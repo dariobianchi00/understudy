@@ -341,13 +341,37 @@ def collect(run, scope):
     """Which markdown files go into the export, in reading order."""
     docs = []
     summary = os.path.join(run, "exec-summary.md")
-    lenses = sorted(d for d in os.listdir(run)
-                    if os.path.isdir(os.path.join(run, d))
-                    and os.path.exists(os.path.join(run, d, "findings-final.md")))
+
+    def _lens_dirs(base, prefix=""):
+        """Lens folders hold findings-final.md. Mode D nests them one level
+        deeper under compare/<site>/<lens>/, and compare/ itself is a lens —
+        a flat scan misses every one of them and exports an empty report."""
+        found = []
+        if not os.path.isdir(base):
+            return found
+        for d in sorted(os.listdir(base)):
+            full = os.path.join(base, d)
+            if not os.path.isdir(full):
+                continue
+            if os.path.exists(os.path.join(full, "findings-final.md")):
+                found.append(prefix + d)
+            # compare/ holds BOTH its own diff report and one folder per site,
+            # so it must be recursed into as well as counted — stopping at the
+            # first findings-final.md silently drops every per-site lens.
+            if d == "compare" or prefix:
+                found += _lens_dirs(full, f"{prefix}{d}/")
+        return found
+
+    lenses = _lens_dirs(run)
 
     if scope == "summary":
         if not os.path.exists(summary):
-            sys.exit("no exec-summary.md in the run folder")
+            # A Mode D run may carry its headline at compare/exec-summary.md.
+            alt = os.path.join(run, "compare", "exec-summary.md")
+            if os.path.exists(alt):
+                return [alt] + [os.path.join(run, l, "findings-final.md") for l in lenses]
+            sys.exit("no exec-summary.md at the run root or in compare/ — "
+                     "the orchestrator writes it; see run.md §3.6")
         # The summary alone is a dead end — a verdict with no route to the
         # findings behind it. Carry every lens's findings file too; the renderer
         # emits their triage tables and drops the detail.
@@ -356,10 +380,21 @@ def collect(run, scope):
     if scope == "all":
         if os.path.exists(summary):
             docs.append(summary)
+        # Mode D: compare/exec-summary.md is the run's headline when no
+        # run-root summary exists, and belongs before the per-site detail.
+        cmp_summary = os.path.join(run, "compare", "exec-summary.md")
+        if os.path.exists(cmp_summary) and cmp_summary not in docs:
+            docs.append(cmp_summary)
         for l in lenses:
             docs += [os.path.join(run, l, "exec-summary.md"),
                      os.path.join(run, l, "findings-final.md")]
-        return [d for d in docs if os.path.exists(d)]
+        # Preserve order, drop duplicates — compare/exec-summary.md is reachable
+        # both as the run headline and as a lens.
+        seen, uniq = set(), []
+        for d in docs:
+            if os.path.exists(d) and d not in seen:
+                seen.add(d); uniq.append(d)
+        return uniq
 
     if scope not in lenses:
         sys.exit(f"no lens '{scope}' in this run — found: {', '.join(lenses) or 'none'}")

@@ -32,6 +32,20 @@ Same persona brief, same shapes, same device, same time cap. **No persona ever s
 
 > A persona who has just read a competitor is no longer describing this site — they are describing a contrast, and the contrast is Pass 2's job. Capture the sites separately or the comparison compares nothing.
 
+### ⚑ How to actually enforce that when one agent drives every site
+
+A single agent capturing three sites cannot un-see the first two. **"Do not let it influence you" is not a mechanism** — the same failure as putting a success criterion in a file the persona reads. Split the work instead:
+
+1. **Capture mechanically, and form no judgements.** One script, applied identically to every site: fresh context, same viewport, same waits, screenshots, fold text, headings, links, page facts. It records *what is there*. It records no reactions, no impressions, no comparisons.
+2. **Hand each site's artifacts to a separate reading agent** that can see only that site's folder. It performs the persona reading — the first-impression answers, the comprehension axes — having never seen a rival.
+3. **The diff pass is the first and only step permitted to see all three.**
+
+This is stronger than the single-agent version, not a compromise for it: no reading is a reaction to a competitor, and the symmetry is enforced by a script rather than by discipline.
+
+**Record it in `index.json`** so the diff pass knows how independence was achieved — and note the residual: the capture script was authored once and applied identically, which is the intended symmetry, not a leak.
+
+**One consequence for scoring:** a mechanical capture has no session log and no debrief, so **time-to-comprehension is estimated by each reading agent, not measured.** Say so in `index.json` and keep timings out of the matrix — compare the comprehension *axes*, which are judgements about the page, not the clock.
+
 ---
 
 ## Run order
