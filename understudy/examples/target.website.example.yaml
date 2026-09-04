@@ -1,0 +1,127 @@
+# understudy target — WEBSITE assessment EXAMPLE
+#
+# Written by the onboarding interview to ~/.understudy/targets/<slug>.yaml
+# — outside the repo, gitignored, only on explicit confirmation.
+#
+# Every product and URL below is FICTIONAL. If a real product name would make
+# this example clearer, the example is wrong. See CLAUDE.md §7.
+
+slug: nimbus-notes-site
+product_name: Nimbus Notes (marketing site)
+base_url: https://example-nimbus-notes.test
+public_site: true
+
+# ── Assessment type ───────────────────────────────────────────────────────
+# product | website | both — asked FIRST at interview, never inferred from the
+# URL. A marketing URL may be a product's login page, and the two produce
+# entirely different runs.
+assessment_type: website
+
+# ── Auth ──────────────────────────────────────────────────────────────────
+# A website assessment is logged out by nature. NO CREDENTIALS. NOT EVER.
+auth:
+  wall: false
+  wall_location: null
+
+# ── Competitors ⚑ USER-SUPPLIED ONLY ──────────────────────────────────────
+# understudy NEVER infers these. A wrong competitor set produces a confident,
+# useless comparison, and only the user knows whether the site they worry
+# about is the obvious one or the one nobody names.
+#
+# An empty list is valid and means `compare` is skipped — not that understudy
+# should go and find some.
+competitors:
+  - https://example-stratus-notes.test
+  - https://example-cumulus-docs.test
+
+# ── Conversion goal ⚑ REQUIRED for the conversion lens ────────────────────
+# What should a visitor actually do? Without it, `conversion` has no target
+# and degrades into generic CTA advice — which is indistinguishable from a
+# real finding once it is in the report.
+conversion_goal: "Start a free trial without talking to sales"
+
+# ── Objectives ────────────────────────────────────────────────────────────
+objectives:
+  - clarity      # Mode A-visit
+  - conversion   # Mode A-visit
+  - trust        # Mode A-visit
+  - technical    # Mode B
+  - seo          # Mode C
+  - aeo          # Mode C
+  - compare      # Mode D
+
+# ── Coverage depth ────────────────────────────────────────────────────────
+# overview | standard | deep — asked every run.
+#
+# Depth and persona realism pull against each other: past a point the persona
+# has stopped being a first-time visitor and become an auditor. On a `deep`
+# run the traversal marks where that happened, and findings after that line
+# are flagged so they are not read as evidence about an ordinary visit.
+coverage_depth: standard
+
+# ── Run objectives ⚑ optional, never invented ─────────────────────────────
+# Specific claims to prove or disprove. If the user gives none, this stays
+# empty — an inferred objective scored "achieved" is the worst output this
+# tool could produce.
+#
+# The persona is told `objective`. The persona is NEVER told `expected` —
+# knowing the success criterion guarantees the test passes.
+objectives_under_test:
+  - objective: "A visitor can find out what it costs without giving an email"
+    expected: "A price in currency is visible within 3 clicks of the landing page"
+  - objective: "A visitor can tell what the product does from the landing page"
+    expected: "The persona's one-sentence answer matches the actual product"
+
+# ── Personas ──────────────────────────────────────────────────────────────
+# "generic" means INFERRED by the agent from the product type alone. The report
+# states this on its face — findings from inferred personas are materially
+# weaker than findings from researched ones, and that is why the field exists.
+persona_mode: generic
+
+personas:
+  - name: evaluator
+    device: desktop-1440x900
+    goal: "Work out in five minutes whether this could replace what the team uses now."
+    gives_up_when: "Can't tell what it costs, or the page is all adjectives and no product."
+
+  - name: sceptic
+    device: iphone-13
+    goal: "Find out who is behind this and what happens to the data before considering it."
+    gives_up_when: "The privacy policy is a link to a generic corporate page."
+    device_is_constraint: true   # phone-only; never simulate on desktop
+
+# ── Models ────────────────────────────────────────────────────────────────
+# traversal — runs in the main session, so it uses the SESSION model.
+#             understudy cannot set this. Recorded for the manifest and for
+#             --since comparisons; changing it here changes nothing.
+# scoring   — runs as subagents, so understudy CAN set it, per lens.
+models:
+  traversal_last_used: null
+
+  scoring_shape: balanced
+  scoring:
+    clarity: opus        # judgement — a weak model is plausibly wrong
+    conversion: opus     # judgement
+    trust: opus          # judgement
+    compare: opus        # judgement
+    technical: sonnet    # observable facts against a rubric
+    seo: sonnet          # observable facts against a rubric
+    aeo: sonnet          # observable facts against a rubric
+
+# ── Run constraints ───────────────────────────────────────────────────────
+time_cap_minutes: 25        # a visit is 15–25 min, not 90
+checkpoints: [10, 20]
+
+# ── Scope exclusions ──────────────────────────────────────────────────────
+# Applied at SCORING time, not capture. The traversal still records what it
+# sees — the analyst drops it.
+scope_exclusions:
+  - "The /beta section is deliberately unfinished; do not report it."
+
+# ── Output ────────────────────────────────────────────────────────────────
+# Must never be inside the understudy repo. See CLAUDE.md §7.
+output_dir: ~/.understudy/runs/nimbus-notes-site/
+
+# ── Provenance ────────────────────────────────────────────────────────────
+created: 2026-09-04
+last_run: null

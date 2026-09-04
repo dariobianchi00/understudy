@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "understudy",
+  "version": "0.2.0",
+  "description": "An agent that stands in for a user, drives a live web product, and reports back through a chosen lens.",
+  "owner": {
+    "name": "Dario Bianchi",
+    "url": "https://github.com/dariobianchi00"
+  },
+  "plugins": [
+    {
+      "name": "understudy",
+      "description": "Evaluate any web product or website as a stand-in user. Eleven lenses \u2014 ux, bugs, onboarding, content, clarity, conversion, trust, technical, seo, aeo, compare \u2014 score one browser session each. Every finding cites a screenshot.",
+      "source": "./understudy",
+      "category": "testing",
+      "keywords": [
+        "ux",
+        "testing",
+        "playwright",
+        "seo",
+        "aeo",
+        "persona",
+        "qa",
+        "website-audit",
+        "core-web-vitals",
+        "competitive-analysis"
+      ]
+    }
+  ]
+}

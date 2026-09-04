@@ -1,0 +1,495 @@
+# understudy
+
+An agent that stands in for a user, drives a live web product, and reports back through a chosen lens.
+
+**This file is the build spec and the standing conventions for this repo.** Sections 1–9 are durable — they stay after the build. Section 10 is the build plan; delete it when Phase 5 is done.
+
+---
+
+## 0. Read this first (for the agent building this repo)
+
+### Vocabulary — three things with confusingly similar names
+
+Get these straight before reading further. Conflating them is the easiest way to misread this spec.
+
+| Term | Means |
+|---|---|
+| **the reference skill** | The pre-existing single-product, single-lens skill this repo generalises. It already works, validated over three real runs. It is the *source* of the methodology, not part of this repo. Its location is in `BUILD_NOTES.local.md`. |
+| **Phase 1 … Phase 5** | Rows of the build sequence in §10. Steps in constructing *this* repo. Nothing to do with the reference skill. |
+| **Pass 1 / Pass 2** | The two halves of a single run at execution time. Pass 1 = the naive persona gathers evidence; Pass 2 = the analyst scores it. The anti-bias design (§6, invariant 1). |
+
+Throughout this file, **"the reference skill"** never means a build phase and **"Phase N"** never means the reference skill.
+
+### ⚑ Check this before starting
+
+This repo is greenfield. The methodology it extracts is **not reproduced in this file** and must not be guessed at.
+
+`BUILD_NOTES.local.md` — gitignored, never committed — holds the reference skill's location, the four methodology files to read, and the migration inventory.
+
+**Can you read `BUILD_NOTES.local.md`, and the path it names?**
+
+- **Yes** → read the four methodology files it lists before writing anything, plus the reference skill's own `SKILL.md`. They carry hard-won detail — MCP viewport bugs, the two-pass anti-bias design, the evidence rule — that must survive the port. Then follow its migration table.
+- **No** → **stop and tell the user.** Roughly 190 lines across four files cover: Nielsen's 10 heuristics and Microsoft's HAX 18 condensed into a Layer A/B/C cheat sheet · a P0–P3 severity rubric with worked examples · the exec-summary and findings templates · and Playwright-MCP call patterns with documented upstream workarounds. Reinventing these produces a plausible-looking framework that will not reproduce the reference skill's findings. **The build cannot proceed without them.**
+
+*(Why the pointers are not inlined here: this file ships in a public repo and §7 forbids product-identifying content — including paths that name a product. `BUILD_NOTES.local.md` exists for that reason alone.)*
+
+**Two files from the reference skill must never be copied into this repo** under any circumstances — its personas file and its product config. They contain real customer segmentation and a real product's commercial data. `BUILD_NOTES.local.md` names them. See §7.
+
+---
+
+## 1. What this is
+
+The reference skill answered *"is this product's UX any good?"* for one product. understudy answers **any evaluative question about any web product**, by separating three things the reference skill had fused together:
+
+- **the target** — which product, which personas, which credentials *(never in this repo)*
+- **the traversal** — how evidence gets gathered
+- **the lens** — how that evidence gets scored into a report
+
+Add a lens by writing one agent file. Add a product by answering an interview. Neither requires touching the harness.
+
+---
+
+## 2. The architecture — traversal modes
+
+Objectives do not group by topic. They group by **what the agent physically has to do to gather the evidence.** This is the whole design.
+
+| Mode | Evidence gathering | Lenses |
+|---|---|---|
+| **A — Journey** | A persona with a goal drives the product. **One traversal, many scorings.** | ux · bugs · onboarding · content |
+| **A-visit — Visit** | A persona with a *question* reads a site. Same machinery, different flow shapes, ~1/4 the time. | clarity · conversion · trust · content |
+| **B — Instrumented** | Scripted and measured, no persona. Own traversal. | technical · accessibility · responsive · security-surface |
+| **C — Crawl** | No session, often no login. | seo · aeo · compliance |
+| **D — Comparative** | N runs of A, A-visit or C, then a diff pass. | compare · parity · pricing |
+
+**A-visit is a variant of A, not a fifth mode.** The evidence-gathering is identical — a persona drives a browser and leaves artifacts. Only the flow shapes differ, so it reuses the traversal skill, the capture gate, the evidence rules and the two-pass separation unchanged. Inventing a mode for it would duplicate all of that to express one difference.
+
+**Why the shapes differ:** a product user's journey is entry → activation → first value → surfaces → debrief. A site visitor's is **land → orient → evaluate → decide**, and their "first value" is *"did I understand what this is and decide whether to care?"* — reached in twenty seconds or never. Forcing a visitor through product shapes produces findings about a signup flow they were never going to reach.
+
+### The orchestrator contract
+
+> **Group the requested objectives by mode → capture ONCE per mode → fan out every scoring for that mode.**
+
+The six Mode-A lenses all score the *same* persona traversal. One expensive browser session, N cheap analyst passes in parallel. Running one agent per objective through the product would cost ~6× for identical evidence.
+
+**Structural precedent:** `~/.claude/plugins/marketplaces/claude-code-plugins/plugins/pr-review-toolkit/` ships one command fanning out to six specialist agents over one artifact. Read it — it is the shape this repo implements.
+
+---
+
+## 3. Scope — two assessment types, one architecture
+
+**The user's first question is not "which mode" — it is "what am I evaluating?"** Modes are an implementation detail. The entry fork is:
+
+| | **Product assessment** | **Website assessment** |
+|---|---|---|
+| The thing | An app someone signs into and uses | A site someone reads and decides from |
+| The persona's goal | Accomplish a task | Answer a question: *is this for me?* |
+| Success | Reached first value | Understood the offer and knew what to do next |
+| Time per persona | ~90 min | ~15–25 min |
+| Auth | Usually a wall, human-in-the-loop | Usually none |
+| Competitors | Blocked by their auth wall | **Fully reachable — this is where Mode D works** |
+
+Each resolves to a lens bundle. Same harness, same gates, same two-pass separation.
+
+### Product assessment — Mode A + C
+
+1. **ux** — Nielsen 10 + Microsoft HAX 18 + activation *(ported from the reference skill unchanged)*
+2. **bugs** — console errors, failed requests, dead ends, broken states. Output is repro steps + environment, not a findings list
+3. **onboarding** — steps-to-value, time-to-first-value, drop-off points. Output is a funnel
+4. **content** — promise-vs-delivery match, reading level, jargon density
+
+### Website assessment — Mode A-visit + B + C + D
+
+5. **clarity** — can a visitor say what this is, who it's for, and what to do next? Time-to-comprehension, the point they lost interest, what they misunderstood
+6. **conversion** — is the next step obvious at every scroll depth? CTA hierarchy, form burden, dead-end pages, the gap between what the page asks for and what the visitor is ready to give
+7. **trust** — proof, pricing transparency, who is behind this, what happens to my data. The objections a sceptic raises and whether the site answers them
+8. **technical** — the metric set in §3.1. Mode B, **pulled forward from "extension point" because a website assessment without it is incomplete**
+9. **seo** — crawlability, meta, canonical, structured data, internal linking, sitemap, indexability
+10. **aeo** — schema.org coverage, extractable answer blocks, entity clarity, `llms.txt`. **Static markup only in v1**; querying live answer engines is deferred — see §11.3
+11. **compare** — the same lenses across 2+ sites, then a diff pass producing a differences matrix
+
+**⚑ `compare` is the key question for website assessment**, not an afterthought. Build it *with* the website bundle, not in a later phase — a site audit that cannot answer *"how do we look next to them?"* is answering the easier question.
+
+**Competitors are always user-supplied.** understudy never infers who they are. A wrong competitor set produces a confident, useless comparison, and the user is the only one who knows whether the site they're worried about is the obvious one or the one nobody names.
+
+### 3.1 Technical metrics — the recommended set
+
+All obtainable from Playwright MCP with no extra tooling: Navigation Timing, `PerformanceObserver`, the network log, response headers.
+
+| Tier | Metrics | Why |
+|---|---|---|
+| **1 — Experience** | LCP · CLS · TBT (INP proxy) · FCP · TTFB | The Core Web Vitals, plus the two that explain them |
+| **2 — Delivery** | Page weight · request count · 5 largest assets · image hygiene (format; natural vs displayed dimensions) · compression · cache headers · render-blocking resources · **third-party weight and count** | Where a fast site went slow. Oversized images and third parties account for most of it |
+| **3 — Hygiene** | HTTPS + HSTS · mixed content · viewport meta · redirect chains · 404s on linked assets · console errors on load | Cheap to check, embarrassing to miss |
+
+**⚑ These are lab numbers and the report must say so on its face.** One measurement, one machine, one connection. They identify what is wrong with the *page* — a 4 MB hero image is a fact at any sample size. They do **not** describe what users experience, which needs field data understudy cannot reach. Presenting a lab LCP as "your users' LCP" is confidently wrong, and it is the kind of error that gets a whole tool distrusted.
+
+**Measure mobile and desktop separately.** For most marketing sites the mobile number is the real one and the desktop number is the flattering one.
+
+---
+
+## 4. Onboarding contract
+
+Runs on every invocation. Never assumes. One question at a time.
+
+1. **Check for a saved target.** If `~/.understudy/targets/` matches → *"Found target `<slug>` (last run `<date>`). Reuse / edit / start fresh?"*
+2. **⚑ Assessment type — the first question, asked before anything else:**
+   ```
+   What are you evaluating?
+
+     (a) A product — something people sign into and use.
+         Lenses: ux · bugs · onboarding · content
+         ~90 min per persona.
+
+     (b) A website — something people read and decide from.
+         Lenses: clarity · conversion · trust · technical · seo · aeo · compare
+         ~15-25 min per persona, plus a crawl.
+
+     (c) Both — a marketing site with a product behind it.
+         Runs (b) on the site, then (a) on the product. Two captures.
+   ```
+   *This is asked first because it determines every later question. A product interview asks about first value and auth walls; a website interview asks about competitors and conversion goals. Asking them in the wrong order produces an interview that does not fit what the user has.*
+3. **Interview:**
+   - Product or site name + base URL. Public, or behind auth?
+   - **If website assessment: competitor URLs.** Ask for 1–3. **Never infer them** — a wrong competitor set produces a confident, useless comparison. "None" is a valid answer; say that comparison will be skipped.
+   - **If website assessment: what should a visitor do next?** The conversion goal — sign up, book a call, read the docs, buy. Without it, `conversion` has no target to score against and degrades into generic CTA advice.
+   - **Objectives** — multi-select, defaulted from the assessment type. Show which mode each belongs to and what that costs in traversals.
+   - **⚑ Personas — an explicit fork, asked every run:**
+     - **(a) Generic** — the agent proposes N personas from the product type and objective alone (defaults: novice · power-user · sceptic). Fast, zero input. **The report must state on its face that findings rest on inferred personas.**
+     - **(b) Supplied** — the user pastes or points at their own persona definitions. The agent parses them and does not invent.
+     - *This fork exists because persona quality, not the harness, is what makes the output good — and persona quality cannot ship in a public repo. Making it a visible choice turns a silent limitation into a stated one.*
+   - Device profile per persona
+   - **⚑ Models — confirmed, not assumed (both levels):**
+     - **Traversal model** = the current session model. understudy reports what it is and whether it's the strongest one available. It **cannot switch** — if the user wants a different one they run `/model` and re-invoke. Say why it matters: traversal is the irreversible part.
+     - **Scoring models** — show the per-lens default allocation and the spend it implies. Offer three shapes: *thorough* (opus across the board) · *balanced* (the default split) · *cheap* (sonnet across the board). Per-lens override allowed.
+     - *This is asked because an evaluation is a real spend, and trading cost against depth is the user's call. It is also the last honest moment to ask — after this, cost is being incurred.*
+   - Time cap per traversal
+   - Auth: is there a wall, and where? Confirm the human-in-the-loop pause
+   - Output destination — default `~/.understudy/runs/<slug>/`
+   - **Scope exclusions** — anything that must NOT be reported as a finding *(precedent from the reference skill: an identity-proxy gate in front of the product is infrastructure, not a UX defect)*
+4. **Echo the plan back** — assessment type, modes, traversals required, lenses per mode, estimated wall time. Wait for go.
+5. **Offer to save:** *"Save this target for next time? Goes to `~/.understudy/targets/<slug>.yaml`, outside the repo, gitignored. Credentials are never saved."*
+
+---
+
+## 5. Auth contract
+
+**The agent never handles a credential.** Not from a file, not from an env var, not from the user in chat.
+
+```
+→ [persona] traversal — auth wall detected at <url>
+⏸  PAUSED — authenticate in the open browser, then confirm
+→ [persona] traversal — resuming at <path>
+```
+
+Two rules inherited from the reference skill, both load-bearing:
+- **The auth wall is never a finding.** It is infrastructure — excluded from all scoring and from the exec summary.
+- **The persona never drives an identity provider's UI.** It stops at the wall and hands over.
+
+---
+
+## 6. Lens specification
+
+A lens is one agent file plus one reference. That is the entire extension surface.
+
+```yaml
+---
+name: lens-<slug>
+description: <when the orchestrator should invoke this>
+mode: A | B | C | D
+model: inherit | opus | sonnet | haiku   # confirmed by the user at onboarding
+---
+```
+
+Body: the framework, the severity rubric, the output schema, the evidence rule.
+
+### Two invariants — never relax these
+
+1. **Naive/analyst separation.** The traversal agent never sees the framework. Banned during capture: *heuristic · severity · usability · Nielsen · HAX · P0/P1/P2/P3*. Contaminating the traversal is how you get a report that confirms its own priors. This is the single most valuable thing the reference skill proved.
+2. **Every finding cites evidence.** No screenshot, log line or DOM excerpt → the finding is dropped. No exceptions, including for findings that are obviously true.
+
+### Model policy
+
+**What the harness can and cannot control** — this is a mechanism constraint, not a preference:
+
+| Level | Who sets it | How |
+|---|---|---|
+| **Session model** (runs the traversal) | **The user, only.** `/model`, or config. | understudy cannot change it. It can read it, report it, and recommend — nothing more. |
+| **Subagent model** (runs each scoring lens) | **The harness.** | `model:` in the lens agent's frontmatter (`inherit` · `opus` · `sonnet` · `haiku`), overridable per run via the `Agent` tool's `model` parameter. |
+
+**Traversal runs in the main session and therefore at the session model.** This is forced by §5: the auth pause hands the open browser to a human, and a subagent cannot perform that handover. Traversal cannot be pinned.
+
+Two consequences the spec must not paper over:
+
+- **"Traversal always gets the strongest model" is a recommendation, not a guarantee.** Pre-flight surfaces the session model and says plainly that traversal is the irreversible part — the persona is deciding what to do next, and a weak journey cannot be rescued by good scoring. Then it asks. **Check and ask; never switch.**
+- **"Strongest available" is not expressible in frontmatter.** The field takes literal model names, not a ranking. A pin means *that model*, not *the best one* — so a hardcoded pin silently downgrades a session running something newer. Prefer `inherit` plus an explicit confirmed choice over a pin that ages badly.
+
+**⚑ Lens files never use `inherit`.** The official plugin guidance recommends `inherit` as a default; understudy deliberately does not follow it. `inherit` resolves to the *session* model, which silently re-couples the two levels: a user on a cheap session model would receive cheap scoring while believing they had chosen `balanced`, and the manifest would record a model nobody selected. The independence of the two levels is the entire point of this section, so lens frontmatter always names a model explicitly.
+
+**Resolution happens at onboarding, not in the lens file.** This keeps explicit naming from ageing badly:
+
+- The lens's `model:` frontmatter is a **declared default** — documentation and fallback, not the operative value.
+- The **orchestrator always passes an explicit `model` to the `Agent` tool at call time**, taken from the user's confirmed choice in the target file.
+- The onboarding shape (*thorough · balanced · cheap*) resolves to concrete model names **against what is available at that moment**, so a newer model is picked up by the shape without editing six lens files.
+
+Net effect: no silent coupling, no stale pins, and the manifest records a model the user actually chose.
+
+**⚑ The user confirms both levels during onboarding, before any cost is incurred.** Defaults are offered, not assumed — an evaluation is a real spend, and whether to spend more on scoring or less is the user's call, not the harness's. See §4, step 5a.
+
+**Default scoring allocation** (offered, overridable per lens): opus for `ux` · `content` · `onboarding` · `compare` — judgement-heavy, where a weaker model produces plausible findings that are wrong. sonnet for `bugs` · `seo` · `aeo` — closer to extraction against a checklist, where the framework does the work.
+
+**⚑ The run manifest records the model used for the traversal AND per lens.** Findings are not comparable across models; a cross-model diff must be flagged, never silently presented. The traversal model matters most here, because it is the one that changes without anyone deciding it — a user who switched models between Tuesday and Friday has two runs that cannot be honestly diffed.
+
+### Stable finding IDs — build in Phase 2, not later
+
+Every finding carries `hash(lens + flow + normalized-locator + normalized-title)`.
+
+⚑ **The locator may be inferred, and inference is part of the tooling.** When a lens omits an explicit locator, `check_report.py` derives one from the report text — the first `/path`, else the first artifact its regex matches. Changing that derivation re-IDs findings nobody edited, and a `--since` diff across the change is noise dressed as findings. Observed 2026-09-04: widening the artifact extensions to accept Mode-C `.html`/`.txt` evidence re-IDed an existing finding. **Treat any change to locator inference as a schema migration** — re-ID existing runs deliberately and record it. Lenses avoid the problem entirely by passing `--locator` explicitly, which is why the output contract calls it the trap.
+
+This enables `understudy report --since <run-id>` → **new · persisting · resolved**. **It cannot be retrofitted** — findings written without stable IDs can never be diffed against findings written with them. Everything else about diffing is cheap whenever you want it; this part is not.
+
+---
+
+## 7. What never enters this repo
+
+By construction, not by discipline:
+
+- Product names, URLs, or any real target
+- Credentials, tokens, cookies, session state
+- Personas derived from real customer research
+- Pricing, marketing copy, commercial terms
+- Output paths that reveal a filesystem or an employer
+- Screenshots or traces from any real run
+
+`examples/target.example.yaml` uses a **fictional** product. If a real product name would make an example clearer, the example is wrong.
+
+Everything real lives outside the repo:
+
+```
+~/.understudy/
+├── targets/<slug>.yaml     written only on explicit confirmation
+├── runs/<slug>/            default output
+├── profiles/<slug>/        browser profiles
+└── creds/                  USER-CREATED ONLY. The agent never writes here.
+```
+
+`.gitignore` must cover `**/targets/`, `**/runs/`, `*.env`, `*.png`, `*.webm`, `*.zip` from day one — before the first commit, not after.
+
+---
+
+## 8. Repo layout
+
+```
+understudy/                              (public, MIT)
+├── .claude-plugin/marketplace.json      one repo = one marketplace
+├── CLAUDE.md                            this file
+├── README.md                            install + first run
+├── LICENSE                              MIT
+├── .gitignore
+└── understudy/
+    ├── .claude-plugin/plugin.json
+    ├── commands/
+    │   ├── run.md      ✅               entry point: onboarding → orchestrate
+    │   ├── report.md   ✅               re-score existing evidence; --since for diffs
+    │   └── compare.md                   Mode D entry point
+    ├── agents/                          one per lens — the Pass-2 scorers
+    │   ├── lens-ux.md ✅   lens-bugs.md ✅   lens-onboarding.md ✅
+    │   ├── lens-content.md ✅
+    │   ├── lens-clarity.md  lens-conversion.md  lens-trust.md    (3a)
+    │   ├── lens-seo.md      lens-aeo.md         lens-technical.md (3b)
+    │   └── lens-compare.md                                        (3c)
+    ├── skills/
+    │   ├── onboarding/                  the interview                    ✅ built
+    │   ├── traversal-journey/           Mode A capture                   ✅ built
+    │   ├── traversal-visit/             Mode A-visit capture             (3a)
+    │   ├── traversal-crawl/             Mode C crawl                     (3b)
+    │   ├── traversal-measure/           Mode B technical metrics         (3b)
+    │   └── traversal-compare/           Mode D orchestration             (3c)
+    ├── references/                      [M] methodology, ported from reference skill
+    │   ├── playwright-patterns.md ✅  flow-shapes.md        ✅
+    │   ├── first-value.md         ✅  evidence-rules.md     ✅
+    │   ├── heuristics-framework.md ✅ severity-rubric.md    ✅
+    │   ├── report-template.md     ✅
+    │   ├── visit-shapes.md            land→orient→evaluate→decide  (3a)
+    │   └── technical-metrics.md       the §3.1 set + lab caveat    (3b)
+    ├── scripts/
+    │   ├── render_report.py ✅  md → self-contained HTML / PDF; stdlib only
+    │   ├── init_run.py     ✅   creates run folder + manifest at run START
+    │   ├── check_capture.py ✅  phase-2a gate: checks 2 + 5, mechanically
+    │   ├── finding_id.py   ✅   stable IDs + self-test
+    │   ├── check_report.py ✅   phase-2b gate: checks 1, 3, 4 + 6
+    │   └── compare_runs.py      Phase 4 — new/persisting/resolved + overlap %
+    └── examples/                        fictional product only
+        ├── target.example.yaml ✅   sample-findings.md ✅
+```
+
+---
+
+## 9. Publishing to GitHub
+
+The repo **is** a Claude Code plugin marketplace. Users install with two commands.
+
+1. **`.claude-plugin/marketplace.json`** at the repo root — name `understudy`, owner block, one entry in `plugins[]` with `"source": "./understudy"`. Model it on `~/.claude/plugins/marketplaces/pm-skills/.claude-plugin/marketplace.json`.
+2. **`understudy/.claude-plugin/plugin.json`** — name, version, description, author, keywords, homepage, `"license": "MIT"`.
+3. **`LICENSE`** — MIT, confirmed 2026-09-02. Chosen because this tool runs inside paid client engagements, where a permissive licence is one fewer question from procurement. The file needs a `Copyright (c) 2026 <holder>` line.
+
+   ✅ **Settled 2026-09-02: personal copyright.** The file reads `Copyright (c) 2026 Dario Bianchi`. Noted for the record: the methodology was developed while testing an employer's product, in role, and most employment contracts assign IP created in the course of employment. This was decided knowingly, not overlooked. The `[P]` product-specific material never ships (§7), which keeps the lineage question narrow.
+4. **`README.md`** must carry:
+   - What it is, in two sentences
+   - Install:
+     ```
+     /plugin marketplace add dariobianchi00/understudy
+     /plugin install understudy
+     ```
+   - First run: `/understudy run`
+   - **The Playwright MCP prerequisite, stated prominently** — including the two version-dependent quirks: the older-version `browser_resize` numeric-argument bug (with the `setViewportSize` fallback, and the point that the *verification* is what matters), and the fact that the server confines writes to its own output roots so screenshots must transit and be moved. See §11 risk 1.
+   - The lens table and how to add one
+   - An explicit "this tool never stores your credentials or product data" section — it is the main thing a client will ask about
+5. **Version from v0.1.0.** Tag releases; the marketplace resolves against the repo.
+6. **Public from the first commit.** There is nothing sensitive in the repo by construction (§7), and a repo that starts private and flips public is exactly how secrets end up in git history.
+
+---
+
+## 10. Build sequence — delete this section when Phase 5 ships
+
+| Phase | Deliverable | Gate |
+|---|---|---|
+| **1** | Repo + marketplace + plugin skeleton + `/understudy run` onboarding, no lenses | Installs clean on a second machine |
+| **2a** | Mode A capture only — traversal writes evidence to disk + run manifest. No scoring. | Checks 2 and 5 below pass. A human can open the run folder and follow what the persona did |
+| **2b** | 4 Mode-A lens agents scoring 2a's artifacts + **stable IDs** + ported report template | **All six structural checks below, passing.** If any fails, the extraction broke — stop, do not start Phase 3 |
+| **3a** | **Website assessment — visit half.** A-visit flow shapes + `clarity` · `conversion` · `trust` lenses + the assessment-type fork in onboarding | A marketing site runs end to end with no auth at all. Same six gate checks pass |
+| **3b** | **Website assessment — machine half.** Mode C crawl + `seo` + `aeo` (static only) + Mode B `technical` (§3.1 metric set) | Crawl and measurement run with no persona and no session; lab-vs-field caveat present in the report |
+| **3c** | **`compare` across sites.** Mode D over N logged-out sites, differences matrix | Two sites, one matrix. **The key question for website assessment — not deferred to a later phase** |
+| **4** | **Coverage depth** + **run objectives** + `compare_runs.py` + the reproducibility eval + `report --since` | A run can *fail* an objective, not merely describe. Same target twice → a self-overlap baseline; number goes in the README |
+| **5** | README, LICENSE, fictional example target, v0.1.0 tag | Someone else installs and runs it unaided |
+
+### Why Phase 2 splits into 2a and 2b
+
+Phase 2 is the heaviest phase in the build — capture, four scoring agents, stable IDs and the manifest, all behind one gate. Split at the artifact boundary, because that is where the design already separates: **2a produces the evidence, 2b consumes it.**
+
+The split earns its keep three ways. Capture failures and scoring failures look nothing alike, and one gate for both makes a red light ambiguous. 2b re-runs against 2a's saved artifacts for free — no browser, no time cap — so lens iteration is cheap. And the naive/analyst separation (§6, invariant 1) is a *structural* property once capture is a separate deliverable: 2a physically cannot see the framework, because the framework is not built yet.
+
+### The Phase 2 gate — structural, not statistical
+
+**Why not "reproduces the reference skill's findings":** that gate cannot be evaluated. The reference skill's own success criteria set its run-to-run stability at *"top 3 P0/P1 findings overlap ≥60% across runs"* — that is the skill measured against **itself**, same product, same personas. A Phase 2 run overlapping 55% is therefore indistinguishable from ordinary variance, so the gate cannot separate *"the extraction broke the methodology"* from *"Tuesday."* §6 compounds it: findings are not comparable across models, and the reference skill pins a model this repo will not.
+
+So Phase 2 gates on **what the extraction is actually responsible for** — that the harness carries the methodology intact. All six are mechanically checkable against one run's artifacts. Checks 2 and 5 gate 2a; all six gate 2b:
+
+1. **Evidence rule holds.** Every finding in `findings-final.md` cites a screenshot, log line, or DOM excerpt. Zero exceptions. A finding without evidence is a gate failure, not a warning.
+2. **Naive/analyst separation held.** Grep the Pass 1 session log and persona debrief for the banned terms (§6, invariant 1). Any hit = contaminated traversal = fail.
+3. **Zero unsupported P0s.** Every P0 traces to a specific artifact a human can open.
+4. **Stable IDs are present and stable.** Every finding carries its `hash(lens + flow + normalized-locator + normalized-title)`. Re-running Pass 2 alone over the *same* Pass 1 artifacts must produce identical IDs for unchanged findings. This is deterministic — it tests the ID function, not the model.
+5. **Manifest is complete.** Model recorded per lens, target slug, timestamps, persona mode (generic vs supplied), scope exclusions applied.
+6. **The report leads with a verdict.** `exec-summary.md` opens with a one-sentence verdict and a top-3, before anything else — §11.5's mitigation, enforced rather than asserted. Checkable: the first non-heading block is a single sentence, and a top-3 list appears above any detailed findings. Seven lenses can produce a great deal of unread output; this is the only thing standing between the user and that.
+
+Plus one human check that is not automatable and should not pretend to be: **read the exec summary. Is it sign-off-ready without rewriting?** That was the reference skill's real bar and it stays a judgement call.
+
+### Why website assessment is Phase 3, and why `compare` moved into it
+
+Website assessment is cheaper and lower-risk than product assessment — no auth, no credentials, no 90-minute traversals, no destructive-action hazards — so it is where the harness gets exercised at low cost. It is also the assessment type most people will try first.
+
+**`compare` moved from Phase 4 into 3c** because it is the *point* of a website assessment, not a bonus. §11 risk 4 warned that Mode D is realistically logged-out-only, since you cannot human-in-the-loop past a competitor's auth wall. For marketing sites there is no wall, so the limitation that makes Mode D weak for products vanishes entirely. **Website assessment is where Mode D is strongest, and shipping the bundle without it answers the easier question.**
+
+**3a before 3b, deliberately.** The persona half is the risky half — new flow shapes, three new lenses, an unproven journey model. The crawl and measurement half is well-understood work whose output is largely deterministic. Doing the uncertain thing first means finding out early.
+
+### Phase 4 — coverage depth ⚑ NEW REQUIREMENT
+
+**Raised 2026-09-04, from the first real run.** The report's own coverage-gaps section listed five product surfaces the persona never opened. Three causes, and only two were legitimate:
+
+1. `flow-shapes.md` Shape 2b prescribes *"2–3 major surfaces, 8–12 min"*. The traversal followed the spec.
+2. The persona stance is explicit that *"a persona who does everything correctly is testing a product nobody uses."* A real novice does not tour nine nav items.
+3. **The traversal stopped at 20:00 of a 30-minute cap with budget unused.** That one is not defensible.
+
+**The defect is not the coverage — it is that the user never chose it.** Depth is currently hardcoded in a reference file the user never sees, and they discover it in the "what we could not see" section after the run. That is the wrong order.
+
+**⚑ The real tension, which the option must express honestly:** depth and persona realism pull against each other. A persona who dutifully opens every section has stopped being a novice and become an auditor, and the findings change character with them. So the fork is not lazy-versus-thorough:
+
+| Tier | Traversal | What it buys | What it costs |
+|---|---|---|---|
+| **Overview** | The persona's natural path only. No surface sweep. | Highest realism. This is what a real first session looks like. | Lowest coverage; says nothing about screens nobody would find. |
+| **Standard** *(today's default)* | Natural path + 2–3 surfaces relevant to the goal. | Balanced. Shape 2b as it stands. | Surfaces outside the persona's interest go unseen. |
+| **Deep** | Every reachable surface, after the natural path completes. | Best coverage; finds the broken screen nobody visits. | Later surfaces are visited by an auditor, not a novice. |
+
+**Requirements:**
+
+- **R1.** Asked in the onboarding interview, per run, with the realism trade-off stated in the question — not buried in docs. Recorded in the target file as `coverage_depth` and in the manifest.
+- **R2.** `flow-shapes.md` Shape 2b becomes parameterised by it: `overview` skips 2b; `standard` keeps 2–3 surfaces; `deep` enumerates the product's own navigation and visits every reachable item.
+- **R3.** ⚑ **Deep runs must mark which findings came from auditor-style exploration.** Without this, deep coverage silently launders auditor findings as user findings — a finding from a screen no real novice would reach is real, but it is not evidence about the first-run experience. Tag them and say so on the face of the report.
+- **R4.** **Time cap and depth are checked against each other at interview.** `deep` on a 30-minute cap is not deliverable; say so before the run, not after.
+- **R5.** The traversal must **use its remaining budget**. If the surface sweep finishes with time left, continue exploring rather than stopping early — and record why it stopped. "Cap not hit" plus "surfaces unopened" is the signature of a traversal that gave up, and the run summary should surface that contradiction rather than the reader spotting it.
+
+---
+
+### Phase 4 — run objectives ⚑ NEW REQUIREMENT
+
+**The feature that lets a run FAIL rather than merely report.** Today understudy answers *"what did you find?"*. Objectives make it answer *"does it do what you claimed?"* — a materially stronger product, and the one thing a client actually buys.
+
+**Shape:** optional. At interview, after the lenses are chosen: *"Do you want this run to test anything specific?"* If yes, per objective the user gives:
+
+- **The objective** — what the product should let someone do. *"A new user can log a meal from a photo."*
+- **The expected outcome** — what success looks like, observably. *"Macros appear within 30 seconds of uploading."*
+
+Output is a scored table before the findings: **achieved · partially achieved · not achieved · not reachable**, each citing evidence, each written in the user's own words.
+
+**Requirements:**
+
+- **O1.** ⚑ **Captured at interview, before capture.** An objective the persona did not pursue cannot be scored honestly afterwards, and reverse-engineering one from a traversal that happened to touch it is exactly the confirmation the two-pass design exists to prevent.
+- **O2.** ⚑ **The objective reaches the traversal, the framework does not.** The persona is told *"also try to log a meal from a photo"* as a goal, in the user's words — never the success criterion, never the scoring rubric. A persona who knows what success looks like will find it. This is invariant 1 (§6) applied to objectives, and it is the easiest place in the whole design to break it.
+- **O3.** **Scoring happens in Pass 2, against the recorded evidence**, by an agent that sees the expected outcome for the first time. Same evidence rule: no artifact, no score.
+- **O4.** **"Not reachable" is a first-class result**, distinct from "not achieved". A paywall, a missing account tier or an unbuilt feature is not a failure of the product against the objective — conflating them produces a confident false negative.
+- **O5.** **Objectives appear at the top of the exec summary**, above the top 3. A user who asked a specific question should not have to hunt for the answer among findings they did not ask for.
+- **O6.** **Never invent objectives.** If the user declines, the run has none and the report says so. An inferred objective scored as achieved is the worst output this tool could produce.
+
+---
+
+### Reproducibility moved to Phase 4, deliberately
+
+Measuring run-over-run finding stability is worth doing — but its payoff is `understudy report --since <run-id>` (§6), not the Phase 2 gate. Building it after the lens set is complete means building it once, against a harness that has stopped moving. Website assessment also makes it far cheaper to establish: a self-overlap baseline needs the same target run twice, and a 20-minute visit traversal costs a fraction of a 90-minute product one.
+
+What Phase 4 adds: `scripts/compare_runs.py` — match findings across two runs by stable ID, emit **new · persisting · resolved** plus an overlap percentage. Then run the same target twice unchanged to establish this harness's own noise floor. **Report the overlap number in the README.** A tool that tells you how much it disagrees with itself is more trustworthy than one that doesn't mention it.
+
+⚑ **Phase 2 must still ship stable IDs**, per §6 — they cannot be retrofitted, and Phase 4's comparison is worthless without them. Deferring the *measurement* is not deferring the *IDs*.
+
+**Housekeeping, independent of this repo:** a stale output path in the reference skill needs fixing on this machine. Details in `BUILD_NOTES.local.md` §4. Not this repo's problem.
+
+---
+
+## 11. Known risks
+
+1. **⚑ The core dependency is flaky and this repo is public.** Playwright MCP failed to connect on 2026-09-02. Publishing a tool whose main dependency breaks and needs an undocumented workaround makes you the support desk. **Mitigation: hard pre-flight check with an explicit "this is upstream, here is the workaround" message, and say so in the README.**
+
+   ✅ **Partly revised 2026-09-04 after the first real run.** Two corrections, both from observation rather than inheritance:
+
+   - **The `browser_resize` bug did not reproduce.** `browser_resize(1440, 900)` worked and internally called `setViewportSize`. The bug is real in *some* versions, so the fallback stays — but the docs now state it as version-dependent rather than as a fact about the tool, and the run-code tool's name varies (`browser_run_code` / `browser_run_code_unsafe`). **The load-bearing rule was never the workaround; it is the `browser_evaluate` verification, which runs on every path.**
+   - **A quirk the reference skill did not document: the server confines file writes to its own output roots.** An absolute path into `~/.understudy/runs/` is refused, so screenshots and console/network dumps must be captured with a plain filename and moved immediately. The transit directory sits inside this repo, which makes §7 hygiene an active step (`rm -rf .playwright-mcp`, verify `git status` clean), not merely a `.gitignore` entry.
+
+   *General lesson worth keeping: an inherited caveat is a hypothesis about a dependency, and it ages. State the version and the date, keep the fallback, and make the verification — not the workaround — the thing that always runs.*
+2. **"Generic" is doing a lot of work.** ✅ Mitigated by the persona fork (§4). *Residual: nothing stops a user choosing generic every time and trusting the output anyway.*
+3. **AEO is half a product not yet built.** ✅ **Settled 2026-09-02: v1 ships the static half only** — schema.org coverage, extractable answer blocks, entity clarity, `llms.txt`. Querying live answer engines (rate limits, non-determinism, per-query cost) is out of v1 and budgeted separately. **This must be stated explicitly in both `lens-aeo.md` and the README** — a missing half that is named is a scope decision; an unnamed one is a bug report waiting to happen.
+4. **Mode D multiplies everything, and competitors have their own auth walls** you cannot human-in-the-loop past without accounts. **Mode D is realistically logged-out-only for competitors.** ✅ Largely resolved by scoping: website assessment (§3) is logged-out by nature, so this is where `compare` actually works and where it now ships (Phase 3c). *Residual: `compare` on two logged-in products remains out of reach, and the README must say so — a user who compares two marketing sites successfully will reasonably expect to compare the products behind them.*
+
+6. **⚑ Lab metrics read as field metrics.** The Mode B `technical` numbers are one measurement from one machine on one connection. They are sound evidence about the page and no evidence at all about what users experience. A report presenting a lab LCP as "your users' LCP" is confidently wrong, and that error discredits every other number beside it. **Mitigation: the caveat sits in the report body, not a footnote; mobile and desktop are measured and reported separately; §3.1 states the limit.**
+
+7. **Website assessment looks cheap, so it will be over-trusted.** A 20-minute visit traversal costs a quarter of a product run, which invites running it casually and treating the output as equivalent. It is not — a visitor traversal sees the pages a visitor sees and nothing behind them. **Mitigation: the report states what was and was not reached, and `clarity` never speculates about a product it did not open.**
+5. **Seven lenses can produce a great deal of unread output.** The report template must force a one-sentence verdict and a top-3 before anything else. The reference skill did this, and it is why its exec summary was usable. **Enforced by Phase 2 gate check 6 (§10)** — this mitigation is a gate, not an intention.
+
+   ✅ **Extended 2026-09-04, after the first real run made the risk concrete.** A 3-lens run produced 39 findings of which ~25 were distinct: `bugs` contributed 3 findings `ux` did not have, and `onboarding` contributed none (its value was the funnel, not its findings list). Verdict-first was being applied *per lens*, which multiplies the problem it was meant to solve — four competing exec summaries for three lenses, eight for seven.
+
+   Settled output contract:
+
+   - **Lens reports stay standalone and are NOT deduplicated against each other.** Each is read alone by a different audience. Overlap is the price.
+   - **Overlap is reconciled once, at the run level, as corroboration** — "flagged independently by ux, bugs and onboarding". The lenses never read each other, so agreement is real signal rather than an echo, and this is the only layer that can observe it. One slot in the top 3, never three.
+   - **Cross-lens ranking is legitimate** because `severity-rubric.md` is shared and lens-agnostic — P0–P3 are defined by user impact, not by lens. Merging or re-scoring another lens's finding is not.
+   - **House style is binding on every line of every report:** conclusion first, bullets, no prose paragraphs, ≤25 words per bullet, numbers over adjectives. Concision applies to the *reasoning*; evidence, repro steps and severity are never compressed.
+   - **Run-level exec summary always exists**, roughly one page per lens run (soft).
+   - **Markdown is canonical; export is a copy.** Offered every run — HTML or PDF, scoped to summary / one lens / everything. HTML is self-contained with screenshots embedded beside the findings citing them, because a report whose evidence dies when forwarded is worse than one with no evidence: it still looks complete.
+
+---
+
+## 12. Migration inventory
+
+Lives in `BUILD_NOTES.local.md` §3, not here — the table names real paths and a real
+product, which §7 forbids in this file.
+
+It also carries the **scrub rule**: the reference skill hardcodes four persona names
+and a product name. Grep every ported file for both before it lands in this repo. A
+ported file that still names a persona or a product is a bug, not a detail.

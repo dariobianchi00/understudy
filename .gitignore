@@ -1,0 +1,50 @@
+# ── Build-time local notes ────────────────────────────────────────────────
+# Names a real product path and the migration inventory. Never committed.
+BUILD_NOTES.local.md
+*.local.md
+.local/
+
+# ── Real targets, runs, credentials (§7) ──────────────────────────────────
+**/targets/
+**/runs/
+**/profiles/
+**/creds/
+*.env
+.env*
+
+# ── Run artifacts — evidence from real products ───────────────────────────
+# Rendered reports embed real screenshots as data URIs — they are run output,
+# never repo content, and a stray one is a leak of a real product.
+report-*.html
+report-*.pdf
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.webm
+*.mp4
+*.zip
+trace.zip
+screenshots/
+session.log
+timeline.json
+findings-raw.json
+
+# ── Tooling ───────────────────────────────────────────────────────────────
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+test-results/
+playwright-report/
+.playwright-mcp/
+
+# ── Escape hatch ──────────────────────────────────────────────────────────
+# examples/ ships fictional targets only; keep them despite the rules above.
+!examples/
+!examples/**
+
+# Local machine settings — not part of the plugin
+.claude/settings.local.json

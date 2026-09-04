@@ -1,0 +1,101 @@
+# understudy target file — EXAMPLE
+#
+# Written by the onboarding interview to ~/.understudy/targets/<slug>.yaml
+# — outside the repo, gitignored, only on explicit confirmation.
+#
+# The product below is FICTIONAL. If a real product name would make this
+# example clearer, the example is wrong. See CLAUDE.md §7.
+
+slug: nimbus-notes
+product_name: Nimbus Notes
+base_url: https://example-nimbus-notes.test
+public_site: false
+
+# ── Auth ──────────────────────────────────────────────────────────────────
+# NO CREDENTIALS. NOT EVER. Not a password, not a token, not a cookie,
+# not a path to a file containing one. This block describes only WHERE the
+# wall is, so the traversal knows when to stop and hand over to the human.
+auth:
+  wall: true
+  wall_location: "/login — email + password, Google SSO alternative"
+  # The persona stops here and hands the open browser to the human.
+  # It never drives an identity provider's UI.
+  # The wall is never reported as a finding.
+
+# ── Objectives ────────────────────────────────────────────────────────────
+# Grouped by mode at orchestration time: capture once per mode,
+# fan out every scoring for that mode.
+objectives:
+  - ux           # Mode A
+  - bugs         # Mode A
+  - onboarding   # Mode A
+  - seo          # Mode C
+
+# ── Personas ──────────────────────────────────────────────────────────────
+# persona_mode: generic | supplied
+#
+# "generic" means these were INFERRED by the agent from the product type
+# alone. The report states this on its face. Findings from inferred personas
+# are materially weaker than findings from researched ones — that is the
+# whole reason this field exists.
+persona_mode: generic
+
+personas:
+  - name: novice
+    device: desktop-1440x900
+    goal: "Keep a shared shopping list with a partner without reading docs."
+    gives_up_when: "Asked to pick a workspace type before seeing anything."
+
+  - name: power-user
+    device: desktop-1920x1080
+    goal: "Evaluate whether keyboard shortcuts and search are good enough to switch tools."
+    gives_up_when: "Search returns nothing useful on the first two tries."
+
+  - name: sceptic
+    device: iphone-13
+    goal: "Find out what it does with their data before signing up for anything."
+    gives_up_when: "The privacy policy is a link to a generic corporate page."
+    device_is_constraint: true   # phone-only; never simulate on desktop
+
+# ── Models ────────────────────────────────────────────────────────────────
+# Confirmed by the user at onboarding, never assumed. Two levels:
+#
+#   traversal — runs in the main session, so it uses the SESSION model.
+#               understudy cannot set this. Recorded here as what was used
+#               on the last run, for manifest and diff purposes only —
+#               changing this value does not change what runs.
+#
+#   scoring   — runs as subagents, so understudy CAN set it, per lens.
+#
+# Findings are not comparable across models. A run on a different model is
+# flagged in any --since diff rather than silently presented.
+models:
+  traversal_last_used: null      # filled by the run; informational
+
+  scoring_shape: balanced        # thorough | balanced | cheap | custom
+  scoring:
+    ux: opus                     # judgement — a weak model is plausibly wrong
+    onboarding: opus             # judgement
+    content: opus                # judgement
+    bugs: sonnet                 # observable facts against a rubric
+    seo: sonnet                  # observable facts against a rubric
+
+# ── Run constraints ───────────────────────────────────────────────────────
+time_cap_minutes: 90        # hard stop per persona traversal
+checkpoints: [30, 60, 75]   # progress announcements
+
+# ── Scope exclusions ──────────────────────────────────────────────────────
+# Applied at SCORING time, not capture. The traversal still records what it
+# sees — the analyst drops it. An excluded thing that blocked the persona
+# still explains why they got stuck.
+scope_exclusions:
+  - "Identity proxy in front of the domain — infrastructure, not a UX defect."
+  - "The /labs section is deliberately unfinished; do not report it."
+
+# ── Output ────────────────────────────────────────────────────────────────
+# Must never be inside the understudy repo. See CLAUDE.md §7.
+output_dir: ~/.understudy/runs/nimbus-notes/
+
+# ── Provenance ────────────────────────────────────────────────────────────
+created: 2026-09-04
+last_run: null
