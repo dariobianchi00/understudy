@@ -9,10 +9,20 @@ Why this exists (CLAUDE.md §6): it enables
 without stable IDs can never be diffed against findings written with them.
 Everything else about diffing is cheap whenever you want it. This part is not.
 
-The whole value depends on the ID being stable across runs for what a human
-would call "the same problem", and different for genuinely different problems.
-Normalisation is where that is won or lost, so it is deliberately aggressive
-about run-specific noise and deliberately conservative about meaning.
+The ID is stable against run-specific noise — a staging host, a session id, a
+changed timing. It is NOT stable against a model rewording the title.
+
+⚑ MEASURED 2026-09-04: scoring identical evidence twice gave 1.7% exact-ID
+overlap while the findings were substantially the same, reworded. One pair
+differed by the single word "appears". An earlier version of this docstring
+claimed normalisation made a rewording safe. It does not, and cannot: two
+sentences meaning the same thing can share almost no tokens.
+
+So the ID is a fast exact key, not the whole matching story. `compare_runs.py`
+pairs leftovers by title similarity and reports both numbers. Do not "fix" this
+by making normalisation more aggressive — stripping enough words to make
+rewordings collide also collides genuinely different findings, which is the
+worse error: it hides a new problem inside an old one.
 
 ⚑ THE ID DEPENDS ON THE TOOLING, NOT ONLY ON THE FINDING.
 

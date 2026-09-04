@@ -391,7 +391,27 @@ understudy/scripts/compare_runs.py <old_run> <new_run>
 
 Matches findings across two runs by **stable ID** — `hash(lens + flow + normalised locator + normalised title)` — and classifies each as **new · persisting · resolved**, with an overlap percentage.
 
-Matching on titles would silently drop anything a model reworded, inflating both "new" and "resolved" until the diff looked busier than reality. IDs are written from the first run precisely because **they cannot be retrofitted**: findings written without them can never be diffed against findings written with them.
+IDs are written from the first run because **they cannot be retrofitted**: findings written without them can never be diffed against findings written with them.
+
+### ⚑ How much understudy disagrees with itself
+
+Measured 2026-09-04. The same evidence was scored twice by the same six lenses on the same models — the capture was held byte-identical, so the only variable is the scoring pass.
+
+| | |
+|---|---|
+| Findings, run 1 → run 2 | 30 → 30 |
+| **Overlap, matched by similarity** | **30.4%** |
+| Overlap by exact finding ID | 1.7% |
+| P0+P1 overlap | 42.9% |
+| Severity moved on a matched finding | 1 (a P0 in run 1 scored P1 in run 2) |
+
+**Read that carefully, because it is the most useful thing on this page.**
+
+**Individual findings are not reproducible. Themes are.** Both runs independently reported: the audience is never stated · four product terms are sold and never defined · the most consequential capability is explained only in the privacy policy · there is no customer proof anywhere · non-existent URLs return 200 · `llms.txt` is absent · canonicals are missing. What changed between runs was how those observations were grouped, worded and scored — not what was seen.
+
+So: **trust the themes, and treat any single finding as one reading rather than a verdict.** If a finding matters enough to act on, the honest move is to open its evidence, which is why every finding cites an artifact you can open.
+
+**A note on the 1.7%.** An earlier version of this README claimed IDs were "normalised so a rewording doesn't create a false new finding." That was wrong, and this measurement is what caught it — hash equality cannot survive a model choosing different words, and one pair here differed by the single word "appears". `compare_runs.py` now matches on similarity as well as ID and prints both numbers, so the diff shows reworded findings as reworded rather than as churn.
 
 **"Resolved" means absent from the new run, which is not the same as fixed.** The lens may not have run; a different model may not have noticed; coverage may not have reached the screen. So the tool prints its comparability warnings **above** the counts, never below, and refuses to present a cross-model or cross-persona-mode diff as though it were clean:
 

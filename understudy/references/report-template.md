@@ -98,6 +98,7 @@ and if only one persona ran, say that instead: a flip could not be observed.>
 - **So what:** <ONE line. What this costs this persona. The reason to fix it.>
 - **Framework tags:** <A?, B-G?, C-? — per the lens>
 - **Flow:** <shape_1 | shape_2 | shape_2b | shape_3>
+- **Locator:** <the exact string you passed to finding_id.py --locator>
 - **Personas hit:** <comma-separated>
 - **Observed:**
   - <bullet — neutral and concrete>
@@ -112,6 +113,20 @@ and if only one persona ran, say that instead: a flip could not be observed.>
 ```
 
 **The title carries the finding.** `Same meal shows three different times across surfaces` — not `Timestamp issue` and not `Investigation of meal timestamps`. A reader scanning only the titles should get the whole report.
+
+**⚑ `Locator` is not optional, even though the gate will tolerate its absence.**
+
+The ID is `hash(lens + flow + locator + title)`. If you omit this field the gate
+*infers* a locator — the first `` `/path` `` in the body, else the first Evidence
+artifact — and if that differs from what you hashed, the ID is rejected.
+
+Writing the field makes the two agree by construction. It also makes the ID
+reproducible by a human, and immune to a future change in inference rules.
+
+> Observed 2026-09-04: a lens passed `--locator` to the script but did not write
+> the field. The gate found `/privacy` in the finding's prose, inferred that
+> instead, and rejected two otherwise-correct IDs. Passing `--locator` to the
+> script does nothing on its own — **the report has to say what you hashed.**
 
 **`So what` is the field most often written badly.** It is not a restatement of the title and not a framework citation. *"She could not tell which time the product had actually recorded"* is a so-what; *"violates consistency heuristic A4"* is not.
 

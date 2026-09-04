@@ -43,6 +43,7 @@ line with `·` separators, however much more compact that reads:
 - **So what:** <ONE line. What this costs. The reason to fix it.>
 - **Framework tags:** <per the lens>
 - **Flow:** <the flow or stage this belongs to>
+- **Locator:** <the exact string you passed to finding_id.py --locator>
 - **Personas hit:** <comma-separated, or "n/a" for lenses with no persona>
 - **Observed:**
   - <bullet — neutral, concrete>
@@ -78,10 +79,18 @@ Pass the **same** `flow` and `title` strings that appear in the report. The gate
 derives its inputs from the file, so any drift between what you hashed and what
 you wrote is a failure.
 
-**The locator is the trap.** If you omit it the gate infers one — the first
-`` `/path` `` in the body, else the first Evidence artifact. Pass that same value
-explicitly and the two agree. Pass a prose description of *where* the problem
-lives and they will not.
+**The locator is the trap, and passing `--locator` to the script is only half
+the fix.** The gate re-derives the locator from your *report*, not from your
+shell command. If the finding block has no `**Locator:**` field, it infers one —
+the first `` `/path` `` in the body, else the first Evidence artifact — and any
+difference from what you hashed is a rejected ID.
+
+**So write the `Locator:` field with exactly the string you passed.** That makes
+the two agree by construction, and it is the only way to be sure.
+
+> Observed 2026-09-04: a lens passed `--locator` correctly, omitted the field,
+> and had two IDs rejected because the gate found a `/path` in the prose and
+> preferred it.
 
 **Write the finding block first, then hash what you wrote.**
 
