@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>understudy — send a stand-in user through your product</title>
+<meta name="description" content="An agent that stands in for a user, drives your live product, gets stuck where a real person would get stuck, and hands you a report where every finding cites a screenshot.">
+<meta property="og:title" content="understudy">
+<meta property="og:description" content="Your users don't file bug reports. They leave. understudy sends a stand-in user through your product and tells you where they gave up.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f6f4;
+  --ink:#14161a;
+  --mut:#5f646c;
+  --rule:#dedeD8;
+  --mark:#ffe45c;
+  --p0:#a4261d;
+  --measure:63ch;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:Newsreader,Georgia,'Times New Roman',serif;
+  font-size:19px;line-height:1.62;
+  font-optical-sizing:auto;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+a{color:inherit}
+
+/* ── masthead ─────────────────────────────────────────── */
+.top{display:flex;justify-content:space-between;align-items:baseline;
+  gap:18px;padding:26px 0 0;font-size:15px}
+.top .short{display:none}
+.mark{font-weight:600;letter-spacing:-.01em}
+.top a{color:var(--mut);text-decoration:none;border-bottom:1px solid var(--rule)}
+.top a:hover{color:var(--ink);border-color:var(--ink)}
+
+/* ── hero ─────────────────────────────────────────────── */
+.hero{padding:86px 0 8px}
+h1{
+  font-size:clamp(38px,6.4vw,62px);line-height:1.06;font-weight:400;
+  letter-spacing:-.022em;margin:0 0 26px;max-width:16ch;
+}
+.lede{font-size:21px;line-height:1.55;max-width:var(--measure);margin:0 0 34px;color:#24282e}
+.actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.btn{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:14px;
+  text-decoration:none;padding:11px 18px;border:1px solid var(--ink);
+  background:var(--ink);color:var(--paper);border-radius:2px;
+}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.tiny{font-size:14px;color:var(--mut);margin:0}
+
+/* ── the transcript, the centrepiece ──────────────────── */
+.log{
+  margin:64px 0 0;padding:30px 30px 26px;background:#fff;
+  border:1px solid var(--rule);border-radius:3px;
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:14.5px;line-height:1.85;
+}
+.log .cap{
+  font-family:Newsreader,serif;font-size:15px;color:var(--mut);
+  margin:0 0 18px;font-style:italic;
+}
+/* hanging indent: wrapped text clears the timestamp so the times form a
+   clean left column — the way a log is actually read */
+.log p{margin:0 0 3px;padding-left:9ch;text-indent:-9ch}
+.t{color:#9aa0a8}
+.log .said{color:#000}
+mark{
+  background:linear-gradient(var(--mark),var(--mark)) left center/0% 100% no-repeat;
+  color:inherit;padding:1px 0;
+  animation:draw .62s cubic-bezier(.2,.7,.3,1) 1.05s forwards;
+}
+@keyframes draw{to{background-size:100% 100%}}
+@media (prefers-reduced-motion:reduce){
+  mark{animation:none;background-size:100% 100%}
+}
+.log p.after{font-family:Newsreader,serif;font-size:16.5px;color:var(--mut);
+  margin:20px 0 0;padding:18px 0 0;text-indent:0;
+  border-top:1px solid var(--rule);font-style:italic;line-height:1.5}
+
+/* ── sections ─────────────────────────────────────────── */
+section{padding:74px 0 0}
+h2{font-size:29px;font-weight:500;letter-spacing:-.015em;line-height:1.2;
+  margin:0 0 16px;max-width:22ch}
+h3{font-size:19px;font-weight:600;margin:32px 0 6px}
+p{max-width:var(--measure)}
+.rule{border:0;border-top:1px solid var(--rule);margin:74px 0 0}
+
+/* report anatomy */
+.anat{border-left:2px solid var(--ink);padding-left:22px;margin:26px 0 0}
+.anat h3{margin-top:22px}
+.anat h3:first-child{margin-top:0}
+.anat p{margin:2px 0 0;color:var(--mut);font-size:17px}
+
+/* finding specimen */
+.spec{background:#fff;border:1px solid var(--rule);border-radius:3px;
+  padding:22px 24px;margin:26px 0 0;font-size:16.5px}
+.sev{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;
+  color:#fff;background:var(--p0);padding:2px 7px;border-radius:2px;
+  vertical-align:2px;margin-right:9px}
+.spec .ttl{font-weight:600}
+.spec dl{margin:14px 0 0;display:grid;grid-template-columns:max-content 1fr;
+  gap:5px 16px;font-size:15.5px}
+.spec dt{color:var(--mut)}
+.spec dd{margin:0}
+.spec code{font-family:'IBM Plex Mono',monospace;font-size:13.5px;
+  background:#f1f1ee;padding:1px 5px;border-radius:2px}
+
+/* honesty numbers */
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:2px;margin:26px 0 0;background:var(--rule);border:1px solid var(--rule)}
+.nums div{background:var(--paper);padding:17px 18px}
+.nums b{display:block;font-size:31px;font-weight:400;letter-spacing:-.02em;
+  line-height:1.1;font-variant-numeric:tabular-nums}
+.nums span{font-size:14.5px;color:var(--mut);display:block;margin-top:4px;
+  line-height:1.4}
+
+/* install */
+pre{font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.9;
+  background:var(--ink);color:#eceff2;padding:20px 22px;border-radius:3px;
+  overflow-x:auto;margin:22px 0 0}
+pre .c{color:#8d949d}
+
+footer{padding:70px 0 64px;font-size:15.5px;color:var(--mut)}
+footer a{color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+@media (max-width:620px){
+  body{font-size:18px}
+  .top .long{display:none}
+  .top .short{display:inline}
+  .hero{padding-top:56px}
+  .log{padding:22px 18px;font-size:13px}
+  section{padding-top:58px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="mark">understudy</span>
+    <a href="https://github.com/dariobianchi00/understudy"><span class="long">github.com/dariobianchi00/understudy</span><span class="short">GitHub</span></a>
+  </header>
+
+  <div class="hero">
+    <h1>Your users don't file bug reports. They leave.</h1>
+    <p class="lede">understudy sends a stand-in user through your live product — someone with a goal, a short attention span and somewhere else to be. It gets stuck where a real person gets stuck, gives up where they'd give up, and hands you a report where every finding cites a screenshot you can open.</p>
+    <div class="actions">
+      <a class="btn" href="#install">Install it</a>
+      <a class="btn ghost" href="#trust">How it stays honest</a>
+    </div>
+    <p class="tiny">Runs in Claude Code. Drives a real browser. Never sees your credentials.</p>
+  </div>
+
+  <div class="log">
+    <p class="cap">From a session log. The product is fictional; the shape is not.</p>
+<p><span class="t">[00:40]</span> <span class="said">The menu says Meals, Body, Reports, Chat, Pages, Skills. That is a lot of things and I don't know what half of them are.</span></p>
+<p><span class="t">[02:41]</span> <span class="said">It worked. I typed what I ate in a normal sentence and it gave me the calories back. That's the thing I'd have had to look up myself.</span></p>
+<p><span class="t">[05:10]</span> <span class="said"><mark>I'm being sold something I can't name.</mark></span></p>
+<p><span class="t">[07:00]</span> <span class="said">I had to read the legal page to find out what the feature does.</span></p>
+    <p class="after">She reached the thing the product is for in under three minutes — and still couldn't tell you what half of it was.</p>
+  </div>
+
+  <hr class="rule">
+
+  <section>
+    <h2>One session. Four different questions answered.</h2>
+    <p>Driving the product is the expensive part, so understudy does it once and scores that single recording through as many lenses as you asked for. Adding a question costs minutes, not another hour in the browser.</p>
+    <div class="anat">
+      <h3>Is it usable?</h3>
+      <p>Where they hesitated, backtracked, and gave up.</p>
+      <h3>What's broken?</h3>
+      <p>Console errors, failed requests, dead ends — with repro steps.</p>
+      <h3>Where do people drop off?</h3>
+      <p>Time to first value, steps to get there, the point they stopped.</p>
+      <h3>Does it deliver what the marketing promised?</h3>
+      <p>What they expected on arrival, against what they found.</p>
+    </div>
+    <p style="margin-top:26px">Websites get their own set — whether a visitor can say what you do, whether the next step is obvious, whether they believe you, plus crawlability, structured data and page speed. And a comparison against competitors <em>you</em> name.</p>
+  </section>
+
+  <section id="trust">
+    <h2>Two rules that make the findings worth reading.</h2>
+
+    <h3>The stand-in never sees the scoring framework.</h3>
+    <p>An agent that knows what it's looking for finds it every time. So the persona is told a goal and nothing else — no heuristics, no severity scale, no previous findings. A separate reviewer scores the recording afterwards. The vocabulary is banned during the session and checked mechanically; one slip fails the run.</p>
+
+    <h3>Every finding cites evidence, with no exceptions.</h3>
+    <p>No screenshot, log line or network trace means the finding is dropped — and that holds hardest for findings that seem obviously true, because those are the ones nobody checks. Anything dropped goes in a list at the end, so there's somewhere honest to put a hunch.</p>
+
+    <div class="spec">
+      <span class="sev">P0</span><span class="ttl">The app claims to know things about the user that it invented</span>
+      <dl>
+        <dt>So what</dt><dd>She stopped trusting the number it had just given her.</dd>
+        <dt>Evidence</dt><dd><code>screenshots/07-memories.png</code> · <code>session.log:53</code></dd>
+        <dt>In her words</dt><dd>“If it's wrong about that, is it wrong about my eggs?”</dd>
+        <dt>Fix</dt><dd>Scope the page to this product's own data, or remove it.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <h2>What it can't tell you.</h2>
+    <p>Scoring the same recording twice, with the same reviewers on the same models, reproduces about a third of the individual findings. We measured it rather than assumed it:</p>
+
+    <div class="nums">
+      <div><b>30.4%</b><span>findings that recur when the same evidence is scored twice</span></div>
+      <div><b>42.9%</b><span>recurrence among the serious ones</span></div>
+      <div><b>P0 → P1</b><span>one finding scored differently between the two runs</span></div>
+    </div>
+
+    <p style="margin-top:26px"><strong>The themes are stable. The individual findings are not.</strong> Both runs reported the same problems — the audience is never named, four features are sold and never explained, the most important capability is buried in the privacy policy. What changed was how those got grouped, worded and ranked.</p>
+    <p>So treat any single finding as one careful reading rather than a verdict, and open its evidence before you act on it. That's what the citations are for. No evaluation tool publishes this number; it's here because a report you can't calibrate is worse than no report.</p>
+    <p>Two more limits worth knowing up front. If you don't supply your own personas, understudy invents plausible ones and says so on the face of every report — inferred personas produce materially weaker findings. And it never handles a credential: at a login screen it stops and hands you the browser.</p>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <p>You need <a href="https://github.com/microsoft/playwright-mcp">Playwright MCP</a> connected — understudy drives a real browser, and refuses to fall back to fetching pages over HTTP and calling it a session.</p>
+<pre><span class="c"># in Claude Code</span>
+/plugin marketplace add dariobianchi00/understudy
+/plugin install understudy
+
+<span class="c"># then</span>
+/understudy:run https://your-product.com</pre>
+    <p style="margin-top:22px">It interviews you first — one question at a time — then shows you the plan and the time it will take, and waits. Reports land in <code style="font-family:'IBM Plex Mono',monospace;font-size:14px">~/.understudy/</code> on your machine. Nothing is uploaded anywhere; there is nowhere to upload it to.</p>
+  </section>
+
+  <hr class="rule">
+
+  <footer>
+    <p>Built by <a href="https://github.com/dariobianchi00">Dario Bianchi</a>. MIT licensed. <a href="https://github.com/dariobianchi00/understudy">Source and full documentation on GitHub</a>.</p>
+  </footer>
+
+</div>
+</body>
+</html>
