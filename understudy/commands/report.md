@@ -80,11 +80,27 @@ Give each agent the run folder path and nothing else it does not need. **Never p
 ${CLAUDE_PLUGIN_ROOT}/scripts/check_report.py <run_folder>
 ```
 
-Gate checks 1, 3, 4 and 6. **Do not present a report that fails.** Fix the lens output and re-run the check.
+Gate checks 1, 3, 4, 6 and 7. **Do not present a report that fails.** Fix the lens output and re-run the check.
 
 ### 5. Aggregate
 
-Write a run-level `exec-summary.md` at the run root — **rewriting the existing one**, since it now covers a lens it did not before. Same contract as `/understudy:run` §3.6: one verdict sentence, the combined top 3 by severity, cross-lens corroboration counts, pointers to each lens report. **One sentence, then three findings, before anything else.**
+Write a run-level `exec-summary.md` at the run root — **rewriting the existing one**, since it now covers a lens it did not before.
+
+**⚑ Use the template in `/understudy:run` §3.6 verbatim.** It is the one place the run
+document's shape is defined, and rewriting the summary is the moment that shape is most
+easily lost. In particular:
+
+- Open with **What this is** — a description of the thing assessed — then **How it was
+  produced**. No verdict sentence at the top; the verdict opens the Top 5.
+- **Top 5**, always five, ranked by severity across every check, filled from P1 when the
+  run carries fewer than five P0s.
+- Write **Contents**, **How each area scores** and **Raised by more than one check** as
+  empty headings. `render_report.py` fills all three from what actually ran.
+- Sections in `LENS_ORDER` and named in Title Case — never by folder name.
+- No section numbers by hand, no severity tally of your own, no "Recommended first action".
+
+If the newly-scored lens published a `- **Score:** N/10 — why` line, it joins the score
+table automatically and the overall is recomputed. **The overall score is never authored.**
 
 House style applies — pyramid, bullets, no prose paragraphs. Roughly one page per lens in the run.
 

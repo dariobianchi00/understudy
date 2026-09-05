@@ -12,8 +12,39 @@ adds only what is specific to that lens.
 
 Follow `report-template.md` exactly. Two files in the run folder:
 
-- `<lens>/exec-summary.md` — verdict sentence first, then the top 3. Gate check 6 enforces this.
+- `<lens>/exec-summary.md` — verdict sentence first, then the top 3, then your score. Gate checks 6 and 7 enforce this.
 - `<lens>/findings-final.md`
+
+### ⚑ Your exec-summary MUST carry a score
+
+One line, exactly this shape, anywhere in the file:
+
+```markdown
+- **Score:** <0-10>/10 — <one line saying what drove it, in the reader's terms>
+```
+
+**You assign it, because you are the only agent that read this evidence.** The
+run report renders every lens's score in one table with an overall figure, and
+the reason you write becomes a column a paying client reads. A lens that omits
+it is silently dropped from that table.
+
+| Band | Means |
+|---|---|
+| 10 | Nothing a reasonable reviewer would raise |
+| 8–9 | Works; the findings are polish |
+| 6–7 | Works, with friction a real user would notice and complain about |
+| 4–5 | A user gets through, but a meaningful share would give up or distrust it |
+| 2–3 | The job this check covers mostly fails |
+| 0–1 | Unusable on this dimension |
+
+**Gate check 7 refuses a score your own severities contradict** — above 5 with a
+P0, above 7 with a P1, above 9 with a P2. The ceiling is loose on purpose: it
+stops a number nobody could defend, it does not second-guess a judgement inside
+the band.
+
+Score the **dimension**, not the count of findings. Eleven P3s is a tidy 8, not
+a 3. And **never write an overall score** — it is the mean of the lens scores,
+computed by `render_report.py`, so no two places in the report can disagree.
 
 ## House style — binding on every line
 
@@ -106,7 +137,15 @@ the two agree by construction, and it is the only way to be sure.
 6. **Stay in your lens.** Note out-of-scope observations in one line under **For other lenses** and move on.
 7. **If `persona_mode` is `generic`, say so on the face of the report.** Findings rest on inferred personas.
 8. **Never dedupe against another lens, and never read one.** Each lens report stands alone. Overlap is reconciled once, at the run level, by the orchestrator.
-9. **If the run has `coverage_depth: deep`, mark findings from auditor-style exploration.** A finding from a screen no real user would reach is real, but it is not evidence about the ordinary experience. See CLAUDE.md Phase 4, R3.
+9. **Every finding carries a `Fix`, and it is client-facing.** `render_report.py`
+   prints it as a *Recommended fix* column beside the finding, so it is one of
+   four things a paying reader sees. Name the surface and the change — *"Delete
+   the eyebrow and link that section to /restaurants"*, not *"reconsider the
+   framing"*. An empty Fix renders as a dash.
+10. **Quote on-page wording verbatim, in quotation marks, when a finding turns on
+   copy.** Two lenses quoting the same string is how the run level detects that
+   they found the same thing. Paraphrasing costs that link.
+11. **If the run has `coverage_depth: deep`, mark findings from auditor-style exploration.** A finding from a screen no real user would reach is real, but it is not evidence about the ordinary experience. See CLAUDE.md Phase 4, R3.
 
 ---
 

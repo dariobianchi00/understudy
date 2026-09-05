@@ -100,7 +100,11 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/check_report.py <run_folder>
 
 ## Stage 6 — Hand over
 
-Run-level `exec-summary.md` leads with the matrix, then the per-site reports. Then offer the export — **PDF or HTML**, scoped to **summary · one lens · everything** — via `render_report.py`.
+Run-level `exec-summary.md` follows the `/understudy:run` §3.6 template like any other
+run — description first, then the Top 5. **Do not paste the matrix into it:**
+`render_report.py` lifts the `## Differences matrix` from `compare/exec-summary.md` and
+appends it as the report's closing section on its own landscape page, so a copy in the
+summary is a second version of a table built from N captures. Then offer the export — **PDF or HTML**, scoped to **summary · one lens · everything** — via `render_report.py`.
 
 **State on the face of the report that only public websites were compared.** A reader who sees a successful marketing-site comparison will reasonably assume the products behind them were compared too. They were not, and they cannot be: you cannot human-in-the-loop past a competitor's auth wall, and creating an account on their product to try is not something this tool will do.
 
