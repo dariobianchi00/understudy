@@ -316,7 +316,9 @@ understudy/                              (public, MIT)
     │   ├── init_run.py     ✅   creates run folder + manifest at run START
     │   ├── check_capture.py ✅  phase-2a gate: checks 2 + 5, mechanically
     │   ├── finding_id.py   ✅   stable IDs + self-test
-    │   ├── check_report.py ✅   phase-2b gate: checks 1, 3, 4 + 6
+    │   ├── check_report.py ✅   phase-2b gate: checks 1, 3, 4, 6 + 7
+    │   ├── close_run.py    ✅   closes the manifest at run END — captures,
+    │   │                        findings, finished_utc, all read off the disk
     │   └── compare_runs.py      Phase 4 — new/persisting/resolved + overlap %
     └── examples/                        fictional product only
         ├── target.example.yaml ✅   sample-findings.md ✅
@@ -393,6 +395,12 @@ Plus one human check that is not automatable and should not pretend to be: **rea
 6. **⚑ Lab metrics read as field metrics.** The Mode B `technical` numbers are one measurement from one machine on one connection. They are sound evidence about the page and no evidence at all about what users experience. A report presenting a lab LCP as "your users' LCP" is confidently wrong, and that error discredits every other number beside it. **Mitigation: the caveat sits in the report body, not a footnote; mobile and desktop are measured and reported separately; §3.1 states the limit.**
 
 7. **Website assessment looks cheap, so it will be over-trusted.** A 20-minute visit traversal costs a quarter of a product run, which invites running it casually and treating the output as equivalent. It is not — a visitor traversal sees the pages a visitor sees and nothing behind them. **Mitigation: the report states what was and was not reached, and `clarity` never speculates about a product it did not open.**
+9. **⚑ A manifest written at the start is only half a manifest.** `init_run.py` deliberately writes it at run start, so it records what ran rather than what someone remembers — but nothing ever wrote the other half, and every run on disk claimed `phase: 2a-capture`, `finished_utc: null`, `captures: {}`. Four completed runs, all lying about themselves. Since `report --since` compares runs by what their manifests say they contain, an unclosed run cannot be honestly diffed, and the failure is silent.
+
+   **Fixed 2026-09-05 by `close_run.py`**, which keeps the same principle: every field is read off the disk, never taken from the caller. `finished_utc` comes from the newest evidence or findings file, not the wall clock — excluding exports, so re-rendering a report months later cannot move the date a run finished. `check_report.py` warns while a manifest is still open, because the gate is the last thing that runs and the thing nobody skips.
+
+   *General lesson: a field that nothing writes and nothing reads is not a field, it is a comment. Either populate it or delete it — a schema that lies is worse than one that is missing.*
+
 5. **Seven lenses can produce a great deal of unread output.** The report template must force a one-sentence verdict and a top-3 before anything else. The reference skill did this, and it is why its exec summary was usable. **Enforced by gate check 6 in `check_report.py`** — this mitigation is a gate, not an intention.
 
    ✅ **Extended 2026-09-04, after the first real run made the risk concrete.** A 3-lens run produced 39 findings of which ~25 were distinct: `bugs` contributed 3 findings `ux` did not have, and `onboarding` contributed none (its value was the funnel, not its findings list). Verdict-first was being applied *per lens*, which multiplies the problem it was meant to solve — four competing exec summaries for three lenses, eight for seven.

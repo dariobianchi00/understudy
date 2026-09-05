@@ -469,7 +469,26 @@ reading the lens reports, not from the generated table.
 It never merges, re-scores or drops anything (§11.8) — a false pair costs a
 misleading note, not a lost finding.
 
-### 3.7 — Offer an export, then hand over
+### 3.7 — Close the manifest
+
+```
+${CLAUDE_PLUGIN_ROOT}/scripts/close_run.py <run_folder>
+```
+
+Records what was captured, what was scored and when the run finished — **every
+field read off the disk, never from memory**, which is the same reason
+`init_run.py` writes the manifest at the start rather than reconstructing it at
+the end.
+
+Until this runs, the manifest says the run never got past capture. `report
+--since` compares runs by what the manifest claims they contain, so an unclosed
+run is one that cannot be honestly diffed. `check_report.py` warns when it is
+still open.
+
+Use `--phase 2b-scoring` if scoring is not finished, and `--reopen` before
+adding a lens to a run that was already closed.
+
+### 3.8 — Offer an export, then hand over
 
 Print the run folder path. Then **ask, every run** — two short questions, not a form:
 

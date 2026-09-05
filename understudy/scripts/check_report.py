@@ -288,6 +288,19 @@ def main():
         check_score(os.path.join(d, "exec-summary.md"),
                     os.path.join(d, "findings-final.md"), r, lens)
 
+    # A note, never a failure: the run is sound, its record of itself is not.
+    # Warning here is what stops the close step being forgotten — the gate is
+    # the last thing that runs, and it is the thing nobody skips.
+    try:
+        mf = json.load(open(os.path.join(run, "manifest.json")))
+        if mf.get("phase") != "complete" or not mf.get("finished_utc"):
+            r.note("manifest still open (phase "
+                   f"'{mf.get('phase')}', finished_utc {mf.get('finished_utc')}) — "
+                   "run scripts/close_run.py <run_folder> to record what was "
+                   "captured and when it finished")
+    except Exception:
+        pass
+
     for n in r.notes:
         print(f"  · {n}")
     print()

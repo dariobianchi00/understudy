@@ -104,7 +104,17 @@ table automatically and the overall is recomputed. **The overall score is never 
 
 House style applies — pyramid, bullets, no prose paragraphs. Roughly one page per lens in the run.
 
-### 6. Offer an export
+### 6. Re-close the manifest
+
+```
+${CLAUDE_PLUGIN_ROOT}/scripts/close_run.py <run_folder>
+```
+
+The run now holds a lens it did not before, and the manifest records what a run
+contains. Re-running it updates the capture and findings counts; `finished_utc`
+is stamped once and is not moved by a later scoring pass.
+
+### 7. Offer an export
 
 Same as a full run. Print the run folder path, then ask:
 
