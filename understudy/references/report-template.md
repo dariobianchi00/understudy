@@ -43,6 +43,9 @@ no "it depends", no list. This is the line someone repeats in a meeting.>
 2. **[P1] <Title>** — <one line> (<personas>)
 3. **[P1] <Title>** — <one line> (<personas>)
 
+## Score
+- **Score:** <N>/10 — <one line saying what drove it, in the reader's terms>
+
 ## Limits on this read
 - **Personas:** <list> — ⚠ INFERRED (generic) | researched (supplied)
 - **Not reached:** <surfaces, flows — or "none">
@@ -61,6 +64,29 @@ and if only one persona ran, say that instead: a flip could not be observed.>
 ## Next action
 <One line.>
 ```
+
+### ⚑ The score
+
+**You assign it, because you are the only one who read the evidence.** The run
+report renders every lens's score in one table with an overall figure, so this
+number is read by the client beside the other checks — a lens that scores
+generously makes every other lens look worse than it is.
+
+- **10** — nothing to fix that a reasonable reviewer would raise.
+- **8–9** — works; the findings are polish.
+- **6–7** — works, with friction a real user would notice and complain about.
+- **4–5** — a user gets through, but a meaningful share would give up or distrust it.
+- **2–3** — the job this check covers mostly fails.
+- **0–1** — unusable on this dimension.
+
+**Gate check 7 refuses a score its own severities contradict** — above 5/10
+carrying a P0, above 7/10 carrying a P1, above 9/10 carrying a P2. The ceiling
+is loose on purpose: it stops a number nobody could defend, it does not
+second-guess a judgement inside the band. Score the dimension, not the count of
+findings — eleven P3s is a tidy 8, not a 3.
+
+**Never write the overall score.** It is the mean of the lens scores, computed
+by `render_report.py`, so the cover and the table cannot disagree.
 
 **⚑ If `persona_mode` is `generic`, the inferred-persona warning appears in the summary itself, not a footnote.** Findings resting on personas the agent invented are materially weaker than findings from researched ones, and a reader who misses that will over-trust the report.
 
@@ -112,6 +138,17 @@ and if only one persona ran, say that instead: a flip could not be observed.>
 - **Fix:** <One line. A direction, not a spec.>
 ```
 
+**⚑ `Fix` is client-facing.** It is not a note to yourself: `render_report.py`
+prints it as a *Recommended fix* column beside every finding in the exported
+report, so it is one of the four things a paying reader actually sees. Write it
+as an instruction someone could hand to a developer or a copywriter — name the
+surface and the change. *"Delete the eyebrow, and add a self-serve link from
+that section to /restaurants"* is a fix; *"reconsider the framing"* is not.
+
+**Never leave it empty.** A finding with no fix renders as a dash, and a column
+of dashes is the reader's evidence that the report describes problems it cannot
+help with.
+
 **The title carries the finding.** `Same meal shows three different times across surfaces` — not `Timestamp issue` and not `Investigation of meal timestamps`. A reader scanning only the titles should get the whole report.
 
 **⚑ `Locator` is not optional, even though the gate will tolerate its absence.**
@@ -161,6 +198,11 @@ Observations that did not meet the evidence rule. **Not findings.**
 **⚑ Split when severity flips.** If the same behaviour is P1 for one persona and a non-issue for another, that is **two findings**, not an average. Name the persona-specific variants (`<id>-a`, `<id>-b`) and flag the flip in the exec summary.
 
 > A flip usually means the product has picked a user without saying so. Averaging it away destroys the most valuable signal the method produces — and it is the failure mode a hurried analyst falls into every time.
+
+**Cite the exact on-page wording in quotation marks when a finding turns on
+copy.** Two lenses quoting the same string is how the run level detects that
+they found the same thing — see `commands/run.md` §3.6. Paraphrasing the label
+costs that link, and costs the reader the ability to search for it.
 
 **Do NOT dedupe across lenses.** Each lens report stands alone and is read alone; a problem another lens also found still belongs in yours, scored on your terms. Cross-lens overlap is reconciled once, at the run level, by the orchestrator — never by you, and never by reading another lens's output.
 

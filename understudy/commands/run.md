@@ -250,67 +250,197 @@ else. Three consequences:
 - **Explain the vocabulary before using it.** `ux`, `bugs`, `onboarding`,
   `P0`, `persona` are all jargon. The summary carries a short "what was tested"
   block that says what each lens actually looked for, in plain English.
-- **Lead with the decision, not the description.** Not "this report analyses
-  the onboarding funnel" — say what is wrong, what it costs, and what to do.
+- **Describe the thing, then lead with the decision.** Two or three lines
+  saying what the product actually is come first — a verdict about something
+  the reader cannot picture is unusable. From the Top 5 onwards it is decisions
+  only: what is wrong, what it costs, what to do. Never "this report analyses
+  the onboarding funnel".
 - **Write like a person.** No "it is worth noting", no "delve", no
   three-part flourishes, no sentence that survives having its adjectives
   deleted. Concrete nouns and real numbers. If a line could appear in any
   report about any product, cut it.
 
 ```markdown
-# <Product> — understudy run <YYYY-MM-DD> (<run-id>)
+# <Product> — <Website | Product> assessment — <D Month YYYY>
 
-<ONE SENTENCE across the whole run. What is true about this product, and what
-it costs. The line someone repeats in a meeting.>
+## What this is
 
-## The three things that matter
-1. **<Plain-English title>** — <one line: the cost, in the user's terms>
-   <severity> · found by <n> of <m> independent checks · `<lens> <id>`
-2. …
-3. …
+<2–3 lines describing the thing assessed, neutrally, as a stranger would need
+it explained: what the company sells, to whom, in which market, at what scale.
+Numbers from the site — vendor counts, price ranges, countries. NO verdict and
+NO finding here; a reader who has never seen the product must be able to
+picture it before being told what is wrong with it.>
 
-## What we did
-<2–3 sentences, no jargon. A stand-in user with a goal drove the real product
-in a real browser while everything was recorded; separate reviewers then scored
-that recording. Say how long, on what device, and how many people were simulated.>
+## How it was produced
+
+<2–3 sentences, no jargon. A stand-in buyer with a goal drove the real site in
+a real browser while everything was recorded; separate reviewers then scored
+that recording without seeing each other's work. Say how long, on what device,
+how many people were simulated, and that the personas were constructed if they
+were.>
+
+## Contents
+
+<LEAVE EMPTY. render_report.py fills this with a numbered, hyperlinked index of
+every section, built from what actually ran.>
+
+## Top 5 — fix these first
+
+<ONE sentence: the strongest honest reading of the whole run. This is the
+verdict; it lives here, introducing the list, not at the top of the document.>
+
+| # | Severity | What is happening | What it costs | Effort |
+|---|---|---|---|---|
+| 1 | P0 | <what a reader can see on the page> | <the cost, in the buyer's terms> | <Copy change / Server configuration / Design change / Build> |
+
+<Exactly five rows, highest severity first, drawn from every check. If the run
+produced fewer than five P0s — usually — fill from P1, and let the Severity
+column say so. Never pad with P2 or P3 to reach five: four serious findings and
+a filler reads worse than four.>
+
+<One line under the table grouping the effort: which are copy, which are
+configuration, which need building.>
+
+## What a buyer could and could not establish
+
+| Question the buyer had | Answer from the site |
+|---|---|
+
+<Their real questions, with times and page counts where they were observed.>
+
+## What the site does well
+
+<2–4 bullets. A report that cannot say anything positive is as untrustworthy as
+one that cannot say anything negative.>
+
+## Against comparable sites
+
+<Only when competitors were run. The differences matrix, plus the market caveat
+naming which markets the comparison sites serve.>
 
 ## What each check looked for
+
 | Check | Question it answers |
 |---|---|
-| **ux** | Can someone use this without being taught? Is anything confusing, misleading, or harder than it needs to be? |
-| **bugs** | Is anything actually broken — errors, failed requests, dead ends, contradictory data? |
-| **onboarding** | How long from arriving to getting something useful, and where do people give up? |
-| **content** | Does the product deliver what its words promise, in language people understand? |
+| **Clarity** | Can a visitor say what this is, who it is for, and what to do next? |
 
-*(Include only the lenses that ran. Rewrite the questions if a lens's own
-verdict phrases it better — these are defaults, not fixed copy.)*
+<In LENS_ORDER, always: Clarity, Conversion, Trust, Compare, SEO, AEO,
+Technical — then Usability, Defects, Activation, Content. Include only the
+checks that ran. This table's order IS the document's order.>
 
-## Severity, in plain terms
-- **P0** — blocks the job, or breaks trust badly enough that people leave.
-- **P1** — they get through, but would churn before paying.
-- **P2** — noticeable annoyance; erodes value over time.
-- **P3** — polish. Worth fixing, changes nothing.
+## How each area scores
 
-## The numbers
-- <5–7 bullets. Real figures only: time to first value, steps, counts.
-  No adjective that isn't carrying a number.>
+<LEAVE EMPTY. render_report.py fills this from each lens's own `Score:` line
+and computes the overall. Never write the numbers by hand.>
 
-## Where to go deeper
-| Report | Findings | What it says |
-|---|---|---|
-| [`ux`](ux/exec-summary.md) | 14 — 1 P0, 8 P1, 4 P2, 1 P3 | <the lens's own verdict, one line> |
+## How to read these findings
 
-## What we could not see
+| Severity | Meaning |
+|---|---|
+| 🔴 **P0** | Blocks the job, or breaks trust badly enough that people leave |
+| 🟠 **P1** | They get through, but would not become a customer |
+| 🟡 **P2** | Noticeable friction; erodes value over time |
+| ⚪ **P3** | Polish. Worth fixing, changes nothing on its own |
+
+<Then one line on what corroboration across checks means, and one on where the
+full evidence lives.>
+
+## Raised by more than one check
+
+<LEAVE EMPTY. render_report.py fills this with the findings two or more checks
+named independently. Omit the heading entirely if only one check ran.>
+
+## Limits of this assessment
+
 - <Persona mode, coverage depth, surfaces never opened, devices not tested,
-  anything excluded. An executive who acts on this needs to know its edges.>
-
-## What the product got right
-- <2–4 bullets. A report that cannot say anything positive is as untrustworthy
-  as one that cannot say anything negative.>
-
-## Do this next
-<One line. One action, not a list.>
+  lab-vs-field on any speed number, anything excluded. Stated here rather than
+  in a footnote, because acting on the report requires knowing them.>
 ```
+
+#### ⚑ Sections this document must NOT contain
+
+- **No verdict sentence at the top.** The document opens with a description of
+  the thing assessed. A reader who has never seen the product cannot use a
+  verdict about it. The verdict opens the Top 5 instead, where the evidence for
+  it is directly underneath. *(Gate check 6 applies to lens summaries only.)*
+- **No "Recommended first action".** The Top 5 is ranked, so its first row is
+  already the recommended first action. Repeating it invites the two to drift.
+- **No "technical facts worth separating out".** Anything technical belongs to
+  the Technical check, where a reader looking for it will go. A summary that
+  keeps its own technical annexe is two reports.
+- **No section numbers written by hand.** `render_report.py` numbers every
+  section in document order, so an inserted section cannot leave the index
+  pointing at the wrong place.
+- **No severity tally of your own.** The cover already carries the finding
+  count and the P0/P1/P2/P3 split. A second copy in the body is how the two
+  come to disagree.
+
+Three headings are written empty and filled by the renderer — **Contents**,
+**How each area scores**, and **Raised by more than one check**. Write the
+heading, write nothing under it. Each is built from what actually ran, so none
+of them can contradict the document it sits in.
+
+A fourth, **Site-by-site comparison**, is appended by the renderer as the final
+section and is not declared at all — see below.
+
+#### ⚑ The site-by-site matrix closes the document
+
+When `compare` ran, `render_report.py` lifts the `## Differences matrix` table
+whole from `compare/exec-summary.md` and appends it as the last numbered
+section, on its own landscape page.
+
+**Do not re-type it into the run summary.** It is the only place in the report
+where each competitor's own observed value sits beside ours, it is built from
+four separate captures, and a hand-copied second version is how one number
+comes to differ between two pages of one document.
+
+`## Against comparable sites` earlier in the summary stays, and stays short: it
+carries our column and the lead/trail/level count, for the reader who stops
+before the findings. The matrix at the end is the evidence behind it — summary
+and detail, the same split as the Top 5 against the per-lens sections.
+
+> Requested 2026-09-05 by the first client to read one: the summary told him
+> where the site trailed but never showed what the other three actually did, so
+> the comparison could not be checked. The lens had built the table; only the
+> export was dropping it.
+
+#### ⚑ The order is fixed, and the table announces it
+
+`LENS_ORDER` in `render_report.py` — **Clarity · Conversion · Trust · Compare ·
+SEO · AEO · Technical**, then **Usability · Defects · Activation · Content** —
+is the order the detailed sections appear in, the order the contents lists
+them, and the order "What each check looked for" must use.
+
+> Observed 2026-09-05: the summary's own table listed the checks in one order
+> and the document presented them in another. A reader who uses the table as a
+> map is then wrong on every jump, and the report looks assembled rather than
+> written. **If you reorder the table, you have introduced a bug.**
+
+**Check names are Title Case; `SEO` and `AEO` are always upper case.** They are
+what the client reads, never the folder name.
+
+| Folder | In the report |
+|---|---|
+| `clarity` | Clarity |
+| `conversion` | Conversion |
+| `trust` | Trust and credibility |
+| `compare` | Competitive comparison |
+| `seo` | Search visibility |
+| `aeo` | Answer-engine readiness |
+| `technical` | Performance and delivery |
+| `ux` | Usability |
+| `bugs` | Defects |
+| `onboarding` | Activation |
+| `content` | Content |
+
+`render_report.py` uses this same mapping (`LENS_LABELS`), so a report that says
+"aeo" in one table and "Answer-engine readiness" in the next looks like two
+documents stapled together.
+
+**⚑ Never name a run-folder path in prose the client reads.** A link's target
+is a relative path and stays one; the link *text* is the display name. A
+sentence like "see `trust/findings-final.md` in the run folder" is meaningless
+to someone who was sent a PDF — say "in the full report".
 
 #### Ranking across lenses is legitimate — merging is not
 
@@ -327,6 +457,17 @@ Lens reports deliberately do not dedupe against each other (`report-template.md`
 **Three independent lenses reaching the same finding is the strongest signal this architecture can produce** — the lenses never read each other, so agreement is real corroboration rather than an echo. Reported as three separate findings it reads as padding; reported as a corroboration count it reads as confidence.
 
 Rules: a corroborated finding takes **one** slot in the top 3, not three. Count lenses, never average severities — cite the highest and say which lens assigned it.
+
+**`render_report.py` also computes this mechanically** and prints a "Raised by
+more than one check" table above the lens sections, plus an *Also raised by*
+note on each affected row. That is a floor, not a substitute: it pairs findings
+on a shared verbatim quotation or a similar title at the same locator, so it
+catches the obvious agreements and misses ones phrased differently. **Your
+top-3 corroboration counts are the authoritative ones** — write them from
+reading the lens reports, not from the generated table.
+
+It never merges, re-scores or drops anything (§11.8) — a false pair costs a
+misleading note, not a lost finding.
 
 ### 3.7 — Offer an export, then hand over
 

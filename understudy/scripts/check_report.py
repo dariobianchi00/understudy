@@ -12,6 +12,12 @@ Enforces the four gate conditions scoring is responsible for (CLAUDE.md §10):
             is deterministic: it tests the ID function, not the model.
   Check 6 — the report leads with a verdict. First non-heading block is a
             single sentence; a top-3 appears above any detailed findings.
+            Applies to LENS summaries only. The run-level summary opens with a
+            description of the thing assessed and carries its verdict in the
+            Top 5 — see commands/run.md §3.6.
+  Check 7 — a lens's self-assigned score is not contradicted by its own
+            severities. The lens that read the evidence picks the 0-10; this
+            refuses the combinations that cannot both be true.
 
 Checks 2 and 5 belong to capture — see check_capture.py.
 
@@ -81,6 +87,46 @@ def parse_findings(text):
             if fm:
                 current["fields"][fm.group("key").strip().lower()] = fm.group("val").strip()
     return findings
+
+
+SCORE_FIELD = re.compile(r"^-\s+\*\*Score:\*\*\s*(\d{1,2})\s*/\s*10\s*[—–-]?\s*(.*?)\s*$",
+                         re.M)
+
+# The ceiling a lens may claim while carrying a finding of each severity.
+# Deliberately loose: it catches a score that cannot be defended, not one it
+# merely disagrees with. Scoring is a judgement (§11.8) and the gate is not
+# here to relitigate it — only to stop "9/10" sitting above a P0.
+SCORE_CEILING = {"P0": 5, "P1": 7, "P2": 9}
+
+
+def check_score(path, findings_path, r, lens):
+    """Check 7 — the score and the severities must be able to coexist."""
+    if not os.path.exists(path):
+        return
+    findings = (parse_findings(open(findings_path, errors="replace").read())
+                if os.path.exists(findings_path) else [])
+    text = open(path, errors="replace").read()
+    m = SCORE_FIELD.search(text)
+    if not m:
+        r.note(f"{lens}: no '- **Score:** N/10 — why' line; "
+               f"the run report will omit this check from its score table")
+        return
+    score, why = int(m.group(1)), m.group(2).strip()
+    if not 0 <= score <= 10:
+        r.fail(7, f"{lens}: score {score} is outside 0-10")
+        return
+    if len(why) < 15:
+        r.fail(7, f"{lens}: score {score}/10 has no reason. "
+                  f"'Why that score' is a column a client reads.")
+    worst = None
+    for sev in ("P0", "P1", "P2"):
+        if any(f["fields"].get("severity", "").upper().startswith(sev) for f in findings):
+            worst = sev
+            break
+    if worst and score > SCORE_CEILING[worst]:
+        r.fail(7, f"{lens}: scored {score}/10 while carrying a {worst}. "
+                  f"A lens with a {worst} cannot score above "
+                  f"{SCORE_CEILING[worst]}/10.")
 
 
 def check_verdict(path, r, lens):
@@ -239,6 +285,8 @@ def main():
         d = os.path.join(run, lens)
         check_verdict(os.path.join(d, "exec-summary.md"), r, lens)
         check_findings(os.path.join(d, "findings-final.md"), r, lens, run)
+        check_score(os.path.join(d, "exec-summary.md"),
+                    os.path.join(d, "findings-final.md"), r, lens)
 
     for n in r.notes:
         print(f"  · {n}")
@@ -248,7 +296,8 @@ def main():
         labels = {1: "evidence rule (gate check 1)",
                   3: "zero unsupported P0s (gate check 3)",
                   4: "stable finding IDs (gate check 4)",
-                  6: "report leads with a verdict (gate check 6)"}
+                  6: "report leads with a verdict (gate check 6)",
+                  7: "score consistent with severities (gate check 7)"}
         by = {}
         for c, m in r.failures:
             by.setdefault(c, []).append(m)

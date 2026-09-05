@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "understudy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An agent that stands in for a user, drives a live web product, and reports back through a chosen lens.",
   "owner": {
     "name": "Dario Bianchi",

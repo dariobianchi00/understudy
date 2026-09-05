@@ -81,7 +81,14 @@ Adjustments for a diff lens:
 - **`Personas hit:`** is the persona whose evidence supports the row, or `n/a` for Mode C dimensions.
 - **`Evidence:` must cite at least one artifact per site** in the row. A one-sided citation fails the evidence rule here even though it would pass elsewhere.
 
-The matrix goes in `exec-summary.md`, immediately after the verdict:
+The matrix goes in `exec-summary.md`, immediately after the verdict.
+
+**⚑ This table is lifted verbatim into the client report.** `render_report.py`
+finds it by the exact heading `## Differences matrix` and renders it as the
+final section of the run report, on a landscape page. So: keep the heading
+exactly as written, keep the verdict word bolded and one of `leads` · `trails`
+· `level` · `not comparable`, and write every cell as something a reader who
+has never opened your report can understand on its own — `✓ 5 s`, not `✓`.
 
 ```markdown
 > **Public websites only, logged out.** Competitor products behind their login

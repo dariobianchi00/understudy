@@ -1,6 +1,6 @@
 {
   "name": "understudy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Evaluate any web product or website as a stand-in user. Eleven lenses \u2014 ux, bugs, onboarding, content, clarity, conversion, trust, technical, seo, aeo, compare \u2014 score one browser session each. Every finding cites a screenshot.",
   "author": {
     "name": "Dario Bianchi",
