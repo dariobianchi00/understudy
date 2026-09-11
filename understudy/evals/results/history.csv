@@ -1,0 +1,3 @@
+date,capture,lens,model,run,contract_pass,recall,caught,planted,hallucinations,out_of_lens,band_ok,band_judged,n_findings,score,cost_usd,seconds,results_dir
+2026-09-11T0351Z,product,bugs,sonnet,1,1,1.0,4,4,0,0,2,4,3,1,0.772,242.7,results/smoke-product
+2026-09-11T0351Z,site,clarity,opus,1,1,1.0,3,3,0,0,3,3,8,3,1.7569,282.2,results/smoke-site

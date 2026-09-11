@@ -34,6 +34,33 @@ They are not a measurement of the traversal skills. A traversal eval drives
 more expensive layer. These captures test the eleven lenses, the gates and the
 renderer against known ground truth.
 
+## Running the lens evals
+
+```bash
+python3 understudy/evals/run_evals.py --capture site --lens clarity --lens trust --runs 3
+python3 understudy/evals/run_evals.py --capture product --lens bugs
+python3 understudy/evals/run_evals.py --trend        # rebuild results/trend.md
+```
+
+Each (lens, run) copies the frozen capture to a temp folder, runs the real lens
+agent through `claude -p` on the model the manifest allocates, then grades the
+two files it wrote. `--dry-run` writes the prompts and calls nothing. Results
+land in `results/<timestamp>/`, one line per run is appended to
+`results/history.csv`, and `results/trend.md` is rebuilt.
+
+| Grader | How | Kind |
+|---|---|---|
+| `contract` | `check_report.py --expect-lenses 1` on the output | **Gate.** Pass/fail |
+| `recall` | LLM judge: for each planted defect for this lens, did any finding correspond, in any wording | Metric |
+| `hallucinations` | LLM judge: was a deliberately clean item reported as a problem | Metric, expect 0 |
+| `out_of_lens` | LLM judge: findings that belong to another check | Metric, expect 0 |
+| `band` | deterministic: each caught defect's severity vs its planted band | Metric |
+| `score` | the 0–10 the lens gave itself | Metric |
+
+**Only `contract` is pass/fail.** The rest are numbers to trend. Do not set a
+threshold on any of them until there are enough runs to know the noise — that
+is the mistake §11.8 exists to prevent.
+
 ## Grading against the answer key
 
 `planted.json` lists each defect with the lenses expected to catch it and the
