@@ -189,7 +189,7 @@ def preflight(model):
     txt = (out.get("result") or "") + p.stderr
     if out.get("is_error") or NOT_USABLE.search(txt) or "OK" not in txt.upper():
         sys.exit(f"preflight: claude is not usable here — {txt.strip()[:160]!r}. "
-                 f"Set ANTHROPIC_API_KEY (an API key, sk-ant-…) or sign in; nothing recorded")
+                 f"Sign in, or set CLAUDE_CODE_OAUTH_TOKEN (from `claude setup-token`) or ANTHROPIC_API_KEY; nothing recorded")
     return True
 
 

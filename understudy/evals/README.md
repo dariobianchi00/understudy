@@ -92,8 +92,13 @@ run summary's shape, and persisting a lens's text verbatim.
 `.github/workflows/evals.yml` runs the lens evals on both captures and every
 behaviour case every Monday (and on demand), commits `results/` to the
 `evals-results` branch, and opens an issue if a contract gate or a safety case
-fails. It needs the repository secret `ANTHROPIC_API_KEY`; nothing runs
-without it. Metrics in `trend.md` are watched, never gated.
+fails. It authenticates with the repository secret `CLAUDE_CODE_OAUTH_TOKEN`
+— a Claude subscription token made with `claude setup-token` in a real
+terminal and stored with `gh secret set CLAUDE_CODE_OAUTH_TOKEN` — so the
+spend lands on the plan, not on API credit. (An `ANTHROPIC_API_KEY` secret
+works too, billed to that key.) Nothing runs without one of them; a plan
+window that runs out mid-run is recorded as skipped, never as a failure.
+Metrics in `trend.md` are watched, never gated.
 
 ## Grading against the answer key
 
