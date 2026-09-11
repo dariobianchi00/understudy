@@ -1,0 +1,17 @@
+{
+ "setup": "site-run",
+ "files_equal": [
+  [
+   "clarity/exec-summary.md",
+   "expected-exec-summary.md"
+  ],
+  [
+   "clarity/findings-final.md",
+   "expected-findings-final.md"
+  ]
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "mcp__*"
+ ]
+}

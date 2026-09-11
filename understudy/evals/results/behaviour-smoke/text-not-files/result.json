@@ -1,0 +1,19 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [
+  "clarity/exec-summary.md differs from the text it was given (paraphrased or truncated)",
+  "clarity/findings-final.md differs from the text it was given (paraphrased or truncated)"
+ ],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "unparsed",
+  "cost": 0
+ },
+ "tools_called": [],
+ "reply": "You've hit your session limit \u00b7 resets 1pm (Asia/Kuala_Lumpur)",
+ "cost_usd": 0.0
+}

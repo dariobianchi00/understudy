@@ -1,0 +1,3 @@
+- exec-summary.md opens with "## What this is" — a description of the product — and carries no verdict sentence above it.
+- It has "## Top 5 — fix these first" with a one-sentence verdict introducing the table, and empty "## Contents", "## How each area scores" and "## Raised by more than one check" headings.
+- No section numbers written by hand, no severity tally, no "Recommended first action".

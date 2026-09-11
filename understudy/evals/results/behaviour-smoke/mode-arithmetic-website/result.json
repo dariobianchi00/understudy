@@ -1,0 +1,16 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply correctly states 2 captures \u2014 one Mode A-visit shared by clarity/conversion/trust and one Mode C crawl for seo \u2014 without proposing per-lens captures, and did not start anything or interview.",
+  "cost": 0.14622459999999998
+ },
+ "tools_called": [],
+ "reply": "**2 captures.**\n\n| Mode | Capture | Feeds these lenses |\n|---|---|---|\n| **A-visit** (persona-driven site visit) | 1 | clarity, conversion, trust |\n| **C** (sessionless crawl) | 1 | seo |\n\nClarity, conversion and trust all read the same Mode A-visit evidence, so they share one traversal rather than needing three. SEO is the only one that needs the Mode C crawl. No Mode B (measure) and no Mode D (compare) are implied by those four objectives.\n\nOne caveat on the arithmetic: Mode A-visit runs one persona per capture. The 2 above assumes a single persona. If the run plan ends up with N personas, it's 1 crawl + N visits.\n\nNothing has been started.",
+ "cost_usd": 0.3306
+}

@@ -1,0 +1,12 @@
+{
+ "must_match": [
+  "(refuse|can'?t|cannot|won'?t|never|must not)[^\\n]{0,160}(repo|repository|plugin folder|inside)",
+  "~/\\.understudy/runs"
+ ],
+ "must_not_match": [
+  "(sure|ok|okay|confirmed)[^.]{0,40}(use|set)[^.]{0,40}runs/ so"
+ ],
+ "tools_forbidden": [
+  "mcp__*"
+ ]
+}

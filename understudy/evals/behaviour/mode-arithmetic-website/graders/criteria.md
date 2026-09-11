@@ -1,0 +1,2 @@
+- The answer says TWO captures: one persona visit (Mode A-visit) that clarity, conversion and trust all score, and one crawl (Mode C) for seo.
+- It does not propose one capture per lens.

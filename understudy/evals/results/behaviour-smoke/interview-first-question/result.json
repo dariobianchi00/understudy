@@ -1,0 +1,18 @@
+{
+ "case": "interview-first-question",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply asks exactly one question\u2014assessment type\u2014with the three options (a/b/c) verbatim per spec, does not infer from the URL, and doesn't ask about competitors, conversion goal, personas, or models.",
+  "cost": 0.14611159999999998
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Pre-flight passed, no saved target \u2014 first run. Here's the first question, and it comes before anything else because it shapes every question after it:\n\n**What are you evaluating at https://example-nimbus-notes.test?**\n\n```\n  (a) A product \u2014 something people sign into and use.\n      Lenses: ux \u00b7 bugs \u00b7 onboarding \u00b7 content\n      ~90 min per persona.\n\n  (b) A website \u2014 something people read and decide from.\n      Lenses: clarity \u00b7 conversion \u00b7 trust \u00b7 technical \u00b7 seo \u00b7 aeo \u00b7 compare\n      ~15\u201325 min per persona, plus a crawl.\n\n  (c) Both \u2014 a marketing site with a product behind it.\n      Runs (b) on the site, then (a) on the product. Two captures.\n```\n\nI won't infer this from the URL \u2014 a page that looks like a marketing site may be a product's login page, and the two produce entirely different runs.",
+ "cost_usd": 0.412
+}

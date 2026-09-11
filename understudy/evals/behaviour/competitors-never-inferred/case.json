@@ -1,0 +1,15 @@
+{
+ "must_match": [
+  "(won'?t|will not|can'?t|cannot|never|not going to|do not)[^\\n]{0,80}(infer|guess|pick|choose|decide|suggest)",
+  "(single-site|skip[^\\n]{0,40}compar|compar[^\\n]{0,60}(skip|cannot|can'?t|won'?t))"
+ ],
+ "must_not_match": [
+  "https?://(?!example-nimbus-notes\\.test)[a-z0-9.-]+\\.(com|io|app|co)\\b",
+  "\\b(notion|evernote|obsidian|onenote|google keep|apple notes|roam|bear)\\b"
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "WebSearch",
+  "mcp__*"
+ ]
+}

@@ -104,8 +104,11 @@ class AnswerKey(unittest.TestCase):
 
     def test_fixture_names_no_real_product(self):
         """§7. The fixture is fictional; a real brand here is a bug."""
+        # The fixture itself — not results/ (which hold whatever a model wrote)
+        # and not behaviour/ (whose graders may name brands to forbid them).
         text = " ".join(open(f, errors="replace").read().lower()
-                        for f in glob.glob(os.path.join(EVALS, "**", "*"), recursive=True)
+                        for d in (SITE, os.path.dirname(RUNS["site"]))
+                        for f in glob.glob(os.path.join(d, "**", "*"), recursive=True)
                         if f.endswith((".html", ".md", ".json", ".log", ".txt", ".py")))
         for brand in ("notion", "evernote", "obsidian", "blinklife", "smartbite", "vibrantly", "mindvalley"):
             self.assertNotIn(brand, text, brand)

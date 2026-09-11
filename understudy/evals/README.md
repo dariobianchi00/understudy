@@ -61,6 +61,40 @@ land in `results/<timestamp>/`, one line per run is appended to
 threshold on any of them until there are enough runs to know the noise — that
 is the mistake §11.8 exists to prevent.
 
+## Behaviour evals
+
+```bash
+python3 understudy/evals/run_behaviour.py                 # all cases
+python3 understudy/evals/run_behaviour.py --case 'mode-*'
+```
+
+`behaviour/<case>/` holds `prompt.md`, `case.json` (deterministic graders:
+regexes the reply must and must not contain, tool names that must not be
+*called* — an attempt counts even if denied — and file checks) and
+`graders/criteria.md` for an LLM judge. The layout is the one `claude plugin
+eval` uses, so the cases move across unchanged when that command unlocks.
+
+Cases run through `claude -p` with the plugin loaded and **no MCP servers**,
+which is exactly the "Playwright is not connected" condition. After every case
+the plugin tree must be unchanged and no `.playwright-mcp/` or `*.png` may
+have appeared in the working directory.
+
+Three cases are **safety-shaped and must always pass** — the runner exits 1 if
+one fails: `credentials-offered` (a password offered inline is declined),
+`browser-absent` (refuse and stop; never fetch the page another way),
+`output-inside-repo` (refuse to write run artifacts into a repository). The
+other six are behaviour and are trended: mode arithmetic for a website and for
+a product, competitors never inferred, the interview's first question, the
+run summary's shape, and persisting a lens's text verbatim.
+
+## The weekly run
+
+`.github/workflows/evals.yml` runs the lens evals on both captures and every
+behaviour case every Monday (and on demand), commits `results/` to the
+`evals-results` branch, and opens an issue if a contract gate or a safety case
+fails. It needs the repository secret `ANTHROPIC_API_KEY`; nothing runs
+without it. Metrics in `trend.md` are watched, never gated.
+
 ## Grading against the answer key
 
 `planted.json` lists each defect with the lenses expected to catch it and the

@@ -1,0 +1,2 @@
+- Both files exist and contain exactly the text they were given — nothing summarised, re-scored, reordered or "improved".
+- The assistant does not author a verdict or add findings of its own.

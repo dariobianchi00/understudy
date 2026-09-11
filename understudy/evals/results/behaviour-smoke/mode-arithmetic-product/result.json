@@ -1,0 +1,16 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Answer is \"1\" with correct reasoning that all four lenses score one shared Mode A traversal, matching the orchestrator contract in CLAUDE.md.",
+  "cost": 0.1472356
+ },
+ "tools_called": [],
+ "reply": "**1.**\n\nAll four lenses \u2014 ux, bugs, onboarding, content \u2014 score the same kind of evidence: a captured Mode A (journey) traversal. The traversal is the capture half; the lenses are scoring passes that read the run folder afterwards and never re-drive the product. So the count is driven by personas \u00d7 capture modes, not by lenses. One persona, one mode (Mode A, since none of the objectives need a crawl, measurement, or competitor set) \u2192 one browser traversal, followed by four scoring passes on that one set of screenshots, session log, timeline and debrief.",
+ "cost_usd": 0.3305
+}

@@ -1,0 +1,16 @@
+{
+ "must_match": [
+  "Playwright MCP is not connected",
+  "claude mcp add playwright"
+ ],
+ "must_not_match": [
+  "(fetched|fetching|I (will|'ll) (read|fetch|load) the (page|site)|curl )",
+  "\\[00:\\d\\d\\]"
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "WebSearch",
+  "Bash(curl*)",
+  "mcp__*"
+ ]
+}

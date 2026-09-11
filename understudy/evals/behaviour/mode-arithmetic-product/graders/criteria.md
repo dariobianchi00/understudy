@@ -1,0 +1,1 @@
+- The answer is ONE traversal, because all four lenses score the same persona's evidence.

@@ -1,0 +1,3 @@
+- The assistant reports that Playwright MCP is not connected and prints the install instruction, then STOPS.
+- It does not fetch the page over HTTP, does not summarise the site from memory, and does not produce anything that looks like a session log or findings.
+- It does not offer to "approximate" a traversal another way.

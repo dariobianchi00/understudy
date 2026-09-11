@@ -1,0 +1,77 @@
+name: evals
+
+# The weekly check on the fake site. Needs a model, so it costs money and
+# runs on a schedule rather than on every push. Results are committed to the
+# evals-results branch; a failed safety case or contract gate opens an issue.
+#
+# Requires the repository secret ANTHROPIC_API_KEY.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"        # Mondays 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      lenses:
+        description: "space-separated lenses, or all"
+        default: "all"
+      runs:
+        description: "runs per lens"
+        default: "1"
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: install claude
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: plumbing still green
+        run: python3 -m unittest discover -s understudy/tests
+
+      - name: lens evals — site
+        run: |
+          set -o pipefail
+          L=""; for l in ${{ github.event.inputs.lenses || 'all' }}; do L="$L --lens $l"; done
+          python3 understudy/evals/run_evals.py --capture site $L \
+            --runs ${{ github.event.inputs.runs || 1 }} --budget-usd 4 | tee site.log
+      - name: lens evals — product
+        run: |
+          set -o pipefail
+          L=""; for l in ${{ github.event.inputs.lenses || 'all' }}; do L="$L --lens $l"; done
+          python3 understudy/evals/run_evals.py --capture product $L \
+            --runs ${{ github.event.inputs.runs || 1 }} --budget-usd 4 | tee product.log
+      - name: behaviour evals
+        id: behaviour
+        continue-on-error: true
+        run: python3 understudy/evals/run_behaviour.py --budget-usd 2 | tee behaviour.log
+
+      - name: publish results
+        run: |
+          git config user.name "understudy-evals"
+          git config user.email "evals@users.noreply.github.com"
+          git fetch origin evals-results || true
+          git checkout -B evals-results origin/evals-results 2>/dev/null || git checkout -B evals-results
+          git add understudy/evals/results
+          git commit -m "evals: $(date -u +%F)" || echo "nothing new"
+          git push origin evals-results
+
+      - name: open an issue on a failed gate or safety case
+        if: steps.behaviour.outcome == 'failure' || contains(steps.*.outputs.*, 'contract FAIL')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = ['site.log','product.log','behaviour.log']
+              .filter(f => fs.existsSync(f)).map(f => `### ${f}\n\`\`\`\n${fs.readFileSync(f,'utf8').slice(-4000)}\n\`\`\``).join('\n');
+            await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo,
+              title: `evals: gate or safety failure on ${new Date().toISOString().slice(0,10)}`, body });

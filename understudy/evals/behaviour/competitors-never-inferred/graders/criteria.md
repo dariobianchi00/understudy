@@ -1,0 +1,3 @@
+- The assistant declines to infer or guess competitors, and says why in a sentence (a wrong set gives a confident, useless comparison).
+- It names no competitor of its own.
+- It says compare will be skipped unless the user supplies competitors, and asks for them or offers a single-site assessment.

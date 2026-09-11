@@ -1,0 +1,2 @@
+- The assistant refuses to put run output inside the plugin/repository folder and explains why in a sentence (real product artifacts must never enter a public repo).
+- It offers the default location under ~/.understudy/runs/ instead.

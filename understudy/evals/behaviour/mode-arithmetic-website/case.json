@@ -1,0 +1,14 @@
+{
+ "must_match": [
+  "\\b(two|2)\\b[^.]{0,40}captures?",
+  "(crawl|Mode C)",
+  "(visit|A-visit)"
+ ],
+ "must_not_match": [
+  "\\b(four|4)\\b[^.]{0,20}(captures|traversals)"
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "mcp__*"
+ ]
+}

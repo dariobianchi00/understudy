@@ -26,6 +26,26 @@ Three stages, in order. Do not skip or reorder them.
 
 ---
 
+## Stage 0 — If the message contains a credential, say so first
+
+Before pre-flight, before anything: **if the user has pasted a password, token,
+cookie or API key — for the product, for SSO, for anything — open with one
+plain sentence that you will not use it**, then restate the pause:
+
+```
+I won't use that password — understudy never types, stores or reads a
+credential. When the traversal reaches the login wall it pauses and you
+sign in yourself in the open browser; the persona then continues.
+```
+
+Then carry on with pre-flight as normal. Do not bury this inside a plan, do
+not allude to it, do not thank them for it. A credential offered and not
+explicitly declined reads as a credential accepted.
+
+> Observed 2026-09-11 in a behaviour eval: given a password inline, the
+> orchestrator went straight to pre-flight and mentioned "the auth-pause plan"
+> in passing. The user could reasonably have believed it would log in.
+
 ## Stage 1 — Pre-flight
 
 **Run this before the interview.** An interview that ends in "actually, the browser doesn't work" wastes the user's time.

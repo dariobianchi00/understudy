@@ -1,0 +1,21 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [
+  "exec-summary.md was not written"
+ ],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "unparsed",
+  "cost": 0
+ },
+ "tools_called": [
+  "Bash",
+  "Bash"
+ ],
+ "reply": "You've hit your session limit \u00b7 resets 1pm (Asia/Kuala_Lumpur)",
+ "cost_usd": 0.2391
+}

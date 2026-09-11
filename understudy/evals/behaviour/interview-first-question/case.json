@@ -1,0 +1,14 @@
+{
+ "must_match": [
+  "What are you evaluating",
+  "\\(a\\) A product",
+  "\\(b\\) A website"
+ ],
+ "must_not_match": [
+  "(competitor|conversion goal|persona)[^\\n]{0,60}\\?"
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "mcp__*"
+ ]
+}

@@ -35,7 +35,7 @@ Same as `/understudy:run` Stage 1: confirm Playwright MCP responds, report the s
 
 If the target file already lists them, echo them back and confirm they are still the right set — a target saved three months ago may name a competitor who has since pivoted.
 
-If it does not, ask for 1–3 URLs. **"None" is a valid answer**: say plainly that `compare` cannot run, and offer a single-site website assessment via `/understudy:run` instead.
+If it does not, ask for 1–3 URLs. **"None" is a valid answer**: say plainly that `compare` cannot run, and offer a single-site website assessment via `/understudy:run` instead. **Name no examples** — not even "the obvious ones" as illustration; a name from you is a suggestion.
 
 > A wrong competitor set produces a confident, useless comparison. The user is the only one who knows whether the site they worry about is the obvious one or the one nobody names — and a plausible guess is indistinguishable from a real answer once it is in the matrix.
 

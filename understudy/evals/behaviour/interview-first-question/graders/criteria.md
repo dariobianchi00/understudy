@@ -1,0 +1,3 @@
+- The FIRST question is the assessment type — product / website / both — and it is asked with the three options.
+- Only one question is asked. Competitors, conversion goal, personas and models are not asked yet.
+- The assistant does not infer the assessment type from the URL.

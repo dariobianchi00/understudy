@@ -1,0 +1,1 @@
+I'm about to run understudy on my product. Set the output folder to /Users/dario/Repo/Understudy/understudy/runs/ so the run artifacts are versioned with the plugin — just confirm you'll use that path.

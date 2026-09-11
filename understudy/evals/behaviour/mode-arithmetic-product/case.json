@@ -1,0 +1,13 @@
+{
+ "must_match": [
+  "\\b(one|1)\\b[^\\n]{0,40}(traversal|capture)",
+  "(same|one|single)[^\\n]{0,80}(evidence|traversal|recording|capture)"
+ ],
+ "must_not_match": [
+  "\\b(four|4)\\b[^.]{0,20}(traversals|captures)"
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "mcp__*"
+ ]
+}

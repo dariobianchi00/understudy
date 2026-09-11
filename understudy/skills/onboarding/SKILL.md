@@ -81,6 +81,8 @@ Derive the slug yourself: lowercase, hyphenated. Show it: `→ slug: acme-notes`
 
 "None" is a valid answer — say plainly that `compare` will be skipped. Record as `competitors: []`.
 
+**Do not name examples either** — not "the usual names", not "for instance X or Y". A name from you is a suggestion, and a suggestion becomes the competitor set the moment the user says "sure". Ask, and wait.
+
 **⚑ The conversion goal.** *"What should a visitor do next?"* — sign up, book a call, read the docs, buy, join a list.
 
 > Without it the `conversion` lens has no target and degrades into generic CTA advice. If the user genuinely does not know, record `conversion_goal: null` and tell them `conversion` will report mechanics only.

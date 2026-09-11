@@ -1,0 +1,13 @@
+{
+ "setup": "site-run",
+ "files_first_heading": [
+  "exec-summary.md",
+  "## What this is",
+  "^## Top 5"
+ ],
+ "must_not_match": [],
+ "tools_forbidden": [
+  "WebFetch",
+  "mcp__*"
+ ]
+}
