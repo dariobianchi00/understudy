@@ -37,6 +37,7 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+NOT_USABLE = re.compile(r"not logged in|please run /login|invalid.{0,20}api key|authentication|hit your (session|usage) limit", re.I)
 PLUGIN = os.path.normpath(os.path.join(HERE, ".."))
 SCRIPTS = os.path.join(PLUGIN, "scripts")
 sys.path.insert(0, SCRIPTS)
@@ -195,6 +196,26 @@ def history_row(stamp, capture, lens, model, run, s, cost, seconds, results_dir)
 
 
 # ------------------------------------------------------------------ claude --
+
+def preflight(model):
+    """One cheap call. If the CLI is not signed in or the key is bad, every
+    lens would 'fail' in a second with $0.00 spent and the history would fill
+    with zeros that mean nothing. Observed 2026-09-11 on the first CI run:
+    'Not logged in · Please run /login' recorded as recall 0/3 across eight
+    lenses. Exit 2 — infrastructure, not a result."""
+    try:
+        p = subprocess.run(["claude", "-p", "Reply with the single word OK.", "--model", model,
+                            "--output-format", "json", "--no-session-persistence",
+                            "--max-budget-usd", "0.05"], capture_output=True, text=True, timeout=120)
+        out = json.loads(p.stdout) if p.stdout.strip().startswith("{") else {"result": p.stdout + p.stderr}
+    except (subprocess.TimeoutExpired, ValueError) as e:
+        sys.exit(f"preflight: claude did not answer ({e}); nothing recorded")
+    txt = (out.get("result") or "") + p.stderr
+    if out.get("is_error") or NOT_USABLE.search(txt) or "OK" not in txt.upper():
+        sys.exit(f"preflight: claude is not usable here — {txt.strip()[:160]!r}. "
+                 f"Set ANTHROPIC_API_KEY (an API key, sk-ant-…) or sign in; nothing recorded")
+    return True
+
 
 def claude(prompt, model, system=None, tools=None, schema=None, budget=None, cwd=None,
            add_dir=None, timeout=1800):
@@ -356,11 +377,18 @@ def main():
     if not a.capture or not a.lens:
         ap.error("--capture and at least one --lens are required")
 
+    if not a.dry_run:
+        preflight(a.judge_model)
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H%MZ")
     results_dir = a.out or os.path.join(RESULTS, stamp)
     os.makedirs(results_dir, exist_ok=True)
-    lenses = [l for d in KEY.get("site", []) + KEY.get("product", []) for l in d["lenses"]] \
-        if a.lens == ["all"] else a.lens
+    if a.lens == ["all"]:
+        # the lenses this capture was made for — the manifest's objectives —
+        # not every lens the answer key happens to mention
+        m = json.load(open(os.path.join(FIXTURE, a.capture, "manifest.json")))
+        lenses = list(m.get("objectives") or [])
+    else:
+        lenses = a.lens
     lenses = sorted(set(l for l in lenses if planted_for(a.capture, l)))
 
     rows, results = [], []

@@ -18,6 +18,10 @@ on:
         description: "runs per lens"
         default: "1"
 
+permissions:
+  contents: write        # push results to the evals-results branch
+  issues: write          # open an issue on a failed gate or safety case
+
 jobs:
   evals:
     runs-on: ubuntu-latest
@@ -37,6 +41,14 @@ jobs:
 
       - name: plumbing still green
         run: python3 -m unittest discover -s understudy/tests
+
+      - name: claude is usable with this key
+        # Fails the job before any lens runs if the CLI cannot answer — a
+        # missing or wrong key must never be recorded as 'recall 0/3'.
+        run: |
+          claude -p "Reply with the single word OK." --model sonnet --output-format json \
+            --no-session-persistence --max-budget-usd 0.05 | tee preflight.json
+          python3 -c "import json;d=json.load(open('preflight.json'));assert not d.get('is_error') and 'OK' in (d.get('result') or '').upper(), d"
 
       - name: lens evals — site
         run: |

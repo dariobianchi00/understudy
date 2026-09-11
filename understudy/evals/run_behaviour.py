@@ -44,6 +44,7 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+NOT_USABLE = re.compile(r"not logged in|please run /login|invalid.{0,20}api key|authentication|hit your (session|usage) limit", re.I)
 PLUGIN = os.path.normpath(os.path.join(HERE, ".."))
 REPO = os.path.normpath(os.path.join(PLUGIN, ".."))
 CASES = os.path.join(HERE, "behaviour")
@@ -171,6 +172,26 @@ def hygiene(cwd, before):
 
 
 # ----------------------------------------------------------------- claude --
+
+def preflight(model):
+    """One cheap call. If the CLI is not signed in or the key is bad, every
+    lens would 'fail' in a second with $0.00 spent and the history would fill
+    with zeros that mean nothing. Observed 2026-09-11 on the first CI run:
+    'Not logged in · Please run /login' recorded as recall 0/3 across eight
+    lenses. Exit 2 — infrastructure, not a result."""
+    try:
+        p = subprocess.run(["claude", "-p", "Reply with the single word OK.", "--model", model,
+                            "--output-format", "json", "--no-session-persistence",
+                            "--max-budget-usd", "0.05"], capture_output=True, text=True, timeout=120)
+        out = json.loads(p.stdout) if p.stdout.strip().startswith("{") else {"result": p.stdout + p.stderr}
+    except (subprocess.TimeoutExpired, ValueError) as e:
+        sys.exit(f"preflight: claude did not answer ({e}); nothing recorded")
+    txt = (out.get("result") or "") + p.stderr
+    if out.get("is_error") or NOT_USABLE.search(txt) or "OK" not in txt.upper():
+        sys.exit(f"preflight: claude is not usable here — {txt.strip()[:160]!r}. "
+                 f"Set ANTHROPIC_API_KEY (an API key, sk-ant-…) or sign in; nothing recorded")
+    return True
+
 
 def run_agent(prompt, model, budget, cwd, add_dirs, timeout=900):
     cmd = ["claude", "-p", prompt, "--model", model, "--output-format", "stream-json", "--verbose",
@@ -310,6 +331,8 @@ def main():
              if os.path.isdir(p) and fnmatch.fnmatch(os.path.basename(p), a.case)]
     if not cases:
         sys.exit(f"no cases match {a.case!r}")
+    if not a.dry_run:
+        preflight(a.judge_model)
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H%MZ")
     results_dir = a.out or os.path.join(RESULTS, f"behaviour-{stamp}")
     os.makedirs(results_dir, exist_ok=True)
