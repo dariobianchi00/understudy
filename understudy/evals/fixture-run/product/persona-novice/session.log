@@ -1,0 +1,26 @@
+[pre-session] Arrived via: the marketing site — "Nimbus remembers everything so you never start from zero"
+[pre-session] What I was told: "remembers everything so you never start from zero"
+[pre-session] What I expect this to be: a notes app that fills itself in from things I already have
+[00:00] Login page. Screenshot 00-start.png. Handing over.
+→ [novice] traversal — auth wall detected at /app/login.html
+⏸  PAUSED — authenticate in the open browser, then confirm
+→ [novice] traversal — resuming at /app/signup.html
+[00:00] Wall cleared by the human at wall-clock 01:10. Clock starts now. Screenshot 00-wall-cleared.png.
+[00:05] "Before we begin, choose your workspace type": Federated graph, Sovereign vault, Hybrid mesh. "This cannot be changed later." Screenshot 01-signup-workspace-type.png.
+[00:20] I don't know what any of these are. It says I can't change it. I haven't seen the product yet and it wants a decision I can't undo.
+[00:48] Picked "Hybrid mesh" because it sounds like it includes the other two. Clicked Create workspace.
+[00:55] Dashboard. "Your cards" — "Nothing here yet." Screenshot 02-dashboard-empty.png. Nothing tells me what to do. I thought it would have my stuff.
+[01:20] There's a search box. Typed "meeting". "No results for 'meeting'." Well, there's nothing in it.
+[01:40] Top menu: Cards, New block, Memories, Settings. Cards and blocks — same thing? Clicked "New block".
+[01:55] A form. Title, Body. Screenshot 03-new-note.png. Typed a title "Dentist" and a few lines.
+[02:41] As I type, a word count updates and the text appears in a preview box under it. OK — that's the first thing it's done for me. Small, but it did something.
+[03:05] Clicked Save. Green "Saved ✓" popped up top right. Screenshot 04-note-saved-toast.png. Then it went back to the dashboard.
+[03:12] Dashboard still says "Nothing here yet." Screenshot 05-notes-list-missing.png. Where did it go?
+[03:30] Typed "Dentist" in search. "No results for 'Dentist'." It said saved.
+[03:50] Went back to New block. Wrote it again, saved again, "Saved ✓" again, dashboard empty again. It is lying to me.
+[04:30] Clicked Memories. Screenshot 06-memories.png. "You prefer to schedule meetings on Tuesday afternoons." "Your team uses Jira and Slack." "You are working on a product launch in Q4."
+[04:50] None of that is true. I've written one note about a dentist. Where is this from? If it's making these up, is it making up the "Saved" too?
+[05:20] Settings. Screenshot 07-settings.png. "Enable webhook sync", "Federated graph replication", "Vault attestation". No idea. There's an Export button — "Markdown, all cards". At least that's clear.
+[06:00] surface: Memories — I don't trust it. surface: Settings — words I don't know, one button I do.
+[06:30] I've spent six minutes and I have zero notes saved and a page telling me things about myself that aren't true. I'd stop here.
+[07:00] Debrief.

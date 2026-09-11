@@ -1,0 +1,6 @@
+[GET] http://localhost:8765/ → 200 text/html 4.2 KB
+[GET] https://analytics.example-tracker.test/t.js → 200 application/javascript 38 KB (third-party)
+[POST] https://analytics.example-tracker.test/collect?uid=2c91… → 204
+[GET] http://localhost:8765/assets/generated/hero.png → 200 image/png 3.9 MB
+[GET] http://localhost:8765/privacy.html → 200 text/html 1.4 KB
+[GET] http://localhost:8765/about.html → 200 text/html 2.6 KB

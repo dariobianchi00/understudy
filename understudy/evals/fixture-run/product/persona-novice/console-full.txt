@@ -1,0 +1,6 @@
+[error] dashboard.html:1 Uncaught ReferenceError: renderGraphOverlay is not defined
+[error] dashboard.html:1 Uncaught ReferenceError: renderGraphOverlay is not defined
+[error] new.html:1 POST http://localhost:8765/api/notes 500 (Internal Server Error)
+[error] dashboard.html:1 Uncaught ReferenceError: renderGraphOverlay is not defined
+[error] new.html:1 POST http://localhost:8765/api/notes 500 (Internal Server Error)
+[error] dashboard.html:1 Uncaught ReferenceError: renderGraphOverlay is not defined

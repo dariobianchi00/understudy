@@ -1,0 +1,89 @@
+{
+  "url": "http://localhost:8765/",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "viewport_verified": true,
+  "measured_utc": "2026-09-08T09:30:00+00:00",
+  "cache": "cold",
+  "throttling": "none",
+  "runs": 1,
+  "tier1": {
+    "lcp_ms": 5800,
+    "cls": 0.04,
+    "tbt_ms": 410,
+    "fcp_ms": 2900,
+    "ttfb_ms": 120
+  },
+  "tier2": {
+    "page_weight_bytes": 4104000,
+    "request_count": 9,
+    "largest_assets": [
+      {
+        "url": "http://localhost:8765/assets/generated/hero.png",
+        "type": "image",
+        "bytes": 3900000
+      },
+      {
+        "url": "https://fonts.example-cdn.test/all.css",
+        "type": "stylesheet",
+        "bytes": 62464
+      },
+      {
+        "url": "https://analytics.example-tracker.test/t.js",
+        "type": "script",
+        "bytes": 38912
+      }
+    ],
+    "images": [
+      {
+        "url": "http://localhost:8765/assets/generated/hero.png",
+        "format": "png",
+        "bytes": 3900000,
+        "natural": [
+          3000,
+          2000
+        ],
+        "displayed": [
+          350,
+          233
+        ],
+        "lazy": false
+      }
+    ],
+    "uncompressed_text_resources": [
+      "http://localhost:8765/style.css",
+      "http://localhost:8765/"
+    ],
+    "missing_cache_headers": [
+      "http://localhost:8765/style.css",
+      "http://localhost:8765/assets/generated/hero.png"
+    ],
+    "render_blocking": [
+      "https://fonts.example-cdn.test/all.css",
+      "http://localhost:8765/style.css"
+    ],
+    "third_party": {
+      "domains": 2,
+      "requests": 3,
+      "bytes": 101376,
+      "by_domain": {
+        "fonts.example-cdn.test": 62464,
+        "analytics.example-tracker.test": 38912
+      }
+    }
+  },
+  "tier3": {
+    "https": true,
+    "hsts": true,
+    "mixed_content": [],
+    "viewport_meta": true,
+    "redirect_chain": [],
+    "asset_404s": [],
+    "console_errors_on_load": [
+      "ReferenceError: nimbusBootstrap is not defined"
+    ]
+  },
+  "screenshot": "measure/screenshots/index-mobile.png"
+}

@@ -1,0 +1,10 @@
+[GET] http://localhost:8765/ → 200 text/html 4.2 KB
+[GET] http://localhost:8765/style.css → 200 text/css 3.1 KB (no content-encoding)
+[GET] https://fonts.example-cdn.test/all.css → 200 text/css 61 KB (render-blocking, third-party)
+[GET] https://analytics.example-tracker.test/t.js → 200 application/javascript 38 KB (third-party)
+[POST] https://analytics.example-tracker.test/collect?uid=8f3a… → 204
+[GET] http://localhost:8765/assets/generated/hero.png → 200 image/png 3.9 MB
+[GET] http://localhost:8765/pricing.html → 200 text/html 2.0 KB
+[GET] http://localhost:8765/features.html → 404 text/html 0.9 KB
+[GET] http://localhost:8765/about.html → 200 text/html 2.6 KB
+[GET] http://localhost:8765/privacy.html → 200 text/html 1.4 KB

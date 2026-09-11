@@ -1,0 +1,80 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "verified": true
+  },
+  "shape_v1": {
+    "time_to_comprehension_seconds": null,
+    "understood_what": false,
+    "understood_who": false,
+    "understood_next_step": false,
+    "guessed": true
+  },
+  "shape_v2": {
+    "start": "00:30",
+    "end": "01:48",
+    "scroll_depth_pct": 100,
+    "sections_seen": 4,
+    "point_of_lost_interest": "01:25"
+  },
+  "shape_v3": {
+    "start": "01:48",
+    "end": "05:45",
+    "pages_visited": [
+      "/pricing.html",
+      "/index.html#demo",
+      "/features.html",
+      "/about.html",
+      "/privacy.html"
+    ],
+    "questions_unanswered": [
+      "What does it cost?",
+      "What is a workspace type?",
+      "What is a sync graph?",
+      "Who are the partners you share data with?",
+      "Is it for individuals or teams?"
+    ],
+    "price_found": false,
+    "price_understood": false,
+    "forms_opened": 1,
+    "forms_submitted": 0,
+    "trust_up": [
+      "About page: named founder, address, company number",
+      "FAQ with real answers"
+    ],
+    "trust_down": [
+      "Anonymous testimonials",
+      "Cookie bar says no tracking; privacy page says cookies and partners",
+      "No price",
+      "Phone number required for a demo"
+    ]
+  },
+  "shape_v4": {
+    "start": "05:45",
+    "end": "06:30",
+    "verdict": "would not proceed; no price"
+  },
+  "objectives": [
+    {
+      "objective": "A visitor can find out what it costs without giving an email",
+      "attempted": true,
+      "started": "01:48",
+      "ended": "02:30",
+      "what_happened": "I opened Pricing. Three plans, all 'Contact sales', no numbers. Contact sales leads to a seven-field form.",
+      "where_i_looked": [
+        "/pricing.html",
+        "/index.html#demo"
+      ],
+      "screenshots": [
+        "screenshots/02-pricing.png",
+        "screenshots/03-demo-form.png"
+      ],
+      "gave_up": true
+    }
+  ],
+  "coverage_depth": "standard",
+  "auditor_mode_from": null,
+  "left_early": false,
+  "session_end_minutes": 6.5
+}

@@ -1,0 +1,32 @@
+{
+  "entry_url": "http://localhost:8765/",
+  "final_url": "http://localhost:8765/",
+  "redirect_chain": [],
+  "response_headers": {
+    "content-type": "text/html; charset=utf-8",
+    "server": "SimpleHTTP/0.6",
+    "strict-transport-security": "max-age=31536000"
+  },
+  "robots_txt": {
+    "present": true,
+    "text": "User-agent: *\nDisallow: /app/\nSitemap: https://example-nimbus-notes.test/sitemap.xml\n",
+    "disallows": [
+      "/app/"
+    ],
+    "sitemap_declared": "https://example-nimbus-notes.test/sitemap.xml"
+  },
+  "sitemap": {
+    "declared": "https://example-nimbus-notes.test/sitemap.xml",
+    "status": 404,
+    "url_count": 0,
+    "reachable": false
+  },
+  "llms_txt": {
+    "present": false,
+    "status": 404,
+    "content": null
+  },
+  "crawled_utc": "2026-09-08T09:20:00+00:00",
+  "depth": "standard",
+  "cap": 15
+}

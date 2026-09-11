@@ -1,0 +1,52 @@
+{
+  "url": "http://localhost:8765/",
+  "final_url": "http://localhost:8765/",
+  "status": 200,
+  "redirect_chain": [],
+  "title": "Nimbus Notes \u2014 Your thoughts, everywhere.",
+  "title_length": 41,
+  "meta_description": "Nimbus Notes keeps every thought in a bi-directional sync graph with a zero-knowledge vault.",
+  "meta_description_length": 92,
+  "canonical": "",
+  "canonical_is_self": false,
+  "robots_meta": "",
+  "x_robots_tag": "",
+  "h1": [
+    "Your thoughts, everywhere."
+  ],
+  "h2": [
+    "How it works",
+    "Loved by teams",
+    "Book a demo"
+  ],
+  "heading_order_valid": true,
+  "lang": "en",
+  "charset": "utf-8",
+  "og": {},
+  "twitter": {},
+  "structured_data": [
+    {
+      "raw": "{\"@context\": \"https://schema.org\", \"@type\": \"SoftwareApplication\", \"name\": \"Nimbus Notes\", \"offers\": {\"@type\": \"Offer\", \"price\": }",
+      "valid": false,
+      "error": "Expecting value: line 1 column 111"
+    }
+  ],
+  "internal_links": [
+    "http://localhost:8765/",
+    "http://localhost:8765/features.html",
+    "http://localhost:8765/pricing.html",
+    "http://localhost:8765/about.html",
+    "http://localhost:8765/app/login.html",
+    "http://localhost:8765/privacy.html",
+    "http://localhost:8765/#"
+  ],
+  "external_links": [
+    "https://analytics.example-tracker.test/t.js"
+  ],
+  "images_missing_alt": 1,
+  "images_total": 1,
+  "word_count": 210,
+  "has_main_landmark": true,
+  "answer_blocks": [],
+  "html": "crawl/html/1-index.html"
+}

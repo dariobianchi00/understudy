@@ -1,0 +1,32 @@
+[
+  {
+    "t": "00:08",
+    "screen": "00-landing.png",
+    "flow": "V1",
+    "reaction": "For who? Doesn't say."
+  },
+  {
+    "t": "00:45",
+    "screen": "01-privacy.png",
+    "flow": "V3",
+    "reaction": "'Share with partners' \u2014 which partners? Not said."
+  },
+  {
+    "t": "01:05",
+    "screen": "01-privacy.png",
+    "flow": "V3",
+    "reaction": "The bar said no tracking cookies. This page says they use cookies."
+  },
+  {
+    "t": "01:30",
+    "screen": "02-about.png",
+    "flow": "V3",
+    "reaction": "A real company: named founder, address, company number."
+  },
+  {
+    "t": "02:20",
+    "screen": "00-landing.png",
+    "flow": "V3",
+    "reaction": "The button does nothing when I tap it."
+  }
+]

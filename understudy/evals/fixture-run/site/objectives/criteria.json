@@ -1,0 +1,9 @@
+{
+  "_warning": "DO NOT OPEN DURING CAPTURE.",
+  "criteria": [
+    {
+      "objective": "A visitor can find out what it costs without giving an email",
+      "expected": "A price in currency is visible within 3 clicks of the landing page"
+    }
+  ]
+}

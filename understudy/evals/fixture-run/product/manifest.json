@@ -1,0 +1,54 @@
+{
+  "run_id": "fixture02",
+  "target_slug": "nimbus-notes",
+  "product_name": "Nimbus Notes",
+  "base_url": "http://localhost:8765/app/login.html",
+  "started_utc": "2026-09-08T10:00:00+00:00",
+  "finished_utc": null,
+  "models": {
+    "traversal": "fixture-hand-authored",
+    "traversal_settable_by_understudy": false,
+    "scoring": {
+      "ux": "opus",
+      "bugs": "sonnet",
+      "onboarding": "opus",
+      "content": "opus"
+    },
+    "scoring_shape": "balanced"
+  },
+  "assessment_type": "product",
+  "coverage_depth": "standard",
+  "conversion_goal": null,
+  "competitors": [],
+  "objectives_under_test": [
+    {
+      "objective": "A new user can write a note and find it again"
+    }
+  ],
+  "persona_mode": "generic",
+  "alias_email": "qa@example-nimbus-notes.test",
+  "vocabulary_allowlist": [],
+  "personas": [
+    {
+      "name": "novice",
+      "device": "desktop-1440x900"
+    },
+    {
+      "name": "power-user",
+      "device": "desktop-1440x900"
+    }
+  ],
+  "objectives": [
+    "ux",
+    "bugs",
+    "onboarding",
+    "content"
+  ],
+  "scope_exclusions": [
+    "The login wall at /app/login.html \u2014 infrastructure, not a defect."
+  ],
+  "time_cap_minutes": 90,
+  "understudy_version": "0.3.0",
+  "phase": "2a-capture",
+  "captures": {}
+}

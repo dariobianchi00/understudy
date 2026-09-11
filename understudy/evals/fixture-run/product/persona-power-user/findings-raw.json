@@ -1,0 +1,26 @@
+[
+  {
+    "t": "01:00",
+    "screen": "03-search-empty.png",
+    "flow": "shape_2",
+    "reaction": "Saved, then empty. Search for the title finds nothing."
+  },
+  {
+    "t": "01:30",
+    "screen": "02-dashboard.png",
+    "flow": "shape_2",
+    "reaction": "No keyboard shortcuts at all."
+  },
+  {
+    "t": "02:00",
+    "screen": "07-settings.png",
+    "flow": "surfaces",
+    "reaction": "Is 'Federated graph replication' the thing I picked at signup? Same words, no link."
+  },
+  {
+    "t": "02:30",
+    "screen": "02-dashboard.png",
+    "flow": "surfaces",
+    "reaction": "Memories aren't mine. A demo panel, I assume."
+  }
+]

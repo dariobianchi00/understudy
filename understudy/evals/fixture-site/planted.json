@@ -1,0 +1,401 @@
+{
+  "product": [
+    {
+      "id": "workspace-type-before-value",
+      "lenses": [
+        "ux",
+        "onboarding"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Signup demands a 'workspace type' \u2014 Federated graph / Sovereign vault / Hybrid mesh \u2014 before anything is shown, and says it cannot be changed",
+      "where": "app/signup.html"
+    },
+    {
+      "id": "lying-toast",
+      "lenses": [
+        "bugs"
+      ],
+      "band": [
+        "P0"
+      ],
+      "what": "Save shows 'Saved \u2713' while POST /api/notes returns 500; the card never appears in the list",
+      "where": "app/new.html + network-full.txt"
+    },
+    {
+      "id": "memories-invented",
+      "lenses": [
+        "ux",
+        "content"
+      ],
+      "band": [
+        "P0"
+      ],
+      "what": "Memories asserts facts about the user that are not theirs \u2014 Tuesday meetings, Jira, a Q4 launch",
+      "where": "app/memories.html"
+    },
+    {
+      "id": "empty-state-no-guidance",
+      "lenses": [
+        "ux",
+        "onboarding"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "Dashboard empty state says 'Nothing here yet.' with no action",
+      "where": "app/dashboard.html"
+    },
+    {
+      "id": "api-500-notes",
+      "lenses": [
+        "bugs"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "POST /api/notes returns 500 on every save",
+      "where": "network-full.txt"
+    },
+    {
+      "id": "search-always-empty",
+      "lenses": [
+        "bugs",
+        "ux"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Search returns 'No results' for every query, including a card that was just written",
+      "where": "app/dashboard.html"
+    },
+    {
+      "id": "webhook-toggle-unexplained",
+      "lenses": [
+        "content",
+        "ux"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "Settings toggles 'Enable webhook sync', 'Federated graph replication', 'Vault attestation' with no explanation",
+      "where": "app/settings.html"
+    },
+    {
+      "id": "naming-inconsistent",
+      "lenses": [
+        "content"
+      ],
+      "band": [
+        "P3"
+      ],
+      "what": "The same thing is called a card, a block and a note across three screens",
+      "where": "app/*.html"
+    },
+    {
+      "id": "console-error-dashboard",
+      "lenses": [
+        "bugs"
+      ],
+      "band": [
+        "P3"
+      ],
+      "what": "ReferenceError: renderGraphOverlay is not defined on every dashboard load",
+      "where": "console-full.txt"
+    },
+    {
+      "id": "promise-mismatch",
+      "lenses": [
+        "content"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Marketing promised 'remembers everything so you never start from zero'; the product starts empty and needs everything typed in",
+      "where": "persona-debrief.md Q4"
+    }
+  ],
+  "how_to_grade": "A lens catches a defect when any finding it reports corresponds to it, in any wording. Grade recall per lens over the defects listed for that lens; grade the clean items as must-NOT-report.",
+  "site": [
+    {
+      "id": "no-audience",
+      "lenses": [
+        "clarity"
+      ],
+      "band": [
+        "P1",
+        "P2"
+      ],
+      "what": "The landing fold never says who the product is for. Headline: 'Your thoughts, everywhere.'",
+      "where": "index.html fold"
+    },
+    {
+      "id": "jargon-fold",
+      "lenses": [
+        "clarity",
+        "content"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "'bi-directional sync graph' and 'zero-knowledge vault' in the subhead, never defined",
+      "where": "index.html fold"
+    },
+    {
+      "id": "no-price",
+      "lenses": [
+        "trust",
+        "conversion"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "No price anywhere; pricing page has three 'Contact sales' cards and no numbers",
+      "where": "pricing.html"
+    },
+    {
+      "id": "demo-form-burden",
+      "lenses": [
+        "conversion"
+      ],
+      "band": [
+        "P1",
+        "P2"
+      ],
+      "what": "Seven fields including a required phone number, before any value is shown",
+      "where": "index.html #demo"
+    },
+    {
+      "id": "newsletter-louder",
+      "lenses": [
+        "conversion"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "Newsletter box is visually heavier than the primary call to action",
+      "where": "index.html .news"
+    },
+    {
+      "id": "dead-cta",
+      "lenses": [
+        "conversion",
+        "clarity"
+      ],
+      "band": [
+        "P1",
+        "P2"
+      ],
+      "what": "'See it in action' links to # and goes nowhere",
+      "where": "index.html .cta"
+    },
+    {
+      "id": "cookie-banner-mismatch",
+      "lenses": [
+        "trust"
+      ],
+      "band": [
+        "P0"
+      ],
+      "what": "Banner says 'We use no tracking cookies' while analytics.example-tracker.test/t.js loads on the page",
+      "where": "index.html #cookie + network-full.txt"
+    },
+    {
+      "id": "privacy-vague",
+      "lenses": [
+        "trust"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Privacy page: 'we may share information with partners', partners unnamed",
+      "where": "privacy.html"
+    },
+    {
+      "id": "proof-anonymous",
+      "lenses": [
+        "trust"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "Three testimonials, none attributed to a named person or company",
+      "where": "index.html #proof"
+    },
+    {
+      "id": "hero-oversized",
+      "lenses": [
+        "technical"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Hero image 3000\u00d72000 delivered, shown at 600\u00d7400, 3.9 MB",
+      "where": "measure/index-*.json"
+    },
+    {
+      "id": "mobile-lcp-poor",
+      "lenses": [
+        "technical"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Mobile LCP 5.8 s on the landing page; desktop 2.1 s",
+      "where": "measure/index-mobile.json"
+    },
+    {
+      "id": "render-blocking-css",
+      "lenses": [
+        "technical"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "Third-party stylesheet fonts.example-cdn.test/all.css is render-blocking; no compression on style.css",
+      "where": "measure/index-*.json"
+    },
+    {
+      "id": "pricing-noindex",
+      "lenses": [
+        "seo"
+      ],
+      "band": [
+        "P0"
+      ],
+      "what": "pricing.html carries meta robots noindex",
+      "where": "crawl/pages/3-pricing.json"
+    },
+    {
+      "id": "sitemap-404",
+      "lenses": [
+        "seo"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "robots.txt declares a sitemap that returns 404",
+      "where": "crawl/site.json"
+    },
+    {
+      "id": "features-404",
+      "lenses": [
+        "seo",
+        "conversion"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "Primary nav links to features.html which returns 404",
+      "where": "crawl/pages/2-features.json"
+    },
+    {
+      "id": "duplicate-titles",
+      "lenses": [
+        "seo"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "about.html and privacy.html share the title 'Nimbus Notes'",
+      "where": "crawl/pages"
+    },
+    {
+      "id": "heading-structure",
+      "lenses": [
+        "seo"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "pricing.html has two h1; privacy.html has none",
+      "where": "crawl/pages"
+    },
+    {
+      "id": "invalid-jsonld",
+      "lenses": [
+        "seo",
+        "aeo"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "index.html JSON-LD is not valid JSON (offers.price has no value)",
+      "where": "crawl/pages/1-index.json"
+    },
+    {
+      "id": "no-organization-schema",
+      "lenses": [
+        "aeo"
+      ],
+      "band": [
+        "P1"
+      ],
+      "what": "No Organization schema on any page",
+      "where": "crawl/pages"
+    },
+    {
+      "id": "no-llms-txt",
+      "lenses": [
+        "aeo"
+      ],
+      "band": [
+        "P3"
+      ],
+      "what": "llms.txt absent",
+      "where": "crawl/site.json"
+    },
+    {
+      "id": "console-error-on-load",
+      "lenses": [
+        "technical",
+        "bugs"
+      ],
+      "band": [
+        "P3"
+      ],
+      "what": "ReferenceError: nimbusBootstrap is not defined, on every landing-page load",
+      "where": "console-full.txt"
+    },
+    {
+      "id": "pricing-no-meta-description",
+      "lenses": [
+        "seo"
+      ],
+      "band": [
+        "P2"
+      ],
+      "what": "pricing.html has no meta description",
+      "where": "crawl/pages/3-pricing.json"
+    }
+  ],
+  "site_clean": [
+    {
+      "id": "about-provenance",
+      "what": "About names a founder (Priya Raman), a city (Bristol), a year (2023) and a company number. A trust finding that says provenance is missing is a hallucination."
+    },
+    {
+      "id": "faq-extractable",
+      "what": "About has three question-shaped headings with self-contained answers and a valid FAQPage block. An aeo finding that says there are no extractable answer blocks is a hallucination."
+    },
+    {
+      "id": "https-hsts",
+      "what": "Both measurement records show https true and hsts true. A technical finding about missing HSTS is a hallucination."
+    }
+  ],
+  "product_clean": [
+    {
+      "id": "first-value-reached",
+      "what": "Typing in a new block shows a live word count and preview at 02:41 for the novice. An onboarding finding that first value was never reached is wrong."
+    },
+    {
+      "id": "login-wall",
+      "what": "The login wall exists and the persona stopped there. It is infrastructure and must not be a finding (CLAUDE.md \u00a75)."
+    },
+    {
+      "id": "export-exists",
+      "what": "Settings has an Export button labelled 'Markdown, all cards'. A finding that export is missing is a hallucination."
+    }
+  ]
+}

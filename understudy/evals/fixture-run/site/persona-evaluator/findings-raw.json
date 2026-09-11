@@ -1,0 +1,62 @@
+[
+  {
+    "t": "00:09",
+    "screen": "00-landing.png",
+    "flow": "V1",
+    "reaction": "Who is it for? No idea. The top doesn't say."
+  },
+  {
+    "t": "00:18",
+    "screen": "00-landing.png",
+    "flow": "V1",
+    "reaction": "'bi-directional sync graph', 'zero-knowledge vault' \u2014 I don't know what either means."
+  },
+  {
+    "t": "00:40",
+    "screen": "00-landing.png",
+    "flow": "V2",
+    "reaction": "Clicked 'See it in action' twice. Nothing happened."
+  },
+  {
+    "t": "01:10",
+    "screen": "01-scrolled.png",
+    "flow": "V2",
+    "reaction": "The newsletter box is bigger and brighter than the button that shows the product."
+  },
+  {
+    "t": "01:25",
+    "screen": "01-scrolled.png",
+    "flow": "V2",
+    "reaction": "Three quotes, nobody has a name. I don't believe these."
+  },
+  {
+    "t": "01:55",
+    "screen": "02-pricing.png",
+    "flow": "V3",
+    "reaction": "Every plan says Contact sales. No numbers anywhere."
+  },
+  {
+    "t": "02:58",
+    "screen": "03-demo-form.png",
+    "flow": "V3",
+    "reaction": "Seven fields. Phone required. I haven't seen the product."
+  },
+  {
+    "t": "03:30",
+    "screen": "04-features-404.png",
+    "flow": "V3",
+    "reaction": "Features in the nav goes to a 404."
+  },
+  {
+    "t": "03:50",
+    "screen": "05-about.png",
+    "flow": "V3",
+    "reaction": "A named founder, an address, a company number. First thing that felt real."
+  },
+  {
+    "t": "05:20",
+    "screen": "06-privacy.png",
+    "flow": "V3",
+    "reaction": "Cookie bar said no tracking. Privacy page says cookies and partners. Which is it?"
+  }
+]

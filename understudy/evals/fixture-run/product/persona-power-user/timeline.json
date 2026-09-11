@@ -1,0 +1,56 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "verified": true
+  },
+  "shape_0": {
+    "wall_present": true,
+    "wall_wait_seconds": 40,
+    "excluded_from_scoring": true
+  },
+  "shape_1": {
+    "start": "00:00",
+    "end": "00:30",
+    "steps": 2,
+    "screens": 2,
+    "checkpoint_30": "ok"
+  },
+  "shape_2": {
+    "start": "00:30",
+    "end": "01:30",
+    "first_value_reached": false,
+    "seconds_to_first_value": null,
+    "steps_to_first_value": 0,
+    "permission_prompts": 0,
+    "times_had_to_hunt": 1
+  },
+  "shape_2b": {
+    "surfaces_probed": [
+      "settings",
+      "memories"
+    ],
+    "minutes": 1
+  },
+  "shape_3": {
+    "start": "03:00",
+    "end": "03:20"
+  },
+  "objectives": [
+    {
+      "objective": "A new user can write a note and find it again",
+      "attempted": true,
+      "started": "01:00",
+      "ended": "01:30",
+      "what_happened": "Wrote 'Roadmap', saved, list empty, search found nothing.",
+      "where_i_looked": [
+        "/app/new.html",
+        "/app/dashboard.html"
+      ],
+      "screenshots": [
+        "screenshots/03-search-empty.png"
+      ],
+      "gave_up": true
+    }
+  ]
+}

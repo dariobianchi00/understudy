@@ -1,0 +1,68 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "verified": true
+  },
+  "shape_v1": {
+    "time_to_comprehension_seconds": null,
+    "understood_what": false,
+    "understood_who": false,
+    "understood_next_step": true,
+    "guessed": true
+  },
+  "shape_v2": {
+    "start": "00:15",
+    "end": "00:30",
+    "scroll_depth_pct": 100,
+    "sections_seen": 1,
+    "point_of_lost_interest": "00:30"
+  },
+  "shape_v3": {
+    "start": "00:30",
+    "end": "02:40",
+    "pages_visited": [
+      "/privacy.html",
+      "/about.html"
+    ],
+    "questions_unanswered": [
+      "Who are the partners you share with?",
+      "Do you use tracking cookies or not?",
+      "What does 'remembers everything' actually do?"
+    ],
+    "price_found": false,
+    "price_understood": false,
+    "forms_opened": 0,
+    "forms_submitted": 0,
+    "trust_up": [
+      "Named founder, address, company number",
+      "Data location stated (Frankfurt)"
+    ],
+    "trust_down": [
+      "Privacy page names no partners",
+      "Cookie bar contradicts privacy page",
+      "'See it in action' does nothing"
+    ]
+  },
+  "shape_v4": {
+    "start": "02:40",
+    "end": "02:50",
+    "verdict": "left; data handling unclear"
+  },
+  "objectives": [
+    {
+      "objective": "A visitor can find out what it costs without giving an email",
+      "attempted": false,
+      "started": null,
+      "ended": null,
+      "what_happened": "I didn't look for a price. That wasn't my question.",
+      "where_i_looked": [],
+      "screenshots": [],
+      "gave_up": false
+    }
+  ],
+  "coverage_depth": "standard",
+  "auditor_mode_from": null,
+  "left_early": true,
+  "session_end_minutes": 2.9
+}

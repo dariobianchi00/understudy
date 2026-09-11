@@ -1,0 +1,9 @@
+[GET] http://localhost:8765/app/login.html → 200
+[GET] http://localhost:8765/app/signup.html → 200
+[GET] http://localhost:8765/app/dashboard.html → 200
+[GET] http://localhost:8765/app/new.html → 200
+[POST] http://localhost:8765/api/notes → 500 internal error  (03:05)
+[GET] http://localhost:8765/app/dashboard.html → 200
+[POST] http://localhost:8765/api/notes → 500 internal error  (03:50)
+[GET] http://localhost:8765/app/memories.html → 200
+[GET] http://localhost:8765/app/settings.html → 200

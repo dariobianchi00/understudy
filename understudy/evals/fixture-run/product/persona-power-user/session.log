@@ -1,0 +1,16 @@
+[pre-session] Arrived via: direct — evaluating whether to switch the team
+[pre-session] What I was told: "remembers everything so you never start from zero"
+[pre-session] What I expect this to be: fast capture, good search, keyboard-driven
+[00:00] Login. Screenshot 00-start.png. Handing over.
+→ [power-user] traversal — auth wall detected at /app/login.html
+⏸  PAUSED — authenticate in the open browser, then confirm
+→ [power-user] traversal — resuming at /app/signup.html
+[00:00] Clock starts. Workspace type: Federated graph / Sovereign vault / Hybrid mesh, cannot be changed. Fine — I've seen worse. Picked Federated graph.
+[00:30] Dashboard, empty. Screenshot 02-dashboard.png. Search box — good, that's what I care about.
+[00:45] Typed "test" and Enter. "No results for 'test'." Expected, nothing's in it yet.
+[01:00] New block. Title "Roadmap", body three lines. Save. "Saved ✓". Back to dashboard: empty. Screenshot 03-search-empty.png after searching "Roadmap" — no results.
+[01:30] Tried keyboard: Ctrl+K, Ctrl+N, / — nothing. No shortcuts.
+[02:00] Settings. Screenshot 07-settings.png. "Federated graph replication" is on by default. I picked that at signup — is this the same thing? Export → Markdown. Good.
+[02:30] Memories. Tuesday meetings, Jira, Q4 launch. Not me. Whatever — a demo panel, I assume. Not going to trust it.
+[03:00] Enough. Save doesn't save and search doesn't search. Nothing else matters until those work.
+[03:20] Debrief.

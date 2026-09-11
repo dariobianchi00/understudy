@@ -1,0 +1,45 @@
+{
+  "depth": "standard",
+  "cap": 15,
+  "crawled": [
+    {
+      "url": "http://localhost:8765/",
+      "status": 200,
+      "file": "pages/1-index.json"
+    },
+    {
+      "url": "http://localhost:8765/features.html",
+      "status": 404,
+      "file": "pages/2-features.json"
+    },
+    {
+      "url": "http://localhost:8765/pricing.html",
+      "status": 200,
+      "file": "pages/3-pricing.json"
+    },
+    {
+      "url": "http://localhost:8765/about.html",
+      "status": 200,
+      "file": "pages/4-about.json"
+    },
+    {
+      "url": "http://localhost:8765/privacy.html",
+      "status": 200,
+      "file": "pages/5-privacy.json"
+    }
+  ],
+  "not_crawled": [
+    {
+      "url": "http://localhost:8765/app/login.html",
+      "reason": "disallowed by robots.txt (/app/)"
+    },
+    {
+      "url": "https://analytics.example-tracker.test/t.js",
+      "reason": "off-domain"
+    },
+    {
+      "url": "https://fonts.example-cdn.test/all.css",
+      "reason": "off-domain"
+    }
+  ]
+}

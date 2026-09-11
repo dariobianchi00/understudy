@@ -1,0 +1,56 @@
+{
+  "run_id": "fixture01",
+  "target_slug": "nimbus-notes-site",
+  "product_name": "Nimbus Notes",
+  "base_url": "http://localhost:8765/",
+  "started_utc": "2026-09-08T09:00:00+00:00",
+  "finished_utc": null,
+  "models": {
+    "traversal": "fixture-hand-authored",
+    "traversal_settable_by_understudy": false,
+    "scoring": {
+      "clarity": "opus",
+      "conversion": "opus",
+      "trust": "opus",
+      "technical": "sonnet",
+      "seo": "sonnet",
+      "aeo": "sonnet"
+    },
+    "scoring_shape": "balanced"
+  },
+  "assessment_type": "website",
+  "coverage_depth": "standard",
+  "conversion_goal": "Start a free trial without talking to sales",
+  "competitors": [],
+  "objectives_under_test": [
+    {
+      "objective": "A visitor can find out what it costs without giving an email"
+    }
+  ],
+  "persona_mode": "generic",
+  "alias_email": null,
+  "vocabulary_allowlist": [],
+  "personas": [
+    {
+      "name": "evaluator",
+      "device": "desktop-1440x900"
+    },
+    {
+      "name": "sceptic",
+      "device": "iphone-13"
+    }
+  ],
+  "objectives": [
+    "clarity",
+    "conversion",
+    "trust",
+    "technical",
+    "seo",
+    "aeo"
+  ],
+  "scope_exclusions": [],
+  "time_cap_minutes": 25,
+  "understudy_version": "0.3.0",
+  "phase": "2a-capture",
+  "captures": {}
+}

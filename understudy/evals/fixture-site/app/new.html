@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>New block — Nimbus</title><link rel="stylesheet" href="app.css"></head><body>
+<div class="top"><strong>Nimbus</strong><a href="dashboard.html">Cards</a><a href="new.html">New block</a><a href="memories.html">Memories</a><a href="settings.html">Settings</a></div>
+<div class="main">
+<div class="card"><h2>New block</h2>
+<label>Title</label><input id="t" placeholder="Untitled">
+<label>Body</label><textarea id="b" rows="8" oninput="document.getElementById('wc').textContent=this.value.trim().split(/\s+/).filter(Boolean).length+' words';document.getElementById('pv').textContent=this.value"></textarea>
+<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:13px"><span id="wc">0 words</span><span>Preview below</span></div>
+<div class="mem" id="pv" style="min-height:24px;white-space:pre-wrap"></div>
+<button onclick="var x=new XMLHttpRequest();x.open('POST','/api/notes');x.send('{}');document.getElementById('toast').style.display='block';setTimeout(function(){location.href='dashboard.html'},900)">Save</button></div>
+<div class="toast" id="toast">Saved ✓</div>
+</div></body></html>

@@ -41,10 +41,16 @@ test-results/
 playwright-report/
 .playwright-mcp/
 
-# ── Escape hatch ──────────────────────────────────────────────────────────
+# ── Escape hatches ────────────────────────────────────────────────────────
 # examples/ ships fictional targets only; keep them despite the rules above.
 !examples/
 !examples/**
+# evals/fixture-run/ is a FROZEN CAPTURE OF A FICTIONAL SITE — screenshots of
+# pages that live in evals/fixture-site/, logs written by hand. It is the only
+# place a *.png, session.log or timeline.json may be committed, and CI checks
+# that nothing outside it ever is.
+!understudy/evals/fixture-run/
+!understudy/evals/fixture-run/**
 
 # Local machine settings — not part of the plugin
 .claude/settings.local.json

@@ -1,0 +1,57 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "verified": true
+  },
+  "shape_0": {
+    "wall_present": true,
+    "wall_wait_seconds": 70,
+    "excluded_from_scoring": true
+  },
+  "shape_1": {
+    "start": "00:00",
+    "end": "00:55",
+    "steps": 3,
+    "screens": 3,
+    "checkpoint_30": "ok"
+  },
+  "shape_2": {
+    "start": "00:55",
+    "end": "03:50",
+    "first_value_reached": true,
+    "seconds_to_first_value": 161,
+    "steps_to_first_value": 5,
+    "permission_prompts": 0,
+    "times_had_to_hunt": 2
+  },
+  "shape_2b": {
+    "surfaces_probed": [
+      "memories",
+      "settings"
+    ],
+    "minutes": 1.5
+  },
+  "shape_3": {
+    "start": "06:00",
+    "end": "07:00"
+  },
+  "objectives": [
+    {
+      "objective": "A new user can write a note and find it again",
+      "attempted": true,
+      "started": "01:55",
+      "ended": "03:50",
+      "what_happened": "I wrote a note twice. Each time it said Saved and the list stayed empty. Search for its title found nothing.",
+      "where_i_looked": [
+        "/app/new.html",
+        "/app/dashboard.html"
+      ],
+      "screenshots": [
+        "screenshots/04-note-saved-toast.png",
+        "screenshots/05-notes-list-missing.png"
+      ],
+      "gave_up": true
+    }
+  ]
+}

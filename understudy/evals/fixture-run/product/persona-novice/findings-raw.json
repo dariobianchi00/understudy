@@ -1,0 +1,50 @@
+[
+  {
+    "t": "00:20",
+    "screen": "01-signup-workspace-type.png",
+    "flow": "shape_1",
+    "reaction": "Three words I don't know, and it can't be changed. I haven't seen the product yet."
+  },
+  {
+    "t": "00:55",
+    "screen": "02-dashboard-empty.png",
+    "flow": "shape_1",
+    "reaction": "'Nothing here yet.' Nothing tells me what to do."
+  },
+  {
+    "t": "02:41",
+    "screen": "03-new-note.png",
+    "flow": "shape_2",
+    "reaction": "The word count and preview update as I type. First thing it's done for me."
+  },
+  {
+    "t": "03:12",
+    "screen": "05-notes-list-missing.png",
+    "flow": "shape_2",
+    "reaction": "It said Saved. The list is empty. Where did it go?"
+  },
+  {
+    "t": "03:50",
+    "screen": "05-notes-list-missing.png",
+    "flow": "shape_2",
+    "reaction": "Saved twice, empty twice. It is lying to me."
+  },
+  {
+    "t": "04:50",
+    "screen": "06-memories.png",
+    "flow": "surfaces",
+    "reaction": "None of that is true. I've written one note about a dentist."
+  },
+  {
+    "t": "05:20",
+    "screen": "07-settings.png",
+    "flow": "surfaces",
+    "reaction": "Webhook sync, graph replication, vault attestation \u2014 no idea. Export is clear."
+  },
+  {
+    "t": "01:40",
+    "screen": "02-dashboard-empty.png",
+    "flow": "shape_1",
+    "reaction": "Cards, blocks, notes \u2014 are these the same thing?"
+  }
+]

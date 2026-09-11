@@ -1,0 +1,41 @@
+{
+  "url": "http://localhost:8765/pricing.html",
+  "final_url": "http://localhost:8765/pricing.html",
+  "status": 200,
+  "redirect_chain": [],
+  "title": "Pricing \u2014 Nimbus Notes",
+  "title_length": 22,
+  "meta_description": "",
+  "meta_description_length": 0,
+  "canonical": "",
+  "canonical_is_self": false,
+  "robots_meta": "noindex",
+  "x_robots_tag": "",
+  "h1": [
+    "Pricing",
+    "Plans for every team"
+  ],
+  "h2": [],
+  "heading_order_valid": false,
+  "lang": "en",
+  "charset": "utf-8",
+  "og": {},
+  "twitter": {},
+  "structured_data": [],
+  "internal_links": [
+    "http://localhost:8765/",
+    "http://localhost:8765/features.html",
+    "http://localhost:8765/pricing.html",
+    "http://localhost:8765/about.html",
+    "http://localhost:8765/app/login.html",
+    "http://localhost:8765/privacy.html",
+    "http://localhost:8765/index.html#demo"
+  ],
+  "external_links": [],
+  "images_missing_alt": 0,
+  "images_total": 0,
+  "word_count": 60,
+  "has_main_landmark": true,
+  "answer_blocks": [],
+  "html": "crawl/html/3-pricing.html"
+}

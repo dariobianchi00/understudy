@@ -1,0 +1,57 @@
+{
+  "url": "http://localhost:8765/pricing.html",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "viewport_verified": true,
+  "measured_utc": "2026-09-08T09:30:00+00:00",
+  "cache": "cold",
+  "throttling": "none",
+  "runs": 1,
+  "tier1": {
+    "lcp_ms": 1400,
+    "cls": 0.01,
+    "tbt_ms": 30,
+    "fcp_ms": 800,
+    "ttfb_ms": 110
+  },
+  "tier2": {
+    "page_weight_bytes": 5200,
+    "request_count": 3,
+    "largest_assets": [
+      {
+        "url": "http://localhost:8765/style.css",
+        "type": "stylesheet",
+        "bytes": 3174
+      }
+    ],
+    "images": [],
+    "uncompressed_text_resources": [
+      "http://localhost:8765/style.css",
+      "http://localhost:8765/pricing.html"
+    ],
+    "missing_cache_headers": [
+      "http://localhost:8765/style.css"
+    ],
+    "render_blocking": [
+      "http://localhost:8765/style.css"
+    ],
+    "third_party": {
+      "domains": 0,
+      "requests": 0,
+      "bytes": 0,
+      "by_domain": {}
+    }
+  },
+  "tier3": {
+    "https": true,
+    "hsts": true,
+    "mixed_content": [],
+    "viewport_meta": true,
+    "redirect_chain": [],
+    "asset_404s": [],
+    "console_errors_on_load": []
+  },
+  "screenshot": "measure/screenshots/pricing-mobile.png"
+}

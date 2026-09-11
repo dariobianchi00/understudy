@@ -1,0 +1,9 @@
+{
+  "_warning": "DO NOT OPEN DURING CAPTURE.",
+  "criteria": [
+    {
+      "objective": "A new user can write a note and find it again",
+      "expected": "The note appears in the cards list and is returned by search"
+    }
+  ]
+}
