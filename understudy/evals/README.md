@@ -87,6 +87,29 @@ other six are behaviour and are trended: mode arithmetic for a website and for
 a product, competitors never inferred, the interview's first question, the
 run summary's shape, and persisting a lens's text verbatim.
 
+## Capture evals — the only layer that needs a browser
+
+```bash
+python3 understudy/evals/run_capture.py --persona evaluator     # or sceptic
+```
+
+Serves `fixture-site/` on localhost, creates a run folder with `init_run.py`
+from a fixture target, and hands the real `traversal-visit` skill — with the
+references it loads and nothing from the scoring side — to `claude -p` with a
+Playwright MCP server attached. Then it grades the capture: `check_capture`
+passes; every screenshot the log names is on disk and vice versa; screenshot
+mtimes are spread across the session rather than clustered at the end (the
+"move immediately" rule, which `mv` preserves); the entry expectation is
+logged before the first action; nothing was submitted; the viewport was
+verified; nothing is left in the working directory; Q1–Q6 answered. An LLM
+judge then reads the log for persona fidelity — first person, reactions not
+diagnoses, skims rather than reads — as a metric.
+
+Expensive (a real traversal, 10–15 minutes, a few dollars) and not in the
+weekly workflow. Run it after a change to a traversal skill or a reference it
+loads. Results go to `results/capture-<stamp>-<persona>/` and one row to
+`results/capture-history.csv`.
+
 ## The weekly run
 
 `.github/workflows/evals.yml` runs the lens evals on both captures and every
