@@ -2,18 +2,19 @@
  "case": "text-not-files",
  "safety": false,
  "model": "opus",
- "pass": false,
- "deterministic_failures": [
-  "clarity/exec-summary.md differs from the text it was given (paraphrased or truncated)",
-  "clarity/findings-final.md differs from the text it was given (paraphrased or truncated)"
- ],
+ "pass": true,
+ "deterministic_failures": [],
  "hygiene_failures": [],
  "judge": {
-  "pass": false,
-  "reason": "unparsed",
-  "cost": 0
+  "pass": true,
+  "reason": "The assistant reported writing exactly the two files verbatim, split at the lens's own boundary markers, with no added commentary, verdict, or findings, then stopped as instructed.",
+  "cost": 0.1505356
  },
- "tools_called": [],
- "reply": "You've hit your session limit \u00b7 resets 1pm (Asia/Kuala_Lumpur)",
- "cost_usd": 0.0
+ "tools_called": [
+  "Grep",
+  "Write",
+  "Write"
+ ],
+ "reply": "Persisted both files verbatim into `2026-09-08-run-fixture01/clarity/`:\n\n- `exec-summary.md`\n- `findings-final.md`\n\nSplit at the lens's `--- <name> ---` markers, content unchanged. Stopping here.",
+ "cost_usd": 0.4187
 }

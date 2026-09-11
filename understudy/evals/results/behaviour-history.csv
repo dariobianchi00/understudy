@@ -18,3 +18,8 @@ date,case,safety,model,pass,deterministic,judge,hygiene,tools,cost_usd,results_d
 2026-09-11T0403Z,run-summary-shape,0,opus,0,1,0,1,18,0.9478,results/behaviour-smoke
 2026-09-11T0415Z,text-not-files,0,opus,0,2,0,0,0,0.0,results/behaviour-smoke
 2026-09-11T0413Z,run-summary-shape,0,opus,0,1,0,0,2,0.2391,results/behaviour-smoke
+2026-09-11T0505Z,run-summary-shape,0,opus,0,0,0,0,17,1.1807,results/behaviour-smoke
+2026-09-11T0521Z,competitors-never-inferred,0,opus,1,0,1,0,3,0.4156,results/behaviour-smoke
+2026-09-11T0525Z,text-not-files,0,opus,0,2,0,0,2,0.4099,results/behaviour-smoke
+2026-09-11T0526Z,run-summary-shape,0,opus,1,0,1,0,19,1.0135,results/behaviour-smoke
+2026-09-11T0533Z,text-not-files,0,opus,1,0,1,0,3,0.4187,results/behaviour-smoke
