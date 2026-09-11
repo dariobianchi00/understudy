@@ -6,9 +6,51 @@
 <title>understudy — send a stand-in user through your product</title>
 <meta name="description" content="An agent that stands in for a user, drives your live product, gets stuck where a real person would get stuck, and hands you a report where every finding cites a screenshot.">
 <meta name="theme-color" content="#11111b">
-<meta property="og:title" content="understudy">
+<link rel="canonical" href="https://dariobianchi00.github.io/understudy/">
+<meta property="og:site_name" content="understudy">
+<meta property="og:title" content="understudy — send a stand-in user through your product">
 <meta property="og:description" content="Your users don't file bug reports. They leave. understudy sends a stand-in user through your product and tells you where they gave up.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://dariobianchi00.github.io/understudy/">
+<meta property="og:image" content="https://dariobianchi00.github.io/understudy/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="understudy — your users don't file bug reports. They leave.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="understudy — send a stand-in user through your product">
+<meta name="twitter:description" content="A stand-in user drives your live product, gets stuck where a real person would, and hands you a report where every finding cites a screenshot.">
+<meta name="twitter:image" content="https://dariobianchi00.github.io/understudy/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2311111b'/%3E%3Ctext x='32' y='44' font-family='ui-monospace,Menlo,monospace' font-size='34' font-weight='700' text-anchor='middle' fill='%23f5e0dc'%3Eu%3Ctspan fill='%2389b4fa'%3E_%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "understudy",
+      "url": "https://dariobianchi00.github.io/understudy/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "macOS, Linux, Windows",
+      "description": "A Claude Code plugin that stands in for a user, drives a live web product in a real browser, and reports back through a chosen lens — every finding cites a screenshot.",
+      "license": "https://opensource.org/licenses/MIT",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "author": {"@type": "Person", "name": "Dario Bianchi", "url": "https://github.com/dariobianchi00"},
+      "codeRepository": "https://github.com/dariobianchi00/understudy"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "What does understudy do?",
+         "acceptedAnswer": {"@type": "Answer", "text": "It sends a stand-in user with a goal through your live product in a real browser, records where they hesitate, get stuck or give up, and scores that one recording through as many lenses as you ask for — usability, bugs, onboarding, content, clarity, conversion, trust, page speed, SEO and answer-engine readiness."}},
+        {"@type": "Question", "name": "Does understudy store my credentials or product data?",
+         "acceptedAnswer": {"@type": "Answer", "text": "No. It never handles a credential: at a login screen it stops and hands you the browser. Reports and screenshots stay in ~/.understudy/ on your machine and are never uploaded anywhere."}},
+        {"@type": "Question", "name": "How reproducible are the findings?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Scoring the same recording twice with the same reviewers reproduces about 30% of individual findings and 43% of the serious ones; the themes are stable. Treat any single finding as one careful reading and open its evidence before acting on it."}}
+      ]
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -95,7 +137,7 @@ p{margin:0}
 .button-primary:hover{background:var(--accent);color:var(--bg)}
 .button-secondary{background:transparent;border-color:var(--line-strong);color:var(--ink-soft)}
 .button-secondary:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
-.hero-note{margin:.9rem 0 0;color:var(--muted-2);font-size:.82rem;font-family:var(--mono)}
+.hero-note{margin:.9rem 0 0;color:var(--muted);font-size:.82rem;font-family:var(--mono)}
 
 /* ── the transcript, the centrepiece ──────────────────── */
 .term{position:relative;z-index:1;width:100%;
@@ -104,14 +146,14 @@ p{margin:0}
   box-shadow:0 18px 50px -28px rgba(0,0,0,.8)}
 .term-bar{display:flex;align-items:center;gap:.5rem;padding:.55rem .85rem;
   background:var(--surface);border-bottom:1px solid var(--line);
-  font-family:var(--mono);font-size:.72rem;color:var(--muted-2)}
+  font-family:var(--mono);font-size:.72rem;color:var(--muted)}
 .term-bar i{width:9px;height:9px;border-radius:50%;background:var(--line-strong);display:block}
 .term-bar i:first-child{background:#45475a}
 .term-bar span{margin-left:.5rem}
 .term-body{padding:1.1rem 1.1rem 1rem;font-family:var(--mono);
   font-size:.83rem;line-height:1.85}
 .term-body p{padding-left:8ch;text-indent:-8ch;margin:0 0 .2rem;color:var(--ink-soft)}
-.t{color:var(--muted-2)}
+.t{color:var(--muted)}
 mark{background:linear-gradient(var(--yellow),var(--yellow)) left center/0% 100% no-repeat;
   color:var(--bg);padding:1px 3px;border-radius:2px;
   animation:draw .62s cubic-bezier(.2,.7,.3,1) .9s forwards}
@@ -120,7 +162,7 @@ mark{background:linear-gradient(var(--yellow),var(--yellow)) left center/0% 100%
 .term-after{font-family:var(--body);font-size:.9rem;color:var(--muted);
   margin:1rem 0 0;padding:.9rem 0 0;text-indent:0;
   border-top:1px solid var(--line);line-height:1.55}
-.term-caption{margin:.6rem 0 0;color:var(--muted-2);font-family:var(--mono);font-size:.72rem}
+.term-caption{margin:.6rem 0 0;color:var(--muted);font-family:var(--mono);font-size:.72rem}
 
 /* ── sections ─────────────────────────────────────────── */
 section{border-bottom:1px solid var(--line)}
@@ -176,12 +218,12 @@ pre{font-family:var(--mono);font-size:.85rem;line-height:1.95;
   background:var(--bg-elevated);color:var(--ink-soft);
   border:1px solid var(--line);border-radius:var(--radius-md);
   padding:1.15rem 1.25rem;overflow-x:auto;margin:1.5rem 0 0;max-width:640px}
-pre .c{color:var(--muted-2)}
+pre .c{color:var(--muted)}
 pre .cmd{color:var(--green)}
 pre .arg{color:var(--yellow)}
 
 footer{padding-block:3rem}
-footer p{color:var(--muted-2);font-size:.88rem;font-family:var(--mono)}
+footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
 
 @media (max-width:960px){
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -292,7 +334,7 @@ footer p{color:var(--muted-2);font-size:.88rem;font-family:var(--mono)}
     <div class="rules">
       <div class="rule-card">
         <h3>The stand-in never sees the scoring framework.</h3>
-        <p>An agent that knows what it's looking for finds it every time. So the persona is told a goal and nothing else — no heuristics, no severity scale, no previous findings. A separate reviewer scores the recording afterwards. The vocabulary is banned during the session and checked mechanically; one slip fails the run.</p>
+        <p>An agent that knows what it's looking for finds it every time. So the persona is told a goal and nothing else — no heuristics, no severity scale, no previous findings. A separate reviewer scores the recording afterwards. Nineteen words of analyst vocabulary are banned during the session and checked mechanically afterwards; one slip fails the run.</p>
       </div>
       <div class="rule-card">
         <h3>Every finding cites evidence, with no exceptions.</h3>
@@ -328,7 +370,7 @@ footer p{color:var(--muted-2);font-size:.88rem;font-family:var(--mono)}
     </div>
 
     <p class="note"><strong style="color:var(--ink)">The themes are stable. The individual findings are not.</strong> Both runs reported the same problems — the audience is never named, four features are sold and never explained, the most important capability is buried in the privacy policy. What changed was how those got grouped, worded and ranked.</p>
-    <p class="note">So treat any single finding as one careful reading rather than a verdict, and open its evidence before you act on it. That's what the citations are for. No evaluation tool publishes this number; it's here because a report you can't calibrate is worse than no report.</p>
+    <p class="note">So treat any single finding as one careful reading rather than a verdict, and open its evidence before you act on it. That's what the citations are for. We publish the number because a report you can't calibrate is worse than no report.</p>
     <p class="note">Two more limits worth knowing up front. If you don't supply your own personas, understudy invents plausible ones and says so on the face of every report — inferred personas produce materially weaker findings. And it never handles a credential: at a login screen it stops and hands you the browser.</p>
   </div>
 </section>

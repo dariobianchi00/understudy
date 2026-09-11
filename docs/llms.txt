@@ -1,0 +1,17 @@
+# understudy
+
+> A Claude Code plugin that stands in for a user, drives a live web product in a real browser, and reports back through a chosen lens. Every finding cites a screenshot. It never handles a credential and never uploads anything.
+
+understudy answers evaluative questions about a web product or website by separating three things: the target (never in the repo), the traversal (how evidence is gathered — one browser session), and the lens (how that evidence is scored — usability, bugs, onboarding, content, clarity, conversion, trust, technical, SEO, AEO, compare). One traversal, many scorings.
+
+Its published reproducibility floor: scoring identical evidence twice reproduces about 30% of individual findings and 43% of the serious ones. Themes are stable; single findings are one careful reading.
+
+## Docs
+
+- [Landing page](https://dariobianchi00.github.io/understudy/): what it is, the two rules that keep findings honest, install
+- [README](https://github.com/dariobianchi00/understudy#readme): full documentation — lenses, models, personas, verification, run-over-run diffing
+- [Source](https://github.com/dariobianchi00/understudy): MIT-licensed plugin marketplace
+
+## Install
+
+- `/plugin marketplace add dariobianchi00/understudy` then `/plugin install understudy` in Claude Code; requires Playwright MCP

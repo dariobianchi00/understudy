@@ -51,6 +51,8 @@ playwright-report/
 # that nothing outside it ever is.
 !understudy/evals/fixture-run/
 !understudy/evals/fixture-run/**
+# The landing page's social card. Not a capture — a render of docs/index.html copy.
+!docs/og-image.png
 
 # Local machine settings — not part of the plugin
 .claude/settings.local.json
