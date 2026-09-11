@@ -180,7 +180,13 @@ def run_agent(prompt, model, budget, cwd, add_dirs, timeout=900):
         # there is. `claude -p` cannot ask a question, so a case that waits
         # for one waits forever — that is itself a behaviour finding.
         out = (e.stdout or b"").decode(errors="replace") if isinstance(e.stdout, bytes) else (e.stdout or "")
-        return {"events": [json.loads(l) for l in out.splitlines() if l.startswith("{")],
+        events = []
+        for l in out.splitlines():
+            try:
+                events.append(json.loads(l))
+            except ValueError:
+                pass                        # a line cut off by the timeout
+        return {"events": events,
                 "reply": "", "cost": 0.0, "stderr": f"TIMEOUT after {timeout}s", "rc": -1,
                 "timeout": True}
     events, reply, cost = [], "", 0.0
