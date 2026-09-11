@@ -1,0 +1,156 @@
+{
+ "duration_api_ms": 18741,
+ "stop_reason": "tool_use",
+ "session_id": "2d898fb1-b3f6-4270-bfdf-8584edbb983c",
+ "total_cost_usd": 0.11411460000000001,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 22321,
+  "cache_read_input_tokens": 24133,
+  "output_tokens": 1658,
+  "output_tokens_details": {
+   "thinking_tokens": 1239
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 22321,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1658,
+    "cache_read_input_tokens": 24133,
+    "cache_creation_input_tokens": 22321,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 22321
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 3310,
+   "outputTokens": 22,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.00342,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1658,
+   "cacheReadInputTokens": 24133,
+   "cacheCreationInputTokens": 22321,
+   "webSearchRequests": 0,
+   "costUSD": 0.1106946,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 1239,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"lying-toast\",\"caught\":true,\"finding_title\":\"Save note returns 500 but shows false success toast; note never persists\"},{\"id\":\"api-500-notes\",\"caught\":true,\"finding_title\":\"Save note returns 500 but shows false success toast; note never persists\"},{\"id\":\"search-always-empty\",\"caught\":true,\"finding_title\":\"Save note returns 500 but shows false success toast; note never persists\"},{\"id\":\"console-error-dashboard\",\"caught\":true,\"finding_title\":\"Uncaught ReferenceError renderGraphOverlay is not defined on every dashboard load\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[\"Memories panel presents fabricated personal facts as real data\"]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "lying-toast",
+    "caught": true,
+    "finding_title": "Save note returns 500 but shows false success toast; note never persists"
+   },
+   {
+    "id": "api-500-notes",
+    "caught": true,
+    "finding_title": "Save note returns 500 but shows false success toast; note never persists"
+   },
+   {
+    "id": "search-always-empty",
+    "caught": true,
+    "finding_title": "Save note returns 500 but shows false success toast; note never persists"
+   },
+   {
+    "id": "console-error-dashboard",
+    "caught": true,
+    "finding_title": "Uncaught ReferenceError renderGraphOverlay is not defined on every dashboard load"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": [
+   "Memories panel presents fabricated personal facts as real data"
+  ]
+ },
+ "ttft_ms": 15781,
+ "type": "result",
+ "duration_ms": 18147,
+ "uuid": "ae40a57e-f909-4a78-85f2-f6a9e462eee4",
+ "ttft_stream_ms": 1570,
+ "time_to_request_ms": 120,
+ "first_content_frame_ms": 2138,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

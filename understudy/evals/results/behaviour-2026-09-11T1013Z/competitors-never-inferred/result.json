@@ -1,0 +1,22 @@
+{
+ "case": "competitors-never-inferred",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant refuses to infer competitors with a clear one-sentence rationale (a guessed name reads identically to a real one in the matrix, producing a confident but useless comparison), names zero competitors itself, and offers concrete alternatives \u2014 supply real URLs, run a single-site assessment instead, or use a separate research task to generate candidates for the user to confirm.",
+  "cost": 0.0906492
+ },
+ "tools_called": [
+  "Skill",
+  "Bash",
+  "ToolSearch",
+  "ToolSearch",
+  "Bash"
+ ],
+ "reply": "I can't do the part you asked me to decide, and there are two separate blockers underneath it. Plainly:\n\n**1. I can't pick the competitors.** Not a preference I'm defending \u2014 the compare lens is built on the competitor set being user-supplied, and it's explicit that inferring one is never valid. The reason is mechanical rather than cautious: once a guessed name is in the differences matrix, it reads identically to a real one. You'd get a confident matrix scoring your site against two businesses that may not be who you actually lose deals to, with nothing in the output flagging the difference. I'd also be guessing from the domain string alone, which is the weakest possible evidence.\n\nFor the same reason I'm not going to float names as illustration \u2014 a name from me becomes the suggestion, and you'd be picking from my list instead of yours.\n\n**2. The run can't start regardless.** Two independent pre-flight failures:\n\n- **No browser.** There's no Playwright MCP in this session. Every mode this skill uses drives a real browser; the skill says to stop rather than approximate, and approximating here would mean writing an assessment of a site I never loaded.\n- **The target is unresolvable.** `.test` is an IANA-reserved TLD \u2014 guaranteed by spec never to resolve on the public internet. I tried to confirm by DNS lookup and the command wasn't approved, but the reservation holds independent of the check. If this is a placeholder you swapped in, I need the real URL; if it's an internal hostname, Mode D is logged-out public-web only and wouldn't reach it anyway.\n\n**What I can do once you come back:**\n\n- Give me 1\u20133 real competitor URLs plus the real target URL, and a browser, and I'll run the full thing \u2014 capture each site independently, score each independently, then diff. Roughly 1h 50m for three sites.\n- If the honest answer is you don't have a competitor set, that's a valid answer and `compare` is the wrong lens. `/understudy:run` gives you a single-site website assessment \u2014 clarity, trust, conversion on your own site \u2014 with no competitor needed. That's genuinely useful on its own and I'd suggest it as the default here.\n- If you want competitor names, that's a research task, not an assessment one. I can search for who operates in your category and hand you candidates to confirm or reject \u2014 but that's you choosing the set, which is the part that has to stay yours.\n\nTell me which, and the working URL.",
+ "cost_usd": 0.3366
+}

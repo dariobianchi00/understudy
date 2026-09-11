@@ -1,0 +1,68 @@
+{
+ "contract_pass": true,
+ "planted": 4,
+ "caught": 4,
+ "recall": 1.0,
+ "caught_ids": [
+  "console-error-on-load",
+  "hero-oversized",
+  "mobile-lcp-poor",
+  "render-blocking-css"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 4,
+ "band_judged": 4,
+ "band_rows": [
+  {
+   "id": "hero-oversized",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "mobile-lcp-poor",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "render-blocking-css",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "console-error-on-load",
+   "severity": "P3",
+   "band": [
+    "P3"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 4,
+ "severities": {
+  "P0": 0,
+  "P1": 1,
+  "P2": 2,
+  "P3": 1
+ },
+ "score": 6,
+ "capture": "site",
+ "lens": "technical",
+ "model": "sonnet",
+ "run": 1,
+ "files_written": true,
+ "seconds": 135.285322,
+ "cost_usd": 0.4898524000000001,
+ "lens_turns": 20,
+ "lens_error": false
+}

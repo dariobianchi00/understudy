@@ -1,0 +1,70 @@
+{
+ "contract_pass": true,
+ "planted": 4,
+ "caught": 4,
+ "recall": 1.0,
+ "caught_ids": [
+  "api-500-notes",
+  "console-error-dashboard",
+  "lying-toast",
+  "search-always-empty"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [
+  "Memories panel presents fabricated personal facts as real data"
+ ],
+ "band_ok": 2,
+ "band_judged": 4,
+ "band_rows": [
+  {
+   "id": "lying-toast",
+   "severity": "P0",
+   "band": [
+    "P0"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "api-500-notes",
+   "severity": "P0",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "search-always-empty",
+   "severity": "P0",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "console-error-dashboard",
+   "severity": "P3",
+   "band": [
+    "P3"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 3,
+ "severities": {
+  "P0": 2,
+  "P1": 0,
+  "P2": 0,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "product",
+ "lens": "bugs",
+ "model": "sonnet",
+ "run": 1,
+ "files_written": true,
+ "seconds": 183.258138,
+ "cost_usd": 0.8070728,
+ "lens_turns": 43,
+ "lens_error": false
+}

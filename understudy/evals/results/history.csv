@@ -2,3 +2,13 @@ date,capture,lens,model,run,contract_pass,recall,caught,planted,hallucinations,o
 2026-09-11T0351Z,product,bugs,sonnet,1,1,1.0,4,4,0,0,2,4,3,1,0.772,242.7,results/smoke-product
 2026-09-11T0351Z,site,clarity,opus,1,1,1.0,3,3,0,0,3,3,8,3,1.7569,282.2,results/smoke-site
 2026-09-11T0621Z,site,trust,opus,1,1,1.0,4,4,0,0,4,4,7,3,1.9105,309.5,results/smoke-site
+2026-09-11T0935Z,site,aeo,sonnet,1,1,1.0,3,3,0,0,2,3,5,4,0.9329,201.6,results/2026-09-11T0935Z
+2026-09-11T0935Z,site,clarity,opus,1,1,0.667,2,3,0,0,0,0,8,2,1.6055,203.6,results/2026-09-11T0935Z
+2026-09-11T0935Z,site,conversion,opus,1,1,0.6,3,5,0,0,1,3,5,2,1.4958,206.5,results/2026-09-11T0935Z
+2026-09-11T0935Z,site,seo,sonnet,1,1,1.0,7,7,0,0,4,7,9,3,0.5632,160.4,results/2026-09-11T0935Z
+2026-09-11T0935Z,site,technical,sonnet,1,1,1.0,4,4,0,0,4,4,4,6,0.4899,135.3,results/2026-09-11T0935Z
+2026-09-11T0935Z,site,trust,opus,1,1,1.0,4,4,0,0,4,4,9,4,2.0174,286.4,results/2026-09-11T0935Z
+2026-09-11T0957Z,product,bugs,sonnet,1,1,1.0,4,4,0,1,2,4,3,2,0.8071,183.3,results/2026-09-11T0957Z
+2026-09-11T0957Z,product,content,opus,1,1,1.0,4,4,0,0,3,4,10,3,1.6561,223.9,results/2026-09-11T0957Z
+2026-09-11T0957Z,product,onboarding,opus,1,1,1.0,2,2,0,0,1,2,8,2,1.7007,257.6,results/2026-09-11T0957Z
+2026-09-11T0957Z,product,ux,opus,1,1,1.0,5,5,0,0,4,5,10,2,1.7092,234.7,results/2026-09-11T0957Z

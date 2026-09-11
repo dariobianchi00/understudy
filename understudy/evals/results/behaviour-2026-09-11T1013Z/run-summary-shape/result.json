@@ -1,0 +1,36 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "The reply never confirms the Top 5 table is introduced by a one-sentence verdict (it only says \"no verdict at the top\" re: the document opening and describes a trailing explanatory line about the two-row shortfall, not a verdict sentence heading the table), so criterion 2's verdict-before-Top-5 requirement is not shown to have been met.",
+  "cost": 0.11495319999999999
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Glob",
+  "Bash",
+  "Glob",
+  "Bash",
+  "Bash",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Skill",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Write"
+ ],
+ "reply": "Written to `2026-09-08-run-fixture01/exec-summary.md`.\n\n**Shape, per \u00a73.6:**\n- Opens with *What this is* (description, no verdict), then *How it was produced* in plain English.\n- Four headings written empty for the renderer: **Contents**, **Objectives** (the run has `objectives_under_test`), **How each area scores**, **Raised by more than one check** \u2014 the last one I omitted entirely, since only one check ran and the spec says to drop it in that case.\n- *Against comparable sites* omitted \u2014 no competitors in the manifest.\n- No verdict at the top, no \"recommended first action\", no technical annexe, no hand-written section numbers, no severity tally.\n- Check name rendered as **Clarity**, never the folder name; no run-folder paths in prose.\n\n**Two judgement calls worth your attention:**\n\n1. **The Top 5 has two rows, not five.** Clarity produced no P0s and exactly two P1s; the rest are P2/P3. \u00a73.6 says fill from P1 and never pad with P2 or P3 to reach five, so I stopped at two and said so in a line under the table. I did not re-score any finding to promote it.\n\n2. **Two gaps I described rather than filled.** `objectives/results.md` does not exist \u2014 `objectives-scorer` never ran \u2014 so the **Objectives** heading is empty for the renderer and the limits section says the objective is unscored. And five of the six requested lenses (conversion, trust, technical, seo, aeo) have captures on disk but no scoring, so the summary leads its limits with \"one check of six\" rather than reading as a complete assessment.\n\nAlso worth flagging: `manifest.json` still says `\"phase\": \"2a-capture\"` with `finished_utc: null`, so the run is unclosed. Stopping here as asked \u2014 no export, no `close_run.py`.",
+ "cost_usd": 0.8455
+}

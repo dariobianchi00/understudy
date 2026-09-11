@@ -1,0 +1,267 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast",
+   "search-always-empty"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "Memories panel presents fabricated personal facts as real data"
+  ],
+  "band_ok": 2,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "P3",
+    "band": [
+     "P3"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 3,
+  "severities": {
+   "P0": 2,
+   "P1": 0,
+   "P2": 0,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 183.258138,
+  "cost_usd": 0.8070728,
+  "lens_turns": 43,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 3,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 10,
+  "severities": {
+   "P0": 2,
+   "P1": 2,
+   "P2": 6,
+   "P3": 0
+  },
+  "score": 3,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 223.923402,
+  "cost_usd": 1.6561306,
+  "lens_turns": 34,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 1,
+  "band_judged": 2,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P1",
+    "band": [
+     "P2"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 1,
+   "P1": 4,
+   "P2": 3,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 257.629128,
+  "cost_usd": 1.7007146,
+  "lens_turns": 38,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 4,
+  "band_judged": 5,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 10,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 6,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 234.70768,
+  "cost_usd": 1.7091866000000002,
+  "lens_turns": 39,
+  "lens_error": false
+ }
+]

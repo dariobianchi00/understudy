@@ -1,0 +1,22 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [
+  "reply contains /\\b(four|4)\\b[^.]{0,20}(captures|traversals)/"
+ ],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly stated 2 captures (Mode A-visit serving clarity/conversion/trust, Mode C crawl serving seo), did not propose one capture per lens, and did not interview or start anything.",
+  "cost": 0.0874292
+ },
+ "tools_called": [
+  "Bash",
+  "Glob",
+  "Glob"
+ ],
+ "reply": "**2 captures.**\n\n| # | Mode | Skill | Serves |\n|---|------|-------|--------|\n| 1 | Mode A-visit | `understudy:traversal-visit` | clarity, conversion, trust |\n| 2 | Mode C (crawl) | `understudy:traversal-crawl` | seo |\n\nThe arithmetic: four objectives, but captures don't map 1:1 to lenses. Clarity, conversion and trust all score the *same* Mode A-visit traversal \u2014 one persona-driven pass over the site, scored three ways afterwards. SEO scores a Mode C crawl, which is session-less and persona-less, so it can't share the visit capture and needs its own pass. 3 lenses \u2192 1 capture, plus 1 lens \u2192 1 capture = 2.\n\nTwo things that would change the number, stated rather than asked:\n- **Personas multiply capture 1, not capture 2.** I'm counting one persona. If the interview yields N personas, that's N Mode A-visit captures + 1 crawl = N+1. The crawl never multiplies.\n- **No Mode B here.** None of your four objectives is `technical`, so there's no measurement pass. Adding `technical` later would make it 3 (and it'd be mobile + desktop within that one capture, not two captures).\n\nNothing has been started.",
+ "cost_usd": 0.256
+}

@@ -1,0 +1,149 @@
+{
+ "duration_api_ms": 13417,
+ "stop_reason": "tool_use",
+ "session_id": "d5eefcf6-a593-48a7-89ea-cacfcb730261",
+ "total_cost_usd": 0.1198716,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 24265,
+  "cache_read_input_tokens": 24133,
+  "output_tokens": 1305,
+  "output_tokens_details": {
+   "thinking_tokens": 963
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 24265,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1305,
+    "cache_read_input_tokens": 24133,
+    "cache_creation_input_tokens": 24265,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 24265
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 4851,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.0049310000000000005,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1305,
+   "cacheReadInputTokens": 24133,
+   "cacheCreationInputTokens": 24265,
+   "webSearchRequests": 0,
+   "costUSD": 0.11494059999999999,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 963,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-audience\",\"caught\":true,\"finding_title\":\"bc120b0122b1 \u2014 The home page names no audience, so both personas answered \\\"who is it for\\\" with a guess\"},{\"id\":\"jargon-fold\",\"caught\":true,\"finding_title\":\"f2ef631e4075 \u2014 The fold's only explanation is two terms neither persona could define\"},{\"id\":\"dead-cta\",\"caught\":false,\"finding_title\":\"\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-audience",
+    "caught": true,
+    "finding_title": "bc120b0122b1 \u2014 The home page names no audience, so both personas answered \"who is it for\" with a guess"
+   },
+   {
+    "id": "jargon-fold",
+    "caught": true,
+    "finding_title": "f2ef631e4075 \u2014 The fold's only explanation is two terms neither persona could define"
+   },
+   {
+    "id": "dead-cta",
+    "caught": false,
+    "finding_title": ""
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 10463,
+ "type": "result",
+ "duration_ms": 12464,
+ "uuid": "7c7d29f3-9d31-4fec-bb47-5ff53f638fd6",
+ "ttft_stream_ms": 898,
+ "time_to_request_ms": 127,
+ "first_content_frame_ms": 1241,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
