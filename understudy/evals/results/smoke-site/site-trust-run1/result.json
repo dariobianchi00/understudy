@@ -1,0 +1,68 @@
+{
+ "contract_pass": true,
+ "planted": 4,
+ "caught": 4,
+ "recall": 1.0,
+ "caught_ids": [
+  "cookie-banner-mismatch",
+  "no-price",
+  "privacy-vague",
+  "proof-anonymous"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 4,
+ "band_judged": 4,
+ "band_rows": [
+  {
+   "id": "no-price",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "cookie-banner-mismatch",
+   "severity": "P0",
+   "band": [
+    "P0"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "privacy-vague",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "proof-anonymous",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 7,
+ "severities": {
+  "P0": 1,
+  "P1": 2,
+  "P2": 4,
+  "P3": 0
+ },
+ "score": 3,
+ "capture": "site",
+ "lens": "trust",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 309.53568,
+ "cost_usd": 1.9105439999999998,
+ "lens_turns": 33,
+ "lens_error": false
+}

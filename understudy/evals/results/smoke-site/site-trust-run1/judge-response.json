@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 9511,
+ "stop_reason": "tool_use",
+ "session_id": "e2a29ca2-dbd6-4e53-ae1c-9fecce08098f",
+ "total_cost_usd": 0.26897099999999996,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 63854,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 815,
+  "output_tokens_details": {
+   "thinking_tokens": 388
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 63854,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 815,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 63854,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 63854
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5321,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005401,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 815,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 63854,
+   "webSearchRequests": 0,
+   "costUSD": 0.26356999999999997,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 388,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"Pricing page shows no price on any plan and explains it with jargon the visitor cannot answer\"},{\"id\":\"cookie-banner-mismatch\",\"caught\":true,\"finding_title\":\"Cookie bar promises no tracking cookies; a third-party tracker fires on load and the privacy page says otherwise\"},{\"id\":\"privacy-vague\",\"caught\":true,\"finding_title\":\"Privacy page names no partners, no data categories and no cookie behaviour\"},{\"id\":\"proof-anonymous\",\"caught\":true,\"finding_title\":\"Every testimonial is anonymous, so the persona disbelieved all three\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "Pricing page shows no price on any plan and explains it with jargon the visitor cannot answer"
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "caught": true,
+    "finding_title": "Cookie bar promises no tracking cookies; a third-party tracker fires on load and the privacy page says otherwise"
+   },
+   {
+    "id": "privacy-vague",
+    "caught": true,
+    "finding_title": "Privacy page names no partners, no data categories and no cookie behaviour"
+   },
+   {
+    "id": "proof-anonymous",
+    "caught": true,
+    "finding_title": "Every testimonial is anonymous, so the persona disbelieved all three"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 6139,
+ "type": "result",
+ "duration_ms": 11330,
+ "uuid": "b5091431-5814-4d07-a55b-05882c7807a7",
+ "ttft_stream_ms": 1854,
+ "time_to_request_ms": 478,
+ "first_content_frame_ms": 2135,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

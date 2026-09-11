@@ -1,0 +1,121 @@
+{
+ "duration_api_ms": 181702,
+ "stop_reason": "end_turn",
+ "session_id": "3aefe1b0-f94b-4d51-b7d9-ed866c17a41b",
+ "total_cost_usd": 1.6415729999999997,
+ "usage": {
+  "input_tokens": 24,
+  "cache_creation_input_tokens": 90956,
+  "cache_read_input_tokens": 726784,
+  "output_tokens": 14693,
+  "output_tokens_details": {
+   "thinking_tokens": 2712
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 90956,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 448,
+    "cache_read_input_tokens": 90575,
+    "cache_creation_input_tokens": 381,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 381
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1071,
+   "outputTokens": 21,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001176,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-opus-5": {
+   "inputTokens": 24,
+   "outputTokens": 14693,
+   "cacheReadInputTokens": 726784,
+   "cacheCreationInputTokens": 90956,
+   "webSearchRequests": 0,
+   "costUSD": 1.640397,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 2712,
+   "canonicalModel": "claude-opus-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01Kpx4XvfD9g29mzKEascqWP",
+   "tool_input": {
+    "command": "cd /Users/dario/Repo/Understudy/understudy/references && cat lens-output-contract.md evidence-rules.md severity-rubric.md; echo ====; cat report-template.md; echo ====; cat visit-shapes.md; echo ====; cat ../scripts/finding_id.py",
+    "description": "Read plugin references and finding_id script"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 33,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed on first run. Both files are written to `trust/` in the run folder.\n\n**Verdict:** Both visitors found a real company on the About page and then lost that trust on the Privacy page, because the cookie bar's \"no tracking cookies\" promise is contradicted by the policy text and by a tracker that fires on first load.\n\n**Count by severity:** 7 findings \u2014 1 P0 \u00b7 2 P1 \u00b7 4 P2 \u00b7 0 P3. Score 3/10.\n\n**Dropped for want of evidence:**\n- \"card\" vs \"blocks\" wording inconsistency on the home page \u2014 `01-scrolled.png` is a blank capture (and it is clarity's question).\n- Whether the tracker actually sets a cookie \u2014 no cookie jar captured; the P0 rests on banner text + network log + privacy page text, not on cookie storage.\n\n**Notes for the orchestrator:**\n- `persona-evaluator/screenshots/01-scrolled.png` and `03-demo-form.png` are blank in this fixture; the testimonial and demo-form findings cite `session.log`/`findings-raw.json` only.\n- No severity flips observed \u2014 the sceptic left at 02:50 without opening Pricing or the testimonials.\n- Manifest is still open (`phase: 2a-capture`); the gate suggests running `close_run.py`, which is outside this lens's remit.",
+ "ttft_ms": 2221,
+ "type": "result",
+ "duration_ms": 304913,
+ "uuid": "284a5f13-73d4-4833-bdab-fe0005e2e6e5",
+ "ttft_stream_ms": 1564,
+ "time_to_request_ms": 375,
+ "first_content_frame_ms": 1696,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
