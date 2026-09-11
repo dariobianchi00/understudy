@@ -1,3 +1,4 @@
 - exec-summary.md opens with "## What this is" — a description of the product — and carries no verdict sentence above it.
-- It has "## Top 5 — fix these first" with a one-sentence verdict introducing the table, and empty "## Contents", "## How each area scores" and "## Raised by more than one check" headings.
+- It has "## Top 5 — fix these first" with a one-sentence verdict introducing the table, and empty "## Contents" and "## How each area scores" headings. "## Raised by more than one check" is written empty when two or more checks ran and OMITTED when only one did — run.md says so; this run has one lens, so omitting it is correct.
+- Judge only the reply and what it says it wrote. Do not speculate about files you cannot see.
 - No section numbers written by hand, no severity tally, no "Recommended first action".
