@@ -86,6 +86,12 @@ def setup_run(kind, tmp):
                 if os.path.exists(src):
                     shutil.copy(src, os.path.join(run, "clarity", f))
         return run
+    if kind == "site-run-bare":
+        # the capture only — no lens output, so a "persist this text" case
+        # does not find a different report already there and stop to ask
+        run = os.path.join(tmp, "2026-09-08-run-fixture01")
+        shutil.copytree(FIXTURE_SITE, run)
+        return run
     if kind == "empty-run":
         run = os.path.join(tmp, "2026-09-08-run-empty")
         os.makedirs(run)

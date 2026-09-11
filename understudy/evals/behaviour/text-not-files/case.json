@@ -1,5 +1,5 @@
 {
- "setup": "site-run",
+ "setup": "site-run-bare",
  "files_equal": [
   [
    "clarity/exec-summary.md",
