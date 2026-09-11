@@ -72,7 +72,9 @@ jobs:
       - name: behaviour evals
         id: behaviour
         continue-on-error: true
-        run: python3 understudy/evals/run_behaviour.py --budget-usd 2 | tee behaviour.log
+        run: |
+          set -o pipefail
+          python3 understudy/evals/run_behaviour.py --budget-usd 3 | tee behaviour.log
 
       - name: keep the logs
         if: always()

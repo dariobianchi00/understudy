@@ -4,9 +4,7 @@
   "(crawl|Mode C)",
   "(visit|A-visit)"
  ],
- "must_not_match": [
-  "\\b(four|4)\\b[^.]{0,20}(captures|traversals)"
- ],
+ "must_not_match": [],
  "tools_forbidden": [
   "WebFetch",
   "mcp__*"

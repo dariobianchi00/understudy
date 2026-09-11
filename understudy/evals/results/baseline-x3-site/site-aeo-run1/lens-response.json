@@ -1,0 +1,120 @@
+{
+ "duration_api_ms": 108176,
+ "stop_reason": "end_turn",
+ "session_id": "eb10421c-222c-43f9-b0dc-184371df659a",
+ "total_cost_usd": 0.5089928,
+ "usage": {
+  "input_tokens": 22,
+  "cache_creation_input_tokens": 71354,
+  "cache_read_input_tokens": 597979,
+  "output_tokens": 10276,
+  "output_tokens_details": {
+   "thinking_tokens": 2505
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 71354,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 138,
+    "cache_read_input_tokens": 70969,
+    "cache_creation_input_tokens": 385,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 385
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1077,
+   "outputTokens": 20,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001177,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 22,
+   "outputTokens": 10276,
+   "cacheReadInputTokens": 597979,
+   "cacheCreationInputTokens": 71354,
+   "webSearchRequests": 0,
+   "costUSD": 0.5078157999999999,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 2505,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01EysyAUmeqoKGT5zLhzV4UK",
+   "tool_input": {
+    "command": "cd /Users/dario/Repo/Understudy/understudy && \\\npython3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/\" --title \"Homepage JSON-LD is invalid and truncated, the only schema attempt on the site\" && \\\npython3 scripts/finding_id.py --lens aeo --flow \"crawl:site\" --locator \"crawl/pages/*.json\" --title \"No Organization schema anywhere on the site\" && \\\npython3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/\" --title \"Homepage has zero extractable answer blocks\" && \\\npython3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/about.html\" --title \"FAQPage schema omits one of three on-page Q&A pairs\" && \\\npython3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/pricing.html\" --title \"Pricing page has no extractable price for any plan\" && \\\npython3 scripts/finding_id.py --lens aeo --flow \"crawl:site\" --locator \"llms.txt\" --title \"llms.txt is absent\"\n"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 21,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed. Both files are written.\n\n**Verdict:** An answer engine reading this crawl finds one working FAQ page, a broken schema on the homepage, no Organization markup anywhere, and two pages \u2014 home and pricing \u2014 with nothing quotable at all.\n\n**Counts by severity:** P0: 0 \u00b7 P1: 2 \u00b7 P2: 3 \u00b7 P3: 1 (6 total)\n\n**Score:** 4/10",
+ "ttft_ms": 1761,
+ "type": "result",
+ "duration_ms": 231079,
+ "uuid": "22b245e9-404f-4789-b24e-8ab372644335",
+ "ttft_stream_ms": 1249,
+ "time_to_request_ms": 296,
+ "first_content_frame_ms": 1479,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
