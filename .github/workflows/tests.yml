@@ -1,0 +1,28 @@
+name: tests
+
+# The plumbing: gates, renderer, IDs, normalisers, docs. No model, no
+# browser, no network beyond checkout. Runs on every push and PR.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  plumbing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: self-tests
+        run: |
+          python3 understudy/scripts/finding_id.py --self-test
+          python3 understudy/scripts/compare_runs.py --self-test
+          python3 understudy/scripts/run_layout.py
+      - name: unit tests
+        run: python3 -m unittest discover -s understudy/tests -v
+      - name: nothing real in the tree
+        run: |
+          # §7 — a stray capture artifact in the working tree is a leak.
+          ! git ls-files | grep -E '\.(png|jpe?g|webm|zip|pdf)$|session\.log$|/runs/|/targets/'

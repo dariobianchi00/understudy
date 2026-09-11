@@ -1,0 +1,107 @@
+[
+ {
+  "lens": "ux",
+  "flow": "shape_1",
+  "locator": "https://app.example.com/signup?session=abc123",
+  "title": "Workspace type demanded before any value is shown",
+  "id": "89f861287ea8"
+ },
+ {
+  "lens": "ux",
+  "flow": "shape_1",
+  "locator": "/signup/",
+  "title": "Signup form confusing",
+  "id": "a7fb9b65d7df"
+ },
+ {
+  "lens": "onboarding",
+  "flow": "shape_2",
+  "locator": "/setup",
+  "title": "First value took 47 seconds",
+  "id": "cf8ab5c63c13"
+ },
+ {
+  "lens": "ux",
+  "flow": "shape_1",
+  "locator": "/orders/8821/edit",
+  "title": "Cannot cancel",
+  "id": "670da8d840b5"
+ },
+ {
+  "lens": "bugs",
+  "flow": "shape_2",
+  "locator": "/api/meals",
+  "title": "POST /api/meals returns 500 on photo upload",
+  "id": "79f45579a442"
+ },
+ {
+  "lens": "clarity",
+  "flow": "V1",
+  "locator": "/",
+  "title": "The fold names no audience",
+  "id": "32bcd1bb1951"
+ },
+ {
+  "lens": "clarity",
+  "flow": "V1 \u2014 Land",
+  "locator": "compare/ours-x/screenshots/ours-x-00-fold.png",
+  "title": "The fold names no audience \u2014 who this is for is unstated",
+  "id": "b23c3f128aa1"
+ },
+ {
+  "lens": "trust",
+  "flow": "V3",
+  "locator": "/pricing",
+  "title": "No price anywhere on the site",
+  "id": "15fbaa09ea79"
+ },
+ {
+  "lens": "trust",
+  "flow": "V3",
+  "locator": "/pricing",
+  "title": "Pricing is not shown anywhere on the site",
+  "id": "4d0d67e4ed1e"
+ },
+ {
+  "lens": "seo",
+  "flow": "crawl:site",
+  "locator": "/robots.txt",
+  "title": "Sitemap declared in robots.txt returns 404",
+  "id": "410b73efef8e"
+ },
+ {
+  "lens": "aeo",
+  "flow": "crawl:page",
+  "locator": "/faq",
+  "title": "Answer blocks depend on the paragraph above them",
+  "id": "b56de38c3086"
+ },
+ {
+  "lens": "technical",
+  "flow": "measure:/:mobile",
+  "locator": "/",
+  "title": "Hero image 3000x2000 delivered, shown at 390x260, 1.8 MB",
+  "id": "4bbb486e2b64"
+ },
+ {
+  "lens": "content",
+  "flow": "shape_1",
+  "locator": "/onboarding",
+  "title": "Persona met the term \"workspace\" before any explanation",
+  "id": "d31803413c2e"
+ },
+ {
+  "lens": "compare",
+  "flow": "compare:clarity:what-it-is",
+  "locator": "/",
+  "title": "Trails on what-it-is-in-10s: never clear vs stated in headline",
+  "id": "610fdbd16e79"
+ },
+ {
+  "lens": "ux",
+  "flow": "surfaces",
+  "locator": "/settings#notifications",
+  "title": "Toggle labelled Enable webhook sync with no explanation",
+  "id": "08f71b53847f"
+ }
+]
