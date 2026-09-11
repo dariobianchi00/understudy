@@ -47,7 +47,7 @@ jobs:
         # missing or wrong key must never be recorded as 'recall 0/3'.
         run: |
           claude -p "Reply with the single word OK." --model sonnet --output-format json \
-            --no-session-persistence --max-budget-usd 0.05 | tee preflight.json
+            --no-session-persistence --max-budget-usd 0.25 | tee preflight.json
           python3 -c "import json;d=json.load(open('preflight.json'));assert not d.get('is_error') and 'OK' in (d.get('result') or '').upper(), d"
 
       - name: lens evals — site

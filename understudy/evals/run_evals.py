@@ -206,7 +206,7 @@ def preflight(model):
     try:
         p = subprocess.run(["claude", "-p", "Reply with the single word OK.", "--model", model,
                             "--output-format", "json", "--no-session-persistence",
-                            "--max-budget-usd", "0.05"], capture_output=True, text=True, timeout=120)
+                            "--max-budget-usd", "0.25"], capture_output=True, text=True, timeout=120)
         out = json.loads(p.stdout) if p.stdout.strip().startswith("{") else {"result": p.stdout + p.stderr}
     except (subprocess.TimeoutExpired, ValueError) as e:
         sys.exit(f"preflight: claude did not answer ({e}); nothing recorded")
