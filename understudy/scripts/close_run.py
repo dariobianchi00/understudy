@@ -20,12 +20,29 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import finding_id   # noqa: E402
+import run_layout   # noqa: E402
 
 
 def _count(pattern):
     return len(glob.glob(pattern))
+
+
+def _persona_entry(pdir):
+    """One persona folder's contents. The debrief file is `persona-debrief.md`
+    — observed 2026-09-11 that this looked for `debrief.md` and so no run's
+    manifest had ever recorded a debrief, on runs where one was on disk."""
+    entry = {"screenshots": _count(os.path.join(pdir, "screenshots", "*.png"))}
+    for name, key in (("session.log", "session"), ("timeline.json", "timeline"),
+                      ("persona-debrief.md", "debrief"), ("findings-raw.json", "raw")):
+        if os.path.exists(os.path.join(pdir, name)):
+            entry[key] = True
+    return entry
 
 
 def survey(run):
@@ -36,12 +53,23 @@ def survey(run):
         if not os.path.isdir(full):
             continue
 
-        if d.startswith("persona-") or d.startswith("competitor-"):
-            entry = {"screenshots": _count(os.path.join(full, "screenshots", "*.png"))}
-            for name in ("session.log", "timeline.json", "debrief.md"):
-                if os.path.exists(os.path.join(full, name)):
-                    entry[name.split(".")[0]] = True
-            caps[d] = entry
+        if d.startswith("persona-"):
+            caps[d] = _persona_entry(full)
+
+        elif d == "compare":
+            # Mode D: one folder per site under compare/<site>/, each holding
+            # either persona-* folders or a mechanical capture (screenshots +
+            # site.json, no session log). Record what is actually there.
+            for site in sorted(os.listdir(full)):
+                sdir = os.path.join(full, site)
+                if not os.path.isdir(sdir):
+                    continue
+                entry = {"screenshots": _count(os.path.join(sdir, "screenshots", "*.png")),
+                         "site_json": os.path.exists(os.path.join(sdir, "site.json"))}
+                for p in sorted(os.listdir(sdir)):
+                    if p.startswith("persona-") and os.path.isdir(os.path.join(sdir, p)):
+                        entry[p] = _persona_entry(os.path.join(sdir, p))
+                caps[f"compare/{site}"] = entry
 
         elif d == "crawl":
             # The crawl skill has written its fetched pages under both
@@ -85,13 +113,16 @@ def last_activity(run):
 
 
 def scored(run):
-    """Lenses that produced a findings file, and how many findings each holds."""
+    """Lenses that produced a findings file, and how many findings each holds —
+    including Mode D's per-site lenses under compare/<site>/, and counting only
+    real finding headings, not every `###` in the file."""
     out = {}
-    for d in sorted(os.listdir(run)):
-        f = os.path.join(run, d, "findings-final.md")
-        if os.path.exists(f):
-            text = open(f, errors="replace").read()
-            out[d] = sum(1 for ln in text.split("\n") if ln.startswith("### "))
+    for lens in run_layout.lens_dirs(run):
+        text = open(os.path.join(run, lens, "findings-final.md"), errors="replace").read()
+        cut = re.search(r"^##\s+Dropped for want of evidence", text, re.M)
+        if cut:
+            text = text[:cut.start()]
+        out[lens] = sum(1 for ln in text.split("\n") if finding_id.FINDING_HEADING.match(ln))
     return out
 
 

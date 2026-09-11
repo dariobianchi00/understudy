@@ -32,14 +32,14 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from finding_id import finding_id  # noqa: E402
+from finding_id import finding_id, FINDING_HEADING  # noqa: E402
+import run_layout  # noqa: E402
 
 SEVERITY = re.compile(r"\*\*Severity:\*\*\s*(P[0-3])", re.I)
 TAG_FIELD = re.compile(r"^\s*-\s*\*\*(?P<key>[A-Za-z ][A-Za-z ]*?):\*\*\s*(?P<val>.*)$")
-# A finding heading: "### <id> — <title>" (em dash, en dash or hyphen).
-# Deliberately permissive about the id: a report using sequence numbers must be
-# SEEN and failed by check 4, not silently skipped for not matching a hash.
-FINDING_H = re.compile(r"^###\s+`?(?P<id>[^\s—–]+?)`?\s*[—–]\s*(?P<title>.+?)\s*$")
+# The finding heading. ONE regex, shared with the renderer and the differ —
+# see finding_id.FINDING_HEADING for why three copies were a gate bypass.
+FINDING_H = FINDING_HEADING
 # Extensions a capture can legitimately produce. Mode C writes raw .html and
 # .txt/.xml (robots, sitemap, llms), Mode B writes .json, Mode A writes .png and
 # .log — a gate that rejects any of them rejects valid evidence, which pushes
@@ -87,6 +87,23 @@ def parse_findings(text):
             if fm:
                 current["fields"][fm.group("key").strip().lower()] = fm.group("val").strip()
     return findings
+
+
+def stray_headings(text):
+    """`###` lines under Findings that did NOT parse as findings.
+
+    A heading the parser cannot read is a finding the gate did not check —
+    and until 2026-09-11 that printed as "no findings reported" and PASSED.
+    """
+    stray, in_body = [], True
+    for n, line in enumerate(text.split("\n"), 1):
+        if re.match(r"^##\s+(Dropped for want of evidence|For other lenses|Appendices)", line, re.I):
+            in_body = False
+        elif re.match(r"^##\s+Findings", line, re.I):
+            in_body = True
+        if in_body and line.startswith("### ") and not FINDING_H.match(line):
+            stray.append((n, line.strip()))
+    return stray
 
 
 SCORE_FIELD = re.compile(r"^-\s+\*\*Score:\*\*\s*(\d{1,2})\s*/\s*10\s*[—–-]?\s*(.*?)\s*$",
@@ -191,6 +208,10 @@ def check_findings(path, r, lens, run):
         return
     text = open(path, errors="replace").read()
     findings = parse_findings(text)
+    for n, line in stray_headings(text):
+        r.fail(1, f"{lens}:{n} heading did not parse as a finding, so nothing "
+                  f"below it was checked. The format is `### <id> — <title>`.\n"
+                  f"        > {line[:100]}")
     if not findings:
         r.note(f"{lens}: no findings reported")
         return
@@ -241,13 +262,18 @@ def check_findings(path, r, lens, run):
         flow = fields.get("flow", "")
         locator = fields.get("locator") or _infer_locator(ev, body)
         base = re.sub(r"-[a-z]$", "", fid)  # persona variants: <id>-a, <id>-b
-        expect = finding_id(lens, flow, locator, title)
+        # The ID hashes the lens NAME (`clarity`), never its folder. A Mode D
+        # per-site lens lives at compare/<site>/clarity and still hashes as
+        # `clarity` — that is what its agent was told and what it passed to
+        # finding_id.py.
+        lens_name = lens.rpartition("/")[2]
+        expect = finding_id(lens_name, flow, locator, title)
         if not re.fullmatch(r"[0-9a-f]{6,16}", base):
             r.fail(4, f"{lens}:{ln} id '{fid}' is not a hash — sequence numbers "
                       f"cannot be diffed across runs")
         elif expect[:len(base)] != base:
             r.fail(4, f"{lens}:{ln} id {fid} does not match recomputation.\n"
-                      f"        expected {expect} from lens='{lens}' flow='{flow}' "
+                      f"        expected {expect} from lens='{lens_name}' flow='{flow}' "
                       f"locator='{locator}' title='{title[:50]}'")
 
     r.note(f"{lens}: {len(findings)} finding(s), "
@@ -266,21 +292,31 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("run_folder")
     ap.add_argument("--lens", default=None, help="check only this lens")
+    ap.add_argument("--expect-lenses", type=int, default=None,
+                    help="how many lens reports the orchestrator dispatched; "
+                         "fewer on disk fails the gate")
     a = ap.parse_args()
 
     run = os.path.expanduser(a.run_folder)
     if not os.path.isdir(run):
         sys.exit(f"not a directory: {run}")
 
-    lenses = [a.lens] if a.lens else sorted(
-        d for d in os.listdir(run)
-        if os.path.isdir(os.path.join(run, d))
-        and os.path.exists(os.path.join(run, d, "findings-final.md"))
-    )
+    # Discovery is shared with the renderer, so a Mode D run's per-site lenses
+    # under compare/<site>/ are checked here exactly where the export will
+    # show them. Until 2026-09-11 this listed one level deep and a compare run
+    # passed with three of its four reports never opened.
+    lenses = run_layout.lens_dirs(run)
+    if a.lens:
+        lenses = [l for l in lenses if l == a.lens or l.endswith("/" + a.lens)]
     if not lenses:
         sys.exit("no lens output found — expected <run>/<lens>/findings-final.md")
 
     r = Result()
+    if a.expect_lenses is not None and len(lenses) < a.expect_lenses:
+        r.fail(8, f"{len(lenses)} lens report(s) on disk, {a.expect_lenses} "
+                  f"dispatched: {', '.join(lenses)}. A lens whose files never "
+                  f"landed is not failed by the checks below — it is not "
+                  f"checked. Persist the missing output before re-running.")
     for lens in lenses:
         d = os.path.join(run, lens)
         check_verdict(os.path.join(d, "exec-summary.md"), r, lens)
@@ -310,7 +346,8 @@ def main():
                   3: "zero unsupported P0s (gate check 3)",
                   4: "stable finding IDs (gate check 4)",
                   6: "report leads with a verdict (gate check 6)",
-                  7: "score consistent with severities (gate check 7)"}
+                  7: "score consistent with severities (gate check 7)",
+                  8: "every dispatched lens landed (--expect-lenses)"}
         by = {}
         for c, m in r.failures:
             by.setdefault(c, []).append(m)

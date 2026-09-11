@@ -26,6 +26,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import run_layout  # noqa: E402
+
 # CLAUDE.md §6 invariant 1, and flow-shapes.md "Banned vocabulary".
 BANNED = [
     "heuristic", "nielsen", "hax", "amershi",
@@ -93,6 +96,15 @@ def check_banned_vocabulary(run, r):
                 os.path.isdir(os.path.join(run, "measure")):
             r.note("separation check n/a — no-persona capture (crawl/measure), "
                    "nothing that could carry framework vocabulary")
+            return
+        if run_layout.compare_sites(run):
+            # Mode D's mechanical capture records facts and no reactions, by
+            # design (traversal-compare). The persona reading happens in the
+            # per-site lens agents, whose output only check_report sees — so
+            # the separation is enforced structurally, not by this scan. Say
+            # so rather than fail a valid capture.
+            r.note("separation check n/a — Mode D mechanical capture writes no "
+                   "persona prose; independence is structural (one reader per site)")
             return
         r.fail(2, "no capture artifacts found to scan — "
                   "a traversal that wrote nothing has not been verified, it has been skipped")
@@ -195,6 +207,87 @@ def check_measure(measure_dir, r):
     r.note(f"measure: {len(files)} measurement record(s), {len(viewports)} viewport(s)")
 
 
+def _is_empty_persona(pdir):
+    shots = os.path.join(pdir, "screenshots")
+    n = len(os.listdir(shots)) if os.path.isdir(shots) else 0
+    return n == 0 and not os.path.exists(os.path.join(pdir, "session.log"))
+
+
+def check_compare_sites(run, sites, r):
+    """Mode D. Each compare/<site>/ is a capture in its own right: either
+    persona-* folders (a visit traversal) or a mechanical capture — screenshots
+    plus site.json, no session log by design (traversal-compare). Until
+    2026-09-11 nothing looked here at all."""
+    for site in sites:
+        sdir = os.path.join(run, site)
+        if not os.path.exists(os.path.join(sdir, "site.json")):
+            r.fail(0, f"{site}: site.json missing — url, mode, when, and what was "
+                      f"unreachable; the diff pass cannot tell a gap from a difference")
+        personas = sorted(p for p in os.listdir(sdir)
+                          if p.startswith("persona-") and os.path.isdir(os.path.join(sdir, p)))
+        shots = os.path.join(sdir, "screenshots")
+        n_shots = len([f for f in os.listdir(shots)
+                       if f.lower().endswith((".png", ".jpg", ".jpeg"))]) if os.path.isdir(shots) else 0
+        if personas:
+            for p in personas:
+                _check_persona(os.path.join(sdir, p), f"{site}/{p}", r)
+        elif n_shots == 0:
+            r.fail(0, f"{site}: no persona folder and no screenshots — nothing was captured")
+        else:
+            r.note(f"{site}: mechanical capture, {n_shots} screenshot(s)")
+    if not os.path.exists(os.path.join(run, "compare", "index.json")):
+        r.fail(0, "compare/index.json missing — the sites, and what could not be "
+                  "reached on which, or the diff reports a coverage gap as a difference")
+
+
+def _check_persona(pdir, d, r):
+    """One persona folder — screenshots, a timestamped log, the four files."""
+    shots = os.path.join(pdir, "screenshots")
+    n_shots = len([f for f in os.listdir(shots)
+                   if f.lower().endswith((".png", ".jpg", ".jpeg"))]) if os.path.isdir(shots) else 0
+
+    log = os.path.join(pdir, "session.log")
+    has_log = os.path.exists(log) and os.path.getsize(log) > 0
+
+    if n_shots == 0:
+        r.fail(0, f"{d}: no screenshots — evidence not on disk does not exist, "
+                  f"and every finding it would have supported gets dropped")
+    if not has_log:
+        r.fail(0, f"{d}: session.log missing or empty — the journey cannot be followed")
+    else:
+        text = open(log, errors="replace").read()
+        if not re.search(r"\[\d{2}:\d{2}\]", text):
+            r.fail(0, f"{d}: session.log has no [MM:SS] timestamps — "
+                      f"a finding without a time cannot be placed in the journey")
+        if "[pre-session]" not in text:
+            r.warn(f"{d}: no [pre-session] entry expectation logged — "
+                   f"the promise-vs-delivery question has nothing to compare against")
+
+    for required in ("timeline.json", "persona-debrief.md", "findings-raw.json"):
+        if not os.path.exists(os.path.join(pdir, required)):
+            r.fail(0, f"{d}: {required} missing")
+
+    tl = os.path.join(pdir, "timeline.json")
+    if os.path.exists(tl):
+        try:
+            json.load(open(tl))
+        except json.JSONDecodeError as e:
+            r.fail(0, f"{d}: timeline.json is not valid JSON ({e})")
+
+    fr = os.path.join(pdir, "findings-raw.json")
+    if os.path.exists(fr):
+        try:
+            raw = json.load(open(fr))
+            if isinstance(raw, list) and not raw:
+                r.warn(f"{d}: findings-raw.json is empty — a persona who "
+                       f"reacted to nothing is unusual enough to check")
+        except json.JSONDecodeError as e:
+            r.fail(0, f"{d}: findings-raw.json is not valid JSON ({e})")
+
+    r.note(f"{d}: {n_shots} screenshot(s)")
+
+
+
 def check_human_legible(run, r, manifest):
     """The 2a gate's human condition: can someone follow what happened?"""
     persona_dirs = sorted(
@@ -205,6 +298,9 @@ def check_human_legible(run, r, manifest):
     measure_dir = os.path.join(run, "measure")
     has_crawl   = os.path.isdir(crawl_dir)
     has_measure = os.path.isdir(measure_dir)
+    sites       = run_layout.compare_sites(run)
+    if sites:
+        check_compare_sites(run, sites, r)
 
     # Modes B and C have no persona by design. Demanding a persona folder from
     # a crawl or a measurement fails a capture that is perfectly valid — so
@@ -215,7 +311,7 @@ def check_human_legible(run, r, manifest):
         check_measure(measure_dir, r)
 
     if not persona_dirs:
-        if has_crawl or has_measure:
+        if has_crawl or has_measure or sites:
             return          # a no-persona capture, already checked above
         r.fail(0, "no persona-* folders and no crawl/ or measure/ — nothing was captured")
         return
@@ -229,49 +325,13 @@ def check_human_legible(run, r, manifest):
 
     for d in persona_dirs:
         pdir = os.path.join(run, d)
-        shots = os.path.join(pdir, "screenshots")
-        n_shots = len([f for f in os.listdir(shots)
-                       if f.lower().endswith((".png", ".jpg", ".jpeg"))]) if os.path.isdir(shots) else 0
-
-        log = os.path.join(pdir, "session.log")
-        has_log = os.path.exists(log) and os.path.getsize(log) > 0
-
-        if n_shots == 0:
-            r.fail(0, f"{d}: no screenshots — evidence not on disk does not exist, "
-                      f"and every finding it would have supported gets dropped")
-        if not has_log:
-            r.fail(0, f"{d}: session.log missing or empty — the journey cannot be followed")
-        else:
-            text = open(log, errors="replace").read()
-            if not re.search(r"\[\d{2}:\d{2}\]", text):
-                r.fail(0, f"{d}: session.log has no [MM:SS] timestamps — "
-                          f"a finding without a time cannot be placed in the journey")
-            if "[pre-session]" not in text:
-                r.warn(f"{d}: no [pre-session] entry expectation logged — "
-                       f"the promise-vs-delivery question has nothing to compare against")
-
-        for required in ("timeline.json", "persona-debrief.md", "findings-raw.json"):
-            if not os.path.exists(os.path.join(pdir, required)):
-                r.fail(0, f"{d}: {required} missing")
-
-        tl = os.path.join(pdir, "timeline.json")
-        if os.path.exists(tl):
-            try:
-                json.load(open(tl))
-            except json.JSONDecodeError as e:
-                r.fail(0, f"{d}: timeline.json is not valid JSON ({e})")
-
-        fr = os.path.join(pdir, "findings-raw.json")
-        if os.path.exists(fr):
-            try:
-                raw = json.load(open(fr))
-                if isinstance(raw, list) and not raw:
-                    r.warn(f"{d}: findings-raw.json is empty — a persona who "
-                           f"reacted to nothing is unusual enough to check")
-            except json.JSONDecodeError as e:
-                r.fail(0, f"{d}: findings-raw.json is not valid JSON ({e})")
-
-        r.note(f"{d}: {n_shots} screenshot(s)")
+        if sites and _is_empty_persona(pdir):
+            # init_run creates root persona folders from the target file; a
+            # Mode D mechanical capture writes under compare/<site>/ instead
+            # and leaves them untouched. Empty is expected, not a failure.
+            r.note(f"{d}: unused — Mode D captures live under compare/<site>/")
+            continue
+        _check_persona(pdir, d, r)
 
 
 def main():

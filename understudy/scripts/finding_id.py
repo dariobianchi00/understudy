@@ -58,6 +58,16 @@ import unicodedata
 
 ID_LENGTH = 12
 
+# The finding heading, as EVERY script parses it. One definition — observed
+# 2026-09-11 that three scripts kept three regexes accepting three different
+# dash sets: a hyphen-dashed heading bypassed the gate (parsed as "no findings",
+# PASSED) while the renderer showed it, and an en-dashed one passed the gate
+# and then vanished from the rendered report and the diff. The id group is
+# deliberately permissive — a sequence number must be SEEN here and failed by
+# check 4, not silently skipped for not being hex.
+FINDING_HEADING = re.compile(
+    r"^###\s+`?(?P<id>[^\s`\u2014\u2013-][^\s`]*?)`?\s+[\u2014\u2013-]\s+(?P<title>.+?)\s*$")
+
 # Run-specific noise that must never change an ID.
 _UUID = re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.I)
 _HEX = re.compile(r"\b[0-9a-f]{16,}\b", re.I)
@@ -198,6 +208,27 @@ def self_test() -> int:
         failures += 1
     else:
         print(f"✓ deterministic: {fixed}")
+
+    # The shared heading regex — every dash the template allows, and nothing
+    # that is not a finding.
+    heads = [
+        ("### 259be86dc809 — Workspace picker confusing", "259be86dc809", "Workspace picker confusing"),
+        ("### 259be86dc809 – Workspace picker confusing", "259be86dc809", "Workspace picker confusing"),
+        ("### 259be86dc809 - Workspace picker confusing", "259be86dc809", "Workspace picker confusing"),
+        ("### `259be86dc809` — Backticked id", "259be86dc809", "Backticked id"),
+        ("### 259be86dc809-a — Persona variant", "259be86dc809-a", "Persona variant"),
+        ("### 3 — Sequence number, seen so check 4 can fail it", "3", "Sequence number, seen so check 4 can fail it"),
+    ]
+    for line, fid, title in heads:
+        m = FINDING_HEADING.match(line)
+        ok = bool(m) and m.group("id") == fid and m.group("title") == title
+        print(f"{'✓' if ok else '✗'} heading  {line[:48]}")
+        failures += 0 if ok else 1
+    for line in ("### Sign-up form", "## 259be86dc809 — not an h3",
+                 "### — no id", "#### 259be86dc809 — h4"):
+        ok = FINDING_HEADING.match(line) is None
+        print(f"{'✓' if ok else '✗'} not a finding  {line}")
+        failures += 0 if ok else 1
 
     print()
     print("PASS" if not failures else f"FAIL — {failures} case(s)")

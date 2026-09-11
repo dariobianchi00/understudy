@@ -30,6 +30,10 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import finding_id  # noqa: E402
+import run_layout  # noqa: E402
+
 # Two findings match when their IDs are equal, OR when a human would call them
 # the same problem. The second clause is not a nicety — measured 2026-09-04,
 # re-scoring identical evidence produced 1.7% ID overlap while the findings
@@ -37,7 +41,8 @@ import sys
 # ~100% churn on a product that has not changed, which makes --since useless.
 TITLE_MATCH = 0.62
 
-FINDING_H3 = re.compile(r"^###\s+`?([0-9a-f]{6,16}(?:-[a-z])?)`?\s*[—-]\s*(.+?)\s*$")
+# One heading regex for every script — see finding_id.FINDING_HEADING.
+FINDING_H3 = finding_id.FINDING_HEADING
 SEVERITY = re.compile(r"^-\s+\*\*Severity:\*\*\s*(P[0-3])", re.M)
 DROPPED = re.compile(r"^##\s+Dropped for want of evidence", re.M)
 
@@ -59,10 +64,8 @@ def load_run(run):
             pass
 
     findings = {}
-    for lens in sorted(os.listdir(run)):
+    for lens in run_layout.lens_dirs(run):     # includes compare/<site>/<lens>
         fpath = os.path.join(run, lens, "findings-final.md")
-        if not os.path.isfile(fpath):
-            continue
         text = open(fpath, errors="replace").read()
         cut = DROPPED.search(text)
         if cut:
@@ -173,8 +176,11 @@ def _pair_by_similarity(of, nf, matched_old, matched_new):
 def diff(old, new, lens=None, fuzzy=True):
     of, nf = old["findings"], new["findings"]
     if lens:
-        of = {k: v for k, v in of.items() if v["lens"] == lens}
-        nf = {k: v for k, v in nf.items() if v["lens"] == lens}
+        # `--lens clarity` also selects Mode D's compare/<site>/clarity.
+        def hit(v):
+            return v["lens"] == lens or v["lens"].endswith("/" + lens)
+        of = {k: v for k, v in of.items() if hit(v)}
+        nf = {k: v for k, v in nf.items() if hit(v)}
 
     exact = sorted(set(of) & set(nf))
     matched_old, matched_new = set(exact), set(exact)

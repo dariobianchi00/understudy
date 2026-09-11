@@ -44,6 +44,10 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import finding_id  # noqa: E402
+import run_layout  # noqa: E402
+
 MAX_EMBED_BYTES = 40 * 1024 * 1024
 
 
@@ -204,7 +208,8 @@ def slug(text, prefix=""):
     return f"{prefix}{s[:60]}"
 
 
-FINDING_H3 = re.compile(r"^###\s+`?([0-9a-f]{6,16}(?:-[a-z])?)`?\s*[—-]\s*(.+?)\s*$")
+# One heading regex for every script — see finding_id.FINDING_HEADING.
+FINDING_H3 = finding_id.FINDING_HEADING
 SEV_BULLET = re.compile(r"^-\s+\*\*Severity:\*\*\s*(P[0-3])", re.M)
 SOWHAT = re.compile(r"^-\s+\*\*So what:\*\*\s*(.+?)\s*$", re.M)
 FIX = re.compile(r"^-\s+\*\*Fix:\*\*\s*(.+?)\s*$", re.M)
@@ -328,7 +333,10 @@ def score_table(entries, run):
     rows, vals = [], []
     for e in entries[1:]:
         sc = e.get("score")
-        if not sc:
+        # A competitor's lens is context, not a check on the client's site.
+        # Observed 2026-09-11: ours 2/10 + competitor 10/10 rendered as an
+        # overall of 6.0 on the cover.
+        if not sc or not e.get("ours", True):
             continue
         vals.append(sc["score"])
         hue = ("var(--p0)" if sc["score"] <= 3 else "var(--p1)" if sc["score"] <= 5
@@ -793,27 +801,7 @@ def collect(run, scope):
     docs = []
     summary = os.path.join(run, "exec-summary.md")
 
-    def _lens_dirs(base, prefix=""):
-        """Lens folders hold findings-final.md. Mode D nests them one level
-        deeper under compare/<site>/<lens>/, and compare/ itself is a lens —
-        a flat scan misses every one of them and exports an empty report."""
-        found = []
-        if not os.path.isdir(base):
-            return found
-        for d in sorted(os.listdir(base)):
-            full = os.path.join(base, d)
-            if not os.path.isdir(full):
-                continue
-            if os.path.exists(os.path.join(full, "findings-final.md")):
-                found.append(prefix + d)
-            # compare/ holds BOTH its own diff report and one folder per site,
-            # so it must be recursed into as well as counted — stopping at the
-            # first findings-final.md silently drops every per-site lens.
-            if d == "compare" or prefix:
-                found += _lens_dirs(full, f"{prefix}{d}/")
-        return found
-
-    lenses = _lens_dirs(run)
+    lenses = run_layout.lens_dirs(run)
 
     if scope == "summary":
         if not os.path.exists(summary):
@@ -948,6 +936,14 @@ def main():
     entries = head + tail
     toc = entries
 
+    # Which lenses are the client's own. In a Mode D run the per-site lenses
+    # under compare/<competitor>/ are reference material: they are exported,
+    # but they never score, tally or corroborate against the client's site.
+    roles = run_layout.site_roles(run, meta)
+    for e in entries[1:]:
+        e["ours"] = run_layout.is_ours(e["dir"], roles)
+    ours = [entries[0]] + [e for e in entries[1:] if e["ours"]]
+
     # ---- section numbers, fixed before anything is rendered ----------------
     # The exec summary owns sections 1..k (its H2s, in the order it wrote
     # them); each lens takes the next number. Computing this up front means a
@@ -969,8 +965,8 @@ def main():
     matrix_html = comparison_section(run, meta, images, used)
     matrix_no = base + len(entries) if matrix_html else None
 
-    shared = corroborate(entries)
-    all_find = [f for e in entries[1:] for f in e["find"]]
+    shared = corroborate(ours)
+    all_find = [f for e in ours[1:] for f in e["find"]]
     counts = {k: sum(1 for f in all_find if f["sev"] == k) for k in ("P0", "P1", "P2", "P3")}
 
     corr_html = ""
@@ -1034,11 +1030,14 @@ def main():
         if a.scope == "summary" and n > 0:
             if not e["find"]:
                 continue
+            ctx = ('' if e.get("ours", True) else
+                   '<p class="mut">Competitor site — shown for comparison only. '
+                   'Not counted in the client\'s score, tally or corroboration.</p>')
             body.append(
                 f'<section class="doc" id="{e["anchor"]}">'
                 f'<h2 id="{slug(e["lens"], prefix)}">'
                 f'<span class="secno">{e["secno"]}.</span> {html.escape(e["lens"])} '
-                f'— {len(e["find"])} findings</h2>'
+                f'— {len(e["find"])} findings</h2>{ctx}'
                 + fidx_table(e["find"], numbered=e["secno"])
                 + evidence_block(e["find"])
                 + '<p class="mut">Full detail, evidence and reproduction steps '
