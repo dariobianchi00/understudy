@@ -110,4 +110,4 @@ Write `objectives/results.md`:
 
 House style applies: conclusion first, bullets, no prose paragraphs.
 
-**Return to the orchestrator:** the counts by verdict and the one-sentence summary. The orchestrator puts this **above the top 3** in the run exec summary — a user who asked a specific question should not have to hunt for the answer among findings they did not ask for.
+**Return to the orchestrator:** the counts by verdict and the one-sentence summary. The run summary declares an empty `## Objectives` heading and `render_report.py` fills it from `objectives/results.md` — so the answer to the question the user actually asked reaches the exported report without anyone re-typing it.

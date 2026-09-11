@@ -128,7 +128,6 @@ class Content(unittest.TestCase):
             cover = render(build(t), "summary").split("</section>")[0]
             self.assertIn("constructed, not researched", cover)
 
-    @unittest.expectedFailure   # C7 — caveat fires only on == "generic" today
     def test_unknown_persona_mode_still_gets_caveat(self):
         with tempfile.TemporaryDirectory() as t:
             run = build(t)
@@ -141,6 +140,39 @@ class Content(unittest.TestCase):
             run = build(t)
             render(run, "clarity")
             self.assertTrue(os.path.exists(os.path.join(run, "report-full.md")))
+
+
+class Objectives(unittest.TestCase):
+    def test_results_fill_the_declared_heading(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = build(t)
+            fx.write(os.path.join(run, "objectives", "results.md"),
+                     "# Objectives\n\nOne of one met.\n\n## Results\n| # | Objective | Verdict |\n"
+                     "|---|---|---|\n| 1 | Find the price | **Not achieved** |\n")
+            p = os.path.join(run, "exec-summary.md")
+            open(p, "w").write(open(p).read().replace("## Contents\n\n", "## Contents\n\n## Objectives\n\n"))
+            html = render(run, "summary")
+            i = html.find("Objectives</h2>")
+            self.assertGreater(i, 0)
+            self.assertIn("Not achieved", html[i:i + 800])
+
+    def test_results_still_rendered_without_the_heading(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = build(t)
+            fx.write(os.path.join(run, "objectives", "results.md"), "# O\n\nZero of one met.\n")
+            html = render(run, "summary")
+            self.assertIn("Zero of one met", html)
+
+
+class Images(unittest.TestCase):
+    def test_bare_filename_only_resolves_when_unique(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t, with_lens=False)
+            fx.persona(run, "q")          # second persona, same 01-landing.png
+            imgs = rr.find_images(run)
+            self.assertNotIn("01-landing.png", imgs)
+            self.assertIn("persona-p/screenshots/01-landing.png", imgs)
+            self.assertIn("persona-q/screenshots/01-landing.png", imgs)
 
 
 class Units(unittest.TestCase):

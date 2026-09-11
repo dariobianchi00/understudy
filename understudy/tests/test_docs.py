@@ -24,7 +24,6 @@ class Versions(unittest.TestCase):
         b = json.load(open(os.path.join(ROOT, ".claude-plugin", "marketplace.json")))["version"]
         self.assertEqual(a, b)
 
-    @unittest.expectedFailure   # D4 — README says v0.1.0
     def test_readme_names_the_current_version(self):
         v = json.load(open(os.path.join(PLUGIN, ".claude-plugin", "plugin.json")))["version"]
         self.assertIn(f"v{v}", read("README.md"))
@@ -41,7 +40,6 @@ class References(unittest.TestCase):
                     missing.append((os.path.relpath(f, ROOT), m.group(1)))
         self.assertEqual(missing, [])
 
-    @unittest.expectedFailure   # D3 — "CLAUDE.md Phase 4, R1/O2" points at deleted sections
     def test_claude_md_references_resolve(self):
         spec = read("CLAUDE.md")
         sections = set(re.findall(r"^##+\s+(\d+(?:\.\d+)?)\.?\s", spec, re.M))
@@ -69,32 +67,26 @@ class References(unittest.TestCase):
 
 
 class BannedVocabulary(unittest.TestCase):
-    """The prose says 'checked mechanically'. The script must check it."""
-
-    def prose_terms(self, name):
-        text = read("understudy", "references", name)
-        block = re.search(r"## Banned vocabulary.*?\n> (.+?)\n", text, re.S).group(1)
-        terms = []
-        for t in block.split("·"):
-            t = re.sub(r"\(.*?\)", "", t).strip().lower()
-            if t:
-                terms.append(t)
-        return terms
+    """One list, in references/banned-vocabulary.md, read by the script."""
 
     def script_terms(self):
         import sys
         sys.path.insert(0, fx.SCRIPTS)
         import check_capture
-        return set(check_capture.BANNED) | {"ux"}
+        return set(check_capture.BANNED)
 
-    def test_flow_shapes_terms_are_enforced(self):
-        missing = [t for t in self.prose_terms("flow-shapes.md") if t not in self.script_terms()]
-        self.assertEqual(missing, ["friction"])   # known gap, documented in C5
+    def test_script_reads_the_file(self):
+        text = read("understudy", "references", "banned-vocabulary.md")
+        file_terms = {l[2:].strip().lower() for l in text.split("\n") if l.startswith("- ")}
+        self.assertEqual(self.script_terms(), file_terms)
+        for t in ("cta", "friction", "conversion funnel", "above the fold", "p1", "ux"):
+            self.assertIn(t, file_terms)
 
-    @unittest.expectedFailure   # C5
-    def test_visit_shapes_terms_are_enforced(self):
-        missing = [t for t in self.prose_terms("visit-shapes.md") if t not in self.script_terms()]
-        self.assertEqual(missing, [])
+    def test_shape_files_point_at_the_file_and_keep_no_copy(self):
+        for name in ("flow-shapes.md", "visit-shapes.md"):
+            text = read("understudy", "references", name)
+            self.assertIn("banned-vocabulary.md", text, name)
+            self.assertNotIn("Nielsen · HAX", text, f"{name} still carries its own list")
 
 
 class Layout(unittest.TestCase):

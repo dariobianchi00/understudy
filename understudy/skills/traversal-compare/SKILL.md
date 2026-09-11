@@ -37,7 +37,7 @@ Same persona brief, same shapes, same device, same time cap. **No persona ever s
 A single agent capturing three sites cannot un-see the first two. **"Do not let it influence you" is not a mechanism** — the same failure as putting a success criterion in a file the persona reads. Split the work instead:
 
 1. **Capture mechanically, and form no judgements.** One script, applied identically to every site: fresh context, same viewport, same waits, screenshots, fold text, headings, links, page facts. It records *what is there*. It records no reactions, no impressions, no comparisons.
-2. **Hand each site's artifacts to a separate reading agent** that can see only that site's folder. It performs the persona reading — the first-impression answers, the comprehension axes — having never seen a rival.
+2. **Hand each site's artifacts to a separate reading agent** that can see only that site's folder. It performs the persona reading — the first-impression answers, the comprehension axes — having never seen a rival, and writes it to `compare/<site-slug>/reading.md` in first person. **That file is scanned for banned vocabulary by `check_capture.py`** exactly as a session log would be; without it the separation check has nothing to read on a Mode D run.
 3. **The diff pass is the first and only step permitted to see all three.**
 
 This is stronger than the single-agent version, not a compromise for it: no reading is a reaction to a competitor, and the symmetry is enforced by a script rather than by discipline.

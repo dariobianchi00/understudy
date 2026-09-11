@@ -145,7 +145,7 @@ the two agree by construction, and it is the only way to be sure.
 10. **Quote on-page wording verbatim, in quotation marks, when a finding turns on
    copy.** Two lenses quoting the same string is how the run level detects that
    they found the same thing. Paraphrasing costs that link.
-11. **If the run has `coverage_depth: deep`, mark findings from auditor-style exploration.** A finding from a screen no real user would reach is real, but it is not evidence about the ordinary experience. See CLAUDE.md Phase 4, R3.
+11. **If the run has `coverage_depth: deep`, mark findings from auditor-style exploration.** A finding from a screen no real user would reach is real, but it is not evidence about the ordinary experience. See CLAUDE.md §10, "Coverage depth is the user's choice".
 
 ---
 

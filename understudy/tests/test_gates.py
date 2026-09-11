@@ -69,7 +69,6 @@ class Capture(unittest.TestCase):
             rc, checks, out = gate(CAPTURE, run)
             self.assertEqual(rc, 0, out)
 
-    @unittest.expectedFailure   # C5 — visit-shapes bans these; the script does not yet
     def test_check2_visit_vocabulary_is_banned_too(self):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t)
@@ -77,6 +76,55 @@ class Capture(unittest.TestCase):
             rc, checks, out = gate(CAPTURE, run)
             self.assertEqual(rc, 1)
             self.assertEqual(checks, {2}, out)
+
+    def test_check2_url_token_is_not_a_hit(self):
+        """/plans/p1 is a page the persona visited, not a word they chose."""
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.persona(run, log="[00:01] I open https://x.test/plans/p1 and /docs/cta-guide.\n")
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 0, out)
+
+    def test_check2_allowlist_waives_and_is_printed(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.manifest(run, vocabulary_allowlist=["usability"])
+            fx.persona(run, log="[00:01] The nav has a tab called Usability.\n")
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("NOT checked: usability", out)
+
+    def test_check2_reading_md_is_scanned(self):
+        """Mode D's per-site reading is first-person prose; it is scanned."""
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.write(os.path.join(run, "compare", "comp-a", "reading.md"),
+                     "I think this fold has a P2 severity problem.\n")
+            fx.write(os.path.join(run, "compare", "comp-a", "site.json"), "{}")
+            fx.write(os.path.join(run, "compare", "index.json"), '{"sites": []}')
+            os.makedirs(os.path.join(run, "compare", "comp-a", "screenshots"))
+            open(os.path.join(run, "compare", "comp-a", "screenshots", "0.png"), "wb").write(fx.PNG)
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 1)
+            self.assertIn(2, checks, out)
+
+    def test_check5_exclusions_key_must_exist_but_may_be_empty(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            import json
+            m = json.load(open(os.path.join(run, "manifest.json")))
+            del m["scope_exclusions"]
+            open(os.path.join(run, "manifest.json"), "w").write(json.dumps(m))
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 1)
+            self.assertEqual(checks, {5}, out)
+
+    def test_missing_dumps_warn_not_fail(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("console-full.txt missing", out)
 
     def test_check5_missing_traversal_model(self):
         with tempfile.TemporaryDirectory() as t:
@@ -187,13 +235,20 @@ class Report(unittest.TestCase):
             self.assertEqual(rc, 1)
             self.assertIn(3, checks, out)
 
-    @unittest.expectedFailure   # C14 — check 3 only covers P0 today
     def test_check3_p1_cites_missing_artifact(self):
         with tempfile.TemporaryDirectory() as t:
             run = self.one(t, sev="P1", evidence="`persona-p/screenshots/99-nope.png`")
             rc, checks, out = gate(REPORT, run)
             self.assertEqual(rc, 1)
             self.assertIn(3, checks, out)
+
+    def test_check3_bare_session_log_citation_resolves(self):
+        """The contract's own example cites `session.log:NN` without the
+        persona prefix; that resolves against the persona folder."""
+        with tempfile.TemporaryDirectory() as t:
+            run = self.one(t, sev="P1", evidence="`session.log:3` · `screenshots/01-landing.png`")
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
 
     def test_check4_sequence_number(self):
         with tempfile.TemporaryDirectory() as t:

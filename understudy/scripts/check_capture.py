@@ -10,7 +10,7 @@ Enforces the two gate conditions capture is responsible for (CLAUDE.md §10):
             and the report then confirms its own priors.
 
   Check 5 — manifest complete. Both model levels recorded, persona mode
-            recorded, exclusions recorded.
+            recorded, the exclusions key present (an empty list is valid).
 
 Plus the human-legibility condition: can someone open this folder and follow
 what the persona did?
@@ -29,21 +29,40 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import run_layout  # noqa: E402
 
-# CLAUDE.md §6 invariant 1, and flow-shapes.md "Banned vocabulary".
-BANNED = [
-    "heuristic", "nielsen", "hax", "amershi",
-    "severity", "p0", "p1", "p2", "p3",
-    "usability", "wcag", "accessibility audit",
-    "activation funnel", "ttfv",
-]
-# Whole-word matching: "p1" must not fire on "p1000", "hax" not on "haxby",
-# and "UX" not on "UXBridge Road" in a page title the persona quoted.
+# CLAUDE.md §6 invariant 1. The list lives in ONE place —
+# references/banned-vocabulary.md — read by this script and quoted by the
+# shape files. Observed 2026-09-11: the prose banned 19 terms and said
+# "checked mechanically"; the script checked 14.
+def _load_banned():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..",
+                        "references", "banned-vocabulary.md")
+    terms = []
+    for line in open(path, errors="replace"):
+        line = line.strip()
+        if line.startswith("- "):
+            terms.append(line[2:].split("  ")[0].strip().lower())
+    if not terms:
+        sys.exit("references/banned-vocabulary.md has no '- term' lines")
+    return terms
+
+
+BANNED = _load_banned()
+# Whole-word matching: "p1" must not fire on "p1000", "hax" not on "haxby".
 BANNED_RE = {b: re.compile(r"(?<![A-Za-z0-9])" + re.escape(b) + r"(?![A-Za-z0-9])", re.I)
-             for b in BANNED}
+             for b in BANNED if b != "ux"}
 # "UX" only as a standalone token — the persona may write "ux" inside a URL.
 BANNED_RE["ux"] = re.compile(r"(?<![A-Za-z0-9/._-])ux(?![A-Za-z0-9/._-])", re.I)
+# A hit inside a URL-shaped token is a page the persona visited, not a word
+# they chose: /plans/p1, /docs/cta-guide. Quoted page text is NOT exempt — a
+# persona quoting "P1" is still a persona who has seen the framework.
+_URLISH = re.compile(r"\S*(?:://|/)\S*")
 
-SCANNED = ("session.log", "persona-debrief.md", "findings-raw.json")
+# reading.md is Mode D's per-site persona reading (traversal-compare); it is
+# first-person prose and carries the same contamination risk as a session log.
+SCANNED = ("session.log", "persona-debrief.md", "findings-raw.json", "reading.md")
+# Console and network dumps a capture is expected to leave beside the log —
+# lens-bugs calls them its primary evidence.
+DUMPS = ("console-full.txt", "network-full.txt")
 
 REQUIRED_MANIFEST = [
     ("run_id", "run id"),
@@ -52,6 +71,8 @@ REQUIRED_MANIFEST = [
     ("persona_mode", "persona mode (generic vs supplied)"),
     ("models", "models block"),
 ]
+# Must be PRESENT; an empty list is a valid answer ("nothing excluded").
+REQUIRED_KEYS = [("scope_exclusions", "scope exclusions list (may be empty)")]
 
 
 class Result:
@@ -68,9 +89,23 @@ class Result:
         self.notes.append(msg)
 
 
+def _allowlist(run):
+    """manifest.vocabulary_allowlist — terms waived for this run, e.g. a
+    product whose own nav says "Usability". Every waiver is printed, so the
+    gate output says what was not checked."""
+    try:
+        m = json.load(open(os.path.join(run, "manifest.json")))
+        return {t.lower() for t in (m.get("vocabulary_allowlist") or []) if isinstance(t, str)}
+    except (OSError, ValueError):
+        return set()
+
+
 def check_banned_vocabulary(run, r):
     """Check 2 — the separation held."""
     scanned = 0
+    waived = _allowlist(run)
+    if waived:
+        r.warn(f"vocabulary allowlist in manifest — NOT checked: {', '.join(sorted(waived))}")
     for dirpath, _, filenames in os.walk(run):
         for fn in filenames:
             if fn not in SCANNED:
@@ -84,8 +119,11 @@ def check_banned_vocabulary(run, r):
                 r.fail(2, f"{rel}: unreadable ({e})")
                 continue
             for n, line in enumerate(lines, 1):
+                scrubbed = _URLISH.sub(" ", line)
                 for term, rx in BANNED_RE.items():
-                    if rx.search(line):
+                    if term in waived:
+                        continue
+                    if rx.search(scrubbed):
                         r.fail(2, f"{rel}:{n} contains banned term '{term}'\n"
                                   f"        > {line.strip()[:100]}")
     if scanned == 0:
@@ -126,6 +164,9 @@ def check_manifest(run, r):
 
     for key, label in REQUIRED_MANIFEST:
         if m.get(key) in (None, "", {}, []):
+            r.fail(5, f"manifest missing {label} ('{key}')")
+    for key, label in REQUIRED_KEYS:
+        if key not in m:
             r.fail(5, f"manifest missing {label} ('{key}')")
 
     models = m.get("models") or {}
@@ -266,6 +307,10 @@ def _check_persona(pdir, d, r):
     for required in ("timeline.json", "persona-debrief.md", "findings-raw.json"):
         if not os.path.exists(os.path.join(pdir, required)):
             r.fail(0, f"{d}: {required} missing")
+    for dump in DUMPS:
+        if not os.path.exists(os.path.join(pdir, dump)):
+            r.warn(f"{d}: {dump} missing — the bugs and trust lenses read it as "
+                   f"primary evidence; a finding that needed it will be dropped")
 
     tl = os.path.join(pdir, "timeline.json")
     if os.path.exists(tl):

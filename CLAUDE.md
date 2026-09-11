@@ -235,7 +235,7 @@ Net effect: no silent coupling, no stale pins, and the manifest records a model 
 
 **⚑ The user confirms both levels during onboarding, before any cost is incurred.** Defaults are offered, not assumed — an evaluation is a real spend, and whether to spend more on scoring or less is the user's call, not the harness's. See §4, step 5a.
 
-**Default scoring allocation** (offered, overridable per lens): opus for `ux` · `content` · `onboarding` · `compare` — judgement-heavy, where a weaker model produces plausible findings that are wrong. sonnet for `bugs` · `seo` · `aeo` — closer to extraction against a checklist, where the framework does the work.
+**Default scoring allocation** (offered, overridable per lens): opus for `ux` · `content` · `onboarding` · `clarity` · `conversion` · `trust` · `compare` — judgement-heavy, where a weaker model produces plausible findings that are wrong. sonnet for `bugs` · `seo` · `aeo` · `technical` — closer to extraction against a checklist, where the framework does the work.
 
 **⚑ The run manifest records the model used for the traversal AND per lens.** Findings are not comparable across models; a cross-model diff must be flagged, never silently presented. The traversal model matters most here, because it is the one that changes without anyone deciding it — a user who switched models between Tuesday and Friday has two runs that cannot be honestly diffed.
 
@@ -281,6 +281,7 @@ Everything real lives outside the repo:
 ```
 understudy/                              (public, MIT)
 ├── .claude-plugin/marketplace.json      one repo = one marketplace
+├── .github/workflows/tests.yml          the plumbing tests, on every push
 ├── CLAUDE.md                            this file
 ├── README.md                            install + first run
 ├── LICENSE                              MIT
@@ -292,36 +293,36 @@ understudy/                              (public, MIT)
     │   ├── report.md   ✅               re-score existing evidence; --since for diffs
     │   └── compare.md                   Mode D entry point
     ├── agents/                          one per lens — the Pass-2 scorers
-    │   ├── lens-ux.md ✅   lens-bugs.md ✅   lens-onboarding.md ✅
-    │   ├── lens-content.md ✅
-    │   ├── lens-clarity.md  lens-conversion.md  lens-trust.md    (3a)
-    │   ├── lens-seo.md      lens-aeo.md         lens-technical.md (3b)
-    │   └── lens-compare.md                                        (3c)
+    │   ├── lens-ux.md   lens-bugs.md   lens-onboarding.md   lens-content.md
+    │   ├── lens-clarity.md   lens-conversion.md   lens-trust.md
+    │   ├── lens-seo.md   lens-aeo.md   lens-technical.md   lens-compare.md
+    │   └── objectives-scorer.md         pass/fail against the withheld criterion
     ├── skills/
-    │   ├── onboarding/                  the interview                    ✅ built
-    │   ├── traversal-journey/           Mode A capture                   ✅ built
-    │   ├── traversal-visit/             Mode A-visit capture             (3a)
-    │   ├── traversal-crawl/             Mode C crawl                     (3b)
-    │   ├── traversal-measure/           Mode B technical metrics         (3b)
-    │   └── traversal-compare/           Mode D orchestration             (3c)
+    │   ├── onboarding/                  the interview
+    │   ├── traversal-journey/           Mode A capture
+    │   ├── traversal-visit/             Mode A-visit capture
+    │   ├── traversal-crawl/             Mode C crawl
+    │   ├── traversal-measure/           Mode B technical metrics
+    │   └── traversal-compare/           Mode D orchestration
     ├── references/                      [M] methodology, ported from reference skill
-    │   ├── playwright-patterns.md ✅  flow-shapes.md        ✅
-    │   ├── first-value.md         ✅  evidence-rules.md     ✅
-    │   ├── heuristics-framework.md ✅ severity-rubric.md    ✅
-    │   ├── report-template.md     ✅
-    │   ├── visit-shapes.md            land→orient→evaluate→decide  (3a)
-    │   └── technical-metrics.md       the §3.1 set + lab caveat    (3b)
-    ├── scripts/
-    │   ├── render_report.py ✅  md → self-contained HTML / PDF; stdlib only
-    │   ├── init_run.py     ✅   creates run folder + manifest at run START
-    │   ├── check_capture.py ✅  phase-2a gate: checks 2 + 5, mechanically
-    │   ├── finding_id.py   ✅   stable IDs + self-test
-    │   ├── check_report.py ✅   phase-2b gate: checks 1, 3, 4, 6 + 7
-    │   ├── close_run.py    ✅   closes the manifest at run END — captures,
-    │   │                        findings, finished_utc, all read off the disk
-    │   └── compare_runs.py      Phase 4 — new/persisting/resolved + overlap %
+    │   ├── playwright-patterns.md   flow-shapes.md        visit-shapes.md
+    │   ├── first-value.md           evidence-rules.md     severity-rubric.md
+    │   ├── heuristics-framework.md  report-template.md    technical-metrics.md
+    │   ├── lens-output-contract.md  binding on every lens
+    │   └── banned-vocabulary.md     the one list check_capture.py reads
+    ├── scripts/                         stdlib only, every one
+    │   ├── run_layout.py        where lenses live; which compare/<site> is ours
+    │   ├── finding_id.py        stable IDs, the heading regex, title similarity
+    │   ├── init_run.py          creates run folder + manifest at run START
+    │   ├── check_capture.py     phase-2a gate: checks 2 + 5, mechanically
+    │   ├── check_report.py      phase-2b gate: checks 1, 3, 4, 6, 7 + --expect-lenses
+    │   ├── close_run.py         closes the manifest at run END, read off the disk
+    │   ├── compare_runs.py      new/persisting/reworded/resolved + overlap %
+    │   └── render_report.py     md → self-contained HTML / PDF
+    ├── tests/                           67 stdlib unittest cases; fixtures built
+    │                                    in a temp dir, never committed (§7)
     └── examples/                        fictional product only
-        ├── target.example.yaml ✅   sample-findings.md ✅
+        ├── target.example.yaml      sample-findings.md
 ```
 
 ---
@@ -364,6 +365,12 @@ Plus one human check that is not automatable and should not pretend to be: **rea
 **Website assessment before reproducibility.** Website runs are cheap, need no auth, and carry no destructive-action hazard, so they exercise the harness at low cost — and they make a self-overlap baseline affordable, because a 20-minute visit costs a fraction of a 90-minute product traversal.
 
 **`compare` shipped with the website bundle, not after it.** A site audit that cannot answer *"how do we look next to them?"* is answering the easier question. Website assessment is also the only place Mode D genuinely works: there is no auth wall to human-in-the-loop past.
+
+**Coverage depth is the user's choice, and depth trades against realism.** `overview · standard · deep`, asked every run, recorded in the manifest. A persona who dutifully opens every screen has stopped being a newcomer and become an auditor, so on a `deep` run the traversal logs `--- auditor mode: natural interest exhausted ---` at the point a real person would have left, and findings after that line are flagged as not being evidence about an ordinary first session. The persona uses the whole budget it was given — a run that ends early with surfaces unopened is a traversal that gave up, and says so.
+
+**The success criterion is withheld from the persona, physically.** A run objective reaches the traversal as a goal in the user's words; the expected outcome is written to `objectives/criteria.json`, which only `objectives-scorer` opens, after capture is fixed. "Don't look" is not a mechanism when the orchestrator and the persona are the same agent, so the criterion is not in any file the traversal reads. A persona who knows what success looks like finds it, and the test cannot fail.
+
+**One definition of the run layout and one of the finding heading.** `run_layout.py` says where lenses live and which `compare/<site>` is the client's; `finding_id.FINDING_HEADING` is the heading regex. Every script imports them. Three scripts keeping three private copies produced a gate that checked one report of four and a cover score that averaged in a competitor's — the audit of 2026-09-11 that led to `understudy/tests/`.
 
 ---
 

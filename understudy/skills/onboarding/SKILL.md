@@ -243,8 +243,9 @@ Scoring models — three shapes:
   (a) thorough    opus on every lens
                   Best judgement everywhere. Highest cost.
 
-  (b) balanced    opus  → ux, content, onboarding, compare
-      ← default   sonnet → bugs, seo, aeo
+  (b) balanced    opus  → ux, content, onboarding, clarity, conversion,
+      ← default            trust, compare
+                  sonnet → bugs, seo, aeo, technical
                   Opus where judgement is load-bearing; sonnet where the
                   framework does the work and the task is closer to
                   extraction against a checklist.
@@ -303,6 +304,14 @@ not a product defect.
 ```
 
 **Never** offer to read a credentials file, accept a password in chat, or "just this once" handle a token. If the user offers one, decline and restate the pause.
+
+### If the persona will sign up — the alias inbox
+
+A product assessment usually reaches a sign-up form. The persona needs an email address to type into it, and that address is **not a credential** — it is an inbox the user owns and can watch:
+
+> Which email should the persona sign up with? I'll extend it per persona and per run — `you+novice-20260911@yourdomain` — so every run is a fresh signup. It goes in the target file as `alias_email`.
+
+Record `alias_email`. If they decline, record `null` and say plainly that sign-up flows will stop at the form.
 
 ---
 

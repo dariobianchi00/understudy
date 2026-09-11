@@ -5,8 +5,9 @@ Enforces the four gate conditions scoring is responsible for (CLAUDE.md §10):
 
   Check 1 — evidence rule holds. Every finding cites a screenshot, log line,
             console message, or DOM excerpt. Zero exceptions.
-  Check 3 — zero unsupported P0s. Every P0 traces to an artifact that exists
-            on disk and can be opened.
+  Check 3 — cited artifacts exist. Every artifact a finding cites is on disk
+            and can be opened, whatever the severity; a P0 must cite at least
+            one.
   Check 4 — stable IDs present and correct. Every finding carries an id, and
             recomputing it from the finding's own fields reproduces it. This
             is deterministic: it tests the ID function, not the model.
@@ -231,22 +232,24 @@ def check_findings(path, r, lens, run):
             r.fail(1, f"{lens}:{ln} finding '{title[:60]}' cites no artifact\n"
                       f"        Evidence: {ev[:100]}")
 
-        # ---- Check 3: P0s trace to something that exists ----------------
+        # ---- Check 3: cited artifacts exist on disk ----------------------
+        # Every severity. "The file you cite is really there" is the cheapest
+        # anti-confabulation check the harness has; until 2026-09-11 it
+        # covered only P0, the smallest class.
         sev_m = SEVERITY.search(body)
         sev = sev_m.group(1).upper() if sev_m else None
         if not sev:
             r.fail(1, f"{lens}:{ln} finding '{title[:60]}' has no Severity field")
-        elif sev == "P0":
+        elif artifacts or sev == "P0":
             resolved = False
             for m in artifacts:
-                cand = os.path.join(run, m.group("path"))
-                if os.path.exists(cand):
+                if _artifact_exists(run, lens, m.group("path")):
                     resolved = True
                     break
             if not resolved:
                 if artifacts:
                     missing = ", ".join(m.group("path") for m in artifacts)
-                    r.fail(3, f"{lens}:{ln} P0 '{title[:60]}' cites artifact(s) that do "
+                    r.fail(3, f"{lens}:{ln} {sev} '{title[:60]}' cites artifact(s) that do "
                               f"not exist on disk: {missing}")
                 else:
                     r.fail(3, f"{lens}:{ln} P0 '{title[:60]}' cites no openable artifact. "
@@ -278,6 +281,18 @@ def check_findings(path, r, lens, run):
 
     r.note(f"{lens}: {len(findings)} finding(s), "
            f"{sum(1 for f in findings if 'P0' in '\\n'.join(f['raw']))} P0")
+
+
+def _artifact_exists(run, lens, path):
+    """A citation is relative to the run root — or, as the contract's own
+    example `session.log:NN` shows, to the persona folder it came from. Try
+    the root, the lens folder, then any capture folder in the run."""
+    if os.path.exists(os.path.join(run, path)):
+        return True
+    if os.path.exists(os.path.join(run, lens, path)):
+        return True
+    import glob
+    return bool(glob.glob(os.path.join(run, "**", path), recursive=True))
 
 
 def _infer_locator(evidence, body):

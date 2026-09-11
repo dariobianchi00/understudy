@@ -284,6 +284,12 @@ were.>
 <LEAVE EMPTY. render_report.py fills this with a numbered, hyperlinked index of
 every section, built from what actually ran.>
 
+## Objectives
+
+<LEAVE EMPTY, and only when the run had objectives_under_test. render_report.py
+fills it from objectives/results.md — the one part of a run that can fail, and
+the question the user actually asked. Omit the heading when there were none.>
+
 ## Top 5 — fix these first
 
 <ONE sentence: the strongest honest reading of the whole run. This is the
@@ -375,9 +381,9 @@ named independently. Omit the heading entirely if only one check ran.>
   count and the P0/P1/P2/P3 split. A second copy in the body is how the two
   come to disagree.
 
-Three headings are written empty and filled by the renderer — **Contents**,
-**How each area scores**, and **Raised by more than one check**. Write the
-heading, write nothing under it. Each is built from what actually ran, so none
+Four headings are written empty and filled by the renderer — **Contents**,
+**Objectives** (when the run had any), **How each area scores**, and **Raised by
+more than one check**. Write the heading, write nothing under it. Each is built from what actually ran, so none
 of them can contradict the document it sits in.
 
 A fourth, **Site-by-site comparison**, is appended by the renderer as the final

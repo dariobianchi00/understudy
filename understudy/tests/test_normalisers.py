@@ -30,7 +30,7 @@ MUST_NOT_PAIR = [
     ("Sitemap declared in robots.txt returns 404",
      "Canonical points off-site on the pricing page"),
 ]
-# C4 — negation stripped by both stop lists, so these pair at 1.0 today.
+# C4 — negation used to be a stopword in both scripts; these paired at 1.0.
 NEGATION = [
     ("Pricing is shown on the landing page",
      "Pricing is not shown on the landing page"),
@@ -50,7 +50,6 @@ class Similarity(unittest.TestCase):
             for fn, name in ((cr._similar, "compare_runs"), (rr._similar, "render_report")):
                 self.assertLess(fn(a, b), THRESHOLD, (name, a, b))
 
-    @unittest.expectedFailure
     def test_negation_does_not_pair(self):
         for a, b in NEGATION:
             for fn, name in ((cr._similar, "compare_runs"), (rr._similar, "render_report")):

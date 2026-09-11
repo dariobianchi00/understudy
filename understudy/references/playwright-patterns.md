@@ -104,7 +104,7 @@ The server may write to either location depending on version, hence the fallback
 
 **Why this is safe for a public repo:** the transit directory is inside the repo, so `.gitignore` covers `*.png` and `.playwright-mcp/` from day one (CLAUDE.md §7). It is transit, never storage — the run folder outside the repo is the authoritative copy, and the traversal removes `.playwright-mcp/` when it closes the browser.
 
-**Console and network dumps have the same constraint.** `browser_console_messages(filename:)` and `browser_network_requests(filename:)` write to the same roots; move them into the run folder the same way.
+**Console and network dumps have the same constraint, and fixed names.** `browser_console_messages(filename: "console-full.txt")` and `browser_network_requests(filename: "network-full.txt")` write to the same roots; move both into `persona-<slug>/` the same way. The `bugs` and `trust` lenses read exactly those two filenames, and `check_capture.py` warns when either is missing.
 
 **Console and network are evidence, not debug output.**
 - `browser_console_messages()` — JS errors go into `session.log`.

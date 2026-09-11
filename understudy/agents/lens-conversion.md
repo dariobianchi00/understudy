@@ -73,7 +73,7 @@ persona-<slug>/
 
 ## Output
 
-**Follow `${CLAUDE_PLUGIN_ROOT}/references/lens-output-contract.md`.** It is binding and covers the two files you write, the house style, the machine-parsed finding block, the stable ID, the nine hard rules, and what to do if the harness blocks your writes.
+**Follow `${CLAUDE_PLUGIN_ROOT}/references/lens-output-contract.md`.** It is binding and covers the two files you write, the house style, the machine-parsed finding block, the stable ID, the hard rules, and what to do if the harness blocks your writes.
 
 Add this to your `exec-summary.md`, before the numbers:
 

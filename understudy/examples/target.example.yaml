@@ -22,6 +22,18 @@ auth:
   # It never drives an identity provider's UI.
   # The wall is never reported as a finding.
 
+# ── Sign-up alias ─────────────────────────────────────────────────────────
+# NOT a credential: an inbox the user owns and can watch. The persona extends
+# it per run — qa+novice-20260911@example-nimbus-notes.test — so every run is a
+# fresh signup. null means sign-up flows stop at the form.
+alias_email: "qa@example-nimbus-notes.test"
+
+# ── Vocabulary allowlist ──────────────────────────────────────────────────
+# Terms from references/banned-vocabulary.md waived for THIS product, because
+# its own UI uses them (a nav item called "Usability"). Every waiver is printed
+# by the capture gate. Leave empty unless you have to.
+vocabulary_allowlist: []
+
 # ── Objectives ────────────────────────────────────────────────────────────
 # Grouped by mode at orchestration time: capture once per mode,
 # fan out every scoring for that mode.

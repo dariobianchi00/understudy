@@ -55,6 +55,6 @@ persona-<slug>/
 
 ## Output
 
-**Follow `${CLAUDE_PLUGIN_ROOT}/references/lens-output-contract.md`.** It is binding and covers: the two files you write, the house style (conclusion first, bullets, no prose), the machine-parsed finding block, how to compute the stable ID, the nine hard rules, and what to do if the harness blocks your writes.
+**Follow `${CLAUDE_PLUGIN_ROOT}/references/lens-output-contract.md`.** It is binding and covers: the two files you write, the house style (conclusion first, bullets, no prose), the machine-parsed finding block, how to compute the stable ID, the hard rules, and what to do if the harness blocks your writes.
 
 Read it before writing anything. Do not reconstruct it from memory — the ID rules and the field format are exact, and a whole report can fail the gate on a formatting slip.

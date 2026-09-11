@@ -94,8 +94,9 @@ easily lost. In particular:
   produced**. No verdict sentence at the top; the verdict opens the Top 5.
 - **Top 5**, always five, ranked by severity across every check, filled from P1 when the
   run carries fewer than five P0s.
-- Write **Contents**, **How each area scores** and **Raised by more than one check** as
-  empty headings. `render_report.py` fills all three from what actually ran.
+- Write **Contents**, **Objectives** (when the run had any), **How each area scores** and
+  **Raised by more than one check** as empty headings. `render_report.py` fills them
+  from what actually ran.
 - Sections in `LENS_ORDER` and named in Title Case — never by folder name.
 - No section numbers by hand, no severity tally of your own, no "Recommended first action".
 

@@ -54,7 +54,7 @@ Applies when the target sits behind auth, an identity proxy, or a paywall. **The
 From here on, you are the persona.
 
 1. Reach the product's entry point — sign up, start a trial, or simply land, per the target.
-2. Use the persona's alias identity where an account is needed: `<base>+<persona>-<YYYYMMDD>@<domain>`, so every run is a genuinely fresh signup.
+2. Use the persona's alias identity where an account is needed: `manifest.json → alias_email`, extended as `<local>+<persona>-<YYYYMMDD>@<domain>`, so every run is a genuinely fresh signup. The interview asked for it; if it is `null`, sign-up cannot proceed — record that and pivot to Shape 3.
 3. Complete whatever onboarding the product imposes. Fill its forms, click its modals, connect what it asks for.
 4. **Stop when you believe you're in and ready to use it** — not when the product says you're all set. Those are different moments and the gap between them is worth noticing.
 
@@ -101,7 +101,7 @@ Record: what scope was requested (read it off the URL parameters), whether it wa
 
 ### How many surfaces — set at interview, recorded in the manifest
 
-`manifest.json` → `coverage_depth` (CLAUDE.md Phase 4, R1–R5):
+`manifest.json` → `coverage_depth` (CLAUDE.md §10, "Coverage depth is the user's choice"):
 
 | Depth | Shape 2b |
 |---|---|
@@ -159,13 +159,11 @@ Default caps: 90 minutes per persona, hard stop.
 
 ## Banned vocabulary during capture
 
-In `session.log`, `persona-debrief.md` and `findings-raw.json`, never write:
-
-> heuristic · Nielsen · HAX · Amershi · severity · P0 · P1 · P2 · P3 · usability · UX (as an analyst term) · WCAG · accessibility audit · activation funnel · TTFV · friction (as jargon)
+The list lives in **`banned-vocabulary.md`** — one file, read verbatim by `check_capture.py`. Do not keep a copy here; a copy drifts.
 
 The persona may say *"this was hard to use"* or *"it took ages."* They may not say *"this is a P1 usability issue."*
 
-**This is checked mechanically after capture.** Any hit fails the phase gate. If you catch yourself reaching for one of these words, rewrite it as a first-person reaction — which is almost always the better sentence anyway.
+**Checked mechanically after capture.** Any hit fails the phase gate. If you catch yourself reaching for one of those words, rewrite it as a first-person reaction — which is almost always the better sentence anyway.
 
 ---
 
@@ -180,6 +178,8 @@ Under `<run_folder>/persona-<slug>/`:
 | `timeline.json` | Structured metrics — see below |
 | `persona-debrief.md` | The debrief answers, first person |
 | `findings-raw.json` | Observations, untagged and unscored |
+| `console-full.txt` | Every console message, dumped at each checkpoint — the `bugs` lens's primary evidence |
+| `network-full.txt` | Every network request, same — `bugs` and `trust` read it |
 | `trace.zip`, `video.webm` | If the MCP server produces them |
 
 ```json

@@ -132,7 +132,7 @@ When the site asks for details — demo request, newsletter, trial, contact:
 
 ## Coverage depth
 
-Set at interview (CLAUDE.md Phase 4, R1) and recorded in the manifest.
+Set at interview (CLAUDE.md §10, "Coverage depth is the user's choice") and recorded in the manifest.
 
 | `coverage_depth` | V2 / V3 behaviour |
 |---|---|
@@ -158,9 +158,7 @@ Set at interview (CLAUDE.md Phase 4, R1) and recorded in the manifest.
 
 ## Banned vocabulary during capture
 
-Same as `flow-shapes.md`, and for the same reason:
-
-> heuristic · Nielsen · HAX · Amershi · severity · P0 · P1 · P2 · P3 · usability · UX (as an analyst term) · WCAG · accessibility audit · conversion funnel · CTA (as jargon) · friction (as jargon) · above the fold (as jargon)
+The list lives in **`banned-vocabulary.md`** — one file, read verbatim by `check_capture.py`. Do not keep a copy here; a copy drifts.
 
 The persona may say *"I couldn't find the price"*. They may not say *"the pricing CTA is below the fold, a P2 conversion issue."*
 
@@ -179,6 +177,8 @@ Under `<run_folder>/persona-<slug>/`:
 | `timeline.json` | Structured metrics — below |
 | `persona-debrief.md` | Q1–Q6, first person |
 | `findings-raw.json` | Reactions, never verdicts |
+| `console-full.txt` | Every console message, dumped at the landing page and at each moment of confusion |
+| `network-full.txt` | Every network request, same — `trust` reads it for the cookie-banner check |
 
 ```json
 {

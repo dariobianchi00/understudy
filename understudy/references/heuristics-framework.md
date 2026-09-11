@@ -71,8 +71,8 @@ Each of these is a real concern and a *different lens* — routing them elsewher
 
 | Not here | Belongs to |
 |---|---|
-| WCAG / accessibility | Mode B `accessibility` (not yet built) |
-| Load time, performance | Mode B `performance` (not yet built) |
+| WCAG / accessibility | Not built — no lens covers it yet; say so in one line rather than scoring it here |
+| Load time, performance | `technical` (Mode B) |
 | Console errors, failed requests | `bugs` |
 | Copy quality, reading level, jargon density | `content` |
 | Funnel shape, drop-off points | `onboarding` |

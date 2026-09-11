@@ -14,7 +14,7 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
-> **v0.1.0 — product and website assessment both run end to end.** Interview → capture → eleven lenses → verified report → PDF or HTML. What it will not do, it says so rather than approximating.
+> **v0.3.0 — product and website assessment both run end to end.** Interview → capture → eleven lenses → verified report → PDF or HTML. What it will not do, it says so rather than approximating.
 
 ---
 
@@ -274,7 +274,7 @@ The body carries the framework, the severity rubric, the output schema and the e
 ```
 ~/.understudy/runs/<slug>/<date>-run-<id>/
 ├── manifest.json              what ran, on which models, with which personas
-├── exec-summary.md            verdict sentence, then the top 3
+├── exec-summary.md            what it is, how it was produced, then the Top 5
 ├── persona-<name>/
 │   ├── screenshots/NN-*.png   one per distinct screen
 │   ├── session.log            [MM:SS] one line per action, first person
@@ -282,7 +282,7 @@ The body carries the framework, the severity rubric, the output schema and the e
 │   ├── persona-debrief.md     the four debrief answers, in their own words
 │   └── findings-raw.json      reactions — observations, never verdicts
 └── <lens>/
-    ├── exec-summary.md        that lens's verdict and top 3
+    ├── exec-summary.md        that lens's verdict, top 3 and 0–10 score
     └── findings-final.md      severity-rated, every finding evidence-cited
 ```
 
@@ -313,7 +313,7 @@ An evaluation is a real spend, so understudy asks rather than assumes. Two model
 | Shape | Allocation | When |
 |---|---|---|
 | **thorough** | opus everywhere | Best judgement throughout, highest cost |
-| **balanced** *(default)* | opus → `ux` `content` `onboarding`<br>sonnet → `bugs` `seo` `aeo` | Opus where judgement is load-bearing |
+| **balanced** *(default)* | opus → `ux` `content` `onboarding` `clarity` `conversion` `trust` `compare`<br>sonnet → `bugs` `seo` `aeo` `technical` | Opus where judgement is load-bearing |
 | **cheap** | sonnet everywhere | Fastest; expect weaker `ux` and `content` |
 
 Per-lens overrides accepted. The split exists because `ux` and `content` ask a model to judge whether something is *good* — where a weaker model produces findings that are plausible and wrong, and **a wrong P0 costs more than a missed P2**. `bugs`, `seo` and `aeo` check observable facts against a rubric; the framework carries those.
@@ -372,14 +372,25 @@ scripts/check_report.py <run>     # after scoring
 |---|---|---|
 | 1 | Evidence rule | A finding with no artifact cited |
 | 2 | Naive/analyst separation | Any scoring vocabulary in a capture artifact |
-| 3 | Zero unsupported P0s | A P0 citing a file that isn't on disk |
+| 3 | Cited artifacts exist | Any finding citing a file that isn't on disk; a P0 citing nothing openable |
 | 4 | Stable IDs | A sequence number, a duplicate, or an id that doesn't recompute |
-| 5 | Manifest complete | A missing model, persona mode, or exclusion list |
-| 6 | Report leads with a verdict | A multi-sentence opener, or findings above the top 3 |
+| 5 | Manifest complete | A missing model, persona mode, or exclusions key |
+| 6 | Lens report leads with a verdict | A multi-sentence opener, or findings above the top 3 |
+| 7 | Score matches severities | A 9/10 above a P0; a score with no reason |
+
+Plus `--expect-lenses N`: the orchestrator says how many lens reports it dispatched, and fewer on disk fails — a lens whose files never landed is otherwise not failed, just not checked.
 
 Check 2 is the one to understand. If it fails, **the fix is to re-run the traversal, not to edit the words out** — the words are a symptom, and deleting them leaves evidence that still confirms its own priors while now passing the check.
 
 Check 6 exists because seven lenses can produce a great deal of unread output. One sentence, then three findings, before anything else.
+
+### And the checks check themselves
+
+`understudy/tests/` holds the plumbing tests — stdlib `unittest`, no model, no browser: one synthetic run per gate check, asserting which check fired; the renderer's fixed reading order, generated index and client-only overall score; a frozen corpus of finding IDs that turns red if normalisation changes. They run on every push via GitHub Actions and build their fixtures in a temp directory, so nothing resembling a real capture is ever committed.
+
+```bash
+python3 -m unittest discover -s understudy/tests
+```
 
 ---
 

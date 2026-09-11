@@ -134,16 +134,8 @@ def comparability_warnings(old, new):
     return w
 
 
-def _norm_title(t):
-    t = re.sub(r"[^a-z0-9 ]", " ", t.lower())
-    stop = {"the", "a", "an", "is", "are", "was", "on", "in", "of", "to", "it",
-            "its", "and", "or", "that", "this", "any", "anywhere", "appears",
-            "only", "never", "not", "no", "site", "page", "product", "user"}
-    return " ".join(w for w in t.split() if w not in stop)
-
-
 def _similar(a, b):
-    return difflib.SequenceMatcher(None, _norm_title(a), _norm_title(b)).ratio()
+    return finding_id.title_similarity(a, b)
 
 
 def _pair_by_similarity(of, nf, matched_old, matched_new):

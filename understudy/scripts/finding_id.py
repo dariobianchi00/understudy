@@ -133,6 +133,41 @@ def normalize_title(title: str) -> str:
     return " ".join(sorted(words))
 
 
+# ---------------------------------------------------------------------------
+# Title similarity — how compare_runs pairs a reworded finding across runs and
+# how render_report spots one finding raised by two lenses. ONE function, so
+# the two cannot disagree. Negation is NOT a stopword: "pricing is shown" and
+# "pricing is not shown" paired at 1.0 when each script kept its own list
+# (observed 2026-09-11), which turns a regression into a "rewording".
+_SIM_STOP = {"the", "a", "an", "is", "are", "was", "on", "in", "of", "to", "it",
+             "its", "and", "or", "that", "this", "any", "anywhere", "appears",
+             "site", "page", "product", "user", "with", "for"}
+
+
+def _sim_norm(t):
+    t = re.sub(r"[^a-z0-9 ]", " ", (t or "").lower())
+    return " ".join(w for w in t.split() if w not in _SIM_STOP)
+
+
+# Words that flip a finding's meaning. Dropping "not" as a stopword was not
+# enough: one short token barely moves a character-level ratio, so "pricing
+# shown" and "pricing not shown" still scored 0.9. Opposite polarity is a
+# different finding, whatever the ratio says.
+_NEGATION = {"not", "no", "never", "none", "nothing", "without", "cannot",
+             "missing", "absent", "lacks", "unclear"}
+
+
+def _polarity(t):
+    return bool(set(re.sub(r"[^a-z ]", " ", (t or "").lower()).split()) & _NEGATION)
+
+
+def title_similarity(a: str, b: str) -> float:
+    import difflib
+    if _polarity(a) != _polarity(b):
+        return 0.0
+    return difflib.SequenceMatcher(None, _sim_norm(a), _sim_norm(b)).ratio()
+
+
 def finding_id(lens: str, flow: str, locator: str, title: str) -> str:
     parts = [
         (lens or "").strip().lower(),

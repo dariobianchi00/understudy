@@ -54,12 +54,18 @@ MAX_EMBED_BYTES = 40 * 1024 * 1024
 # ---------------------------------------------------------------- images ----
 def find_images(run):
     """Every screenshot in the run, keyed by the paths a report might cite it by."""
-    by_key = {}
+    by_key, bare = {}, {}
     for path in glob.glob(os.path.join(run, "**", "*.png"), recursive=True):
         rel = os.path.relpath(path, run)
         by_key[rel] = path
-        by_key[os.path.basename(path)] = path      # cited bare
         by_key[rel.replace("persona-", "")] = path  # cited without the prefix
+        bare.setdefault(os.path.basename(path), []).append(path)
+    # A bare filename resolves only when it is unique across the run. Two
+    # personas both have a 01-landing.png; picking whichever glob returned
+    # last put the wrong persona's screen beside a finding, looking complete.
+    for name, paths in bare.items():
+        if len(paths) == 1:
+            by_key[name] = paths[0]
     return by_key
 
 
@@ -184,7 +190,9 @@ def cover(meta, title, subtitle, n_find, counts, overall=None, provenance=""):
                     f'class="mut" style="font-size:20px">/10</span></p>')
 
     caveat = ""
-    if meta.get("persona_mode") == "generic":
+    # Anything that is not "supplied" was not researched. A third mode seen
+    # on disk (2026-09-11) shipped with no caveat because this said == "generic".
+    if meta.get("persona_mode") != "supplied":
         who = "buyers" if website else "users"
         thing = "site" if website else "product"
         caveat = (f'<p class="caveat"><strong>The {who} in this assessment were '
@@ -490,18 +498,8 @@ def corroborate(toc):
     return [f for _, f in flat if f["also"]]
 
 
-_STOP = {"the", "a", "an", "is", "are", "was", "on", "in", "of", "to", "it", "its",
-         "and", "or", "that", "this", "any", "anywhere", "appears", "only",
-         "never", "not", "no", "site", "page", "product", "user", "with", "for"}
-
-
-def _norm_title(t):
-    t = re.sub(r"[^a-z0-9 ]", " ", t.lower())
-    return " ".join(w for w in t.split() if w not in _STOP)
-
-
 def _similar(a, b):
-    return difflib.SequenceMatcher(None, _norm_title(a), _norm_title(b)).ratio()
+    return finding_id.title_similarity(a, b)
 
 
 def render_markdown(md, images, used, prefix=""):
@@ -965,6 +963,15 @@ def main():
     matrix_html = comparison_section(run, meta, images, used)
     matrix_no = base + len(entries) if matrix_html else None
 
+    # The run's objectives — the one part of a run that can fail — rendered
+    # from objectives/results.md under a heading the summary declares empty.
+    # Until 2026-09-11 nothing carried this file into the export at all.
+    objectives_html = ""
+    obj_path = os.path.join(run, "objectives", "results.md")
+    if os.path.exists(obj_path):
+        obj_md = re.sub(r"^#\s+.*\n", "", open(obj_path, errors="replace").read(), count=1)
+        objectives_html = render_markdown(obj_md, images, used, "obj-")
+
     shared = corroborate(ours)
     all_find = [f for e in ours[1:] for f in e["find"]]
     counts = {k: sum(1 for f in all_find if f["sev"] == k) for k in ("P0", "P1", "P2", "P3")}
@@ -1062,6 +1069,9 @@ def main():
             if corr_html:
                 rendered = fill_section(rendered, exec_secs, ("raised by more than one check", "corroborated", "raised by more than one"),
                                         corr_html)
+            if objectives_html:
+                rendered = fill_section(rendered, exec_secs, ("objectives", "run objectives"),
+                                        objectives_html)
 
         # A findings file gets a triage table before the findings themselves —
         # severity and cost at a glance, so nobody reads 20 findings to learn
@@ -1098,6 +1108,9 @@ def main():
                                                    "how the site scores", "how it scores")):
         front.append('<section class="doc"><h2 id="scores">How each area scores</h2>'
                      + scores_html + "</section>")
+    if objectives_html and not has_section(exec_secs, ("objectives", "run objectives")):
+        front.append('<section class="doc"><h2 id="objectives">Objectives</h2>'
+                     + objectives_html + "</section>")
     if corr_html and not has_section(exec_secs, ("raised by more than one check", "corroborated", "raised by more than one")):
         front.append('<section class="doc"><h2 id="corroborated">Raised by more '
                      'than one check</h2>' + corr_html + "</section>")

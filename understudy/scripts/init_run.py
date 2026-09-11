@@ -44,7 +44,7 @@ def _minimal_yaml(text):
     list_item = None         # dict for the current '- key: value' item
 
     for raw in text.split("\n"):
-        line = raw.split("#")[0].rstrip()
+        line = _strip_comment(raw).rstrip()
         if not line.strip():
             continue
         indent = len(line) - len(line.lstrip())
@@ -104,6 +104,42 @@ def _minimal_yaml(text):
     return root
 
 
+def _strip_comment(line):
+    """Drop a trailing `# comment` — only where `#` starts the line or follows
+    whitespace, and only outside quotes. `https://x.test/#pricing` and
+    `"/login #main"` are values, not comments; splitting on any `#` truncated
+    both (observed 2026-09-11)."""
+    quote = None
+    for i, ch in enumerate(line):
+        if quote:
+            if ch == quote:
+                quote = None
+        elif ch in ("'", '"'):
+            quote = ch
+        elif ch == "#" and (i == 0 or line[i - 1] in " \t"):
+            return line[:i]
+    return line
+
+
+def _inside_git_repo(path):
+    """True if any existing ancestor of `path` holds a .git — run output never
+    belongs in a repository, this one or any other. Comparing against
+    __file__ protected the plugin cache, not the source repo, once installed."""
+    p = os.path.realpath(os.path.expanduser(path))
+    while not os.path.exists(p) and os.path.dirname(p) != p:
+        p = os.path.dirname(p)
+    while True:
+        if os.path.exists(os.path.join(p, ".git")):
+            return True
+        parent = os.path.dirname(p)
+        if parent == p:
+            return False
+        p = parent
+
+
+PERSONA_MODES = ("generic", "supplied")
+
+
 class _PendingList:
     """A key opened with no inline value may become a mapping or a list.
     The first appended item settles it as a list, replacing the placeholder
@@ -160,9 +196,15 @@ def main():
     out = args.output_dir or target.get("output_dir") or f"~/.understudy/runs/{slug}"
     run_dir = os.path.expanduser(os.path.join(out, f"{today}-run-{run_id}"))
 
-    if os.path.realpath(run_dir).startswith(os.path.realpath(os.path.join(os.path.dirname(__file__), "..", ".."))):
-        sys.exit("REFUSED: run output would land inside the understudy repo. "
-                 "Real run artifacts must never enter a public repo (see CLAUDE.md §7).")
+    if _inside_git_repo(run_dir):
+        sys.exit("REFUSED: run output would land inside a git repository. "
+                 "Real run artifacts must never enter a repo (see CLAUDE.md §7).")
+
+    mode = args.persona_mode or target.get("persona_mode")
+    if mode not in PERSONA_MODES:
+        sys.exit(f"REFUSED: persona_mode is {mode!r}; it must be one of "
+                 f"{', '.join(PERSONA_MODES)}. The report's inferred-persona caveat "
+                 f"keys on this value, and a mode nobody defined is one nobody caveats.")
 
     personas = target.get("personas") or []
     for persona in personas:
@@ -195,7 +237,7 @@ def main():
         "competitors": target.get("competitors") or [],
         # ⚑ Only the OBJECTIVE reaches the manifest. The success criterion is
         # split out to objectives/criteria.json, which the traversal must never
-        # open — see CLAUDE.md Phase 4, O2. "Don't look" is not a mechanism when
+        # open — see CLAUDE.md §10, "The success criterion is withheld". "Don't look" is not a mechanism when
         # the orchestrator and the persona are the same agent, so the criterion
         # is physically not in the file the traversal reads.
         "objectives_under_test": [
@@ -203,7 +245,12 @@ def main():
             for o in (target.get("objectives_under_test") or [])
         ],
 
-        "persona_mode": args.persona_mode or target.get("persona_mode"),
+        "persona_mode": mode,
+        # The alias the persona signs up with (flow-shapes, Shape 1). Not a
+        # credential: an inbox, chosen by the user at interview.
+        "alias_email": target.get("alias_email"),
+        # Terms waived from check 2 for this run — printed by the gate.
+        "vocabulary_allowlist": target.get("vocabulary_allowlist") or [],
         "personas": [
             {"name": p.get("name"), "device": p.get("device")}
             for p in personas if isinstance(p, dict)
@@ -226,7 +273,7 @@ def main():
             json.dump({
                 "_warning": "DO NOT OPEN DURING CAPTURE. Reading this during a "
                             "traversal guarantees the objective passes and makes "
-                            "the test worthless. See CLAUDE.md Phase 4, O2.",
+                            "the test worthless. See CLAUDE.md §10.",
                 "criteria": [
                     {"objective": o.get("objective"), "expected": o.get("expected")}
                     for o in objs if isinstance(o, dict)
