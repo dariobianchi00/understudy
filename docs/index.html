@@ -43,7 +43,7 @@
         {"@type": "Question", "name": "What does understudy do?",
          "acceptedAnswer": {"@type": "Answer", "text": "It sends a stand-in user with a goal through your live product in a real browser, records where they hesitate, get stuck or give up, and scores that one recording through as many lenses as you ask for — usability, bugs, onboarding, content, clarity, conversion, trust, page speed, SEO and answer-engine readiness."}},
         {"@type": "Question", "name": "Does understudy store my credentials or product data?",
-         "acceptedAnswer": {"@type": "Answer", "text": "No. It never handles a credential: at a login screen it stops and hands you the browser. Reports and screenshots stay in ~/.understudy/ on your machine and are never uploaded anywhere."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "No. It never handles a credential: at a login screen it stops and hands you the browser. Reports and screenshots stay in a folder you choose on your machine; understudy uploads nothing. What the Claude model reads to score the run goes through your own Claude account, as anything you paste into Claude does."}},
         {"@type": "Question", "name": "How reproducible are the findings?",
          "acceptedAnswer": {"@type": "Answer", "text": "Scoring the same recording twice with the same reviewers reproduces about 30% of individual findings and 43% of the serious ones; the themes are stable. Treat any single finding as one careful reading and open its evidence before acting on it."}}
       ]
@@ -267,7 +267,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     <div class="hero-left">
       <p class="kicker">a stand-in user, on your live product</p>
       <h1>Your users don't file bug reports. They leave.</h1>
-      <p class="hero-lede">understudy sends a stand-in user through your live product — someone with a goal, a short attention span and somewhere else to be. It gets stuck where a real person gets stuck, gives up where they'd give up, and hands you a report where every finding cites a screenshot you can open.</p>
+      <p class="hero-lede">understudy sends a stand-in user through your live product — or your website — someone with a goal, a short attention span and somewhere else to be. It gets stuck where a real person gets stuck, gives up where they'd give up, and hands you a report where every finding cites a screenshot you can open.</p>
       <div class="hero-actions">
         <a class="button button-primary" href="#install">Install it</a>
         <a class="button button-secondary" href="#trust">How it stays honest</a>
@@ -379,14 +379,39 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
   <div class="wrap">
     <p class="kicker">two commands</p>
     <h2>Install</h2>
-    <p class="section-lede">You need <a href="https://github.com/microsoft/playwright-mcp">Playwright MCP</a> connected — understudy drives a real browser, and refuses to fall back to fetching pages over HTTP and calling it a session.</p>
-<pre><span class="c"># in Claude Code</span>
+    <p class="section-lede">understudy is a plugin for <a href="https://claude.com/claude-code">Claude Code</a> — Anthropic's terminal app for Claude, included with a Claude subscription. It is a separate app from claude.ai; if you only use Claude in the browser, install Claude Code first.</p>
+    <p class="section-lede">It also needs <a href="https://github.com/microsoft/playwright-mcp">Playwright MCP</a>, a browser add-on for Claude Code — one command, once — because understudy drives a real browser and refuses to fall back to fetching pages over HTTP and calling it a session.</p>
+<pre><span class="c"># once, in a terminal — gives Claude Code a browser</span>
+<span class="cmd">claude mcp add</span> <span class="arg">playwright npx @playwright/mcp@latest</span>
+
+<span class="c"># then, inside Claude Code</span>
 <span class="cmd">/plugin marketplace add</span> <span class="arg">dariobianchi00/understudy</span>
 <span class="cmd">/plugin install</span> <span class="arg">understudy</span>
 
 <span class="c"># then</span>
 <span class="cmd">/understudy:run</span> <span class="arg">https://your-product.com</span></pre>
-    <p class="note">It interviews you first — one question at a time — then shows you the plan and the time it will take, and waits. Reports land in <code>~/.understudy/</code> on your machine. Nothing is uploaded anywhere; there is nowhere to upload it to.</p>
+    <p class="note">It interviews you first — one question at a time — then shows you the plan and the time it will take, and waits. Reports land in a folder you choose on your machine. understudy itself uploads nothing and has nowhere to upload to. The one thing that leaves your machine is what the Claude model reads in order to score the run — the screenshots and logs — through your own Claude account, exactly as anything you paste into Claude does.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <p class="kicker">three questions</p>
+    <h2>Questions people ask first.</h2>
+    <div class="rules">
+      <div class="rule-card">
+        <h3>What does understudy do?</h3>
+        <p>It sends a stand-in user with a goal through your live product in a real browser, records where they hesitate, get stuck or give up, and scores that one recording through as many lenses as you ask for — usability, bugs, onboarding, content, clarity, conversion, trust, page speed, SEO and answer-engine readiness.</p>
+      </div>
+      <div class="rule-card">
+        <h3>Does understudy store my credentials or product data?</h3>
+        <p>No. It never handles a credential: at a login screen it stops and hands you the browser. Reports and screenshots stay in a folder you choose on your machine; understudy uploads nothing. What the Claude model reads to score the run goes through your own Claude account, as anything you paste into Claude does.</p>
+      </div>
+      <div class="rule-card">
+        <h3>How reproducible are the findings?</h3>
+        <p>Scoring the same recording twice with the same reviewers reproduces about 30% of individual findings and 43% of the serious ones; the themes are stable. Treat any single finding as one careful reading and open its evidence before acting on it.</p>
+      </div>
+    </div>
   </div>
 </section>
 
