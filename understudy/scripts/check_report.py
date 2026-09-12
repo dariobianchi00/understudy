@@ -279,8 +279,10 @@ def check_findings(path, r, lens, run):
                       f"        expected {expect} from lens='{lens_name}' flow='{flow}' "
                       f"locator='{locator}' title='{title[:50]}'")
 
+    # Count by the Severity FIELD, not the substring — a finding that quotes a
+    # page's own "P0" label was being counted as a P0 (found dogfooding, 2026-09-12).
     r.note(f"{lens}: {len(findings)} finding(s), "
-           f"{sum(1 for f in findings if 'P0' in '\\n'.join(f['raw']))} P0")
+           f"{sum(1 for f in findings if f['fields'].get('severity', '').upper().startswith('P0'))} P0")
 
 
 def _artifact_exists(run, lens, path):
