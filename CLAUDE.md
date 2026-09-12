@@ -164,7 +164,8 @@ Runs on every invocation. Never assumes. One question at a time.
      - *This is asked because an evaluation is a real spend, and trading cost against depth is the user's call. It is also the last honest moment to ask — after this, cost is being incurred.*
    - Time cap per traversal
    - Auth: is there a wall, and where? Confirm the human-in-the-loop pause
-   - Output destination — default `~/.understudy/runs/<slug>/`
+   - **The deliverable** — format (PDF · HTML · markdown) and scope (executive summary · full · one lens). **Default: executive summary as PDF.** The run folder always keeps everything regardless; this is the copy for reading. *(Added 2026-09-12 after dogfooding: the interview asked where, never what, and the user had to correct it after approving the plan.)*
+   - **Where the run folder lives** — default `<their repo>/understudy-runs/<slug>/` when the session is inside a git repo that is not this plugin (and the interview adds it to that repo's `.gitignore`); else `~/.understudy/runs/<slug>/`; or a folder they name. Never inside this plugin. `init_run.py` refuses a folder inside any repo that is not gitignored — screenshots of a product must not reach `git status` by accident.
    - **Scope exclusions** — anything that must NOT be reported as a finding *(precedent from the reference skill: an identity-proxy gate in front of the product is infrastructure, not a UX defect)*
 4. **Echo the plan back** — assessment type, modes, traversals required, lenses per mode, estimated wall time. Wait for go.
 5. **Offer to save:** *"Save this target for next time? Goes to `~/.understudy/targets/<slug>.yaml`, outside the repo, gitignored. Credentials are never saved."*

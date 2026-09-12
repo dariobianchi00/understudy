@@ -115,22 +115,17 @@ The run now holds a lens it did not before, and the manifest records what a run
 contains. Re-running it updates the capture and findings counts; `finished_utc`
 is stamped once and is not moved by a later scoring pass.
 
-### 7. Offer an export
+### 7. Re-render the deliverable
 
-Same as a full run. Print the run folder path, then ask:
-
-```
-Report is in <run-folder> as markdown.
-
-Export a copy?  PDF · HTML · skip
-```
-
-Then what goes in it — **exec summary only · one named lens · everything** — and render:
+`manifest.json → deliverable` says what the user agreed to at interview. Render that
+scope and format again — the run now holds a lens it did not before:
 
 ```bash
 ${CLAUDE_PLUGIN_ROOT}/scripts/render_report.py <run_folder> \
-    --format html|pdf --scope summary|<lens>|all
+    --format <deliverable.format> --scope <deliverable.scope>
 ```
+
+Hand over both the document and the run folder path, as `/understudy:run` §3.8 does.
 
 Markdown stays canonical; the export is a copy. **Re-export after adding a lens** if one already exists, or the shared file silently omits the lens you just paid for.
 

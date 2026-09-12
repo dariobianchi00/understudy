@@ -121,20 +121,68 @@ def _strip_comment(line):
     return line
 
 
-def _inside_git_repo(path):
-    """True if any existing ancestor of `path` holds a .git — run output never
-    belongs in a repository, this one or any other. Comparing against
-    __file__ protected the plugin cache, not the source repo, once installed."""
+def _git_root(path):
+    """The git repository containing `path`, or None. Walks up from the
+    nearest existing ancestor, so a folder that does not exist yet is judged
+    by where it would be created."""
     p = os.path.realpath(os.path.expanduser(path))
     while not os.path.exists(p) and os.path.dirname(p) != p:
         p = os.path.dirname(p)
     while True:
         if os.path.exists(os.path.join(p, ".git")):
-            return True
+            return p
         parent = os.path.dirname(p)
         if parent == p:
-            return False
+            return None
         p = parent
+
+
+def _plugin_root():
+    """The understudy plugin — source checkout or installed cache. Run output
+    must never land inside it (CLAUDE.md §7); it is public by construction."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    return os.path.realpath(os.path.join(here, ".."))
+
+
+def _inside_plugin(path):
+    p = os.path.realpath(os.path.expanduser(path))
+    root = _plugin_root()
+    # the plugin's own repo root, one level up from the plugin folder, when
+    # this is a source checkout
+    repo = _git_root(root)
+    for r in (root, repo):
+        if r and (p == r or p.startswith(r + os.sep)):
+            return True
+    return False
+
+
+def _gitignored(repo, path):
+    """True if git would ignore `path` inside `repo`."""
+    try:
+        rel = os.path.relpath(os.path.realpath(os.path.expanduser(path)), repo)
+        r = subprocess.run(["git", "-C", repo, "check-ignore", "-q", rel],
+                           capture_output=True)
+        return r.returncode == 0
+    except OSError:
+        return False
+
+
+DELIVERABLE_FORMATS = ("pdf", "html", "md")
+DELIVERABLE_SCOPES = ("summary", "all")   # or a lens name
+
+
+def _deliverable(target):
+    """What the run hands over at the end — asked at interview, defaulted here.
+    The full research (evidence, every lens report, markdown) is always kept
+    in the run folder whatever this says; this is the copy for reading."""
+    d = target.get("deliverable") or {}
+    if not isinstance(d, dict):
+        d = {}
+    fmt = str(d.get("format") or "pdf").lower()
+    scope = str(d.get("scope") or "summary").lower()
+    if fmt not in DELIVERABLE_FORMATS:
+        sys.exit(f"REFUSED: deliverable.format is {fmt!r}; must be one of {', '.join(DELIVERABLE_FORMATS)}")
+    return {"format": fmt, "scope": scope, "path": d.get("path")}
 
 
 PERSONA_MODES = ("generic", "supplied")
@@ -186,6 +234,8 @@ def main():
     p.add_argument("--run-id", default=None)
     p.add_argument("--output-dir", default=None)
     p.add_argument("--persona-mode", default=None, choices=["generic", "supplied"])
+    p.add_argument("--allow-untracked", action="store_true",
+                   help="proceed when the output folder is inside a git repo and not gitignored")
     args = p.parse_args()
 
     target = load_target(args.target) or {}
@@ -196,9 +246,24 @@ def main():
     out = args.output_dir or target.get("output_dir") or f"~/.understudy/runs/{slug}"
     run_dir = os.path.expanduser(os.path.join(out, f"{today}-run-{run_id}"))
 
-    if _inside_git_repo(run_dir):
-        sys.exit("REFUSED: run output would land inside a git repository. "
-                 "Real run artifacts must never enter a repo (see CLAUDE.md §7).")
+    # §7: never inside the understudy plugin, source or installed. The user's
+    # OWN repo is allowed — it is their product and their call — but the run
+    # folder holds screenshots of it, so it must be gitignored there, and the
+    # interview offers to add the rule. This is the last line of defence.
+    if _inside_plugin(run_dir):
+        sys.exit("REFUSED: run output would land inside the understudy plugin. "
+                 "Real run artifacts must never enter this repo (see CLAUDE.md §7).")
+    repo = _git_root(run_dir)
+    if repo and not _gitignored(repo, run_dir):
+        if args.allow_untracked:
+            print(f"WARNING: {run_dir} is inside the git repo {repo} and is NOT gitignored — "
+                  f"screenshots of the product will show up in `git status`.", file=sys.stderr)
+        else:
+            sys.exit(f"REFUSED: {out} is inside the git repo {repo} and is not gitignored. "
+                     f"Add the folder to that repo's .gitignore (the interview offers to), or "
+                     f"pass --allow-untracked to proceed anyway.")
+
+    deliverable = _deliverable(target)
 
     mode = args.persona_mode or target.get("persona_mode")
     if mode not in PERSONA_MODES:
@@ -258,6 +323,10 @@ def main():
         "objectives": target.get("objectives") or [],
         "scope_exclusions": target.get("scope_exclusions") or [],
         "time_cap_minutes": target.get("time_cap_minutes"),
+        # The copy handed over at the end. Asked at interview; defaults to the
+        # executive PDF. The run folder always keeps everything.
+        "deliverable": deliverable,
+        "output_dir": os.path.expanduser(out),
         "understudy_version": _version(),
         "phase": "2a-capture",
         "captures": {},

@@ -317,11 +317,57 @@ Record `alias_email`. If they decline, record `null` and say plainly that sign-u
 
 ---
 
-## Step 7 — Output destination
+## Step 7 — The deliverable, and where everything goes ⚑ two questions, asked every run
 
-Default: `~/.understudy/runs/<slug>/`.
+> Observed 2026-09-12, dogfooding: the interview asked about the folder and never about the
+> deliverable; the user had to say "output must be a PDF" after approving the plan. The
+> hand-over is part of the plan, so it is agreed here, not improvised at the end.
 
-Accept an alternative if they want one, with one check: **if the path is inside this repo, refuse and explain.** Real run artifacts — screenshots, traces, findings about a real product — must never land in a public repo. Offer the default instead.
+### 7a — What do you want handed to you at the end?
+
+```
+At the end you get one document to read or forward. The full research —
+every screenshot, log, and lens report, as markdown — is always kept in the
+run folder whatever you choose here.
+
+  Format   (a) PDF   [default]     (b) HTML, self-contained    (c) Markdown only
+  Scope    (a) Executive summary [default] — the verdict, the Top 5, every
+               finding in a triage table with its cost and fix, key screenshots.
+               A few pages; the thing you forward.
+           (b) Full report — every lens in full, all evidence embedded.
+               The archive; long.
+           (c) One lens — name it.
+```
+
+**Default: executive summary, PDF.** Record as `deliverable: {format, scope}`. A user who says
+"just give me everything" gets `all`; one who says nothing gets the default and is told so.
+
+### 7b — Where should the run folder live?
+
+The run folder holds everything real about the product — screenshots included — so its
+location is the user's call, and the default is *their* space, not the plugin's:
+
+```
+Where should the run folder go?
+
+  (a) <cwd>/understudy-runs/<slug>/     [default when you are inside a repo]
+      Next to the product it describes. I'll add understudy-runs/ to that
+      repo's .gitignore so screenshots of your product are never committed.
+  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine
+  (c) A folder you name — a shared drive, a client folder.
+```
+
+- **Detect the default:** if the current working directory is inside a git repository that is
+  not the understudy plugin, offer (a) with the real path filled in. Otherwise offer (b).
+- **If the chosen folder is inside a git repo, ask once:** *"Add `understudy-runs/` to that
+  repo's `.gitignore`? (yes)"*. On yes, append the line. `init_run.py` refuses a folder inside a
+  repo that is not gitignored, so this is not optional politeness — it is the step that makes
+  the folder usable.
+- **If the path is inside the understudy plugin itself, refuse and explain** — public by
+  construction (CLAUDE.md §7) — and offer (a) or (b).
+- The deliverable lands in the run folder beside the markdown. If the user wants the document
+  somewhere else as well — a shared folder — record `deliverable.path` and copy it there at
+  hand-over.
 
 ---
 
@@ -375,7 +421,8 @@ Models        traversal   <session model>   (session-set; I can't change it)
                                      sonnet: seo
 
 Excluded      <verbatim list, or "nothing">
-Output        ~/.understudy/runs/<slug>/
+Deliverable   executive summary · PDF
+Run folder    ./understudy-runs/<slug>/   (gitignored in this repo)
 
 Estimated     ~1.5h traversal + ~30m scoring
 ─────────────────────────────────────────────────────
@@ -411,7 +458,9 @@ On yes, write the file. Create `~/.understudy/targets/` if needed. Schema in `${
 | Reusing a saved target without confirming | The product may have changed since |
 | Starting a traversal without an explicit go | The user is committing hours; make them say yes |
 | Accepting a credential "to speed things up" | Non-negotiable — see Step 6 |
-| Writing run output inside the repo | Public repo; see Step 7 |
+| Writing run output inside the understudy plugin | Public repo; see Step 7b |
+| Putting the run folder in the user's repo without gitignoring it | Screenshots of their product end up in git; `init_run.py` refuses |
+| Asking about the folder but not the deliverable | The user discovers at hand-over that they wanted a PDF; Step 7a |
 | Quoting a time estimate only after they commit | Step 5 exists to prevent exactly this |
 | Inferring the assessment type from the URL | A marketing URL may be a product's login page. Step 0.5 |
 | Inferring competitors | A wrong set produces a confident, useless comparison. Only the user knows |

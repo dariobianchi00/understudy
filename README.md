@@ -160,7 +160,8 @@ Models        traversal   <session model>  (session-set; I can't change it)
               scoring     balanced
 
 Excluded      Identity proxy — infrastructure, not a defect
-Output        ~/.understudy/runs/acme-notes/
+Deliverable   executive summary · PDF
+Run folder    ./understudy-runs/acme-notes/   (gitignored)
 
 Estimated     ~4.5h traversal + ~1h scoring
 ─────────────────────────────────────────────────────
@@ -351,7 +352,7 @@ The thing clients ask first. By construction, not by discipline.
 └── creds/                  YOURS. understudy reads nothing here, writes nothing here.
 ```
 
-Nothing is transmitted anywhere. No telemetry, no phone-home, no hosted component. Point `output_dir` inside the understudy repo and the interview refuses.
+Nothing is transmitted anywhere. No telemetry, no phone-home, no hosted component. Point the run folder inside the understudy plugin and the interview refuses. Point it inside *your* repo — the default when you run from one — and it is added to that repo's `.gitignore` first, because the run folder holds screenshots of your product.
 
 **The HTML and PDF exports are local files too.** They are written next to the markdown, in your run folder. Nothing uploads them and understudy has nowhere to upload them to — but they embed real screenshots of your product, so once you forward one it is as sensitive as the run itself. That is the point of them; it is worth knowing before you send one.
 

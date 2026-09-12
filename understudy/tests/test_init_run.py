@@ -74,13 +74,45 @@ class Refusals(unittest.TestCase):
             self.assertNotEqual(p.returncode, 0)
             self.assertIn("persona_mode", p.stderr)
 
-    def test_output_inside_any_git_repo_is_refused(self):
+    def test_output_inside_the_plugin_is_refused(self):
         with tempfile.TemporaryDirectory() as t:
-            os.makedirs(os.path.join(t, "somerepo", ".git"))
-            p = init(t, out=os.path.join(t, "somerepo", "runs"))
+            p = init(t, out=os.path.join(fx.SCRIPTS, "..", "runs"))
             self.assertNotEqual(p.returncode, 0)
-            self.assertIn("git repository", p.stderr)
+            self.assertIn("understudy plugin", p.stderr)
 
+    def test_users_repo_allowed_when_gitignored(self):
+        with tempfile.TemporaryDirectory() as t:
+            repo = os.path.join(t, "theirrepo")
+            os.makedirs(repo)
+            subprocess.run(["git", "init", "-q", repo], check=True)
+            open(os.path.join(repo, ".gitignore"), "w").write("understudy-runs/\n")
+            p = init(t, out=os.path.join(repo, "understudy-runs", "nimbus"))
+            self.assertEqual(p.returncode, 0, p.stderr)
+            self.assertNotIn("WARNING", p.stderr)
+
+    def test_users_repo_refused_when_not_gitignored(self):
+        with tempfile.TemporaryDirectory() as t:
+            repo = os.path.join(t, "theirrepo")
+            os.makedirs(repo)
+            subprocess.run(["git", "init", "-q", repo], check=True)
+            p = init(t, out=os.path.join(repo, "understudy-runs", "nimbus"))
+            self.assertNotEqual(p.returncode, 0)
+            self.assertIn("not gitignored", p.stderr)
+
+    def test_deliverable_defaults_and_validation(self):
+        with tempfile.TemporaryDirectory() as t:
+            p = init(t)
+            m = json.load(open(os.path.join(p.stdout.strip(), "manifest.json")))
+            self.assertEqual(m["deliverable"], {"format": "pdf", "scope": "summary", "path": None})
+            self.assertTrue(m["output_dir"].startswith(t))
+        with tempfile.TemporaryDirectory() as t:
+            tp = os.path.join(t, "target.yaml")
+            open(tp, "w").write(TARGET.format(mode="generic", out=os.path.join(t, "runs"))
+                                + "deliverable:\n  format: docx\n")
+            p = subprocess.run([sys.executable, INIT, "--target", tp, "--traversal-model", "m"],
+                               capture_output=True, text=True)
+            self.assertNotEqual(p.returncode, 0)
+            self.assertIn("deliverable.format", p.stderr)
 
 if __name__ == "__main__":
     unittest.main()

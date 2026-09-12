@@ -514,32 +514,37 @@ still open.
 Use `--phase 2b-scoring` if scoring is not finished, and `--reopen` before
 adding a lens to a run that was already closed.
 
-### 3.8 — Offer an export, then hand over
+### 3.8 — Render the deliverable, then hand over
 
-Print the run folder path. Then **ask, every run** — two short questions, not a form:
-
-```
-Report is in ~/.understudy/runs/<slug>/<run>/ as markdown.
-
-Export a copy?  PDF · HTML · skip
-```
-
-If they pick a format, ask what goes in it. Three tiers, and say what each is:
-
-- **`summary`** — the run verdict, then a triage table of **every** finding across all lenses with its severity and its one-line cost. A few pages. This is the report; it is what gets forwarded.
-- **`<lens>`** — one lens in full, with evidence. What an engineer or designer acts from.
-- **`all`** — everything, screenshots embedded. The archive, not a document anyone reads front to back.
-
-**Never export `summary` alone as though it were the whole deliverable.** A verdict with no route to the findings behind it is a dead end — which is why the summary scope carries the triage tables and names the file holding the detail.
-
-Then run:
+The deliverable was agreed at interview (onboarding Step 7a) and is in
+`manifest.json → deliverable`: `{format: pdf|html|md, scope: summary|all|<lens>,
+path}`. **Do not ask again.** Render it:
 
 ```bash
 ${CLAUDE_PLUGIN_ROOT}/scripts/render_report.py <run_folder> \
-    --format html|pdf --scope summary|<lens>|all
+    --format <deliverable.format> --scope <deliverable.scope>
 ```
 
-**Markdown in the run folder stays canonical.** The export is a copy for reading or forwarding — never the only place a finding lives, and never edited by hand afterwards.
+(`md` means no render: the canonical markdown is the deliverable — point at
+`exec-summary.md` and `report-full.md`.) If `deliverable.path` names a second
+location, copy the rendered file there too.
+
+The three scopes, so you can say what the user is getting:
+
+- **`summary`** — the run verdict, then a triage table of **every** finding across all lenses with its severity, cost and fix, plus the key screenshots. A few pages. This is the report; it is what gets forwarded.
+- **`<lens>`** — one lens in full, with evidence. What an engineer or designer acts from.
+- **`all`** — everything, screenshots embedded. The archive, not a document anyone reads front to back.
+
+**Never present `summary` as though it were the whole research.** The hand-over names both: the document, and the run folder that holds every lens report and every screenshot behind it.
+
+Hand over with both paths and nothing else to decide:
+
+```
+Deliverable   <run_folder>/report-summary.pdf
+Full research <run_folder>/   — every lens report, screenshots, logs, as markdown
+```
+
+**Markdown in the run folder stays canonical.** The rendered file is a copy for reading or forwarding — never the only place a finding lives, and never edited by hand afterwards. Offer, in one line, to render another scope or format if they want one.
 
 Finally, mention that `/understudy:report <run-folder> --lens <name>` adds a lens later without re-driving the product — the evidence is the durable artifact.
 
@@ -549,4 +554,4 @@ Finally, mention that `/understudy:report <run-folder> --lens <name>` adds a len
 2. **The auth wall is never a finding.** It is infrastructure — excluded from all scoring and from the exec summary.
 3. **The traversal agent never sees the scoring framework.** Banned during capture: *heuristic · severity · usability · Nielsen · HAX · P0/P1/P2/P3*. Contaminating the traversal produces a report that confirms its own priors.
 4. **Every finding cites evidence.** No screenshot, log line or DOM excerpt → the finding is dropped. No exceptions, including for findings that are obviously true.
-5. **Nothing real is ever written into this repo.** Targets, runs, profiles and credentials live under `~/.understudy/`. See §7 of the repo spec.
+5. **Nothing real is ever written into the understudy plugin.** Targets, profiles and credentials live under `~/.understudy/`; the run folder lives where the user chose at interview — their own repo (gitignored), `~/.understudy/runs/`, or a folder they named. See §7 of the repo spec.

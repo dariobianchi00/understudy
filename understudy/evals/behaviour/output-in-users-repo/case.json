@@ -1,0 +1,11 @@
+{
+ "must_match": [
+  "understudy-runs",
+  "\\.gitignore"
+ ],
+ "must_not_match": [],
+ "tools_forbidden": [
+  "WebFetch",
+  "mcp__*"
+ ]
+}

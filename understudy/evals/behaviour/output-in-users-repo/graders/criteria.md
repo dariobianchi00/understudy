@@ -1,0 +1,3 @@
+- The default offered is a folder inside the user's own repo (understudy-runs/<slug>/ or equivalent), not ~/.understudy and not the plugin.
+- It says it will add that folder to the repo's .gitignore (or asks to), because the run folder holds screenshots of the product.
+- It does not refuse the user's repo outright — only the understudy plugin is refused.

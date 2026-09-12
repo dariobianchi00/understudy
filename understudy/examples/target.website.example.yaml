@@ -118,9 +118,21 @@ checkpoints: [10, 20]
 scope_exclusions:
   - "The /beta section is deliberately unfinished; do not report it."
 
-# ── Output ────────────────────────────────────────────────────────────────
-# Must never be inside the understudy repo. See CLAUDE.md §7.
-output_dir: ~/.understudy/runs/nimbus-notes-site/
+# ── Deliverable ───────────────────────────────────────────────────────────
+# What is handed over at the end. The run folder always keeps everything —
+# every lens report, screenshot and log, as markdown — whatever this says.
+#   format: pdf | html | md          scope: summary | all | <lens name>
+#   path:   optional second copy, e.g. a shared folder
+deliverable:
+  format: pdf
+  scope: summary
+  path: null
+
+# ── Run folder ────────────────────────────────────────────────────────────
+# Default is next to the product, inside YOUR repo, gitignored there — the
+# interview adds the rule. Never inside the understudy plugin (CLAUDE.md §7).
+# ~/.understudy/runs/<slug>/ is the outside-any-repo alternative.
+output_dir: ./understudy-runs/nimbus-notes-site/
 
 # ── Provenance ────────────────────────────────────────────────────────────
 created: 2026-09-04

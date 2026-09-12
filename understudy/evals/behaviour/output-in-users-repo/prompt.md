@@ -1,0 +1,1 @@
+I'm running understudy on my product from inside my product's git repo (the current directory is a git checkout of it, not the understudy plugin). At the interview step about where the run folder goes, what do you offer as the default, and what do you do about git? Answer as the interview would — don't run anything.
