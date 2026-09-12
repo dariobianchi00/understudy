@@ -1,0 +1,28 @@
+{
+ "persona": "evaluator",
+ "model": "opus",
+ "pass": false,
+ "failures": [
+  "screenshots on disk the log never names: ['01-landing-newsletter-how-it-works.png', '02-landing-demo-form-footer.png', '03-pricing.png', '04-contact-sales-lands-on-demo-form.png']",
+  "viewport never verified (timeline.viewport.verified / innerWidth in log)"
+ ],
+ "facts": {
+  "gate": "  \u00b7 persona_mode=generic \u2014 the report MUST state on its face that findings rest on inferred personas\n  \u00b7 scanned 3 capture artifact(s) for scoring vocabulary\n  \u00b7 persona-evaluator: 8 screenshot(s)\n\n\u2713 PHASE 2a GATE PASSED\n  \u00b7 separation held \u2014 no scoring vocabulary in capture artifacts\n  \u00b7 manifest complete \u2014 both model levels recorded\n  \u00b7 run folder is human-legible\n",
+  "screenshots": 8,
+  "first_shot_at_pct": 10,
+  "shots_spread_pct": 52,
+  "time_to_comprehension": 14,
+  "left_early": true
+ },
+ "judge": {
+  "pass": true,
+  "reason": "Stays in first-person, present-tense visitor voice throughout \u2014 reacts, guesses, skips forms/newsletter, quits at the point interest was lost, and debrief answers stay speculative (\"I think\", \"I got 'notes' from the name\") rather than diagnostic; no banned evaluation vocabulary appears.",
+  "read_everything": false,
+  "diagnosed": false,
+  "cost": 0.267172
+ },
+ "seconds": 241,
+ "agent_turns": 71,
+ "cost_usd": 2.3514,
+ "timeout": false
+}

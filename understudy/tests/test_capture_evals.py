@@ -28,6 +28,8 @@ def good_run(t, persona="evaluator"):
          "shape_v3": {"forms_submitted": 0}, "left_early": False}))
     fx.write(os.path.join(pdir, "persona-debrief.md"),
              "**Q1** a\n**Q2** b\n**Q3** c\n**Q4** d\n**Q5** e\n**Q6** f\n")
+    fx.write(os.path.join(pdir, "findings-raw.json"), json.dumps(
+        [{"t": "00:12", "screen": "00-landing.png", "flow": "V1", "reaction": "I can't tell what this is for."}]))
     fx.write(os.path.join(pdir, "network-full.txt"), "[GET] http://localhost:8765/ → 200\n")
     fx.write(os.path.join(pdir, "console-full.txt"), "")
     # spread the screenshot mtimes across a 100 s session
@@ -59,7 +61,7 @@ class Graders(unittest.TestCase):
             run, pdir, t0, t1 = good_run(t)
             open(os.path.join(pdir, "screenshots", "09-stray.png"), "wb").write(fx.PNG)
             fails, _ = rc.grade(run, "evaluator", t, t0, t1)
-            self.assertTrue(any("never names" in f for f in fails), fails)
+            self.assertTrue(any("no artifact names" in f for f in fails), fails)
 
     def test_pre_session_after_first_action_fails(self):
         with tempfile.TemporaryDirectory() as t:

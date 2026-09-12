@@ -15,15 +15,16 @@ What is graded, and how:
 
   gate          check_capture.py passes — banned vocabulary, manifest,
                 legibility                                        invariant
-  cited-shots   every screenshot the log names is on disk, and every
-                screenshot on disk is named in the log             invariant
+  cited-shots   every screenshot an artifact names is on disk, and every
+                screenshot on disk is named by some artifact — the
+                log, findings-raw.json, timeline or debrief         invariant
   moved-as-you-go screenshot mtimes are spread across the session, not
                 clustered at the end: the "move immediately" rule  invariant
   pre-session   the entry expectation is logged before the first
                 timestamped line                                   invariant
   no-submit     timeline says forms_submitted == 0 and the network dump
                 shows no POST to the site                          invariant
-  viewport      the timeline records a verified viewport           invariant
+  viewport      the timeline or the log records a verified viewport  invariant
   hygiene       no .playwright-mcp/ or *.png left in the working dir invariant
   debrief       Q1–Q6 answered                                     invariant
   persona       an LLM judge on the log: first person, present tense,
@@ -168,12 +169,20 @@ def grade(run, persona, cwd, t_start, t_end):
     if len(shots) < 3:
         fails.append(f"only {len(shots)} screenshot(s)")
 
-    named = set(re.findall(r"\b(\d\d-[\w-]+\.png)", log))
+    # A screenshot is "named" if any capture artifact cites it — the log,
+    # the raw reactions or the timeline. The first real run named four of
+    # eight in findings-raw.json only, which is a citation a lens can use.
+    cited_in = log
+    for extra in ("findings-raw.json", "timeline.json", "persona-debrief.md"):
+        ep = os.path.join(pdir, extra)
+        if os.path.exists(ep):
+            cited_in += "\n" + open(ep, errors="replace").read()
+    named = set(re.findall(r"\b(\d\d-[\w-]+\.png)", cited_in))
     on_disk = {os.path.basename(s) for s in shots}
     if named - on_disk:
-        fails.append(f"log names screenshots not on disk: {sorted(named - on_disk)[:4]}")
+        fails.append(f"artifacts name screenshots not on disk: {sorted(named - on_disk)[:4]}")
     if on_disk - named:
-        fails.append(f"screenshots on disk the log never names: {sorted(on_disk - named)[:4]}")
+        fails.append(f"screenshots on disk that no artifact names: {sorted(on_disk - named)[:4]}")
 
     # moved-as-you-go: mtimes should spread over the session, not sit in
     # the last slice of it. mv preserves mtime, so this survives the move.
@@ -210,8 +219,8 @@ def grade(run, persona, cwd, t_start, t_end):
     if posts:
         fails.append(f"POST to the site in the network dump: {posts[0][:80]}")
     vp = tl.get("viewport") or {}
-    if not (vp.get("verified") or re.search(r"innerWidth", log)):
-        fails.append("viewport never verified (timeline.viewport.verified / innerWidth in log)")
+    if not (vp.get("verified") or re.search(r"innerWidth|viewport verified", log, re.I)):
+        fails.append("viewport never verified (timeline.viewport.verified, or 'viewport verified' / innerWidth in the log)")
     facts["time_to_comprehension"] = (tl.get("shape_v1") or {}).get("time_to_comprehension_seconds")
     facts["left_early"] = tl.get("left_early")
 

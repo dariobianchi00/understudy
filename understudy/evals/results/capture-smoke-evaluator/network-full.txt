@@ -1,0 +1,13 @@
+=== [00:25] landing page http://localhost:8765/ ===
+1. [GET] http://localhost:8765/ => [200] OK
+2. [GET] https://analytics.example-tracker.test/t.js => [FAILED] net::ERR_NAME_NOT_RESOLVED
+3. [GET] https://fonts.example-cdn.test/all.css => [FAILED] net::ERR_NAME_NOT_RESOLVED
+4. [GET] http://localhost:8765/style.css => [200] OK
+5. [GET] http://localhost:8765/assets/hero.svg => [200] OK
+
+=== [02:45] features.html ===
+[GET] http://localhost:8765/features.html => [404] Not Found  (nav link "Features" → 404 page "That page does not exist.")
+
+=== [03:40] privacy.html ===
+1. [GET] http://localhost:8765/privacy.html => [200] OK
+2. [GET] http://localhost:8765/style.css => [200] OK

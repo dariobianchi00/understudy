@@ -1,0 +1,18 @@
+=== [00:25] landing page http://localhost:8765/ ===
+[ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://fonts.example-cdn.test/all.css:0
+[ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://analytics.example-tracker.test/t.js:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8765/favicon.ico:0
+ReferenceError: nimbusBootstrap is not defined
+    at HTMLDocument.<anonymous> (http://localhost:8765/:3:566)
+
+=== [03:40] all messages since session start (after /, /#, pricing.html, index.html#demo, features.html 404, about.html, privacy.html) ===
+[ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://fonts.example-cdn.test/all.css:0
+[ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://analytics.example-tracker.test/t.js:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8765/favicon.ico:0
+[ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://fonts.example-cdn.test/all.css:0
+[ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://analytics.example-tracker.test/t.js:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8765/features.html:0
+ReferenceError: nimbusBootstrap is not defined
+    at HTMLDocument.<anonymous> (http://localhost:8765/:3:566)
+ReferenceError: nimbusBootstrap is not defined
+    at HTMLDocument.<anonymous> (http://localhost:8765/index.html:3:566)
