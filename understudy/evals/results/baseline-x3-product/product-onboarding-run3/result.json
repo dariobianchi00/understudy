@@ -1,0 +1,50 @@
+{
+ "contract_pass": true,
+ "planted": 2,
+ "caught": 2,
+ "recall": 1.0,
+ "caught_ids": [
+  "empty-state-no-guidance",
+  "workspace-type-before-value"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 2,
+ "band_judged": 2,
+ "band_rows": [
+  {
+   "id": "workspace-type-before-value",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "empty-state-no-guidance",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 6,
+ "severities": {
+  "P0": 1,
+  "P1": 2,
+  "P2": 2,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "product",
+ "lens": "onboarding",
+ "model": "opus",
+ "run": 3,
+ "files_written": true,
+ "seconds": 571.52773,
+ "cost_usd": 1.8342675000000006,
+ "lens_turns": 39,
+ "lens_error": false
+}

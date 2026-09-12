@@ -1,0 +1,149 @@
+{
+ "duration_api_ms": 14434,
+ "stop_reason": "tool_use",
+ "session_id": "7b44a27f-9e1e-44ae-982a-ad582dded9d4",
+ "total_cost_usd": 0.184154,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 40488,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 1102,
+  "output_tokens_details": {
+   "thinking_tokens": 746
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40488,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1102,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 40488,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 40488
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 6265,
+   "outputTokens": 14,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.0063349999999999995,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1102,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 40488,
+   "webSearchRequests": 0,
+   "costUSD": 0.177819,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 746,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-audience\",\"caught\":true,\"finding_title\":\"5a5cec370596 \u2014 Landing page never says who the product is for\"},{\"id\":\"jargon-fold\",\"caught\":true,\"finding_title\":\"ae4f9f37618a \u2014 Hero subhead is jargon the visitor cannot define\"},{\"id\":\"dead-cta\",\"caught\":true,\"finding_title\":\"8e030a76b0ac \u2014 The only path to seeing the product, See it in action, does nothing\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-audience",
+    "caught": true,
+    "finding_title": "5a5cec370596 \u2014 Landing page never says who the product is for"
+   },
+   {
+    "id": "jargon-fold",
+    "caught": true,
+    "finding_title": "ae4f9f37618a \u2014 Hero subhead is jargon the visitor cannot define"
+   },
+   {
+    "id": "dead-cta",
+    "caught": true,
+    "finding_title": "8e030a76b0ac \u2014 The only path to seeing the product, See it in action, does nothing"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 11228,
+ "type": "result",
+ "duration_ms": 16173,
+ "uuid": "fd5fba28-5c81-4099-8984-1313e4f5d219",
+ "ttft_stream_ms": 1440,
+ "time_to_request_ms": 364,
+ "first_content_frame_ms": 1814,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

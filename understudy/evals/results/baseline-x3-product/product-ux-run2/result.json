@@ -1,0 +1,77 @@
+{
+ "contract_pass": true,
+ "planted": 5,
+ "caught": 5,
+ "recall": 1.0,
+ "caught_ids": [
+  "empty-state-no-guidance",
+  "memories-invented",
+  "search-always-empty",
+  "webhook-toggle-unexplained",
+  "workspace-type-before-value"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 0,
+ "band_judged": 0,
+ "band_rows": [
+  {
+   "id": "workspace-type-before-value",
+   "severity": "",
+   "band": [
+    "P1"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "memories-invented",
+   "severity": "",
+   "band": [
+    "P0"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "empty-state-no-guidance",
+   "severity": "",
+   "band": [
+    "P2"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "search-always-empty",
+   "severity": "",
+   "band": [
+    "P1"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "webhook-toggle-unexplained",
+   "severity": "",
+   "band": [
+    "P2"
+   ],
+   "in_band": null
+  }
+ ],
+ "n_findings": 9,
+ "severities": {
+  "P0": 2,
+  "P1": 2,
+  "P2": 5,
+  "P3": 0
+ },
+ "score": 2,
+ "capture": "product",
+ "lens": "ux",
+ "model": "opus",
+ "run": 2,
+ "files_written": true,
+ "seconds": 342.90003,
+ "cost_usd": 2.1156345,
+ "lens_turns": 40,
+ "lens_error": false
+}

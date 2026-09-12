@@ -1,0 +1,112 @@
+{
+ "duration_api_ms": 173034,
+ "stop_reason": "end_turn",
+ "session_id": "315865f6-6796-46e9-9dd3-2592a95095ff",
+ "total_cost_usd": 1.383932,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 74219,
+  "cache_read_input_tokens": 589478,
+  "output_tokens": 13829,
+  "output_tokens_details": {
+   "thinking_tokens": 3002
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 74219,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 544,
+    "cache_read_input_tokens": 84530,
+    "cache_creation_input_tokens": 984,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 984
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1073,
+   "outputTokens": 21,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001178,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-opus-5": {
+   "inputTokens": 20,
+   "outputTokens": 13829,
+   "cacheReadInputTokens": 589478,
+   "cacheCreationInputTokens": 74219,
+   "webSearchRequests": 0,
+   "costUSD": 1.3827539999999998,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 3002,
+   "canonicalModel": "claude-opus-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 30,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed: 7 findings, 1 P0, IDs reproducible.\n\n**Verdict:** The site offers no way to start a free trial anywhere, so the stated goal is unreachable and both visitors left without a next step.\n\n**Count by severity:** P0 \u00d71 \u00b7 P1 \u00d73 \u00b7 P2 \u00d72 \u00b7 P3 \u00d71 \u2014 score 2/10.\n\n- **P0** \u2014 No self-serve trial exists; every path ends at \"Contact sales\" or \"Log in\"\n- **P1** \u2014 Pricing page has no numbers (evaluator gave up at 02:30) \u00b7 hero's only CTA is `href=\"#\"` and does nothing (both personas clicked) \u00b7 demo form is 7 fields, 5 required including phone, before any product is shown\n- **P2** \u2014 Newsletter band and \"Log in\" outrank the primary CTA \u00b7 About page (the strongest trust moment) has no onward action\n- **P3** \u2014 \"Contact sales\" lands on a \"Book a demo\" form\n\n**Dropped for want of evidence:** post-submission behaviour of the demo form (never submitted, by design); whether `app/login.html` has a signup path (never opened); mobile view of the newsletter band and demo form (sceptic went straight to the footer).\n\n**Capture note:** `03-demo-form.png` is a blank white frame \u2014 the form was scored from the served markup (`crawl/html/1-index.html:29-34`) and the session log, and the report says so.\n\nFiles written: `conversion/exec-summary.md`, `conversion/findings-final.md`. The gate also notes the manifest is still open (`phase: 2a-capture`) \u2014 that's for the orchestrator's `close_run.py`, not this lens.",
+ "ttft_ms": 3187,
+ "type": "result",
+ "duration_ms": 176823,
+ "uuid": "621299d8-8edc-46f6-af6b-5b0ee1874d77",
+ "ttft_stream_ms": 2561,
+ "time_to_request_ms": 396,
+ "first_content_frame_ms": 2709,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

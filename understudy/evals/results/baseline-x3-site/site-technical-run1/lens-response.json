@@ -1,0 +1,127 @@
+{
+ "duration_api_ms": 107318,
+ "stop_reason": "end_turn",
+ "session_id": "2e7bb8da-0a34-44d4-9370-d2539f10bff8",
+ "total_cost_usd": 0.4038782000000001,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 51042,
+  "cache_read_input_tokens": 525586,
+  "output_tokens": 9339,
+  "output_tokens_details": {
+   "thinking_tokens": 2977
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 51042,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 132,
+    "cache_read_input_tokens": 67646,
+    "cache_creation_input_tokens": 378,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 378
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1073,
+   "outputTokens": 18,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001163,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 20,
+   "outputTokens": 9339,
+   "cacheReadInputTokens": 525586,
+   "cacheCreationInputTokens": 51042,
+   "webSearchRequests": 0,
+   "costUSD": 0.40271520000000005,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 2977,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01YP2WwqsfxwDxfek1gswEaL",
+   "tool_input": {
+    "command": "cat /Users/dario/Repo/Understudy/understudy/references/severity-rubric.md 2>/dev/null | head -80; echo ---; cat /Users/dario/Repo/Understudy/understudy/references/report-template.md 2>/dev/null | head -150"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01N87xmn3QT7JEZmkjKRKT2t",
+   "tool_input": {
+    "command": "cd /Users/dario/Repo/Understudy/understudy\necho \"F1:\"\npython3 scripts/finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/assets/generated/hero.png\" --title \"Oversized hero image drives poor mobile LCP and 4 MB page weight\"\necho \"F2:\"\npython3 scripts/finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/style.css\" --title \"Render-blocking stylesheets delay first paint and inflate TBT on mobile\"\necho \"F3:\"\npython3 scripts/finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/style.css\" --title \"Static assets ship without compression or cache headers\"\necho \"F4:\"\npython3 scripts/finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/\" --title \"Uncaught ReferenceError fires on every load of the homepage\"\n"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 18,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed.\n\n**Verdict:** The homepage is carrying a 3.9 MB hero image that pushes mobile LCP to 5.8 s and total page weight to 4.1 MB, while the pricing page is fast and clean on both viewports.\n\n**Findings by severity:** P0: 0 \u00b7 P1: 1 \u00b7 P2: 2 \u00b7 P3: 1 (4 total, score 6/10)",
+ "ttft_ms": 2513,
+ "type": "result",
+ "duration_ms": 349481,
+ "uuid": "b84f26f9-5b65-41ab-b68d-237b0140a497",
+ "ttft_stream_ms": 2195,
+ "time_to_request_ms": 226,
+ "first_content_frame_ms": 2370,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

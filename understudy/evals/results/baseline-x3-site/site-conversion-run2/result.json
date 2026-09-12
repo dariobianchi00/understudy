@@ -1,0 +1,79 @@
+{
+ "contract_pass": true,
+ "planted": 5,
+ "caught": 5,
+ "recall": 1.0,
+ "caught_ids": [
+  "dead-cta",
+  "demo-form-burden",
+  "features-404",
+  "newsletter-louder",
+  "no-price"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 4,
+ "band_judged": 5,
+ "band_rows": [
+  {
+   "id": "no-price",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "demo-form-burden",
+   "severity": "P1",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "newsletter-louder",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "dead-cta",
+   "severity": "P1",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "features-404",
+   "severity": "P2",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  }
+ ],
+ "n_findings": 8,
+ "severities": {
+  "P0": 1,
+  "P1": 3,
+  "P2": 3,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "site",
+ "lens": "conversion",
+ "model": "opus",
+ "run": 2,
+ "files_written": true,
+ "seconds": 692.564721,
+ "cost_usd": 1.9368805,
+ "lens_turns": 32,
+ "lens_error": false
+}

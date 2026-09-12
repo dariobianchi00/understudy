@@ -1,0 +1,149 @@
+{
+ "duration_api_ms": 11783,
+ "stop_reason": "tool_use",
+ "session_id": "81979e8c-74a8-41c9-b31d-98856a6de398",
+ "total_cost_usd": 0.17703,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 39375,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 909,
+  "output_tokens_details": {
+   "thinking_tokens": 509
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39375,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 909,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 39375,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 39375
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5513,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005593,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 909,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 39375,
+   "webSearchRequests": 0,
+   "costUSD": 0.171437,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 509,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-audience\",\"caught\":true,\"finding_title\":\"369996aec440 \u2014 Fold names no audience; 'Loved by teams' and 'Starter: For individuals.' leave who-for unanswered\"},{\"id\":\"jargon-fold\",\"caught\":true,\"finding_title\":\"03f0a02fe269 \u2014 Hero subhead is two undefined terms: 'bi-directional sync graph' and 'zero-knowledge vault'\"},{\"id\":\"dead-cta\",\"caught\":true,\"finding_title\":\"5d08b9fba56e \u2014 'See it in action', the only route to seeing the product, does nothing on click or tap\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-audience",
+    "caught": true,
+    "finding_title": "369996aec440 \u2014 Fold names no audience; 'Loved by teams' and 'Starter: For individuals.' leave who-for unanswered"
+   },
+   {
+    "id": "jargon-fold",
+    "caught": true,
+    "finding_title": "03f0a02fe269 \u2014 Hero subhead is two undefined terms: 'bi-directional sync graph' and 'zero-knowledge vault'"
+   },
+   {
+    "id": "dead-cta",
+    "caught": true,
+    "finding_title": "5d08b9fba56e \u2014 'See it in action', the only route to seeing the product, does nothing on click or tap"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 8119,
+ "type": "result",
+ "duration_ms": 13456,
+ "uuid": "b8ff5f38-28d6-4bf4-ab50-4807e6cd301a",
+ "ttft_stream_ms": 1411,
+ "time_to_request_ms": 410,
+ "first_content_frame_ms": 1963,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

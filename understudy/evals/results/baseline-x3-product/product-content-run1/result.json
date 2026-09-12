@@ -1,0 +1,68 @@
+{
+ "contract_pass": true,
+ "planted": 4,
+ "caught": 4,
+ "recall": 1.0,
+ "caught_ids": [
+  "memories-invented",
+  "naming-inconsistent",
+  "promise-mismatch",
+  "webhook-toggle-unexplained"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 0,
+ "band_judged": 0,
+ "band_rows": [
+  {
+   "id": "memories-invented",
+   "severity": "",
+   "band": [
+    "P0"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "webhook-toggle-unexplained",
+   "severity": "",
+   "band": [
+    "P2"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "naming-inconsistent",
+   "severity": "",
+   "band": [
+    "P3"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "promise-mismatch",
+   "severity": "",
+   "band": [
+    "P1"
+   ],
+   "in_band": null
+  }
+ ],
+ "n_findings": 10,
+ "severities": {
+  "P0": 2,
+  "P1": 3,
+  "P2": 4,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "product",
+ "lens": "content",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 616.579641,
+ "cost_usd": 2.2591075,
+ "lens_turns": 45,
+ "lens_error": false
+}

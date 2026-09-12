@@ -1,0 +1,159 @@
+{
+ "duration_api_ms": 13927,
+ "stop_reason": "tool_use",
+ "session_id": "2993affc-0ee9-41e2-a0f2-5565ebc4dd8d",
+ "total_cost_usd": 0.17971600000000001,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 39765,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 1055,
+  "output_tokens_details": {
+   "thinking_tokens": 617
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39765,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1055,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 39765,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 39765
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5184,
+   "outputTokens": 15,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005259000000000001,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1055,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 39765,
+   "webSearchRequests": 0,
+   "costUSD": 0.174457,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 617,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"Pricing page shows no numbers, so the visitor cannot work out what they would pay\"},{\"id\":\"demo-form-burden\",\"caught\":true,\"finding_title\":\"Demo form demands 7 fields, 5 required including phone, before any product is shown\"},{\"id\":\"newsletter-louder\",\"caught\":true,\"finding_title\":\"Newsletter box and Log in outrank the primary call to action in visual weight\"},{\"id\":\"dead-cta\",\"caught\":true,\"finding_title\":\"The only above-fold call to action goes nowhere, leaving the fold with no next step\"},{\"id\":\"features-404\",\"caught\":false,\"finding_title\":\"\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "Pricing page shows no numbers, so the visitor cannot work out what they would pay"
+   },
+   {
+    "id": "demo-form-burden",
+    "caught": true,
+    "finding_title": "Demo form demands 7 fields, 5 required including phone, before any product is shown"
+   },
+   {
+    "id": "newsletter-louder",
+    "caught": true,
+    "finding_title": "Newsletter box and Log in outrank the primary call to action in visual weight"
+   },
+   {
+    "id": "dead-cta",
+    "caught": true,
+    "finding_title": "The only above-fold call to action goes nowhere, leaving the fold with no next step"
+   },
+   {
+    "id": "features-404",
+    "caught": false,
+    "finding_title": ""
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 10267,
+ "type": "result",
+ "duration_ms": 15306,
+ "uuid": "8a719f63-60c3-4c1a-a97b-2b4137452d32",
+ "ttft_stream_ms": 2541,
+ "time_to_request_ms": 250,
+ "first_content_frame_ms": 3061,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

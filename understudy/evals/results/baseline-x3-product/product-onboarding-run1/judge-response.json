@@ -1,0 +1,144 @@
+{
+ "duration_api_ms": 13124,
+ "stop_reason": "tool_use",
+ "session_id": "2f88c5a6-670f-426a-869e-c1e2177025c5",
+ "total_cost_usd": 0.181929,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 40415,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 921,
+  "output_tokens_details": {
+   "thinking_tokens": 582
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40415,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 921,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 40415,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 40415
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 6122,
+   "outputTokens": 18,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.006212,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 921,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 40415,
+   "webSearchRequests": 0,
+   "costUSD": 0.175717,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 582,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"workspace-type-before-value\",\"caught\":true,\"finding_title\":\"fd024b4b3a47-a \u2014 Irreversible \\\"workspace type\\\" choice between three unexplained terms gates the product before the first screen\"},{\"id\":\"empty-state-no-guidance\",\"caught\":true,\"finding_title\":\"a829a497d844 \u2014 Empty dashboard says \\\"Nothing here yet.\\\" with no call to action \u2014 the first note is a hunt, not a step\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "workspace-type-before-value",
+    "caught": true,
+    "finding_title": "fd024b4b3a47-a \u2014 Irreversible \"workspace type\" choice between three unexplained terms gates the product before the first screen"
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "caught": true,
+    "finding_title": "a829a497d844 \u2014 Empty dashboard says \"Nothing here yet.\" with no call to action \u2014 the first note is a hunt, not a step"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 9834,
+ "type": "result",
+ "duration_ms": 14090,
+ "uuid": "f5fcc4f0-5d59-4495-936b-134aca62b2d7",
+ "ttft_stream_ms": 2312,
+ "time_to_request_ms": 260,
+ "first_content_frame_ms": 2819,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

@@ -1,0 +1,95 @@
+{
+ "contract_pass": true,
+ "planted": 7,
+ "caught": 7,
+ "recall": 1.0,
+ "caught_ids": [
+  "duplicate-titles",
+  "features-404",
+  "heading-structure",
+  "invalid-jsonld",
+  "pricing-no-meta-description",
+  "pricing-noindex",
+  "sitemap-404"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 5,
+ "band_judged": 7,
+ "band_rows": [
+  {
+   "id": "pricing-noindex",
+   "severity": "P0",
+   "band": [
+    "P0"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "sitemap-404",
+   "severity": "P2",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "features-404",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "duplicate-titles",
+   "severity": "P1",
+   "band": [
+    "P2"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "heading-structure",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "invalid-jsonld",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "pricing-no-meta-description",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 9,
+ "severities": {
+  "P0": 1,
+  "P1": 2,
+  "P2": 5,
+  "P3": 1
+ },
+ "score": 3,
+ "capture": "site",
+ "lens": "seo",
+ "model": "sonnet",
+ "run": 2,
+ "files_written": true,
+ "seconds": 261.183342,
+ "cost_usd": 0.7010915999999999,
+ "lens_turns": 25,
+ "lens_error": false
+}

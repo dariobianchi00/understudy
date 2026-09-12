@@ -1,0 +1,786 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 3,
+  "recall": 0.75,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast"
+  ],
+  "missed_ids": [
+   "search-always-empty"
+  ],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 2,
+  "band_judged": 3,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "P3",
+    "band": [
+     "P3"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 3,
+  "severities": {
+   "P0": 2,
+   "P1": 0,
+   "P2": 0,
+   "P3": 1
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 361.166922,
+  "cost_usd": 0.7193522,
+  "lens_turns": 29,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast",
+   "search-always-empty"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "Memories panel presents fabricated personal facts as real"
+  ],
+  "band_ok": 1,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 3,
+  "severities": {
+   "P0": 1,
+   "P1": 1,
+   "P2": 1,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 2,
+  "files_written": true,
+  "seconds": 233.373848,
+  "cost_usd": 0.5633736,
+  "lens_turns": 24,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast",
+   "search-always-empty"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 1,
+  "band_judged": 3,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "",
+    "band": [
+     "P3"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 3,
+  "severities": {
+   "P0": 2,
+   "P1": 0,
+   "P2": 1,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 3,
+  "files_written": true,
+  "seconds": 488.740289,
+  "cost_usd": 0.6712778,
+  "lens_turns": 28,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "",
+    "band": [
+     "P0"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "",
+    "band": [
+     "P3"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 10,
+  "severities": {
+   "P0": 2,
+   "P1": 3,
+   "P2": 4,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 616.579641,
+  "cost_usd": 2.2591075,
+  "lens_turns": 45,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "",
+    "band": [
+     "P0"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "",
+    "band": [
+     "P3"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 2,
+   "P1": 3,
+   "P2": 3,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 2,
+  "files_written": true,
+  "seconds": 624.99889,
+  "cost_usd": 2.2388985,
+  "lens_turns": 33,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 2,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "P1",
+    "band": [
+     "P0"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 10,
+  "severities": {
+   "P0": 2,
+   "P1": 3,
+   "P2": 3,
+   "P3": 2
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 3,
+  "files_written": true,
+  "seconds": 597.806116,
+  "cost_usd": 2.0224035000000007,
+  "lens_turns": 38,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 7,
+  "severities": {
+   "P0": 1,
+   "P1": 1,
+   "P2": 4,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 576.644242,
+  "cost_usd": 2.2394100000000003,
+  "lens_turns": 30,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 7,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 3,
+   "P3": 1
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 2,
+  "files_written": true,
+  "seconds": 778.367837,
+  "cost_usd": 2.5048535000000007,
+  "lens_turns": 34,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 2,
+  "band_judged": 2,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 6,
+  "severities": {
+   "P0": 1,
+   "P1": 2,
+   "P2": 2,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 3,
+  "files_written": true,
+  "seconds": 571.52773,
+  "cost_usd": 1.8342675000000006,
+  "lens_turns": 39,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 2,
+  "band_judged": 5,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P3",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "memories-invented",
+    "severity": "P1",
+    "band": [
+     "P0"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 10,
+  "severities": {
+   "P0": 2,
+   "P1": 2,
+   "P2": 5,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 385.869137,
+  "cost_usd": 2.383916,
+  "lens_turns": 48,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "memories-invented",
+    "severity": "",
+    "band": [
+     "P0"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 2,
+   "P1": 2,
+   "P2": 5,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 2,
+  "files_written": true,
+  "seconds": 342.90003,
+  "cost_usd": 2.1156345,
+  "lens_turns": 40,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "memories-invented",
+    "severity": "",
+    "band": [
+     "P0"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 2,
+   "P1": 2,
+   "P2": 4,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 3,
+  "files_written": true,
+  "seconds": 474.40978,
+  "cost_usd": 2.062785,
+  "lens_turns": 43,
+  "lens_error": false
+ }
+]

@@ -1,0 +1,120 @@
+{
+ "duration_api_ms": 99341,
+ "stop_reason": "end_turn",
+ "session_id": "c0409ae6-34e4-4efd-bacc-ee1d5642a55f",
+ "total_cost_usd": 0.39397440000000006,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 50191,
+  "cache_read_input_tokens": 482142,
+  "output_tokens": 9560,
+  "output_tokens_details": {
+   "thinking_tokens": 2500
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 50191,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 127,
+    "cache_read_input_tokens": 66794,
+    "cache_creation_input_tokens": 379,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 379
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1077,
+   "outputTokens": 13,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001142,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 20,
+   "outputTokens": 9560,
+   "cacheReadInputTokens": 482142,
+   "cacheCreationInputTokens": 50191,
+   "webSearchRequests": 0,
+   "costUSD": 0.39283239999999997,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 2500,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01YS4bWtKrwXqTfAEmmL62uW",
+   "tool_input": {
+    "command": "cd /var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-eval-site-seo-8_rv6mg0/site && for f in crawl/pages/*.json; do echo \"=== $f ===\"; cat \"$f\"; echo; done"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 17,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed.\n\n**Verdict:** The pricing page is deliberately hidden from search engines, the primary nav points at a 404 on every page, and the declared sitemap does not exist \u2014 a crawler that respects robots.txt gets none of the site's real content map.\n\n**Findings by severity:** 1 P0 \u00b7 1 P1 \u00b7 3 P2 \u00b7 4 P3 (9 total)",
+ "ttft_ms": 1738,
+ "type": "result",
+ "duration_ms": 222243,
+ "uuid": "2209a3bd-54c8-4728-a654-c29b52061546",
+ "ttft_stream_ms": 1089,
+ "time_to_request_ms": 233,
+ "first_content_frame_ms": 1450,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

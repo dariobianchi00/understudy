@@ -1,0 +1,159 @@
+{
+ "duration_api_ms": 17311,
+ "stop_reason": "tool_use",
+ "session_id": "20feee51-2280-4e8f-bd6a-10a5ebcf7713",
+ "total_cost_usd": 0.178814,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 39167,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 1196,
+  "output_tokens_details": {
+   "thinking_tokens": 768
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39167,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1196,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 39167,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 39167
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5259,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005339,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1196,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 39167,
+   "webSearchRequests": 0,
+   "costUSD": 0.173475,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 768,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"Pricing page shows no price on any of its three plans\"},{\"id\":\"demo-form-burden\",\"caught\":true,\"finding_title\":\"Demo form demands 7 fields, 5 required including phone, before any product is shown\"},{\"id\":\"newsletter-louder\",\"caught\":true,\"finding_title\":\"Newsletter box outweighs the only product call to action\"},{\"id\":\"dead-cta\",\"caught\":true,\"finding_title\":\"Hero call to action See it in action does nothing when clicked\"},{\"id\":\"features-404\",\"caught\":true,\"finding_title\":\"Features nav link lands on a bare 404 with no route back\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "Pricing page shows no price on any of its three plans"
+   },
+   {
+    "id": "demo-form-burden",
+    "caught": true,
+    "finding_title": "Demo form demands 7 fields, 5 required including phone, before any product is shown"
+   },
+   {
+    "id": "newsletter-louder",
+    "caught": true,
+    "finding_title": "Newsletter box outweighs the only product call to action"
+   },
+   {
+    "id": "dead-cta",
+    "caught": true,
+    "finding_title": "Hero call to action See it in action does nothing when clicked"
+   },
+   {
+    "id": "features-404",
+    "caught": true,
+    "finding_title": "Features nav link lands on a bare 404 with no route back"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 13699,
+ "type": "result",
+ "duration_ms": 18625,
+ "uuid": "7f5ddb83-201e-4a7a-9dae-0005a6c31b1e",
+ "ttft_stream_ms": 4582,
+ "time_to_request_ms": 224,
+ "first_content_frame_ms": 5040,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
