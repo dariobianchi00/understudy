@@ -7,10 +7,14 @@
  "hygiene_failures": [],
  "judge": {
   "pass": true,
-  "reason": "The reply correctly states 2 captures \u2014 one Mode A-visit shared by clarity/conversion/trust and one Mode C crawl for seo \u2014 without proposing per-lens captures, and did not start anything or interview.",
-  "cost": 0.14622459999999998
+  "reason": "The answer correctly states 2 captures \u2014 one Mode A-visit capture shared by clarity/conversion/trust, and one Mode C crawl for seo \u2014 without proposing per-lens captures.",
+  "cost": 0.14659260000000002
  },
- "tools_called": [],
- "reply": "**2 captures.**\n\n| Mode | Capture | Feeds these lenses |\n|---|---|---|\n| **A-visit** (persona-driven site visit) | 1 | clarity, conversion, trust |\n| **C** (sessionless crawl) | 1 | seo |\n\nClarity, conversion and trust all read the same Mode A-visit evidence, so they share one traversal rather than needing three. SEO is the only one that needs the Mode C crawl. No Mode B (measure) and no Mode D (compare) are implied by those four objectives.\n\nOne caveat on the arithmetic: Mode A-visit runs one persona per capture. The 2 above assumes a single persona. If the run plan ends up with N personas, it's 1 crawl + N visits.\n\nNothing has been started.",
- "cost_usd": 0.3306
+ "tools_called": [
+  "Bash",
+  "Glob",
+  "Grep"
+ ],
+ "reply": "**2 captures**, in 2 modes:\n\n| # | Mode | Lenses scored from it | Session |\n|---|------|------------------------|---------|\n| 1 | **Mode A-visit** \u2014 one persona visits the site with a question | clarity, conversion, trust | persona-driven, ~15\u201325 min cap |\n| 2 | **Mode C** \u2014 crawl | seo | no session, no persona |\n\nHow it adds up: clarity, conversion and trust all read from the same A-visit evidence, so they cost one pass together, not three. SEO is a different mode (static markup crawl), so it needs its own pass. Nothing needs Mode B (technical/measure) or Mode D (compare).\n\nOne assumption baked into that number: **one persona**. Mode A-visit runs once per persona, so with N personas it becomes N + 1 captures (the crawl never multiplies). Since you asked me not to interview, I've counted the single-persona case.\n\nNothing has been started.",
+ "cost_usd": 0.4158
 }

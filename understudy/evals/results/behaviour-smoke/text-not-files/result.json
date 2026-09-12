@@ -7,14 +7,13 @@
  "hygiene_failures": [],
  "judge": {
   "pass": true,
-  "reason": "The assistant reported writing exactly the two files verbatim, split at the lens's own boundary markers, with no added commentary, verdict, or findings, then stopped as instructed.",
-  "cost": 0.1505356
+  "reason": "The reply only states the files persisted verbatim by boundary, adds no verdict, findings, or edits of its own, and stops as instructed.",
+  "cost": 0.1491166
  },
  "tools_called": [
-  "Grep",
   "Write",
   "Write"
  ],
- "reply": "Persisted both files verbatim into `2026-09-08-run-fixture01/clarity/`:\n\n- `exec-summary.md`\n- `findings-final.md`\n\nSplit at the lens's `--- <name> ---` markers, content unchanged. Stopping here.",
- "cost_usd": 0.4187
+ "reply": "Persisted verbatim, split at the lens's `--- filename ---` boundaries:\n\n- `2026-09-08-run-fixture01/clarity/exec-summary.md`\n- `2026-09-08-run-fixture01/clarity/findings-final.md`\n\nStopping here.",
+ "cost_usd": 0.3774
 }

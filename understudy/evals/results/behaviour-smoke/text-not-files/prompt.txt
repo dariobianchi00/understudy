@@ -1,4 +1,4 @@
-A clarity lens returned its report as text instead of writing files (the host blocked subagent writes). Persist it into /var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-beh-text-not-files-5a_mpd4q/2026-09-08-run-fixture01/clarity/ per commands/run.md §3.4 — split at the lens's own boundary, verbatim, change nothing. Then stop.
+A clarity lens returned its report as text instead of writing files (the host blocked subagent writes). Persist it into /var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-beh-text-not-files-nnpfux9t/2026-09-08-run-fixture01/clarity/ per commands/run.md §3.4 — split at the lens's own boundary, verbatim, change nothing. Then stop.
 
 --- exec-summary.md ---
 # Nimbus Notes — clarity — Run 2026-09-08 (fixture01)
