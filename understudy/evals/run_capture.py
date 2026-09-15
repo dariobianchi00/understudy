@@ -46,6 +46,17 @@ import sys
 import tempfile
 import time
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 PLUGIN = os.path.normpath(os.path.join(HERE, ".."))
 SCRIPTS = os.path.join(PLUGIN, "scripts")
@@ -110,7 +121,7 @@ output_dir: {out_dir}
 def init_run(port, persona, tmp):
     out = os.path.join(tmp, "runs")
     tp = os.path.join(tmp, "target.yaml")
-    open(tp, "w").write(target_yaml(port, persona, out))
+    _write(tp, target_yaml(port, persona, out))
     p = subprocess.run([sys.executable, os.path.join(SCRIPTS, "init_run.py"), "--target", tp,
                         "--traversal-model", "capture-eval"], capture_output=True, text=True)
     if p.returncode:
@@ -121,9 +132,9 @@ def init_run(port, persona, tmp):
 # ---------------------------------------------------------------- prompts --
 
 def system_prompt(persona, run, port):
-    skill = open(os.path.join(PLUGIN, "skills", "traversal-visit", "SKILL.md")).read()
+    skill = _read(os.path.join(PLUGIN, "skills", "traversal-visit", "SKILL.md"))
     skill = skill.split("---", 2)[2] if skill.startswith("---") else skill
-    refs = "\n\n".join(f"<!-- references/{r} -->\n" + open(os.path.join(PLUGIN, "references", r)).read()
+    refs = "\n\n".join(f"<!-- references/{r} -->\n" + _read(os.path.join(PLUGIN, "references", r))
                        for r in SKILL_REFS)
     p = PERSONAS[persona]
     w, h = p["viewport"]
@@ -162,7 +173,7 @@ def grade(run, persona, cwd, t_start, t_end):
         fails.append("check_capture failed")
 
     log_path = os.path.join(pdir, "session.log")
-    log = open(log_path, errors="replace").read() if os.path.exists(log_path) else ""
+    log = _read(log_path, errors="replace") if os.path.exists(log_path) else ""
     shots_dir = os.path.join(pdir, "screenshots")
     shots = sorted(glob.glob(os.path.join(shots_dir, "*.png")))
     facts["screenshots"] = len(shots)
@@ -176,7 +187,7 @@ def grade(run, persona, cwd, t_start, t_end):
     for extra in ("findings-raw.json", "timeline.json", "persona-debrief.md"):
         ep = os.path.join(pdir, extra)
         if os.path.exists(ep):
-            cited_in += "\n" + open(ep, errors="replace").read()
+            cited_in += "\n" + _read(ep, errors="replace")
     named = set(re.findall(r"\b(\d\d-[\w-]+\.png)", cited_in))
     on_disk = {os.path.basename(s) for s in shots}
     if named - on_disk:
@@ -206,7 +217,7 @@ def grade(run, persona, cwd, t_start, t_end):
 
     tl_path = os.path.join(pdir, "timeline.json")
     try:
-        tl = json.load(open(tl_path))
+        tl = json.loads(_read(tl_path))
     except (OSError, ValueError):
         tl = {}
         fails.append("timeline.json missing or invalid")
@@ -214,7 +225,7 @@ def grade(run, persona, cwd, t_start, t_end):
     if v3.get("forms_submitted") not in (0, None):
         fails.append(f"timeline says forms_submitted={v3.get('forms_submitted')}")
     net_path = os.path.join(pdir, "network-full.txt")
-    net = open(net_path, errors="replace").read() if os.path.exists(net_path) else ""
+    net = _read(net_path, errors="replace") if os.path.exists(net_path) else ""
     posts = [l for l in net.splitlines() if re.search(r"\bPOST\b", l) and "localhost" in l]
     if posts:
         fails.append(f"POST to the site in the network dump: {posts[0][:80]}")
@@ -225,7 +236,7 @@ def grade(run, persona, cwd, t_start, t_end):
     facts["left_early"] = tl.get("left_early")
 
     deb_path = os.path.join(pdir, "persona-debrief.md")
-    deb = open(deb_path, errors="replace").read() if os.path.exists(deb_path) else ""
+    deb = _read(deb_path, errors="replace") if os.path.exists(deb_path) else ""
     missing_q = [q for q in ("Q1", "Q2", "Q3", "Q4", "Q5", "Q6") if q not in deb]
     if missing_q:
         fails.append(f"debrief missing {', '.join(missing_q)}")
@@ -313,7 +324,7 @@ def main():
     tmp = tempfile.mkdtemp(prefix="understudy-capture-")
     run = init_run(a.port, a.persona, tmp)
     sysp = system_prompt(a.persona, run, a.port)
-    open(os.path.join(out_dir, "system-prompt.txt"), "w").write(sysp)
+    _write(os.path.join(out_dir, "system-prompt.txt"), sysp)
     if a.dry_run:
         print(f"dry-run: run folder {run}; prompts in {out_dir}")
         shutil.rmtree(tmp, ignore_errors=True)
@@ -336,7 +347,7 @@ def main():
     finally:
         server.kill()
     t1 = time.time()
-    open(os.path.join(out_dir, "agent-response.json"), "w").write(json.dumps(res, indent=1))
+    _write(os.path.join(out_dir, "agent-response.json"), json.dumps(res, indent=1))
 
     if NOT_USABLE.search(res.get("result") or ""):
         print(f"SKIPPED — claude not usable: {(res.get('result') or '')[:100]}")
@@ -349,9 +360,9 @@ def main():
               "console-full.txt", "network-full.txt"):
         if os.path.exists(os.path.join(pdir, f)):
             shutil.copy(os.path.join(pdir, f), out_dir)
-    log = open(os.path.join(pdir, "session.log"), errors="replace").read() \
+    log = _read(os.path.join(pdir, "session.log"), errors="replace") \
         if os.path.exists(os.path.join(pdir, "session.log")) else ""
-    deb = open(os.path.join(pdir, "persona-debrief.md"), errors="replace").read() \
+    deb = _read(os.path.join(pdir, "persona-debrief.md"), errors="replace") \
         if os.path.exists(os.path.join(pdir, "persona-debrief.md")) else ""
     jd = judge_persona(log, deb, a.judge_model) if log else None
 

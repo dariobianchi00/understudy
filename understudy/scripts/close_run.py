@@ -29,6 +29,11 @@ import finding_id   # noqa: E402
 import run_layout   # noqa: E402
 
 
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 def _count(pattern):
     return len(glob.glob(pattern))
 
@@ -79,7 +84,7 @@ def survey(run):
                 _count(os.path.join(full, "html", "*"))
             if not n:
                 try:
-                    idx = json.load(open(os.path.join(full, "index.json")))
+                    idx = json.loads(_read(os.path.join(full, "index.json")))
                     n = len(idx.get("pages") or idx.get("crawled") or [])
                 except Exception:
                     n = 0
@@ -118,7 +123,7 @@ def scored(run):
     real finding headings, not every `###` in the file."""
     out = {}
     for lens in run_layout.lens_dirs(run):
-        text = open(os.path.join(run, lens, "findings-final.md"), errors="replace").read()
+        text = _read(os.path.join(run, lens, "findings-final.md"), errors="replace")
         cut = re.search(r"^##\s+Dropped for want of evidence", text, re.M)
         if cut:
             text = text[:cut.start()]
@@ -140,7 +145,7 @@ def main():
     if not os.path.exists(path):
         sys.exit(f"no manifest.json in {run} — init_run.py writes it at run start")
 
-    m = json.load(open(path))
+    m = json.loads(_read(path))
     m["captures"] = survey(run)
     m["findings"] = scored(run)
     m["phase"] = a.phase

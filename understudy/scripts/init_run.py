@@ -20,10 +20,15 @@ import uuid
 from datetime import datetime, timezone
 
 
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 def load_target(path):
     """Read the target file. Uses PyYAML when present, else a narrow fallback
     parser covering the subset of YAML the target schema actually uses."""
-    text = open(os.path.expanduser(path)).read()
+    text = _read(os.path.expanduser(path))
     try:
         import yaml
         return yaml.safe_load(text)
@@ -366,7 +371,7 @@ def _version():
     here = os.path.dirname(os.path.abspath(__file__))
     plugin = os.path.join(here, "..", ".claude-plugin", "plugin.json")
     try:
-        return json.load(open(plugin)).get("version")
+        return json.loads(_read(plugin)).get("version")
     except Exception:
         return None
 

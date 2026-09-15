@@ -48,6 +48,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import finding_id  # noqa: E402
 import run_layout  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 MAX_EMBED_BYTES = 40 * 1024 * 1024
 
 
@@ -78,7 +84,7 @@ def embed(images_used):
     rules, total = [], 0
     for rel, path in sorted(images_used.items()):
         try:
-            raw = open(path, "rb").read()
+            raw = _read(path, "rb")
         except OSError:
             continue
         total += len(raw)
@@ -325,7 +331,7 @@ def read_score(run, lens_dir):
     path = os.path.join(run, lens_dir, "exec-summary.md")
     if not os.path.exists(path):
         return None
-    m = SCORE.search(open(path, errors="replace").read())
+    m = SCORE.search(_read(path, errors="replace"))
     if not m:
         return None
     return {"score": max(0, min(10, int(m.group(1)))), "why": m.group(2).strip()}
@@ -446,7 +452,7 @@ def comparison_section(run, meta, images, used, prefix="cmp-"):
     path = os.path.join(run, "compare", "exec-summary.md")
     if not os.path.exists(path):
         return ""
-    md = open(path, errors="replace").read()
+    md = _read(path, errors="replace")
     m = re.search(r"^##\s+Differences matrix\s*$", md, re.M)
     if not m:
         return ""
@@ -852,7 +858,7 @@ def write_dense_markdown(run, docs):
     for path in docs:
         rel = os.path.relpath(path, run)
         parts.append(f"<!-- source: {rel} -->\n\n"
-                     + open(path, errors="replace").read().rstrip() + "\n")
+                     + _read(path, errors="replace").rstrip() + "\n")
     out = os.path.join(run, "report-full.md")
     with open(out, "w") as f:
         f.write("\n\n---\n\n".join(parts))
@@ -890,7 +896,7 @@ def main():
     title = os.path.basename(run)
     meta, subtitle, provenance = {}, "", ""
     try:
-        meta = json.load(open(os.path.join(run, "manifest.json")))
+        meta = json.loads(_read(os.path.join(run, "manifest.json")))
         title = f"{meta.get('product_name') or meta.get('target_slug')} — understudy"
         subtitle = human_date(meta.get("started_utc"))
         provenance = (f"run {meta.get('run_id')} · traversal model "
@@ -912,7 +918,7 @@ def main():
     # found. Rendering happens in pass 2, after that order is known.
     entries = []
     for n, path in enumerate(docs):
-        md = open(path, errors="replace").read()
+        md = _read(path, errors="replace")
         prefix = f"d{n}-"
         rel = os.path.relpath(path, run)
         h1 = re.search(r"^#\s+(.*)", md, re.M)
@@ -969,7 +975,7 @@ def main():
     objectives_html = ""
     obj_path = os.path.join(run, "objectives", "results.md")
     if os.path.exists(obj_path):
-        obj_md = re.sub(r"^#\s+.*\n", "", open(obj_path, errors="replace").read(), count=1)
+        obj_md = re.sub(r"^#\s+.*\n", "", _read(obj_path, errors="replace"), count=1)
         objectives_html = render_markdown(obj_md, images, used, "obj-")
 
     shared = corroborate(ours)

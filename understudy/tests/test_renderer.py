@@ -16,6 +16,17 @@ import fixtures as fx
 sys.path.insert(0, fx.SCRIPTS)
 import render_report as rr  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 RENDER = os.path.join(fx.SCRIPTS, "render_report.py")
 
 
@@ -150,7 +161,7 @@ class Objectives(unittest.TestCase):
                      "# Objectives\n\nOne of one met.\n\n## Results\n| # | Objective | Verdict |\n"
                      "|---|---|---|\n| 1 | Find the price | **Not achieved** |\n")
             p = os.path.join(run, "exec-summary.md")
-            open(p, "w").write(open(p).read().replace("## Contents\n\n", "## Contents\n\n## Objectives\n\n"))
+            _write(p, _read(p).replace("## Contents\n\n", "## Contents\n\n## Objectives\n\n"))
             html = render(run, "summary")
             i = html.find("Objectives</h2>")
             self.assertGreater(i, 0)

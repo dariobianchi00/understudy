@@ -15,17 +15,18 @@ PLUGIN = os.path.join(ROOT, "understudy")
 
 
 def read(*p):
-    return open(os.path.join(ROOT, *p), errors="replace").read()
+    with open(os.path.join(ROOT, *p), errors="replace") as fh:
+        return fh.read()
 
 
 class Versions(unittest.TestCase):
     def test_plugin_and_marketplace_agree(self):
-        a = json.load(open(os.path.join(PLUGIN, ".claude-plugin", "plugin.json")))["version"]
-        b = json.load(open(os.path.join(ROOT, ".claude-plugin", "marketplace.json")))["version"]
+        a = json.loads(read(os.path.join(PLUGIN, ".claude-plugin", "plugin.json")))["version"]
+        b = json.loads(read(os.path.join(ROOT, ".claude-plugin", "marketplace.json")))["version"]
         self.assertEqual(a, b)
 
     def test_readme_names_the_current_version(self):
-        v = json.load(open(os.path.join(PLUGIN, ".claude-plugin", "plugin.json")))["version"]
+        v = json.loads(read(os.path.join(PLUGIN, ".claude-plugin", "plugin.json")))["version"]
         self.assertIn(f"v{v}", read("README.md"))
 
 
@@ -34,7 +35,7 @@ class References(unittest.TestCase):
         """`${CLAUDE_PLUGIN_ROOT}/x/y.md` in an agent or skill must be a file."""
         missing = []
         for f in glob.glob(os.path.join(PLUGIN, "**", "*.md"), recursive=True):
-            for m in re.finditer(r"\$\{CLAUDE_PLUGIN_ROOT\}/([\w./-]+)", open(f).read()):
+            for m in re.finditer(r"\$\{CLAUDE_PLUGIN_ROOT\}/([\w./-]+)", read(f)):
                 p = os.path.join(PLUGIN, m.group(1))
                 if not os.path.exists(p) and not os.path.exists(p.rstrip("/")):
                     missing.append((os.path.relpath(f, ROOT), m.group(1)))
@@ -47,7 +48,7 @@ class References(unittest.TestCase):
         for f in glob.glob(os.path.join(PLUGIN, "**", "*"), recursive=True):
             if not f.endswith((".md", ".py")):
                 continue
-            for m in re.finditer(r"CLAUDE\.md[,\s]+(?:§\s*(\d+(?:\.\d+)?)|Phase (\d+))", open(f).read()):
+            for m in re.finditer(r"CLAUDE\.md[,\s]+(?:§\s*(\d+(?:\.\d+)?)|Phase (\d+))", read(f)):
                 if m.group(2) or m.group(1) not in sections:
                     bad.append((os.path.relpath(f, ROOT), m.group(0)))
         self.assertEqual(bad, [])
@@ -59,7 +60,7 @@ class References(unittest.TestCase):
 
     def test_lens_frontmatter_never_inherits(self):
         for f in glob.glob(os.path.join(PLUGIN, "agents", "*.md")):
-            head = open(f).read().split("---")[1]
+            head = read(f).split("---")[1]
             m = re.search(r"^model:\s*(\S+)", head, re.M)
             self.assertIsNotNone(m, f)
             self.assertNotEqual(m.group(1), "inherit", f)

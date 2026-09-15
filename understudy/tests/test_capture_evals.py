@@ -14,6 +14,16 @@ sys.path.insert(0, EVALS)
 import run_capture as rc  # noqa: E402
 
 
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 def good_run(t, persona="evaluator"):
     run = fx.clean_run(t, with_lens=False)
     fx.manifest(run, personas=[{"name": persona, "device": "desktop-1440x900"}], objectives=["clarity"])
@@ -59,7 +69,7 @@ class Graders(unittest.TestCase):
     def test_unnamed_screenshot_fails(self):
         with tempfile.TemporaryDirectory() as t:
             run, pdir, t0, t1 = good_run(t)
-            open(os.path.join(pdir, "screenshots", "09-stray.png"), "wb").write(fx.PNG)
+            fx.write_png(os.path.join(pdir, "screenshots", "09-stray.png"))
             fails, _ = rc.grade(run, "evaluator", t, t0, t1)
             self.assertTrue(any("no artifact names" in f for f in fails), fails)
 
@@ -67,8 +77,8 @@ class Graders(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             run, pdir, t0, t1 = good_run(t)
             p = os.path.join(pdir, "session.log")
-            lines = open(p).read().splitlines()
-            open(p, "w").write("\n".join(lines[2:3] + lines[:2] + lines[3:]) + "\n")
+            lines = _read(p).splitlines()
+            _write(p, "\n".join(lines[2:3] + lines[:2] + lines[3:]) + "\n")
             fails, _ = rc.grade(run, "evaluator", t, t0, t1)
             self.assertTrue(any("pre-session" in f for f in fails), fails)
 
@@ -100,7 +110,7 @@ class Setup(unittest.TestCase):
     def test_target_initialises_a_run(self):
         with tempfile.TemporaryDirectory() as t:
             run = rc.init_run(8765, "evaluator", t)
-            m = json.load(open(os.path.join(run, "manifest.json")))
+            m = json.loads(_read(os.path.join(run, "manifest.json")))
             self.assertEqual(m["assessment_type"], "website")
             self.assertEqual(m["personas"][0]["name"], "evaluator")
             self.assertTrue(os.path.isdir(os.path.join(run, "persona-evaluator", "screenshots")))

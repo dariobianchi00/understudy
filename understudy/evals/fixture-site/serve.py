@@ -9,6 +9,12 @@ file is gitignored (*.png); only this generator is committed.
 """
 import http.server, os, random, struct, sys, zlib
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8765
 
@@ -23,7 +29,8 @@ def heavy_png(path, w=3000, h=2000):
         return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
     png = (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
            + chunk(b"IDAT", zlib.compress(raw, 0)) + chunk(b"IEND", b""))
-    open(path, "wb").write(png)
+    with open(path, "wb") as fh:
+        fh.write(png)
 
 
 class H(http.server.SimpleHTTPRequestHandler):
@@ -37,7 +44,7 @@ class H(http.server.SimpleHTTPRequestHandler):
     def send_error(self, code, *a, **k):
         if code == 404 and os.path.exists(os.path.join(HERE, "404.html")):
             self.send_response(404); self.send_header("Content-Type", "text/html"); self.end_headers()
-            self.wfile.write(open(os.path.join(HERE, "404.html"), "rb").read()); return
+            self.wfile.write(_read(os.path.join(HERE, "404.html"), "rb")); return
         super().send_error(code, *a, **k)
 
 

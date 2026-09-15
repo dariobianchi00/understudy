@@ -11,6 +11,17 @@ import fixtures as fx
 sys.path.insert(0, fx.SCRIPTS)
 import init_run as ir  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 INIT = os.path.join(fx.SCRIPTS, "init_run.py")
 
 TARGET = """slug: nimbus-notes
@@ -36,7 +47,7 @@ output_dir: {out}
 def init(t, mode="generic", out=None):
     out = out or os.path.join(t, "runs")
     tp = os.path.join(t, "target.yaml")
-    open(tp, "w").write(TARGET.format(mode=mode, out=out))
+    _write(tp, TARGET.format(mode=mode, out=out))
     p = subprocess.run([sys.executable, INIT, "--target", tp, "--traversal-model", "m"],
                        capture_output=True, text=True)
     return p
@@ -61,7 +72,7 @@ class Manifest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             p = init(t)
             self.assertEqual(p.returncode, 0, p.stderr)
-            m = json.load(open(os.path.join(p.stdout.strip(), "manifest.json")))
+            m = json.loads(_read(os.path.join(p.stdout.strip(), "manifest.json")))
             self.assertEqual(m["alias_email"], "qa@example-nimbus-notes.test")
             self.assertEqual(m["vocabulary_allowlist"], [])
             self.assertIn("scope_exclusions", m)
@@ -85,7 +96,7 @@ class Refusals(unittest.TestCase):
             repo = os.path.join(t, "theirrepo")
             os.makedirs(repo)
             subprocess.run(["git", "init", "-q", repo], check=True)
-            open(os.path.join(repo, ".gitignore"), "w").write("understudy-runs/\n")
+            _write(os.path.join(repo, ".gitignore"), "understudy-runs/\n")
             p = init(t, out=os.path.join(repo, "understudy-runs", "nimbus"))
             self.assertEqual(p.returncode, 0, p.stderr)
             self.assertNotIn("WARNING", p.stderr)
@@ -102,12 +113,12 @@ class Refusals(unittest.TestCase):
     def test_deliverable_defaults_and_validation(self):
         with tempfile.TemporaryDirectory() as t:
             p = init(t)
-            m = json.load(open(os.path.join(p.stdout.strip(), "manifest.json")))
+            m = json.loads(_read(os.path.join(p.stdout.strip(), "manifest.json")))
             self.assertEqual(m["deliverable"], {"format": "pdf", "scope": "summary", "path": None})
             self.assertTrue(m["output_dir"].startswith(t))
         with tempfile.TemporaryDirectory() as t:
             tp = os.path.join(t, "target.yaml")
-            open(tp, "w").write(TARGET.format(mode="generic", out=os.path.join(t, "runs"))
+            _write(tp, TARGET.format(mode="generic", out=os.path.join(t, "runs"))
                                 + "deliverable:\n  format: docx\n")
             p = subprocess.run([sys.executable, INIT, "--target", tp, "--traversal-model", "m"],
                                capture_output=True, text=True)

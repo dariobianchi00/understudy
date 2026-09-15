@@ -15,6 +15,17 @@ import unittest
 
 import fixtures as fx
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 PY = sys.executable
 CAPTURE = os.path.join(fx.SCRIPTS, "check_capture.py")
 REPORT = os.path.join(fx.SCRIPTS, "check_report.py")
@@ -46,8 +57,8 @@ class Clean(unittest.TestCase):
             with tempfile.TemporaryDirectory() as t:
                 run = fx.clean_run(t)
                 p = os.path.join(run, "clarity", "findings-final.md")
-                s = open(p).read().replace(" — The fold", f" {dash} The fold", 1)
-                open(p, "w").write(s)
+                s = _read(p).replace(" — The fold", f" {dash} The fold", 1)
+                _write(p, s)
                 rc, checks, out = gate(REPORT, run)
                 self.assertEqual(rc, 0, (dash, out))
                 self.assertIn("clarity: 1 finding(s)", out, dash)
@@ -103,7 +114,7 @@ class Capture(unittest.TestCase):
             fx.write(os.path.join(run, "compare", "comp-a", "site.json"), "{}")
             fx.write(os.path.join(run, "compare", "index.json"), '{"sites": []}')
             os.makedirs(os.path.join(run, "compare", "comp-a", "screenshots"))
-            open(os.path.join(run, "compare", "comp-a", "screenshots", "0.png"), "wb").write(fx.PNG)
+            fx.write_png(os.path.join(run, "compare", "comp-a", "screenshots", "0.png"))
             rc, checks, out = gate(CAPTURE, run)
             self.assertEqual(rc, 1)
             self.assertIn(2, checks, out)
@@ -112,9 +123,9 @@ class Capture(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t)
             import json
-            m = json.load(open(os.path.join(run, "manifest.json")))
+            m = json.loads(_read(os.path.join(run, "manifest.json")))
             del m["scope_exclusions"]
-            open(os.path.join(run, "manifest.json"), "w").write(json.dumps(m))
+            _write(os.path.join(run, "manifest.json"), json.dumps(m))
             rc, checks, out = gate(CAPTURE, run)
             self.assertEqual(rc, 1)
             self.assertEqual(checks, {5}, out)
@@ -174,7 +185,7 @@ class Capture(unittest.TestCase):
             for site in ("ours-nimbus", "comp-a"):
                 sd = os.path.join(run, "compare", site)
                 os.makedirs(os.path.join(sd, "screenshots"))
-                open(os.path.join(sd, "screenshots", "00-fold.png"), "wb").write(fx.PNG)
+                fx.write_png(os.path.join(sd, "screenshots", "00-fold.png"))
                 fx.write(os.path.join(sd, "site.json"), '{"url": "https://x.test"}')
             fx.write(os.path.join(run, "compare", "index.json"), '{"sites": []}')
             rc, checks, out = gate(CAPTURE, run)
@@ -187,7 +198,7 @@ class Capture(unittest.TestCase):
             run = fx.clean_run(t, with_lens=False)
             sd = os.path.join(run, "compare", "comp-a")
             os.makedirs(os.path.join(sd, "screenshots"))
-            open(os.path.join(sd, "screenshots", "00-fold.png"), "wb").write(fx.PNG)
+            fx.write_png(os.path.join(sd, "screenshots", "00-fold.png"))
             fx.write(os.path.join(run, "compare", "index.json"), '{"sites": []}')
             rc, checks, out = gate(CAPTURE, run)
             self.assertEqual(rc, 1)
@@ -307,7 +318,7 @@ class Report(unittest.TestCase):
             run = fx.clean_run(t, with_lens=False)
             fx.lens(run, "clarity", [fx.finding("clarity", "x")])
             p = os.path.join(run, "clarity", "exec-summary.md")
-            open(p, "w").write(open(p).read().replace("## Top 3", "## Headlines"))
+            _write(p, _read(p).replace("## Top 3", "## Headlines"))
             rc, checks, out = gate(REPORT, run)
             self.assertEqual(rc, 1)
             self.assertEqual(checks, {6}, out)

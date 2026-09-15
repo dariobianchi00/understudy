@@ -14,6 +14,16 @@ sys.path.insert(0, EVALS)
 import run_behaviour as rb  # noqa: E402
 
 
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 class Cases(unittest.TestCase):
     def test_every_case_is_complete(self):
         dirs = [d for d in sorted(glob.glob(os.path.join(rb.CASES, "*"))) if os.path.isdir(d)]
@@ -33,7 +43,7 @@ class Cases(unittest.TestCase):
     def test_no_case_names_a_real_product(self):
         # prompts and criteria only — a case.json may name a brand in a
         # must_not_match regex precisely to forbid it
-        text = " ".join(open(f).read().lower() for f in
+        text = " ".join(_read(f).lower() for f in
                         glob.glob(os.path.join(rb.CASES, "**", "*.md"), recursive=True))
         for brand in ("blinklife", "smartbite", "vibrantly", "notion", "mindvalley"):
             self.assertNotIn(brand, text, brand)
@@ -62,9 +72,9 @@ class Graders(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             case = rb.load_case(os.path.join(rb.CASES, "text-not-files"))
             os.makedirs(os.path.join(t, "clarity"))
-            exp = open(os.path.join(rb.CASES, "text-not-files", "expected-exec-summary.md")).read()
-            open(os.path.join(t, "clarity", "exec-summary.md"), "w").write(exp.replace("\n", "\n\n"))
-            open(os.path.join(t, "clarity", "findings-final.md"), "w").write("paraphrased")
+            exp = _read(os.path.join(rb.CASES, "text-not-files", "expected-exec-summary.md"))
+            _write(os.path.join(t, "clarity", "exec-summary.md"), exp.replace("\n", "\n\n"))
+            _write(os.path.join(t, "clarity", "findings-final.md"), "paraphrased")
             fails = rb.grade_deterministic(case, "", [], t)
             self.assertEqual(len(fails), 1)
             self.assertIn("findings-final.md", fails[0])
@@ -72,12 +82,12 @@ class Graders(unittest.TestCase):
     def test_first_heading_grader(self):
         with tempfile.TemporaryDirectory() as t:
             case = {"name": "x", "files_first_heading": ["exec-summary.md", "## What this is", r"^## Top 5"]}
-            open(os.path.join(t, "exec-summary.md"), "w").write(
+            _write(os.path.join(t, "exec-summary.md"), 
                 "# Title\n\nA verdict sentence first.\n\n## What this is\n\n## Top 5 — fix these first\n")
             fails = rb.grade_deterministic(case, "", [], t)
             self.assertEqual(len(fails), 1)
             self.assertIn("opens with", fails[0])
-            open(os.path.join(t, "exec-summary.md"), "w").write(
+            _write(os.path.join(t, "exec-summary.md"), 
                 "# Title\n\n## What this is\n- x\n\n## Top 5 — fix these first\nVerdict.\n")
             self.assertEqual(rb.grade_deterministic(case, "", [], t), [])
 
@@ -89,7 +99,7 @@ class DryRun(unittest.TestCase):
                                 "--case", "run-summary-shape", "--dry-run", "--out", t],
                                capture_output=True, text=True)
             self.assertEqual(p.returncode, 0, p.stderr)
-            prompt = open(os.path.join(t, "run-summary-shape", "prompt.txt")).read()
+            prompt = _read(os.path.join(t, "run-summary-shape", "prompt.txt"))
             self.assertNotIn("{run}", prompt)
             self.assertIn("2026-09-08-run-fixture01", prompt)
 

@@ -34,6 +34,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import finding_id  # noqa: E402
 import run_layout  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 # Two findings match when their IDs are equal, OR when a human would call them
 # the same problem. The second clause is not a nicety — measured 2026-09-04,
 # re-scoring identical evidence produced 1.7% ID overlap while the findings
@@ -59,14 +65,14 @@ def load_run(run):
     mpath = os.path.join(run, "manifest.json")
     if os.path.exists(mpath):
         try:
-            manifest = json.load(open(mpath))
+            manifest = json.loads(_read(mpath))
         except (OSError, ValueError):
             pass
 
     findings = {}
     for lens in run_layout.lens_dirs(run):     # includes compare/<site>/<lens>
         fpath = os.path.join(run, lens, "findings-final.md")
-        text = open(fpath, errors="replace").read()
+        text = _read(fpath, errors="replace")
         cut = DROPPED.search(text)
         if cut:
             text = text[:cut.start()]

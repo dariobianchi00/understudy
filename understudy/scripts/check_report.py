@@ -36,6 +36,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from finding_id import finding_id, FINDING_HEADING  # noqa: E402
 import run_layout  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 SEVERITY = re.compile(r"\*\*Severity:\*\*\s*(P[0-3])", re.I)
 TAG_FIELD = re.compile(r"^\s*-\s*\*\*(?P<key>[A-Za-z ][A-Za-z ]*?):\*\*\s*(?P<val>.*)$")
 # The finding heading. ONE regex, shared with the renderer and the differ —
@@ -121,9 +127,9 @@ def check_score(path, findings_path, r, lens):
     """Check 7 — the score and the severities must be able to coexist."""
     if not os.path.exists(path):
         return
-    findings = (parse_findings(open(findings_path, errors="replace").read())
+    findings = (parse_findings(_read(findings_path, errors="replace"))
                 if os.path.exists(findings_path) else [])
-    text = open(path, errors="replace").read()
+    text = _read(path, errors="replace")
     m = SCORE_FIELD.search(text)
     if not m:
         r.note(f"{lens}: no '- **Score:** N/10 — why' line; "
@@ -152,7 +158,7 @@ def check_verdict(path, r, lens):
     if not os.path.exists(path):
         r.fail(6, f"{lens}: exec-summary.md missing")
         return
-    lines = open(path, errors="replace").read().split("\n")
+    lines = _read(path, errors="replace").split("\n")
 
     first_block, idx = [], None
     for i, line in enumerate(lines):
@@ -207,7 +213,7 @@ def check_findings(path, r, lens, run):
     if not os.path.exists(path):
         r.fail(1, f"{lens}: findings-final.md missing")
         return
-    text = open(path, errors="replace").read()
+    text = _read(path, errors="replace")
     findings = parse_findings(text)
     for n, line in stray_headings(text):
         r.fail(1, f"{lens}:{n} heading did not parse as a finding, so nothing "
@@ -345,7 +351,7 @@ def main():
     # Warning here is what stops the close step being forgotten — the gate is
     # the last thing that runs, and it is the thing nobody skips.
     try:
-        mf = json.load(open(os.path.join(run, "manifest.json")))
+        mf = json.loads(_read(os.path.join(run, "manifest.json")))
         if mf.get("phase") != "complete" or not mf.get("finished_utc"):
             r.note("manifest still open (phase "
                    f"'{mf.get('phase')}', finished_utc {mf.get('finished_utc')}) — "

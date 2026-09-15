@@ -29,6 +29,12 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import run_layout  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 # CLAUDE.md §6 invariant 1. The list lives in ONE place —
 # references/banned-vocabulary.md — read by this script and quoted by the
 # shape files. Observed 2026-09-11: the prose banned 19 terms and said
@@ -37,7 +43,7 @@ def _load_banned():
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..",
                         "references", "banned-vocabulary.md")
     terms = []
-    for line in open(path, errors="replace"):
+    for line in _read(path, errors="replace").splitlines():
         line = line.strip()
         if line.startswith("- "):
             terms.append(line[2:].split("  ")[0].strip().lower())
@@ -94,7 +100,7 @@ def _allowlist(run):
     product whose own nav says "Usability". Every waiver is printed, so the
     gate output says what was not checked."""
     try:
-        m = json.load(open(os.path.join(run, "manifest.json")))
+        m = json.loads(_read(os.path.join(run, "manifest.json")))
         return {t.lower() for t in (m.get("vocabulary_allowlist") or []) if isinstance(t, str)}
     except (OSError, ValueError):
         return set()
@@ -114,7 +120,7 @@ def check_banned_vocabulary(run, r):
             rel = os.path.relpath(path, run)
             scanned += 1
             try:
-                lines = open(path, errors="replace").read().split("\n")
+                lines = _read(path, errors="replace").split("\n")
             except OSError as e:
                 r.fail(2, f"{rel}: unreadable ({e})")
                 continue
@@ -157,7 +163,7 @@ def check_manifest(run, r):
         r.fail(5, "manifest.json missing — write it at run start, not at the end")
         return None
     try:
-        m = json.load(open(path))
+        m = json.loads(_read(path))
     except (OSError, json.JSONDecodeError) as e:
         r.fail(5, f"manifest.json unreadable: {e}")
         return None
@@ -192,7 +198,7 @@ def check_crawl(crawl_dir, r):
                   "that are artifacts of the crawl")
         return
     try:
-        idx = json.load(open(index))
+        idx = json.loads(_read(index))
     except json.JSONDecodeError as e:
         r.fail(0, f"crawl/index.json is not valid JSON ({e})")
         return
@@ -226,7 +232,7 @@ def check_measure(measure_dir, r):
     for f in sorted(files):
         path = os.path.join(measure_dir, f)
         try:
-            d = json.load(open(path))
+            d = json.loads(_read(path))
         except json.JSONDecodeError as e:
             r.fail(0, f"measure/{f} is not valid JSON ({e})")
             continue
@@ -296,7 +302,7 @@ def _check_persona(pdir, d, r):
     if not has_log:
         r.fail(0, f"{d}: session.log missing or empty — the journey cannot be followed")
     else:
-        text = open(log, errors="replace").read()
+        text = _read(log, errors="replace")
         if not re.search(r"\[\d{2}:\d{2}\]", text):
             r.fail(0, f"{d}: session.log has no [MM:SS] timestamps — "
                       f"a finding without a time cannot be placed in the journey")
@@ -315,14 +321,14 @@ def _check_persona(pdir, d, r):
     tl = os.path.join(pdir, "timeline.json")
     if os.path.exists(tl):
         try:
-            json.load(open(tl))
+            json.loads(_read(tl))
         except json.JSONDecodeError as e:
             r.fail(0, f"{d}: timeline.json is not valid JSON ({e})")
 
     fr = os.path.join(pdir, "findings-raw.json")
     if os.path.exists(fr):
         try:
-            raw = json.load(open(fr))
+            raw = json.loads(_read(fr))
             if isinstance(raw, list) and not raw:
                 r.warn(f"{d}: findings-raw.json is empty — a persona who "
                        f"reacted to nothing is unusual enough to check")

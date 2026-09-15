@@ -16,12 +16,18 @@ sys.path.insert(0, fx.SCRIPTS)
 import finding_id as fi          # noqa: E402
 import check_report as cr        # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
 CORPUS = os.path.join(fx.HERE, "expected-ids.json")
 
 
 class Corpus(unittest.TestCase):
     def test_every_row_recomputes(self):
-        rows = json.load(open(CORPUS))
+        rows = json.loads(_read(CORPUS))
         self.assertGreaterEqual(len(rows), 10)
         for r in rows:
             got = fi.finding_id(r["lens"], r["flow"], r["locator"], r["title"])

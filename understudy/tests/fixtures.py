@@ -32,6 +32,12 @@ def write(path, text):
         f.write(text)
 
 
+def write_png(path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "wb") as fh:
+        fh.write(PNG)
+
+
 def manifest(run, **over):
     m = {
         "run_id": "t0000001", "target_slug": "nimbus-notes", "product_name": PRODUCT,

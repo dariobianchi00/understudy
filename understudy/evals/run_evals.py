@@ -43,8 +43,19 @@ SCRIPTS = os.path.join(PLUGIN, "scripts")
 sys.path.insert(0, SCRIPTS)
 import check_report  # noqa: E402
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 FIXTURE = os.path.join(HERE, "fixture-run")
-KEY = json.load(open(os.path.join(HERE, "fixture-site", "planted.json")))
+KEY = json.loads(_read(os.path.join(HERE, "fixture-site", "planted.json")))
 RESULTS = os.path.join(HERE, "results")
 
 LENS_TOOLS = ["Read", "Write", "Edit", "Glob", "Grep", "Bash(python3:*)", "Bash(ls:*)",
@@ -57,7 +68,7 @@ SEV_ORDER = ["P0", "P1", "P2", "P3"]
 def lens_system_prompt(lens, work):
     """The lens agent's own file, with the plugin root resolved, plus the
     run-specific frame the orchestrator would give it."""
-    body = open(os.path.join(PLUGIN, "agents", f"lens-{lens}.md")).read()
+    body = _read(os.path.join(PLUGIN, "agents", f"lens-{lens}.md"))
     body = body.split("---", 2)[2] if body.startswith("---") else body
     body = body.replace("${CLAUDE_PLUGIN_ROOT}", PLUGIN)
     return (f"You are the understudy `lens-{lens}` scoring agent, running as a subagent.\n"
@@ -259,7 +270,7 @@ def judge_parse(out):
 
 def one(capture, lens, run_no, model, judge_model, budget, results_dir, dry):
     src = os.path.join(FIXTURE, capture)
-    manifest = json.load(open(os.path.join(src, "manifest.json")))
+    manifest = json.loads(_read(os.path.join(src, "manifest.json")))
     model = model or manifest["models"]["scoring"].get(lens) or "sonnet"
     tmp = tempfile.mkdtemp(prefix=f"understudy-eval-{capture}-{lens}-")
     work = os.path.join(tmp, os.path.basename(src))
@@ -270,8 +281,8 @@ def one(capture, lens, run_no, model, judge_model, budget, results_dir, dry):
     sysprompt = lens_system_prompt(lens, work)
     user = lens_user_prompt(lens, work)
     if dry:
-        open(os.path.join(out_dir, "system-prompt.txt"), "w").write(sysprompt)
-        open(os.path.join(out_dir, "user-prompt.txt"), "w").write(user)
+        _write(os.path.join(out_dir, "system-prompt.txt"), sysprompt)
+        _write(os.path.join(out_dir, "user-prompt.txt"), user)
         print(f"  dry-run: {capture}/{lens} run {run_no} on {model} → {out_dir}")
         shutil.rmtree(tmp, ignore_errors=True)
         return None
@@ -280,26 +291,26 @@ def one(capture, lens, run_no, model, judge_model, budget, results_dir, dry):
     res = claude(user, model, system=sysprompt, tools=LENS_TOOLS, budget=budget,
                  cwd=work, add_dir=work)
     seconds = (dt.datetime.now() - t0).total_seconds()
-    open(os.path.join(out_dir, "lens-response.json"), "w").write(json.dumps(res, indent=1))
+    _write(os.path.join(out_dir, "lens-response.json"), json.dumps(res, indent=1))
 
     lens_dir = os.path.join(work, lens)
     exec_md = findings_md = ""
     files_written = os.path.exists(os.path.join(lens_dir, "findings-final.md"))
     if files_written:
-        exec_md = open(os.path.join(lens_dir, "exec-summary.md"), errors="replace").read() \
+        exec_md = _read(os.path.join(lens_dir, "exec-summary.md"), errors="replace") \
             if os.path.exists(os.path.join(lens_dir, "exec-summary.md")) else ""
-        findings_md = open(os.path.join(lens_dir, "findings-final.md"), errors="replace").read()
+        findings_md = _read(os.path.join(lens_dir, "findings-final.md"), errors="replace")
         shutil.copy(os.path.join(lens_dir, "findings-final.md"), out_dir)
         if exec_md:
             shutil.copy(os.path.join(lens_dir, "exec-summary.md"), out_dir)
     else:
-        open(os.path.join(out_dir, "returned-text.md"), "w").write(res.get("result") or "")
+        _write(os.path.join(out_dir, "returned-text.md"), res.get("result") or "")
 
     gate = subprocess.run([sys.executable, os.path.join(SCRIPTS, "check_report.py"), work,
                            "--lens", lens, "--expect-lenses", "1"],
                           capture_output=True, text=True)
     contract_pass = gate.returncode == 0 and files_written
-    open(os.path.join(out_dir, "gate.txt"), "w").write(gate.stdout + gate.stderr)
+    _write(os.path.join(out_dir, "gate.txt"), gate.stdout + gate.stderr)
 
     findings = parse_findings(findings_md) if findings_md else []
     judge = {"caught": [], "clean_reported": [], "out_of_lens": []}
@@ -308,7 +319,7 @@ def one(capture, lens, run_no, model, judge_model, budget, results_dir, dry):
         jres = claude(judge_prompt(capture, lens, findings_md), judge_model,
                       schema=JUDGE_SCHEMA, budget=1.0)
         judge = judge_parse(jres)
-        open(os.path.join(out_dir, "judge-response.json"), "w").write(json.dumps(jres, indent=1))
+        _write(os.path.join(out_dir, "judge-response.json"), json.dumps(jres, indent=1))
 
     s = summarise(capture, lens, judge, findings, contract_pass, read_score(exec_md))
     s.update({"capture": capture, "lens": lens, "model": model, "run": run_no,
@@ -335,7 +346,7 @@ def trend():
     path = os.path.join(RESULTS, "history.csv")
     if not os.path.exists(path):
         return "no history yet"
-    rows = list(csv.DictReader(open(path)))
+    rows = list(csv.DictReader(_read(path).splitlines(True)))
     by = {}
     for r in rows:
         by.setdefault((r["capture"], r["lens"]), []).append(r)
@@ -354,7 +365,7 @@ def trend():
         cost = f"${sum(float(r['cost_usd'] or 0) for r in rs):.2f}"
         lines.append(f"| {cap} | {lens} | {len(rs)} | {contract} | {rec} | {hal} | {ool} | {band} | {score} | {cost} |")
     text = "\n".join(lines) + "\n"
-    open(os.path.join(RESULTS, "trend.md"), "w").write(text)
+    _write(os.path.join(RESULTS, "trend.md"), text)
     return text
 
 
@@ -385,7 +396,7 @@ def main():
     if a.lens == ["all"]:
         # the lenses this capture was made for — the manifest's objectives —
         # not every lens the answer key happens to mention
-        m = json.load(open(os.path.join(FIXTURE, a.capture, "manifest.json")))
+        m = json.loads(_read(os.path.join(FIXTURE, a.capture, "manifest.json")))
         lenses = list(m.get("objectives") or [])
     else:
         lenses = a.lens

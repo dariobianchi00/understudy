@@ -15,6 +15,17 @@ Stdlib only, like every script here.
 import json
 import os
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 LENS_FILE = "findings-final.md"
 
 
@@ -88,14 +99,14 @@ def site_roles(run, manifest=None):
 
     if manifest is None:
         try:
-            manifest = json.load(open(os.path.join(run, "manifest.json")))
+            manifest = json.loads(_read(os.path.join(run, "manifest.json")))
         except (OSError, ValueError):
             manifest = {}
     base_url = _norm_url(manifest.get("base_url"))
 
     index = {}
     try:
-        idx = json.load(open(os.path.join(run, "compare", "index.json")))
+        idx = json.loads(_read(os.path.join(run, "compare", "index.json")))
         for s in idx.get("sites") or []:
             if isinstance(s, dict) and s.get("slug"):
                 index[s["slug"]] = s
@@ -135,7 +146,7 @@ def self_test():
             os.makedirs(os.path.join(t, d), exist_ok=True)
         for d in ("clarity", "compare", "compare/ours-x/clarity",
                   "compare/comp-a/clarity", "compare/comp-a/trust"):
-            open(os.path.join(t, d, LENS_FILE), "w").write("## Findings\n")
+            _write(os.path.join(t, d, LENS_FILE), "## Findings\n")
         got = lens_dirs(t)
         assert got == ["clarity", "compare", "compare/comp-a/clarity",
                        "compare/comp-a/trust", "compare/ours-x/clarity"], got

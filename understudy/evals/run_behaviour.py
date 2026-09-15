@@ -43,6 +43,17 @@ import subprocess
 import sys
 import tempfile
 
+
+def _read(*a, **k):
+    with open(*a, **k) as fh:
+        return fh.read()
+
+
+def _write(path, text):
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 NOT_USABLE = re.compile(r"not logged in|please run /login|invalid.{0,20}api key|authentication|hit your (session|usage) limit", re.I)
 PLUGIN = os.path.normpath(os.path.join(HERE, ".."))
@@ -66,12 +77,17 @@ JUDGE_SCHEMA = {"type": "object", "properties": {"pass": {"type": "boolean"},
 
 # ------------------------------------------------------------------ cases --
 
+def _read(path):
+    with open(path) as fh:
+        return fh.read()
+
+
 def load_case(path):
-    c = json.load(open(os.path.join(path, "case.json")))
+    c = json.loads(_read(os.path.join(path, "case.json")))
     c["name"] = os.path.basename(path)
-    c["prompt"] = open(os.path.join(path, "prompt.md")).read().strip()
+    c["prompt"] = _read(os.path.join(path, "prompt.md")).strip()
     crit = os.path.join(path, "graders", "criteria.md")
-    c["criteria"] = open(crit).read().strip() if os.path.exists(crit) else ""
+    c["criteria"] = _read(crit).strip() if os.path.exists(crit) else ""
     return c
 
 
@@ -131,8 +147,8 @@ def grade_deterministic(case, reply, tools, run):
             if not os.path.exists(p):
                 fails.append(f"{rel} was not written")
                 continue
-            got = re.sub(r"\s+", " ", open(p).read()).strip()
-            exp = re.sub(r"\s+", " ", open(os.path.join(CASES, case["name"], expected_file)).read()).strip()
+            got = re.sub(r"\s+", " ", _read(p)).strip()
+            exp = re.sub(r"\s+", " ", _read(os.path.join(CASES, case["name"], expected_file))).strip()
             if got != exp:
                 fails.append(f"{rel} differs from the text it was given (paraphrased or truncated)")
         fh = case.get("files_first_heading")
@@ -141,7 +157,7 @@ def grade_deterministic(case, reply, tools, run):
             if not os.path.exists(p):
                 fails.append(f"{fh[0]} was not written")
             else:
-                text = open(p).read()
+                text = _read(p)
                 body = re.sub(r"^#\s+.*\n", "", text, count=1).strip()
                 first = body.split("\n", 1)[0].strip()
                 if not first.lower().startswith(fh[1].lower()):
