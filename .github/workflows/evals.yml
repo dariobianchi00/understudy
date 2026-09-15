@@ -42,6 +42,29 @@ jobs:
       - name: install claude
         run: npm install -g @anthropic-ai/claude-code
 
+      - name: start from the published results
+        # The history CSVs are append-only logs and trend.md is derived from
+        # them. main carries rows from local runs, evals-results carries the
+        # weekly ones, and neither is a superset — so union them: every result
+        # folder from both, every CSV row from both, sorted by stamp, then
+        # rebuild the trend. Without this each publish silently dropped the
+        # rows the other branch had.
+        run: |
+          set -e
+          R=understudy/evals/results
+          if ! git fetch origin evals-results:refs/remotes/origin/evals-results 2>/dev/null; then
+            echo "no evals-results branch yet; starting from main"; exit 0
+          fi
+          mkdir -p "$RUNNER_TEMP/branch"
+          git archive origin/evals-results "$R" | tar -x -C "$RUNNER_TEMP/branch"
+          cp -rn "$RUNNER_TEMP/branch/$R/." "$R/"
+          for f in "$R"/*.csv; do
+            b="$RUNNER_TEMP/branch/$f"; [ -f "$b" ] || continue
+            grep -Fxv -f "$f" "$b" >> "$f" || true
+            { head -1 "$f"; tail -n +2 "$f" | sort -s -t, -k1,1; } > "$f.tmp" && mv "$f.tmp" "$f"
+          done
+          python3 understudy/evals/run_evals.py --trend > /dev/null
+
       - name: plumbing still green
         run: python3 -m unittest discover -s understudy/tests
 
@@ -89,12 +112,21 @@ jobs:
           if-no-files-found: ignore
 
       - name: publish results
+        # Results start from the branch's copy (see "start from the published
+        # results"), so history.csv already carries every earlier row. Save the
+        # tree aside, force the branch checkout, put the tree back, commit, push.
+        # The earlier `checkout -B ... 2>/dev/null || checkout -B` silently fell
+        # back to branching off main once the two branches' history files
+        # differed — observed 2026-09-14 as a non-fast-forward push.
         if: always()
         run: |
           git config user.name "understudy-evals"
           git config user.email "evals@users.noreply.github.com"
-          git fetch origin evals-results || true
-          git checkout -B evals-results origin/evals-results 2>/dev/null || git checkout -B evals-results
+          cp -r understudy/evals/results "$RUNNER_TEMP/results"
+          git fetch origin evals-results:refs/remotes/origin/evals-results || true
+          git checkout -f -B evals-results origin/evals-results || git checkout -f -B evals-results
+          rm -rf understudy/evals/results
+          cp -r "$RUNNER_TEMP/results" understudy/evals/results
           git add understudy/evals/results
           git commit -m "evals: $(date -u +%F)" || echo "nothing new"
           git push origin evals-results

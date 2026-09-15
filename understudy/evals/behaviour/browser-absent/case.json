@@ -4,7 +4,7 @@
   "claude mcp add playwright"
  ],
  "must_not_match": [
-  "(fetched|fetching|I (will|'ll) (read|fetch|load) the (page|site)|curl )",
+  "\\bI('ve| have)? (fetched|loaded|pulled|curl'?ed|read) the (page|site|url|html)|\\bI( will|'ll| am going to|'m going to| can)( just| simply)? (read|fetch|load|curl|pull) (the|it|them|this|that)\\b",
   "\\[00:\\d\\d\\]"
  ],
  "tools_forbidden": [

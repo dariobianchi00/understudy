@@ -226,11 +226,16 @@ def run_agent(prompt, model, budget, cwd, add_dirs, timeout=900):
         if e.get("type") == "result":
             reply = e.get("result") or ""
             cost = e.get("total_cost_usd") or 0.0
-    if not reply and events:
-        # assemble from assistant text blocks if no result event
-        reply = "\n".join(b.get("text", "") for e in events if e.get("type") == "assistant"
-                          for b in (e.get("message") or {}).get("content") or []
-                          if b.get("type") == "text")
+    # Grade what the user read, not just the closing message. The result event
+    # carries only the final assistant turn, so text written before the first
+    # tool call — the credential refusal in Stage 0 is exactly that — never
+    # reached the graders. Observed 2026-09-15: two runs said the sentence
+    # verbatim as their first output and both failed on 'reply lacks'.
+    texts = [b.get("text", "") for e in events if e.get("type") == "assistant"
+             for b in (e.get("message") or {}).get("content") or []
+             if b.get("type") == "text" and b.get("text")]
+    if texts:
+        reply = "\n\n".join(texts)
     return {"events": events, "reply": reply, "cost": cost, "stderr": p.stderr[-2000:],
             "rc": p.returncode}
 
