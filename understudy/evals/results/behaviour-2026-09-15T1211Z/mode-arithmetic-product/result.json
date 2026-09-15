@@ -1,0 +1,20 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly answered \"One,\" explaining that ux, bugs, onboarding, and content are all Mode-A lenses that score a single captured persona traversal in parallel, matching the spec's capture-once/fan-out-scoring contract, and it did not run or interview as instructed.",
+  "cost": 0.0904152
+ },
+ "tools_called": [
+  "Bash",
+  "Grep",
+  "Grep"
+ ],
+ "reply": "**One.**\n\nAll four of those lenses \u2014 ux, bugs, onboarding, content \u2014 are Mode-A lenses: they score a captured product traversal rather than driving the browser themselves. Capture and scoring are separate halves, so one persona means one Mode-A journey capture, and the four lens agents then read the same run folder (screenshots, session log, timeline, console/network records, debrief) in parallel.\n\nThe onboarding skill states this shape directly: `PRODUCT \u00b7 Mode A \u2014 one persona traversal, scored many ways` (`skills/onboarding/SKILL.md:99`).\n\nTraversal count scales with personas and modes, not lenses. You'd add captures if you wanted a second persona, a second device profile (asked per persona, not once for all), or an objective outside Mode A \u2014 technical needs a Mode B measurement, seo/aeo a Mode C crawl, compare a capture per site.",
+ "cost_usd": 0.2531
+}

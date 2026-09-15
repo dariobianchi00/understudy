@@ -1,0 +1,13 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": null,
+ "skipped": "rate-limited",
+ "reply": "Persisted both files verbatim, split at the lens's own `--- filename ---` boundaries:\n\n- `2026-09-08-run-fixture01/clarity/exec-summary.md` \u2014 title, verdict sentence, Top 3, Score\n- `2026-09-08-run-fixture01/clarity/findings-final.md` \u2014 title, `## Findings` (77a357f2d026), `## Dropped for want of evidence`\n\nNothing summarised, re-scored, or re-worded. Two notes for whoever picks this run up:\n\n- The lens's Score line sits in `exec-summary.md` per \u00a73.4's \"verdict sentence, top 3 and stated limits\" split. The lens wrote no separate limits section, so none was authored.\n- `findings-final.md` cites `persona-evaluator/session.log:9`, but `persona-evaluator/` contains `console-full.txt`, `findings-raw.json`, `network-full.txt`, `persona-debrief.md` and `screenshots/` \u2014 no `session.log` was listed. I left the citation as the lens wrote it (editing an evidence citation to clear a check is falsifying the report). The 3.5 evidence-rule gate may flag it; the fix belongs upstream in the capture or the lens, not in this file.\n\nStopping here as asked \u2014 I have not run `check_report.py` or touched the other lenses.",
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": null,
+ "tools_called": [],
+ "cost_usd": 0.0
+}

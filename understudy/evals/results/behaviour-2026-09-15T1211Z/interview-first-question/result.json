@@ -1,0 +1,18 @@
+{
+ "case": "interview-first-question",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant asked exactly one question\u2014the assessment-type fork with all three options (a/b/c)\u2014without inferring type from the URL and without asking about competitors, conversion goal, personas, or models.",
+  "cost": 0.0882132
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Starting fresh \u2014 no saved target, so straight to the first question.\n\n**What are you evaluating at `https://example-nimbus-notes.test`?**\n\n```\n  (a) A product \u2014 something people sign into and use.\n      Lenses: ux \u00b7 bugs \u00b7 onboarding \u00b7 content\n      ~90 min per persona.\n\n  (b) A website \u2014 something people read and decide from.\n      Lenses: clarity \u00b7 conversion \u00b7 trust \u00b7 technical \u00b7 seo \u00b7 aeo \u00b7 compare\n      ~15\u201325 min per persona, plus a crawl.\n\n  (c) Both \u2014 a marketing site with a product behind it.\n      Runs (b) on the site, then (a) on the product. Two captures.\n```\n\nI'm asking rather than guessing because the URL alone can't tell me \u2014 a page that looks like a marketing site is sometimes a product's login page, and the two produce completely different interviews and runs from here on. Everything I ask after this depends on your answer: a product run asks about auth walls and first value, a website run asks about competitors and what a visitor should do next.",
+ "cost_usd": 0.2821
+}

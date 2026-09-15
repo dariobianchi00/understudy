@@ -1,0 +1,23 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly stated 2 captures (one A-visit for clarity/conversion/trust, one Crawl for seo), matching the persona-per-visit-plus-one-crawl formula, without proposing one capture per lens or running the interview.",
+  "cost": 0.09066419999999999
+ },
+ "tools_called": [
+  "Bash",
+  "Glob",
+  "Grep",
+  "Bash",
+  "Bash",
+  "Grep"
+ ],
+ "reply": "**2 captures.**\n\n| # | Mode | Capture | Persona | Covers |\n|---|---|---|---|---|\n| 1 | **A-visit** \u2014 Visit | `traversal-visit` | your one persona | clarity, conversion, trust |\n| 2 | **C** \u2014 Crawl | `traversal-crawl` | none (no session, no login) | seo |\n\nThe arithmetic behind it:\n\n- Captures are counted **per mode**, not per objective. Clarity, conversion and trust are all Mode A-visit lenses, so they score **one** visit traversal three ways \u2014 adding the second and third costs no extra browsing.\n- SEO is Mode C, a different mode, so it needs its own pass. A crawl is not a traversal and can't be approximated from the visit evidence.\n- Mode C takes no persona, so your \"one persona\" multiplies only capture #1. One persona \u00d7 1 visit = 1; crawl = 1. **Total 2.**\n\nScoring after capture: 4 lenses (clarity, conversion, trust over capture #1; seo over capture #2), fanned out in parallel \u2014 plus an objectives scorer if you give the run objectives at interview.\n\nNothing has been started, and I haven't run the interview.",
+ "cost_usd": 0.3782
+}

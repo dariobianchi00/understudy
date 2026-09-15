@@ -1,0 +1,32 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant wrote exec-summary.md and stopped without offering export or asking further questions, made no claim of changing/re-scoring/merging any lens finding, and its explanations (omitting the two-check heading, not padding Top 5 with P2/P3) are consistent with run.md \u00a73.6.",
+  "cost": 0.09167719999999999
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Grep",
+  "Bash",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Write"
+ ],
+ "reply": "I'll start by reading the spec section and looking at the run folder.\n\nI have everything I need. Writing the run-level summary.\n\nWritten to `2026-09-08-run-fixture01/exec-summary.md`.\n\nShape decisions worth flagging, since \u00a73.6 pulls in two directions here:\n\n- **The Top 5 table has two rows, not five.** Clarity produced no P0s and two P1s; the rest are P2/P3. \u00a73.6 says fill from P1 to reach five but *\"Never pad with P2 or P3 to reach five\"*, so the table stops at the two P1s. The heading stays as specified, with one line under the table saying nothing else rose high enough.\n- **Four headings written empty for the renderer**: Contents, Objectives, How each area scores. Objectives is present because the manifest has `objectives_under_test`. \"Raised by more than one check\" is omitted entirely \u2014 only one check ran \u2014 as is \"Against comparable sites\" (no competitors).\n- **Length**: one lens, so roughly one page.\n- Opens with description, not verdict; the verdict introduces the Top 5. No run-folder paths in prose, no hand-written section numbers, no severity tally, no \"recommended first action\".\n\nOne thing to be aware of: `objectives/results.md` does not exist yet, so `render_report.py` will have nothing to fill the Objectives heading with \u2014 the objectives scorer hasn't run for this fixture. The heading is correct per spec regardless; the gap is upstream.",
+ "cost_usd": 0.7375
+}
