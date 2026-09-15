@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 11186,
+ "stop_reason": "tool_use",
+ "session_id": "e8262867-99dc-4d1e-a5a2-842d0b69099c",
+ "total_cost_usd": 0.182781,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 41120,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 787,
+  "output_tokens_details": {
+   "thinking_tokens": 336
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 41120,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 787,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 41120,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 41120
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5504,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005584,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 787,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 41120,
+   "webSearchRequests": 0,
+   "costUSD": 0.177197,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 336,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"0310e531246b \u2014 No plan shows a price; all three say Contact sales and the footnote adds an unknown\"},{\"id\":\"cookie-banner-mismatch\",\"caught\":true,\"finding_title\":\"d7470c89ca1f \u2014 Cookie bar says no tracking cookies while a third-party tracker fires and the privacy page says cookies are used\"},{\"id\":\"privacy-vague\",\"caught\":true,\"finding_title\":\"69aaf3f1d3ab-a \u2014 Privacy page names no partners, no data types, and routes questions to the demo form\"},{\"id\":\"proof-anonymous\",\"caught\":true,\"finding_title\":\"db09f2784f98 \u2014 All three testimonials are anonymous\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "0310e531246b \u2014 No plan shows a price; all three say Contact sales and the footnote adds an unknown"
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "caught": true,
+    "finding_title": "d7470c89ca1f \u2014 Cookie bar says no tracking cookies while a third-party tracker fires and the privacy page says cookies are used"
+   },
+   {
+    "id": "privacy-vague",
+    "caught": true,
+    "finding_title": "69aaf3f1d3ab-a \u2014 Privacy page names no partners, no data types, and routes questions to the demo form"
+   },
+   {
+    "id": "proof-anonymous",
+    "caught": true,
+    "finding_title": "db09f2784f98 \u2014 All three testimonials are anonymous"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 7943,
+ "type": "result",
+ "duration_ms": 12685,
+ "uuid": "172fae0e-ddec-49b9-8d82-ba3e92b6cbb7",
+ "ttft_stream_ms": 2753,
+ "time_to_request_ms": 251,
+ "first_content_frame_ms": 3361,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

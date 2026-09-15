@@ -1,0 +1,144 @@
+{
+ "duration_api_ms": 9891,
+ "stop_reason": "tool_use",
+ "session_id": "b53f5c8a-d855-49b7-a397-de27d507f125",
+ "total_cost_usd": 0.17828999999999998,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 40483,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 589,
+  "output_tokens_details": {
+   "thinking_tokens": 276
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40483,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 589,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 40483,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 40483
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5496,
+   "outputTokens": 25,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005621,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 589,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 40483,
+   "webSearchRequests": 0,
+   "costUSD": 0.172669,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 276,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"workspace-type-before-value\",\"caught\":true,\"finding_title\":\"Irreversible workspace-type choice between three undefined terms stalls the novice 48s before any value\"},{\"id\":\"empty-state-no-guidance\",\"caught\":true,\"finding_title\":\"Empty dashboard gives no next step; novice hunts twice and takes 60s to find \\\"New block\\\"\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "workspace-type-before-value",
+    "caught": true,
+    "finding_title": "Irreversible workspace-type choice between three undefined terms stalls the novice 48s before any value"
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "caught": true,
+    "finding_title": "Empty dashboard gives no next step; novice hunts twice and takes 60s to find \"New block\""
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 7811,
+ "type": "result",
+ "duration_ms": 11177,
+ "uuid": "2192af66-19c3-4dcb-b5f4-7f3cabd1705c",
+ "ttft_stream_ms": 3320,
+ "time_to_request_ms": 250,
+ "first_content_frame_ms": 3835,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

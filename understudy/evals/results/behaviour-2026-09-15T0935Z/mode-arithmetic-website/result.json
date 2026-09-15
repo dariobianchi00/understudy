@@ -1,0 +1,21 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The answer correctly states 2 captures \u2014 one Mode A-visit feeding clarity/conversion/trust, one Mode C crawl feeding seo \u2014 and explicitly rejects one-capture-per-lens.",
+  "cost": 0.08932319999999999
+ },
+ "tools_called": [
+  "Bash",
+  "Glob",
+  "Bash",
+  "Glob"
+ ],
+ "reply": "**2 captures.**\n\n| Capture | Mode | Feeds |\n|---|---|---|\n| 1 | **Mode A-visit** (persona-driven visit \u2014 `traversal-visit`) | clarity, conversion, trust |\n| 2 | **Mode C** (session-less crawl \u2014 `traversal-crawl`) | seo |\n\nThe arithmetic: your four objectives collapse into two capture modes, not four. Clarity, conversion and trust are all scored off the *same* A-visit evidence \u2014 one persona walking the site with a question, producing screenshots, session log, timeline and debrief. Three lenses read that one body of evidence afterwards. SEO can't reuse it, because it needs a no-persona, no-session crawl recording per-page markup facts (titles, meta, canonicals, headings, structured data, internal links, robots, sitemap) \u2014 different driver, different output shape.\n\nSo: 2 captures, 4 scoring passes.\n\nOne dependency worth naming up front, since it's the only thing that changes the number: **captures scale per persona, lenses don't.** If the interview lands on one persona, it stays at 2. Two personas means two A-visit captures (4 lenses\u2026 still 1 crawl), so 3 captures total. The Mode C crawl is always exactly 1 regardless \u2014 it has no persona to vary.\n\nAlso note conversion specifically requires a stated conversion goal in the target file. Without one that lens has nothing to measure against, but it doesn't add a capture \u2014 it's a prerequisite on capture 1, not a third capture.\n\nNothing started, nothing asked.",
+ "cost_usd": 0.2704
+}

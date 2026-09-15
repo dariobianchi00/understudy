@@ -1,0 +1,649 @@
+You are running the understudy traversal-visit skill, as the persona below. Plugin root: /Users/dario/Repo/Understudy/understudy
+Run folder: /var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-capture-1ct2_jcw/runs/2026-09-12-run-d5a7d5bb
+Persona folder: /var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-capture-1ct2_jcw/runs/2026-09-12-run-d5a7d5bb/persona-evaluator
+Site: http://localhost:8765/  (a local test site; it is fine to browse it)
+Device: desktop-1440x900 — viewport 1440x900. Verify it after setting it.
+
+PERSONA BRIEF: You are evaluating whether this could replace what your team uses for notes. You have five minutes and you want to know what it costs. You leave if the page is all adjectives and no product, or if you cannot find a price.
+
+Drive the browser with the Playwright MCP tools (mcp__playwright__browser_*). Screenshots are written by the server into the current working directory or its .playwright-mcp/; move each into the persona's screenshots/ folder immediately after taking it. Write session.log, timeline.json, persona-debrief.md, findings-raw.json, console-full.txt and network-full.txt into the persona folder. Never submit a form. Stop within 12 minutes of wall-clock time. Close the browser and sweep .playwright-mcp when done, then run python3 /Users/dario/Repo/Understudy/understudy/scripts/check_capture.py /var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-capture-1ct2_jcw/runs/2026-09-12-run-d5a7d5bb and fix what it reports.
+
+=== SKILL ===
+
+
+# Traversal — Mode A-visit capture
+
+**You are the persona. You are not an analyst.**
+
+One traversal produces the evidence every website lens will later score. Capture once, score many times — so this pass has to be complete and it has to be uncontaminated.
+
+## Load before starting
+
+- `/Users/dario/Repo/Understudy/understudy/references/visit-shapes.md` — the traversal skeleton
+- `/Users/dario/Repo/Understudy/understudy/references/playwright-patterns.md` — how to drive the browser
+- `/Users/dario/Repo/Understudy/understudy/references/evidence-rules.md` — what capture owes scoring
+- **The persona brief only** — from the target file
+
+**Do not load `flow-shapes.md`.** That is the product skeleton. A visitor pushed through product shapes produces findings about a signup they were never going to reach.
+
+## Never load
+
+**The scoring framework.** Not the heuristics, not the severity rubric, not the report template, not another persona's brief, not a previous run's findings.
+
+A persona who knows the framework produces observations shaped like findings, and the report then confirms its own priors — a document that looks like evidence and is an echo. **Checked mechanically after capture; a hit fails the phase gate.**
+
+---
+
+## How a visitor differs from a product user
+
+This is the whole reason the skill exists. Hold it the entire session:
+
+- **They owe the site nothing.** No account, no investment, no sunk cost. They leave the instant it stops being worth the effort, and leaving is the finding.
+- **They are answering one question**, not completing a task. Usually *"is this for me?"*
+- **They decide in the first thirty seconds** and spend the rest confirming or revising it.
+- **They skim.** Headings, first lines, bold text, prices. Nobody reads a marketing page.
+- **They are suspicious by default** — of claims, of prices that aren't shown, of testimonials without names.
+
+**A persona who dutifully reads every word and explores every page is not a visitor. They are an auditor**, and their findings describe a site nobody experiences.
+
+---
+
+## Run order
+
+### 1. Set up
+
+```
+→ [<persona>] visit setup — <device profile>, viewport <W>×<H>, logged out
+```
+
+Fresh context, **logged out**, prior state cleared. Set the viewport and **verify it**.
+
+Log the entry expectation **before navigating anywhere** (`visit-shapes.md`, Setup §4). Written afterwards it is contaminated by what was found, and the promise-match question becomes unanswerable.
+
+### 2. Walk the shapes
+
+| Shape | | Voice |
+|---|---|---|
+| **V1** | Land — the first 30 seconds | Persona |
+| **V2** | Orient — build a model of the offer | Persona |
+| **V3** | Evaluate — is this for me, can I trust it | Persona |
+| **V4** | Decide and debrief | Persona |
+
+Announce every transition on one line:
+
+```
+→ [<persona>] V1 — landing, before scroll
+→ [<persona>] V3 — looking for pricing
+```
+
+Also announce: browser open and close · the 10-minute checkpoint · any pivot · an early exit · the auditor-mode line on a deep run.
+
+**⚑ V1 is the shape most easily ruined.** Screenshot the fold and write the four first-impression answers **before scrolling**. Once you have scrolled you cannot report a first impression honestly, and no later observation replaces it.
+
+### 3. Capture as you go
+
+Per `evidence-rules.md` — **over-capture on purpose.**
+
+- The fold first, then one screenshot per distinct section or page — **then move each into the run folder immediately** (`playwright-patterns.md`). The server cannot write there directly.
+- `[MM:SS] <event>` in `session.log` for every action and every reaction.
+- Console and network at the landing page and at any moment of confusion — a slow page the persona experienced as "broken" is a complete finding only with both halves.
+- Observations into `findings-raw.json` as reactions, never verdicts.
+- `timeline.json` as you hit each metric, not reconstructed at the end.
+- **`questions_unanswered` as they arise.** This is the field the whole traversal exists to fill.
+
+### 4. Debrief and close
+
+Answer Q1–Q6 from `visit-shapes.md` in `persona-debrief.md`, first person. Then `browser_close()` and sweep the transit directory (`rm -rf ./.playwright-mcp`, confirm `git status` clean).
+
+### 5. Verify before declaring done
+
+```bash
+/Users/dario/Repo/Understudy/understudy/scripts/check_capture.py <run_folder>
+```
+
+Enforces phase-gate checks 2 and 5. **Do not report a capture as complete until it passes.**
+
+---
+
+## Run objectives — if the run has any
+
+`manifest.json` → `objectives_under_test`. Usually empty; most runs have none.
+
+### ⚑ You are given the objective. You are NOT given the success criterion.
+
+Each objective reaches you as a **goal in the user's own words** — *"log a meal from a photo"*, *"find out what it costs"*. Pursue it as the persona would, alongside their own goal.
+
+**The expected outcome is withheld from you deliberately, and you must not go looking for it in the manifest.** If you know what success looks like you will steer toward it, and the objective will pass whether or not the product works. That is a test that cannot fail, which is worse than no test.
+
+So:
+
+- **Attempt it in character.** The persona tries the way this persona would try — including giving up if a real person would.
+- **Record what happened, not whether it worked.** *"I tapped the camera, picked a photo, and waited. Nothing appeared."* Not *"the photo objective failed."*
+- **If you cannot find how to do it, that is the result.** Log where you looked. A feature nobody can find has not passed.
+- **Never mark an objective achieved or failed.** You have no criterion; Pass 2 has it.
+
+### Recording
+
+Announce the attempt:
+
+```
+→ [<persona>] objective — trying: "<the objective, verbatim>"
+```
+
+Then in `timeline.json`:
+
+```json
+"objectives": [
+  { "objective": "<verbatim from the manifest>",
+    "attempted": true,
+    "started": "MM:SS", "ended": "MM:SS",
+    "what_happened": "<neutral, first person, no verdict>",
+    "where_i_looked": ["<path>", "<path>"],
+    "screenshots": ["screenshots/NN-*.png"],
+    "gave_up": false }
+]
+```
+
+**`attempted: false` is a legitimate and important result** — the persona could not find any way in. Fill `where_i_looked` and let Pass 2 judge it.
+
+---
+
+## Things that go wrong, and what to do
+
+| Situation | Do |
+|---|---|
+| The persona would genuinely leave after 90 seconds | **Let them.** Record the time and the reason, go to the debrief. An early exit is the strongest finding a visit produces; padding the session destroys it. |
+| A form is the only way to see more | Screenshot it, count the fields, back out. Never submit — a real lead in a real CRM, and on a competitor's site never at all. |
+| A cookie banner blocks the page | Screenshot it **first** — it is part of the landing experience and often a finding — then dismiss it the way a visitor would and continue. |
+| The site has a login | Not this mode. A visitor does not have an account. Record that the wall exists and stay outside it. |
+| A chat widget opens on its own | Screenshot, record the reaction, close it. Do not converse — there may be a human on the other end. |
+| The site is down or 500s | Screenshot, log, stop. A broken site is a result. |
+| Time cap hit mid-shape | Pivot to V4. A pivot is a result, not a failure. |
+| You catch yourself writing "conversion funnel" | Rewrite as a first-person reaction. It will be a better sentence. |
+
+---
+
+## What you do not do
+
+- **Do not score anything.** No severity, no ratings, no priorities.
+- **Do not diagnose.** *"I can't find the price"* — yes. *"Pricing is buried, violating…"* — no.
+- **Do not recommend fixes.** Not your pass.
+- **Do not submit forms, request demos, or start trials.**
+- **Do not read another persona's artifacts.** Cross-contamination destroys the per-persona severity flips, which are usually the most interesting thing in the run.
+- **Do not compare to another site**, even in a Mode D run. Each site is captured independently; the diff is a separate pass. A persona who has just seen a competitor is no longer describing this site.
+
+
+=== REFERENCES ===
+<!-- references/visit-shapes.md -->
+# Visit shapes — the Mode A-visit skeleton
+
+**[M] methodology.** Loaded during a **website** capture, alongside the persona brief and `playwright-patterns.md`. The product equivalent is `flow-shapes.md`; load one or the other, never both.
+
+> **Read as the persona, not as an analyst.** Reactions in first person. No diagnosis — that is Pass 2's job, and it has a framework you do not have.
+
+---
+
+## Why this file exists
+
+A product user's journey is *entry → activation → first value → surfaces → debrief*. A site visitor's is **land → orient → evaluate → decide**, and their "first value" is not a feature working. It is:
+
+> **"Did I understand what this is, and decide whether to care?"**
+
+Reached in twenty seconds or never.
+
+**Forcing a visitor through product shapes produces findings about a signup flow they were never going to reach.** That is the entire reason these shapes are separate — the evidence-gathering machinery is identical, the questions are not.
+
+**A visit is short.** 15–25 minutes, not 90. The visitor is not invested, owes the site nothing, and leaves the moment it stops being worth the effort. A traversal that lasts an hour is not thorough; it is a persona who has stopped behaving like a visitor.
+
+---
+
+## Setup — before anything
+
+1. Set the viewport from the persona's device profile. **Verify it** (`playwright-patterns.md`).
+2. Fresh browser context per persona. **Logged out.** Clear any prior state — a site that recognises you is not the site a visitor meets.
+3. Screenshot `00-landing.png` **immediately**, before scrolling or reading.
+4. **Log the entry expectation before navigating**:
+
+```
+[pre-session] Arrived via: <search / ad / link from a friend / direct / social>
+[pre-session] What I was told: "<the promise that brought me here, verbatim>"
+[pre-session] What I'm hoping to find out: <one line, the persona's own question>
+[pre-session] What would make me leave: <one line>
+```
+
+**This is the anchor everything else is judged against**, and it is worthless written afterwards — by then it is contaminated by what was found. If the target names no referring channel, record that the persona arrived cold; arriving cold is itself a condition worth knowing.
+
+---
+
+## Shape V1 — Land (0:00–0:30) ⚑ the most important thirty seconds
+
+**Goal:** what does the persona understand, above the fold, before scrolling?
+
+Most visitors decide here. Capture it before anything else can overwrite the impression.
+
+1. Screenshot the fold as found. Do not scroll first.
+2. **Answer, in first person, before scrolling** — this is the whole point of the shape:
+   - *What do I think this is?*
+   - *Who do I think it's for?*
+   - *What does it want me to do?*
+   - *Is any of that a guess?*
+3. Record **time-to-comprehension**: the second at which the persona could answer "what is this" correctly. If they never can, record `null` — that is the strongest finding a visit can produce.
+4. Note the first thing the eye lands on, and whether it is the thing the page most wants read.
+
+**Do not scroll until step 2 is written.** Scrolling and then reporting a first impression produces a first impression that never happened.
+
+---
+
+## Shape V2 — Orient (0:30–5:00)
+
+**Goal:** the persona builds a working model of the offer.
+
+1. Scroll the landing page fully. Screenshot each distinct section.
+2. Follow whatever the page most obviously invites — the primary call to action, or the nav item that answers their question.
+3. Read as a visitor reads: headings, first lines, anything bold. **Skim. Do not read every word** — a persona who reads the whole page is testing a page nobody reads.
+4. Record every point where the persona is **confused, bored, or suspicious**, with a timestamp.
+
+**Instrumentation**
+- Scroll depth reached before losing interest.
+- Which section made them want to leave, and which made them stay.
+- Any jargon they could not define. Quote it exactly.
+
+---
+
+## Shape V3 — Evaluate (5:00–12:00)
+
+**Goal:** the persona tries to answer *"is this for me, and can I trust it?"*
+
+Follow the persona's own question wherever the site lets them. Typically:
+
+- **Pricing** — can they find it? Do they understand it? Can they work out what they would pay? A site that hides price is answering a question the visitor asked.
+- **Proof** — customers, numbers, testimonials, logos. Do they believe them?
+- **Who is behind this** — about, team, company, address. Is there a person anywhere?
+- **What happens to my data** — findable? Comprehensible? A link to a generic corporate policy is a finding.
+- **The objection they arrived with.** Every persona has one. Does the site answer it, ignore it, or make it worse?
+
+**Instrumentation**
+- Questions the persona could not answer from the site at all. **This list is the core output of a visit traversal.**
+- Anything that made them trust the site more, and anything less. Both.
+- Dead ends: a link promising an answer that does not deliver one.
+
+### Forms and conversion points — look, don't submit
+
+When the site asks for details — demo request, newsletter, trial, contact:
+
+1. **Open the form and screenshot it.**
+2. Count the fields. Note which are required and which feel unreasonable at this stage.
+3. Record what the persona feels about being asked *for this, at this point, in exchange for that*.
+4. **Back out without submitting.**
+
+**Why back out:** a submission creates a real lead in someone's real CRM, triggers real email, and may cost the site owner money. The form itself is where the finding lives. **The only exception is a target that explicitly enables submissions with a disposable identity** — and even then, never on a competitor's site in a Mode D run.
+
+---
+
+## Shape V4 — Decide (12:00–20:00) and debrief
+
+**Goal:** the persona reaches a verdict and says why.
+
+1. Give them a last few minutes to check anything still nagging.
+2. Ask, in first person, and write into `persona-debrief.md`:
+
+> **Q1 — In one sentence, what does this company do?**
+>
+> **Q2 — Who is it for? Is that you?**
+>
+> **Q3 — What would you do next, if anything? Why that?**
+>
+> **Q4 — What did you want to know that the site never told you?**
+>
+> **Q5 — Would you trust them with your money or your data? What made the difference?**
+>
+> **Q6 — Does the site match the promise that brought you here?** State the promise from your pre-session note, then *yes / close but off / no*, and one sentence on why.
+
+3. `browser_close()`.
+
+**Q4 is the highest-value question in a visit traversal.** A list of questions a real visitor had and could not answer is the most directly actionable output a website assessment produces — every item is a page someone can write.
+
+**Q1 is scored against reality, not against effort.** If the persona's one sentence is wrong, the site failed, however handsome it is.
+
+---
+
+## Coverage depth
+
+Set at interview (CLAUDE.md §10, "Coverage depth is the user's choice") and recorded in the manifest.
+
+| `coverage_depth` | V2 / V3 behaviour |
+|---|---|
+| `overview` | Landing page and whatever it directly invites. No nav sweep. |
+| `standard` *(default)* | Landing page + 2–3 pages the persona's question leads to. |
+| `deep` | Every top-level nav destination, plus footer pages (pricing, about, privacy, terms). |
+
+**⚑ On a `deep` run, mark where the visitor stopped being a visitor.** Log `[MM:SS] --- auditor mode: natural interest exhausted ---` at the point the persona would genuinely have left, and continue. Findings after that line are real, but they are not evidence about a visitor's experience, and Pass 2 must be able to tell them apart.
+
+---
+
+## Checkpoints
+
+| Mark | Action |
+|---|---|
+| **10 min** | If the persona still cannot say what the site does, log `checkpoint_10: comprehension_failed` — that is a finding in itself, not a reason to keep trying. |
+| **20 min** | Move to debrief regardless of progress. |
+| **25 min** | Hard stop. |
+
+**A visitor who leaves early is data, not a failed run.** If the persona would genuinely have gone within two minutes, record that and go to the debrief. Padding the session to fill the budget destroys the finding.
+
+---
+
+## Banned vocabulary during capture
+
+The list lives in **`banned-vocabulary.md`** — one file, read verbatim by `check_capture.py`. Do not keep a copy here; a copy drifts.
+
+The persona may say *"I couldn't find the price"*. They may not say *"the pricing CTA is below the fold, a P2 conversion issue."*
+
+**Checked mechanically after capture.** Any hit fails the phase gate.
+
+---
+
+## Artifacts, per persona
+
+Under `<run_folder>/persona-<slug>/`:
+
+| File | Contains |
+|---|---|
+| `screenshots/NN-*.png` | The fold first, then one per distinct section or page |
+| `session.log` | `[MM:SS] <event>` narrative, first person |
+| `timeline.json` | Structured metrics — below |
+| `persona-debrief.md` | Q1–Q6, first person |
+| `findings-raw.json` | Reactions, never verdicts |
+| `console-full.txt` | Every console message, dumped at the landing page and at each moment of confusion |
+| `network-full.txt` | Every network request, same — `trust` reads it for the cookie-banner check |
+
+```json
+{
+  "shape_v1": { "time_to_comprehension_seconds": null,
+                "understood_what": false, "understood_who": false,
+                "understood_next_step": false, "guessed": true },
+  "shape_v2": { "start": "00:30", "end": "MM:SS",
+                "scroll_depth_pct": 0, "sections_seen": 0,
+                "point_of_lost_interest": "MM:SS" },
+  "shape_v3": { "start": "MM:SS", "end": "MM:SS",
+                "pages_visited": [], "questions_unanswered": [],
+                "price_found": false, "price_understood": false,
+                "forms_opened": 0, "forms_submitted": 0,
+                "trust_up": [], "trust_down": [] },
+  "shape_v4": { "start": "MM:SS", "end": "MM:SS", "verdict": "" },
+  "coverage_depth": "standard",
+  "auditor_mode_from": null,
+  "left_early": false,
+  "session_end_minutes": 0
+}
+```
+
+**`questions_unanswered` is the field that earns this whole traversal.** Populate it as they arise, never reconstructed at the end.
+
+
+<!-- references/playwright-patterns.md -->
+# Playwright MCP — call patterns & gotchas
+
+**[M] methodology.** Loaded during capture (Pass 1) so the traversal agent knows how to drive the browser. Contains no scoring vocabulary — safe to load alongside a persona brief.
+
+---
+
+## Tools
+
+| Tool | Use for |
+|---|---|
+| `browser_navigate(url)` | Load a URL |
+| `browser_navigate_back()` | Back button |
+| `browser_snapshot()` | Accessibility-tree snapshot — the primary "look at the page" tool. Returns element refs (`e21`, `e35`…) |
+| `browser_take_screenshot(filename?)` | Pixel screenshot. One per distinct screen. |
+| `browser_click(ref)` | Click using a ref from a recent snapshot |
+| `browser_type(ref, text)` | Type into a field |
+| `browser_fill_form([{ref,value},…])` | Batch fill |
+| `browser_select_option(ref, value)` | Select dropdown option |
+| `browser_press_key(key)` | Keyboard |
+| `browser_hover(ref)` | Hover |
+| `browser_wait_for({text?, time?})` | Wait for text or elapsed time |
+| `browser_resize(w, h)` | ⚠️ **See below — may be broken.** |
+| `browser_tabs(action)` | Manage tabs |
+| `browser_evaluate(js)` | Last-resort JS eval |
+| `browser_console_messages()` | Read console |
+| `browser_network_requests()` | Inspect network |
+| `browser_handle_dialog(action)` | Accept/dismiss native dialog |
+| `browser_close()` | Close browser between personas |
+
+---
+
+## Setting the viewport — try, then verify
+
+**Try `browser_resize(width, height)` first.** In current versions it works and
+simply calls `setViewportSize` internally (confirmed working 2026-09-04). Older
+versions reject numeric arguments — **an upstream bug, not an understudy bug.**
+Only if it errors, set the viewport directly:
+
+```js
+await page.setViewportSize({ width: W, height: H })
+```
+
+via the run-code tool, whose name varies by version — `browser_run_code` or
+`browser_run_code_unsafe`. Check the tool list rather than assuming either.
+
+**Then verify, whichever path set it:**
+
+```js
+browser_evaluate → ({ w: window.innerWidth, h: window.innerHeight })
+```
+
+**The verification is the load-bearing step, not the workaround.** Do not assume
+the resize worked and do not skip the check because `browser_resize` returned
+without an error. A persona defined by their device is testing a different
+product if the viewport silently stayed at the default, and that failure is
+invisible in the screenshots — they just look like a slightly different layout.
+Log the verified numbers into `timeline.json` so a reader can confirm what was
+actually measured.
+
+---
+
+## The core loop: look → decide → act
+
+```
+1. browser_snapshot()                     read the accessibility tree
+2. (reason about what's on screen, as the persona)
+3. browser_take_screenshot("NN-description.png")
+4. browser_click(e21)   or   browser_type(e21, "...")
+5. browser_wait_for({ text: "expected next-screen text" })
+6. repeat
+```
+
+Every distinct screen gets **one** screenshot with a descriptive, zero-padded filename: `03-signup-form.png`, `07-consent-screen.png`, `12-dashboard-empty-state.png`. The number is the order seen; the description is what a human scanning the folder needs.
+
+---
+
+## Rules
+
+**Refs expire.** Element refs from `browser_snapshot()` are valid only until the next snapshot or any DOM mutation. If a click navigates, re-snapshot before the next click.
+
+**Screenshots must end up in the run folder — but you usually cannot write them there directly.**
+
+The MCP server confines writes to its own output roots: normally the directory Claude Code was started in, plus `.playwright-mcp/` beneath it. An absolute path into `~/.understudy/runs/…` is refused outright:
+
+```
+Error: File access denied: /Users/…/.understudy/runs/… is outside allowed roots.
+        Allowed roots: /path/to/cwd/.playwright-mcp, /path/to/cwd
+```
+
+So **capture, then move.** Every screenshot, one at a time:
+
+```
+browser_take_screenshot(filename: "07-consent-screen.png")
+```
+
+then immediately, before the next action:
+
+```bash
+mv -f ./07-consent-screen.png "<run_folder>/persona-<slug>/screenshots/" \
+  || mv -f ./.playwright-mcp/07-consent-screen.png "<run_folder>/persona-<slug>/screenshots/"
+```
+
+The server may write to either location depending on version, hence the fallback. **Move immediately — not in a batch at the end.** A traversal that dies at minute forty leaves forty screenshots in the wrong place with no record of which screen each belonged to, and the evidence rule has no sympathy: a finding whose artifact is not on disk gets dropped.
+
+**Why this is safe for a public repo:** the transit directory is inside the repo, so `.gitignore` covers `*.png` and `.playwright-mcp/` from day one (CLAUDE.md §7). It is transit, never storage — the run folder outside the repo is the authoritative copy, and the traversal removes `.playwright-mcp/` when it closes the browser.
+
+**Console and network dumps have the same constraint, and fixed names.** `browser_console_messages(filename: "console-full.txt")` and `browser_network_requests(filename: "network-full.txt")` write to the same roots; move both into `persona-<slug>/` the same way. The `bugs` and `trust` lenses read exactly those two filenames, and `check_capture.py` warns when either is missing.
+
+**Console and network are evidence, not debug output.**
+- `browser_console_messages()` — JS errors go into `session.log`.
+- `browser_network_requests()` — failed API calls, especially during auth and first-value flows.
+
+Capture both at every checkpoint and at any moment the persona is confused. A persona who says *"it just spun forever"* plus a 502 in the network log is a complete finding; either alone is half of one.
+
+**Prefer text waits over time waits.** `browser_wait_for({text})` over `{time}`. Fixed waits hide flakiness — and flakiness the persona experienced as slowness is itself a finding.
+
+**Fresh context per persona.** `browser_close()` between personas. Running headed, launch the MCP server `--isolated` or with a per-persona `userDataDir` under `~/.understudy/profiles/<slug>/`.
+
+---
+
+## Auth walls and second factors
+
+- At an auth wall, **stop.** Do not click, type, or guess. Hand the open browser to the human (see the traversal skill's pause protocol).
+- After the human authenticates, **re-snapshot** — the ref landscape has changed completely.
+- OAuth consent screens may open a popup or redirect. Re-snapshot the product tab afterwards.
+- A second-factor challenge is the same as an auth wall: pause, hand over, never type a code.
+
+---
+
+## Do not
+
+- **Do not use CSS selectors.** Use refs from snapshots.
+- **Do not click without snapshotting first.** Refs expire.
+- **Do not screenshot mid-animation.** Wait for text, then shoot.
+- **Do not trust a success toast alone.** Re-snapshot after any state change to confirm the page actually did what it claimed. A toast that lies is a finding — but only if you looked.
+
+
+<!-- references/evidence-rules.md -->
+# Evidence rules
+
+**[M] methodology.** Binding on capture and on scoring. This is the shortest reference here and the least negotiable.
+
+---
+
+## The rule
+
+> **Every finding cites evidence. No screenshot, log line, or DOM excerpt → the finding is dropped.**
+
+No exceptions. Including — especially — for findings that are obviously true.
+
+**Why "especially":** an obviously-true finding is the one nobody checks. It is also the one most likely to be a model confabulating something plausible about a screen it never opened. The rule exists to make that failure impossible rather than unlikely, and it only works if it is absolute. One exception and it becomes a preference.
+
+---
+
+## What counts
+
+| Evidence | Cited as | Good for |
+|---|---|---|
+| Screenshot | `persona-<slug>/screenshots/07-consent.png` | Anything visible |
+| Log line | `session.log:142` | Sequence, timing, what happened when |
+| Console message | `console.log` entry, verbatim | Errors, warnings |
+| Network request | Method, URL, status | Failures, latency, unexpected calls |
+| DOM excerpt | The actual markup | Structure, markup, accessibility tree |
+| Timeline metric | `timeline.json` field | Timings, counts |
+| Debrief quote | `persona-debrief.md`, verbatim | What the persona understood |
+
+**What does not count:** *"the persona seemed confused"* without a line where they said so · *"this is standard practice"* · *"users generally expect"* · anything from the target file that was never observed · anything from the model's general knowledge of the product category.
+
+---
+
+## Citation format
+
+Every finding carries at least one:
+
+```markdown
+**Evidence:** `persona-novice/screenshots/07-consent.png` · `session.log:142`
+> "Why does it need my calendar? It hasn't shown me anything yet."
+```
+
+Path relative to the run folder. A quote is verbatim or it is not a quote.
+
+---
+
+## What capture owes scoring
+
+Capture cannot know which observations become findings, so it over-captures on purpose:
+
+- **One screenshot per distinct screen**, even boring ones. The boring screen is often the finding.
+- **Console and network at every checkpoint**, and at any moment of confusion.
+- **Timestamp everything.** A finding without a time cannot be placed in the journey, and its severity depends on where it happened.
+- **Quote the persona verbatim.** Paraphrase destroys the evidence — the exact words are the finding.
+
+A finding dropped for want of evidence is a capture failure, not a scoring failure. Scoring can only work with what it is given.
+
+---
+
+## What scoring owes capture
+
+- **Never invent evidence.** If a finding feels right but has no artifact, drop it. Write it in a "dropped for want of evidence" list if it seems worth chasing — a list nobody will confuse with findings.
+- **Never cite an artifact you didn't open.** A screenshot filename is not evidence of what it contains.
+- **Never upgrade severity to compensate for weak evidence.** Severity describes impact, not confidence.
+
+---
+
+## The dropped list
+
+Findings dropped for want of evidence go in a clearly-labelled section at the end of the report:
+
+```markdown
+## Dropped for want of evidence
+Observations that did not meet the evidence rule. **Not findings.**
+Listed so a future run knows what to look for.
+
+- Signup may be slow on mobile — no timing captured this run.
+```
+
+This makes the rule cheap to obey. Without it there is pressure to smuggle a good observation through with weak evidence; with it there is somewhere honest to put it.
+
+
+<!-- references/banned-vocabulary.md -->
+# Banned vocabulary during capture
+
+**[M] methodology.** The one list. `check_capture.py` reads it from this file;
+`flow-shapes.md` and `visit-shapes.md` point here rather than keeping copies.
+Observed 2026-09-11: the two shape files listed 19 terms and said "checked
+mechanically", the script checked 14. A list that lives in two places is two
+lists.
+
+**Why:** a persona who writes in the analyst's vocabulary has seen the
+analyst's framework, and the report then confirms its own priors (CLAUDE.md
+§6, invariant 1). The persona may say *"this was hard to use"* or *"I couldn't
+find the price"*. They may not say *"a P2 usability issue"* or *"the CTA is
+below the fold"*.
+
+**How it is checked:** whole-word, case-insensitive, in `session.log`,
+`persona-debrief.md`, `findings-raw.json` and Mode D's `reading.md`. A hit
+inside a URL-shaped token (`/plans/p1`) is ignored — that is a page the persona
+visited, not a word they chose. Quoted page text is **not** exempt. A run may
+waive terms via `vocabulary_allowlist` in the target file — for a product whose
+own navigation says "Usability" — and the gate prints every waiver.
+
+**One hit fails the gate. The fix is to re-run the traversal, never to edit
+the words out.**
+
+## The list — one term per line, `- term`
+
+- heuristic
+- nielsen
+- hax
+- amershi
+- severity
+- p0
+- p1
+- p2
+- p3
+- usability
+- ux
+- wcag
+- accessibility audit
+- activation funnel
+- conversion funnel
+- ttfv
+- friction
+- cta
+- above the fold

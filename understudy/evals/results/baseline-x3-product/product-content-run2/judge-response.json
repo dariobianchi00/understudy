@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 14190,
+ "stop_reason": "tool_use",
+ "session_id": "80bb3be6-0cce-411e-ac3a-378a8d6ae297",
+ "total_cost_usd": 0.183295,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 40215,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 1136,
+  "output_tokens_details": {
+   "thinking_tokens": 626
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40215,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1136,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 40215,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 40215
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 6158,
+   "outputTokens": 14,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.006228,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1136,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 40215,
+   "webSearchRequests": 0,
+   "costUSD": 0.177067,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 626,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"memories-invented\",\"caught\":true,\"finding_title\":\"5c5e3aa8adf2-a \u2014 \\\"What Nimbus remembers about you\\\" lists three facts about the user that are invented\"},{\"id\":\"webhook-toggle-unexplained\",\"caught\":true,\"finding_title\":\"31ad74b3ec06 \u2014 Settings toggles use engineering vocabulary with no explanation: \\\"Enable webhook sync\\\", \\\"Federated graph replication\\\", \\\"Vault attestation\\\"\"},{\"id\":\"naming-inconsistent\",\"caught\":true,\"finding_title\":\"07d8d3a2fc56 \u2014 One object is called \\\"cards\\\", \\\"block\\\" and \\\"notes\\\" on the same screen\"},{\"id\":\"promise-mismatch\",\"caught\":true,\"finding_title\":\"87014dd5487f \u2014 The product contradicts its pitch: \\\"remembers everything\\\" opens on \\\"Nothing here yet.\\\" and forgets the first note\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "memories-invented",
+    "caught": true,
+    "finding_title": "5c5e3aa8adf2-a \u2014 \"What Nimbus remembers about you\" lists three facts about the user that are invented"
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "caught": true,
+    "finding_title": "31ad74b3ec06 \u2014 Settings toggles use engineering vocabulary with no explanation: \"Enable webhook sync\", \"Federated graph replication\", \"Vault attestation\""
+   },
+   {
+    "id": "naming-inconsistent",
+    "caught": true,
+    "finding_title": "07d8d3a2fc56 \u2014 One object is called \"cards\", \"block\" and \"notes\" on the same screen"
+   },
+   {
+    "id": "promise-mismatch",
+    "caught": true,
+    "finding_title": "87014dd5487f \u2014 The product contradicts its pitch: \"remembers everything\" opens on \"Nothing here yet.\" and forgets the first note"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 10172,
+ "type": "result",
+ "duration_ms": 15685,
+ "uuid": "baa5556a-182a-47d1-93f3-0b2ab965318d",
+ "ttft_stream_ms": 2270,
+ "time_to_request_ms": 231,
+ "first_content_frame_ms": 2723,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

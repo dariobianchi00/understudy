@@ -1,0 +1,40 @@
+→ site/aeo run 1/3
+  contract PASS · recall 3/3 · hallucinations 0 · out-of-lens 0 · band 2/3 · score 4 · $0.77 · 235s
+→ site/aeo run 2/3
+  contract PASS · recall 3/3 · hallucinations 0 · out-of-lens 0 · band 2/3 · score 5 · $0.64 · 363s
+→ site/aeo run 3/3
+  contract PASS · recall 3/3 · hallucinations 0 · out-of-lens 0 · band 3/3 · score 3 · $0.63 · 482s
+→ site/clarity run 1/3
+  contract PASS · recall 3/3 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $2.09 · 572s
+→ site/clarity run 2/3
+  contract PASS · recall 3/3 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 3 · $1.68 · 316s
+→ site/clarity run 3/3
+  contract PASS · recall 3/3 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $1.76 · 445s
+→ site/conversion run 1/3
+  contract PASS · recall 5/5 · hallucinations 0 · out-of-lens 0 · band 3/5 · score 2 · $1.66 · 302s
+→ site/conversion run 2/3
+  contract PASS · recall 5/5 · hallucinations 0 · out-of-lens 0 · band 4/5 · score 2 · $1.94 · 693s
+→ site/conversion run 3/3
+  contract PASS · recall 4/5 · hallucinations 0 · out-of-lens 0 · band 4/4 · score 2 · $1.56 · 181s
+  missed: features-404
+→ site/seo run 1/3
+  contract PASS · recall 7/7 · hallucinations 0 · out-of-lens 0 · band 6/7 · score 4 · $0.58 · 358s
+→ site/seo run 2/3
+  contract PASS · recall 7/7 · hallucinations 0 · out-of-lens 0 · band 5/7 · score 3 · $0.70 · 261s
+→ site/seo run 3/3
+  contract PASS · recall 7/7 · hallucinations 0 · out-of-lens 0 · band 4/7 · score 3 · $0.57 · 226s
+→ site/technical run 1/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 4/4 · score 6 · $0.57 · 354s
+→ site/technical run 2/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 3/3 · score 6 · $0.58 · 358s
+→ site/technical run 3/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 5 · $0.58 · 228s
+→ site/trust run 1/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 4/4 · score 3 · $2.39 · 588s
+→ site/trust run 2/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 3/4 · score 3 · $1.81 · 346s
+→ site/trust run 3/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 3 · $1.88 · 448s
+
+results: understudy/evals/results/baseline-x3-site
+history: /Users/dario/Repo/Understudy/understudy/evals/results/history.csv

@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 12679,
+ "stop_reason": "tool_use",
+ "session_id": "438dc9a5-bdce-40f6-bed6-90a2a1ae1f5f",
+ "total_cost_usd": 0.162864,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 36005,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 1076,
+  "output_tokens_details": {
+   "thinking_tokens": 681
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36005,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1076,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 36005,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 36005
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 3162,
+   "outputTokens": 15,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.003237,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1076,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 36005,
+   "webSearchRequests": 0,
+   "costUSD": 0.15962700000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 681,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"lying-toast\",\"caught\":true,\"finding_title\":\"Save reports success while the API call fails and the note is never stored\"},{\"id\":\"api-500-notes\",\"caught\":true,\"finding_title\":\"Save reports success while the API call fails and the note is never stored\"},{\"id\":\"search-always-empty\",\"caught\":true,\"finding_title\":\"Save reports success while the API call fails and the note is never stored\"},{\"id\":\"console-error-dashboard\",\"caught\":true,\"finding_title\":\"Uncaught ReferenceError on every dashboard load: renderGraphOverlay is not defined\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "lying-toast",
+    "caught": true,
+    "finding_title": "Save reports success while the API call fails and the note is never stored"
+   },
+   {
+    "id": "api-500-notes",
+    "caught": true,
+    "finding_title": "Save reports success while the API call fails and the note is never stored"
+   },
+   {
+    "id": "search-always-empty",
+    "caught": true,
+    "finding_title": "Save reports success while the API call fails and the note is never stored"
+   },
+   {
+    "id": "console-error-dashboard",
+    "caught": true,
+    "finding_title": "Uncaught ReferenceError on every dashboard load: renderGraphOverlay is not defined"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 9864,
+ "type": "result",
+ "duration_ms": 14123,
+ "uuid": "0af857b0-4a6c-4380-8f86-b41dd3f9ac8d",
+ "ttft_stream_ms": 2051,
+ "time_to_request_ms": 614,
+ "first_content_frame_ms": 2387,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

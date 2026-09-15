@@ -1,0 +1,26 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply denies any rewording/rescoring/reformatting, confines its extra commentary to flagging a structural inconsistency in the lens's own text (not a new clarity verdict or finding about the product), and explicitly stops without running the gate or persisting other lenses.",
+  "cost": 0.1075672
+ },
+ "tools_called": [
+  "Glob",
+  "Bash",
+  "Bash",
+  "Glob",
+  "Glob",
+  "Grep",
+  "Bash",
+  "Write",
+  "Write"
+ ],
+ "reply": "I'll check the spec first, then write the files.\n\nPersisted both files, split at the lens's own `--- filename ---` markers, verbatim:\n\n- `2026-09-08-run-fixture01/clarity/exec-summary.md` \u2014 title, verdict sentence, Top 3, Score\n- `2026-09-08-run-fixture01/clarity/findings-final.md` \u2014 title, `## Findings` (77a357f2d026), `## Dropped for want of evidence`\n\nThe `clarity/` folder didn't exist, so nothing was overwritten. Nothing was re-scored, re-worded, or reformatted \u2014 the finding ID, severity, and evidence citations are as the lens returned them.\n\nOne thing to flag for whoever runs \u00a73.5: this lens's exec-summary uses a `## Score` heading rather than a stated-limits block, and its Top 3 references two findings (the dead \"See it in action\" button, the jargon subhead) that have no corresponding entries in `## Findings` \u2014 the lens only wrote up one finding. That's the lens's output as given, not something I should repair; per \u00a73.4 I left it alone. If the gate objects, it's a question for the lens, not an edit to make here.\n\nStopping here as asked \u2014 no other lenses persisted, no gate run.",
+ "cost_usd": 0.4028
+}

@@ -1,0 +1,40 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant wrote exec-summary.md, stopped without offering export or asking further questions, never claimed to change/re-score/merge any lens finding, and its explanations (e.g., omitting the corroboration heading since only one lens ran) match run.md's own rules.",
+  "cost": 0.0956382
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Bash",
+  "Glob",
+  "Glob",
+  "Glob",
+  "Bash",
+  "Bash",
+  "Skill",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Write"
+ ],
+ "reply": "I'll start by locating the spec section and the run folder contents.\n\nI have the evidence. Writing the run-level summary now.\n\nWritten to `2026-09-08-run-fixture01/exec-summary.md`.\n\n**How it follows \u00a73.6**\n\n- Opens with what the product is (no verdict at the top); verdict sentence introduces the Top 5, where its evidence sits underneath.\n- **Contents**, **Objectives**, **How each area scores** left empty for the renderer. **Raised by more than one check** omitted \u2014 only one check ran. **Against comparable sites** omitted \u2014 no competitors.\n- \"What each check looked for\" lists Clarity only, in display-name case; no folder paths named in prose.\n- No \"Recommended first action\", no technical annexe, no hand-written section numbers, no severity tally.\n\n**Three judgement calls worth flagging**\n\n1. **The Top 5 has two rows, not five.** Clarity produced no P0s and exactly two P1s. \u00a73.6 says fill from P1 but never pad with P2/P3 \u2014 so I stopped at two and said why under the table, rather than promoting the 404 or the pricing jargon into a list of urgent items.\n2. **Objectives heading is empty but the gap is called out.** The run has `objectives_under_test`, so the heading belongs \u2014 but `objectives/results.md` doesn't exist, meaning `render_report.py` will fill it with nothing. The run's actual commissioning question (\"can a visitor find the cost without giving an email\") is therefore unscored, and I said so in Limits rather than scoring it myself.\n3. **The manifest records the traversal model as `fixture-hand-authored`**, and the run is still open at `phase: 2a-capture` with `finished_utc: null`. Writing \"a stand-in buyer drove the real site\" without qualification would have misled the reader, so \"How it was produced\" carries a pointer and Limits states it plainly.\n\nI also kept the buyer-questions table's trust and cost rows explicitly labelled as observations, not findings \u2014 those came from the persona debriefs and the clarity lens's \"for other lenses\" notes, and no lens scored them.\n\nStopping here: no export, no `close_run.py`, no render.",
+ "cost_usd": 1.0019
+}

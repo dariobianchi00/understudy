@@ -1,0 +1,55 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 3,
+  "caught": 2,
+  "recall": 0.667,
+  "caught_ids": [
+   "jargon-fold",
+   "no-audience"
+  ],
+  "missed_ids": [
+   "dead-cta"
+  ],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 1,
+  "band_judged": 2,
+  "band_rows": [
+   {
+    "id": "no-audience",
+    "severity": "P1",
+    "band": [
+     "P1",
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "jargon-fold",
+    "severity": "P1",
+    "band": [
+     "P2"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 1,
+   "P1": 4,
+   "P2": 3,
+   "P3": 0
+  },
+  "score": 3,
+  "capture": "site",
+  "lens": "clarity",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 222.041454,
+  "cost_usd": 1.90476,
+  "lens_turns": 46,
+  "lens_error": false
+ }
+]

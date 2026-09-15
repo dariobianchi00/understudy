@@ -1,0 +1,28 @@
+→ product/bugs run 1/3
+  contract PASS · recall 3/4 · hallucinations 0 · out-of-lens 0 · band 2/3 · score 1 · $0.72 · 361s
+  missed: search-always-empty
+→ product/bugs run 2/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 1 · band 1/4 · score 2 · $0.56 · 233s
+→ product/bugs run 3/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 1/3 · score 2 · $0.67 · 489s
+→ product/content run 1/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $2.26 · 617s
+→ product/content run 2/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $2.24 · 625s
+→ product/content run 3/3
+  contract PASS · recall 4/4 · hallucinations 0 · out-of-lens 0 · band 2/4 · score 2 · $2.02 · 598s
+→ product/onboarding run 1/3
+  contract PASS · recall 2/2 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $2.24 · 577s
+→ product/onboarding run 2/3
+  contract PASS · recall 2/2 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 1 · $2.50 · 778s
+→ product/onboarding run 3/3
+  contract PASS · recall 2/2 · hallucinations 0 · out-of-lens 0 · band 2/2 · score 2 · $1.83 · 572s
+→ product/ux run 1/3
+  contract PASS · recall 5/5 · hallucinations 0 · out-of-lens 0 · band 2/5 · score 2 · $2.38 · 386s
+→ product/ux run 2/3
+  contract PASS · recall 5/5 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $2.12 · 343s
+→ product/ux run 3/3
+  contract PASS · recall 5/5 · hallucinations 0 · out-of-lens 0 · band 0/0 · score 2 · $2.06 · 474s
+
+results: understudy/evals/results/baseline-x3-product
+history: /Users/dario/Repo/Understudy/understudy/evals/results/history.csv

@@ -1,0 +1,169 @@
+{
+ "duration_api_ms": 9896,
+ "stop_reason": "tool_use",
+ "session_id": "6a7bc751-071d-4e17-9450-f61a17bc8189",
+ "total_cost_usd": 0.173886,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 38586,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 987,
+  "output_tokens_details": {
+   "thinking_tokens": 421
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38586,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 987,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 38586,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 38586
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 4765,
+   "outputTokens": 12,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.004825,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 987,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 38586,
+   "webSearchRequests": 0,
+   "costUSD": 0.16906100000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 421,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"pricing-noindex\",\"caught\":true,\"finding_title\":\"Pricing page is noindex, removing it from search results\"},{\"id\":\"sitemap-404\",\"caught\":true,\"finding_title\":\"Declared sitemap returns 404, leaving the site with no machine-readable page list\"},{\"id\":\"features-404\",\"caught\":true,\"finding_title\":\"Main navigation links to /features.html on every page, which 404s\"},{\"id\":\"duplicate-titles\",\"caught\":true,\"finding_title\":\"Duplicate title tag \\\"Nimbus Notes\\\" across About and Privacy pages\"},{\"id\":\"heading-structure\",\"caught\":true,\"finding_title\":\"Heading structure broken: Privacy has no H1, Pricing has two\"},{\"id\":\"invalid-jsonld\",\"caught\":true,\"finding_title\":\"Invalid JSON-LD on the homepage: malformed price value breaks the SoftwareApplication block\"},{\"id\":\"pricing-no-meta-description\",\"caught\":true,\"finding_title\":\"Meta description missing on Pricing and Privacy pages\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "pricing-noindex",
+    "caught": true,
+    "finding_title": "Pricing page is noindex, removing it from search results"
+   },
+   {
+    "id": "sitemap-404",
+    "caught": true,
+    "finding_title": "Declared sitemap returns 404, leaving the site with no machine-readable page list"
+   },
+   {
+    "id": "features-404",
+    "caught": true,
+    "finding_title": "Main navigation links to /features.html on every page, which 404s"
+   },
+   {
+    "id": "duplicate-titles",
+    "caught": true,
+    "finding_title": "Duplicate title tag \"Nimbus Notes\" across About and Privacy pages"
+   },
+   {
+    "id": "heading-structure",
+    "caught": true,
+    "finding_title": "Heading structure broken: Privacy has no H1, Pricing has two"
+   },
+   {
+    "id": "invalid-jsonld",
+    "caught": true,
+    "finding_title": "Invalid JSON-LD on the homepage: malformed price value breaks the SoftwareApplication block"
+   },
+   {
+    "id": "pricing-no-meta-description",
+    "caught": true,
+    "finding_title": "Meta description missing on Pricing and Privacy pages"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 5698,
+ "type": "result",
+ "duration_ms": 11555,
+ "uuid": "53fcc308-1e7e-4021-8c0c-f9f89655ceca",
+ "ttft_stream_ms": 1353,
+ "time_to_request_ms": 259,
+ "first_content_frame_ms": 1701,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

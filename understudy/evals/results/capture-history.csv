@@ -1,0 +1,2 @@
+date,persona,model,pass,failures,screenshots,spread_pct,persona_ok,cost_usd,seconds,results_dir
+2026-09-12T0757Z,evaluator,opus,0,2,8,52,1,2.3514,241,results/capture-smoke-evaluator

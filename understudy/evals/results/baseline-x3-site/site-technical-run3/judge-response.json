@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 11829,
+ "stop_reason": "tool_use",
+ "session_id": "9576a6b7-3943-4e1c-a6f1-7fcba0397958",
+ "total_cost_usd": 0.17009000000000002,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 37830,
+  "cache_read_input_tokens": 24215,
+  "output_tokens": 1028,
+  "output_tokens_details": {
+   "thinking_tokens": 554
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37830,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1028,
+    "cache_read_input_tokens": 24215,
+    "cache_creation_input_tokens": 37830,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 37830
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 3563,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.0036430000000000004,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1028,
+   "cacheReadInputTokens": 24215,
+   "cacheCreationInputTokens": 37830,
+   "webSearchRequests": 0,
+   "costUSD": 0.166447,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 554,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"hero-oversized\",\"caught\":true,\"finding_title\":\"98fd630e58d0 \u2014 Unoptimized hero image drives poor mobile LCP and 4.1 MB page weight\"},{\"id\":\"mobile-lcp-poor\",\"caught\":true,\"finding_title\":\"98fd630e58d0 \u2014 Unoptimized hero image drives poor mobile LCP and 4.1 MB page weight\"},{\"id\":\"render-blocking-css\",\"caught\":true,\"finding_title\":\"e6edd96102f6 \u2014 Render-blocking external font stylesheet delays first paint (plus 8845fb7e5ac7 \u2014 Text and CSS responses served without compression)\"},{\"id\":\"console-error-on-load\",\"caught\":true,\"finding_title\":\"8c5c120a71ea \u2014 Console error fires on every homepage load\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "hero-oversized",
+    "caught": true,
+    "finding_title": "98fd630e58d0 \u2014 Unoptimized hero image drives poor mobile LCP and 4.1 MB page weight"
+   },
+   {
+    "id": "mobile-lcp-poor",
+    "caught": true,
+    "finding_title": "98fd630e58d0 \u2014 Unoptimized hero image drives poor mobile LCP and 4.1 MB page weight"
+   },
+   {
+    "id": "render-blocking-css",
+    "caught": true,
+    "finding_title": "e6edd96102f6 \u2014 Render-blocking external font stylesheet delays first paint (plus 8845fb7e5ac7 \u2014 Text and CSS responses served without compression)"
+   },
+   {
+    "id": "console-error-on-load",
+    "caught": true,
+    "finding_title": "8c5c120a71ea \u2014 Console error fires on every homepage load"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 7494,
+ "type": "result",
+ "duration_ms": 13286,
+ "uuid": "2a1547cc-295f-41fd-84d5-c52b0c36e524",
+ "ttft_stream_ms": 1295,
+ "time_to_request_ms": 235,
+ "first_content_frame_ms": 1622,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

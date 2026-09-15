@@ -1,0 +1,137 @@
+{
+ "duration_api_ms": 257406,
+ "stop_reason": "end_turn",
+ "session_id": "59ca1337-5510-4459-a333-fefff331e175",
+ "total_cost_usd": 2.0556034999999997,
+ "usage": {
+  "input_tokens": 34,
+  "cache_creation_input_tokens": 93445,
+  "cache_read_input_tokens": 1087287,
+  "output_tokens": 23048,
+  "output_tokens_details": {
+   "thinking_tokens": 3198
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 93445,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 471,
+    "cache_read_input_tokens": 104360,
+    "cache_creation_input_tokens": 380,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 380
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1075,
+   "outputTokens": 13,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.00114,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-opus-5": {
+   "inputTokens": 34,
+   "outputTokens": 23048,
+   "cacheReadInputTokens": 1087287,
+   "cacheCreationInputTokens": 93445,
+   "webSearchRequests": 0,
+   "costUSD": 2.0544634999999998,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 3198,
+   "canonicalModel": "claude-opus-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01KT8vMSc15mRaKt9ZTzRkFa",
+   "tool_input": {
+    "command": "cd /Users/dario/Repo/Understudy/understudy/references && cat lens-output-contract.md evidence-rules.md severity-rubric.md",
+    "description": "Read output contract, evidence rules, severity rubric"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_011RSXfvsnM8KZYkmFMfKGTP",
+   "tool_input": {
+    "command": "grep -n -i -E \"variant|-a\\b|suffix|re\\.compile|def infer|locator|Flow|verdict|check [0-9]|score\" /Users/dario/Repo/Understudy/understudy/scripts/check_report.py | head -80",
+    "description": "Inspect how check_report parses IDs, variants and fields"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01KM17GZtScE6Noh3NBokxWv",
+   "tool_input": {
+    "command": "mkdir -p content && cat > content/findings-final.md <<'EOF'\n# Nimbus Notes \u2014 content findings \u2014 Run 2026-09-08 (fixture02)\n\n## Method\n- Framework: promise-vs-delivery (Q4), Nielsen A2/A4/A9, reading level, jargon density, error and empty-state copy\n- Pass 1 naive capture \u2192 Pass 2 analyst scoring\n- Personas: generic \u2014 \u26a0 INFERRED (novice, power-user; both desktop 1440\u00d7900)\n- Scoring model: opus\n- Every finding cites an artifact; unsupported observations dropped, listed at the end\n- Scope exclusion applied: the login wall at `/app/login.html` is never scored\n\n## Promise vs delivery\n\n| Persona | Arrived expecting | Product delivered | Match | Cost |\n|---|---|---|---|---|\n| novice | \"remembers everything so you never start from zero\" \u2014 \"a notes app that fills itself in from things I already have\" | Empty \"Your cards\", note lost twice behind \"Saved \u2713\", Memories page stating things that are not true | Fail | Quit at 06:30 with zero notes; Q3 \"No. Nothing, until saving works.\" |\n| power-user | \"remembers everything so you never start from zero\" \u2014 \"fast capture, good search, keyboard-driven\" | Save lost, search finds nothing, no shortcuts, Memories not theirs | Fail | Quit at 03:00; Q3 \"No. Nothing.\" |\n\n- Persona Q4 answers: novice \"No\", power-user \"No\". My reading agrees with both; no disagreement to note.\n- The promise failure is the root of the two P0s: copy claims memory (\"Saved \u2713\", \"What Nimbus remembers about you\") the product cannot back.\n\n## Reading level and jargon\n- Sentence structure is simple throughout (\u2264 10 words per line); the difficulty is vocabulary, not syntax.\n- Jargon terms met before first value: \"Federated graph\", \"Sovereign vault\", \"Hybrid mesh\", \"block\", \"cards\" \u2014 5 terms in the first 2 screens.\n- Jargon terms in Settings: \"Enable webhook sync\", \"Federated graph replication\", \"Vault attestation\" \u2014 3 of 4 controls.\n- Clear copy that worked: \"0 words\" / \"Preview below\" (`persona-novice/screenshots/03-new-note.png`), \"Export \u2014 Markdown, all cards\" (`persona-novice/screenshots/07-settings.png`, `session.log:23`).\n\n---\n\n## Findings\n\n### b80be1050d42 \u2014 \"Saved \u2713\" confirms a save the server rejected, and no error copy ever appears\n- **Severity:** P0\n- **So what:** Both personas were told their note was kept when it was not; the novice concluded \"It is lying to me\" and stopped trusting every other message.\n- **Framework tags:** A1, A9, C-ABANDON\n- **Flow:** shape_2\n- **Locator:** /app/new.html\n- **Personas hit:** novice, power-user\n- **Observed:**\n  - Green \"Saved \u2713\" toast shown after Save while `POST /api/notes` returned 500 (novice twice, power-user once).\n  - Dashboard then shows \"Nothing here yet.\"; search returns \"No results for 'Dentist'\" / \"No results for 'Roadmap'\".\n  - No error, retry or explanation copy shown at any point; the only wording the user sees is a success message.\n- **Evidence:** `persona-novice/session.log:17` \u00b7 `persona-novice/session.log:18` \u00b7 `persona-novice/session.log:20` \u00b7 `persona-novice/network-full.txt` (POST /api/notes \u2192 500 at 03:05 and 03:50) \u00b7 `persona-novice/screenshots/05-notes-list-missing.png` \u00b7 `persona-power-user/session.log:11` \u00b7 `persona-power-user/screenshots/03-search-empty.png`\n  > \"Went back to New block. Wrote it again, saved again, \"Saved \u2713\" again, dashboard empty again. It is lying to me.\"\n  > \"Nothing yet \u2014 it accepts a note and then loses it.\"\n- **Repro:**\n  1. Sign up, choose any workspace type, open \"New block\".\n  2. Enter a title and body, click \"Save\".\n  3. Observe \"Saved \u2713\" toast; return to dashboard and search the title.\n- **Fix:** Gate the \"Saved \u2713\" toast on a 2xx response, and on failure show an error that names what happened and offers retry.\n\n### 5c5e3aa8adf2-a \u2014 \"What Nimbus remembers about you\" lists three facts about the user that are invented\n- **Severity:** P0\n- **So what:** The novice read confident statements about herself that were false, then doubted every other claim the product made \u2014 \"is it making up the 'Saved' too?\"\n- **Framework tags:** A2, B-G2, B-G11, C-ABANDON\n- **Flow:** shape_2b\n- **Locator:** /app/memories.html\n- **Personas hit:** novice\n- **Observed:**\n  - Page shows \"You prefer to schedule meetings on Tuesday afternoons.\" \"Your team uses Jira and Slack.\" \"You are working on a product launch in Q4.\"\n  - Caption reads \"Memories are built from your notes and connected accounts.\" \u2014 the persona had zero saved notes and no connected accounts.\n  - No label marks the content as sample, demo or placeholder.\n- **Evidence:** `persona-novice/screenshots/06-memories.png` \u00b7 `persona-novice/session.log:21` \u00b7 `persona-novice/session.log:22` \u00b7 `persona-novice/session.log:25`\n  > \"None of that is true. I've written one note about a dentist. Where is this from? If it's making these up, is it making up the \"Saved\" too?\"\n- **Repro:**\n  1. Create a fresh workspace with no notes saved and no accounts connected.\n  2. Click \"Memories\" in the top nav.\n- **Fix:** On /app/memories.html, never show placeholder memories as the user's own; show an empty state that says where memories come from and how to create the first one.\n\n### 5c5e3aa8adf2-b \u2014 \"What Nimbus remembers about you\" lists three facts about the user that are invented\n- **Severity:** P1\n- **So what:** The power-user wrote the page off as \"a demo panel\" and declared it untrustworthy \u2014 the headline feature of the pitch was dismissed in 30 seconds.\n- **Framework tags:** A2, B-G2, B-G11\n- **Flow:** shape_2b\n- **Locator:** /app/memories.html\n- **Personas hit:** power-user\n- **Observed:**\n  - Same three statements shown to a workspace with no saved notes and no connected accounts.\n  - Persona assumed demo content rather than a lie, but explicitly refused to trust it.\n- **Evidence:** `persona-power-user/session.log:14` \u00b7 `persona-power-user/persona-debrief.md` \u00b7 `persona-novice/screenshots/06-memories.png` (same page, same copy)\n  > \"Memories. Tuesday meetings, Jira, Q4 launch. Not me. Whatever \u2014 a demo panel, I assume. Not going to trust it.\"\n  > \"It remembers nothing I gave it and claims things I didn't.\"\n- **Repro:**\n  1. Create a fresh workspace, save nothing.\n  2. Click \"Memories\".\n- **Fix:** Same surface: replace the placeholder statements with an honest empty state, or label them \"Example\" so nobody reads them as their own.\n\n### 87014dd5487f \u2014 The product contradicts its pitch: \"remembers everything\" opens on \"Nothing here yet.\" and forgets the first note\n- **Severity:** P1\n- **So what:** Both personas arrived for memory and got amnesia; both answered Q4 \"No\" and Q3 \"Nothing\", so the pitch is actively costing the product its first session.\n- **Framework tags:** A2, B-G1, C-SOWHAT, C-ABANDON\n- **Flow:** shape_1\n- **Locator:** /app/dashboard.html\n- **Personas hit:** novice, power-user\n- **Observed:**\n  - Pre-session promise for both: \"remembers everything so you never start from zero\".\n  - First screen after signup: \"Your cards\" \u2014 \"Nothing here yet.\" with no copy explaining how Nimbus will remember anything.\n  - Nothing in the app names a source of memory (import, connect, sync) until the false caption on Memories.\n- **Evidence:** `persona-novice/session.log:2` \u00b7 `persona-novice/session.log:12` \u00b7 `persona-novice/screenshots/02-dashboard-empty.png` \u00b7 `persona-novice/persona-debrief.md` \u00b7 `persona-power-user/session.log:2` \u00b7 `persona-power-user/screenshots/02-dashboard.png` \u00b7 `persona-power-user/persona-debrief.md`\n  > \"I arrived with \"remembers everything so you never start from zero\". No \u2014 it started completely empty, it lost what I gave it, and the \"memories\" it does have aren't mine.\"\n  > \"\"Remembers everything.\" No. It remembers nothing I gave it and claims things I didn't.\"\n- **Repro:**\n  1. Read the marketing line \"Nimbus remembers everything so you never start from zero\".\n  2. Sign up and land on /app/dashboard.html.\n  3. Compare the first screen against the line.\n- **Fix:** Either make the first dashboard state say how \"remembering\" starts (connect, import, or write) and deliver it, or change the marketing line to match what a new workspace does.\n\n### c2721593a4a1-a \u2014 Signup forces an irreversible choice between \"Federated graph\", \"Sovereign vault\" and \"Hybrid mesh\" with no definitions\n- **Severity:** P1\n- **So what:** The novice spent 48 seconds guessing at a decision she was told she \"cannot\" undo, before seeing a single screen of the product.\n- **Framework tags:** A2, A3, A5, C-ABANDON\n- **Flow:** shape_1\n- **Locator:** /app/signup.html\n- **Personas hit:** novice\n- **Observed:**\n  - Heading \"Before we begin, choose your workspace type\"; three radio labels, no description under any of them.\n  - Helper text: \"This cannot be changed later.\"\n  - Persona picked \"Hybrid mesh\" \"because it sounds like it includes the other two\".\n- **Evidence:** `persona-novice/screenshots/01-signup-workspace-type.png` \u00b7 `persona-novice/session.log:9` \u00b7 `persona-novice/session.log:10` \u00b7 `persona-novice/session.log:11`\n  > \"I don't know what any of these are. It says I can't change it. I haven't seen the product yet and it wants a decision I can't undo.\"\n- **Repro:**\n  1. Clear the login wall and land on /app/signup.html.\n  2. Read the three options and the helper text.\n- **Fix:** Add one plain-language line under each option saying who it is for and what it changes, or default the choice and move it to Settings.\n\n### c2721593a4a1-b \u2014 Signup forces an irreversible choice between \"Federated graph\", \"Sovereign vault\" and \"Hybrid mesh\" with no definitions\n- **Severity:** P3\n- **So what:** The power-user shrugged (\"I've seen worse\") but later could not tell whether \"Federated graph replication\" in Settings was the same thing.\n- **Framework tags:** A2, A4\n- **Flow:** shape_1\n- **Locator:** /app/signup.html\n- **Personas hit:** power-user\n- **Observed:**\n  - Same screen, same three undefined labels; persona picked \"Federated graph\" without comment in under 30 seconds.\n  - At 02:00 asked whether the Settings toggle \"Federated graph replication\" was the signup choice \u2014 \"Same words, no link.\"\n- **Evidence:** `persona-power-user/session.log:8` \u00b7 `persona-power-user/session.log:13` \u00b7 `persona-power-user/screenshots/07-settings.png` \u00b7 `persona-novice/screenshots/01-signup-workspace-type.png` (same screen)\n  > \"Workspace type: Federated graph / Sovereign vault / Hybrid mesh, cannot be changed. Fine \u2014 I've seen worse.\"\n- **Repro:**\n  1. On /app/signup.html pick \"Federated graph\".\n  2. Open Settings and read \"Federated graph replication\".\n- **Fix:** Define each option in one line on signup, and reuse the exact same term where it reappears in Settings.\n\n### 07d8d3a2fc56 \u2014 One object is called \"cards\", \"block\" and \"notes\" on the same screen\n- **Severity:** P2\n- **So what:** The novice could not tell whether \"Cards\" and \"New block\" were the same thing, so the path to writing her first note was a guess.\n- **Framework tags:** A4, A6\n- **Flow:** shape_1\n- **Locator:** /app/dashboard.html\n- **Personas hit:** novice\n- **Observed:**\n  - Nav: \"Cards\", \"New block\"; section heading \"Your cards\"; search placeholder \"Search your notes\"; page title \"New block\"; export label \"Markdown, all cards\".\n  - Three words for one object on a single screen; a fourth (\"Memories\") is introduced with no relationship stated.\n- **Evidence:** `persona-novice/screenshots/02-dashboard-empty.png` \u00b7 `persona-novice/screenshots/03-new-note.png` \u00b7 `persona-novice/screenshots/07-settings.png` \u00b7 `persona-novice/session.log:14` \u00b7 `persona-novice/findings-raw.json`\n  > \"Top menu: Cards, New block, Memories, Settings. Cards and blocks \u2014 same thing? Clicked \"New block\".\"\n- **Repro:**\n  1. Land on /app/dashboard.html and read the nav, heading and search placeholder.\n  2. Click \"New block\" and read the page title.\n- **Fix:** Pick one noun for the object and use it in the nav, the section heading, the search placeholder, the create page and the export label.\n\n### 31ad74b3ec06 \u2014 Settings toggles use engineering vocabulary with no explanation: \"Enable webhook sync\", \"Federated graph replication\", \"Vault attestation\"\n- **Severity:** P2\n- **So what:** Three of four controls on the page were opaque to the novice and ambiguous to the power-user; a switch nobody can explain is a switch nobody dares touch.\n- **Framework tags:** A2, A10\n- **Flow:** shape_2b\n- **Locator:** /app/settings.html\n- **Personas hit:** novice, power-user\n- **Observed:**\n  - Labels \"Enable webhook sync\", \"Federated graph replication\" (checked by default), \"Vault attestation\"; no helper text under any.\n  - Novice: \"No idea.\" Power-user could not tell whether \"Federated graph replication\" was the signup choice.\n  - The one control with a plain description \u2014 \"Export\" \"Markdown, all cards\" \u2014 both personas understood immediately.\n- **Evidence:** `persona-novice/screenshots/07-settings.png` \u00b7 `persona-novice/session.log:23` \u00b7 `persona-novice/session.log:24` \u00b7 `persona-power-user/screenshots/07-settings.png` \u00b7 `persona-power-user/session.log:13`\n  > \"Settings. \"Enable webhook sync\", \"Federated graph replication\", \"Vault attestation\". No idea. There's an Export button \u2014 \"Markdown, all cards\". At least that's clear.\"\n- **Repro:**\n  1. Click \"Settings\" in the top nav.\n  2. Read the three toggle labels.\n- **Fix:** Add a one-line plain-language description under each toggle saying what turning it on does to the user's notes.\n\n### d3573a5fe206 \u2014 Empty state \"Nothing here yet.\" offers no next step\n- **Severity:** P2\n- **So what:** The novice's first screen gave her no instruction, so she spent 45 seconds searching an empty workspace before guessing at \"New block\".\n- **Framework tags:** A6, A10, C-STEPS\n- **Flow:** shape_1\n- **Locator:** /app/dashboard.html\n- **Personas hit:** novice\n- **Observed:**\n  - \"Your cards\" section body reads only \"Nothing here yet.\" \u2014 no link, button or instruction.\n  - Persona typed \"meeting\" into search at 01:20 and got \"No results for 'meeting'\" before finding the create action at 01:40.\n  - Power-user found the search box and moved on; no complaint recorded, so this is scored for the novice only.\n- **Evidence:** `persona-novice/screenshots/02-dashboard-empty.png` \u00b7 `persona-novice/session.log:12` \u00b7 `persona-novice/session.log:13` \u00b7 `persona-novice/session.log:14`\n  > \"Dashboard. \"Your cards\" \u2014 \"Nothing here yet.\" Screenshot 02-dashboard-empty.png. Nothing tells me what to do. I thought it would have my stuff.\"\n- **Repro:**\n  1. Sign up and land on /app/dashboard.html with no notes.\n  2. Read the \"Your cards\" section.\n- **Fix:** Replace \"Nothing here yet.\" with a sentence that says what a card is and a button that creates the first one.\n\n---\n\n## Dropped for want of evidence\nObservations that did not meet the evidence rule. **Not findings.**\n\n- \"No results for '\u2026'\" copy may not distinguish \"nothing saved\" from \"no match\" \u2014 the no-results state was never screenshotted (`persona-power-user/screenshots/03-search-empty.png` shows an empty search box, not the message); log-only.\n- \"Saved \u2713\" toast wording and placement \u2014 `persona-novice/screenshots/04-note-saved-toast.png` shows the empty form, not the toast; the wording is taken from `session.log:17` only.\n\n## For other lenses\n- `POST /api/notes` \u2192 500 on every save; `renderGraphOverlay is not defined` on every dashboard load \u2014 bugs.\n- No keyboard shortcuts (Ctrl+K, Ctrl+N, / all inert) \u2014 ux.\n- Novice TTFV 2:41 on a preview, not a saved note; power-user never reached first value \u2014 onboarding.\n- Irreversible signup choice with no undo \u2014 ux (A3).\n\n## Coverage gaps\n- Marketing site itself never captured; the promise is taken from the pre-session line only.\n- \"Cards\" nav item never clicked by either persona; unknown whether it is the dashboard or a separate list.\n- Export never clicked; whether it exports anything for an empty workspace is unknown.\n- Desktop 1440\u00d7900 only; no mobile.\n- Both personas quit before 07:00; no copy past the first session was seen.\n\n## Appendices\n- A. Persona debriefs: `persona-novice/persona-debrief.md`, `persona-power-user/persona-debrief.md`\n- B. Session timelines: `persona-novice/timeline.json`, `persona-power-user/timeline.json`\n- C. Screenshot index: `persona-novice/screenshots/00-start.png` \u2026 `07-settings.png`; `persona-power-user/screenshots/00-start.png`, `02-dashboard.png`, `03-search-empty.png`, `07-settings.png`\nEOF\ncat > content/exec-summary.md <<'EOF'\n# Nimbus Notes \u2014 content \u2014 Run 2026-09-08 (fixture02)\n\nNimbus promises to \"remember everything\" and then tells both personas two things that are not true \u2014 \"Saved \u2713\" on a note it lost, and \"What Nimbus remembers about you\" on a workspace it knows nothing about \u2014 so the copy is not merely unclear, it is untrusted.\n\n## Top 3\n1. **[P0] \"Saved \u2713\" confirms a save the server rejected, and no error copy ever appears** \u2014 both personas lost their first note behind a success message; \"It is lying to me.\" (novice, power-user)\n2. **[P0] \"What Nimbus remembers about you\" lists three facts about the user that are invented** \u2014 false statements about the persona's own life, captioned as built \"from your notes\"; P1 for the power-user who assumed demo content (novice, power-user)\n3. **[P1] The product contradicts its pitch: \"remembers everything\" opens on \"Nothing here yet.\" and forgets the first note** \u2014 Q4 \"No\" from both personas; Q3 \"Nothing\" from both (novice, power-user)\n\n## Score\n- **Score:** 2/10 \u2014 the product's two most important messages are false, and every other content defect (jargon signup, three names for one object, opaque settings) is downstream of a pitch the product cannot back.\n\n## Also worth knowing\n- Sentence-level reading difficulty is low; the problem is vocabulary: 5 undefined terms before first value, 3 of 4 Settings controls.\n- Copy that worked: \"0 words\" / \"Preview below\" gave the novice her only moment of value; \"Export \u2014 Markdown, all cards\" was the one Settings line both understood.\n- 7 findings: 2 P0, 3 P1, 3 P2, 1 P3 (counting persona variants).\n\n## Limits on this read\n- **Personas:** novice, power-user \u2014 \u26a0 INFERRED (generic)\n- **Not reached:** marketing site, \"Cards\" nav item, Export result, any screen past 07:00\n- **Excluded:** \"The login wall at /app/login.html \u2014 infrastructure, not a defect.\"\n- **Models:** traversal `fixture-hand-authored` \u00b7 scoring `opus`\n\n## Numbers\n| Persona | TTFV | Reading | Self-explanatory | Promise match |\n|---|---|---|---|---|\n| novice | 02:41 (live preview only; no note ever saved) | healthy on the clock, not on substance | Fail \u2014 Q2 reached 2 of 3, Q1 \"right now: nothing\" | Fail |\n| power-user | not reached | not reached | Fail \u2014 Q2 \"That's two, and one of them doesn't work\" | Fail |\n\n## Severity flips\n- Invented memories: P0 novice (doubted every other message) \u2192 P1 power-user (dismissed as demo, still refused to trust).\n- Undefined workspace-type choice: P1 novice (48 s guessing an irreversible decision) \u2192 P3 power-user (\"I've seen worse\").\n- Empty state with no next step: P2 novice \u2192 non-issue power-user, who went straight to search.\n\n## Next action\nMake \"Saved \u2713\" and the Memories page true before touching any other copy \u2014 every other content fix is polish on a product that currently lies.\nEOF\npython3 /Users/dario/Repo/Understudy/understudy/scripts/check_report.py /private/var/folders/lz/1283s_b55qq1cg5v4vlq4dqm0000gn/T/understudy-eval-product-content-t_0xaf4a/product --lens content",
+    "description": "Write both content lens files and run the report gate"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 33,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed on the first run; nothing to fix.\n\n**Verdict:** Nimbus promises to \"remember everything\" and then tells both personas two things that are not true \u2014 \"Saved \u2713\" on a note it lost, and \"What Nimbus remembers about you\" on a workspace it knows nothing about \u2014 so the copy is not merely unclear, it is untrusted.\n\n**Score:** 2/10\n\n**Count by severity** (9 finding blocks = 7 issues, 2 split by persona flip):\n- P0 \u2014 2 (false \"Saved \u2713\" confirmation; invented Memories, novice variant)\n- P1 \u2014 3 (promise mismatch; undefined irreversible workspace-type choice, novice variant; invented Memories, power-user variant)\n- P2 \u2014 3 (cards/block/notes naming; opaque Settings toggles; empty state with no next step)\n- P3 \u2014 1 (workspace-type choice, power-user variant)\n\n**Dropped for want of evidence:** the \"No results for '\u2026'\" message wording (never screenshotted; `03-search-empty.png` shows an empty search box) and the \"Saved \u2713\" toast's placement (`04-note-saved-toast.png` shows the empty form, not the toast \u2014 wording taken from `session.log:17`).\n\nNote for the orchestrator: the manifest is still in phase `2a-capture` with `finished_utc: null`; the gate suggests running `close_run.py` when all lenses are in.",
+ "ttft_ms": 1934,
+ "type": "result",
+ "duration_ms": 620910,
+ "uuid": "1084ba6c-9c63-446f-92f3-b225257a985c",
+ "ttft_stream_ms": 1285,
+ "time_to_request_ms": 235,
+ "first_content_frame_ms": 1485,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
