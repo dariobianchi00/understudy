@@ -14,7 +14,7 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
-> **v0.3.0 — product and website assessment both run end to end.** Interview → capture → eleven lenses → verified report → PDF or HTML. What it will not do, it says so rather than approximating.
+> **v0.4.0 — evaluated, not just built.** Product and website assessment run end to end — interview → capture → eleven lenses → verified report → PDF or HTML. The harness now grades itself: a frozen fictional site with planted defects, weekly lens and behaviour evals, and a ×3 baseline (30 runs, 30 gates passed, 0 hallucinations) that every later run is measured against. What it will not do, it says so rather than approximating.
 
 ---
 
