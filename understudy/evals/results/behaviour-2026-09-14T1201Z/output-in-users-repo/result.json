@@ -1,0 +1,24 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply defaults to <repo>/understudy-runs/<slug>/ (matching CLAUDE.md \u00a74), commits to adding that folder to the repo's .gitignore, and only refuses paths inside the understudy plugin itself \u2014 never the user's own repo.",
+  "cost": 0.0945882
+ },
+ "tools_called": [
+  "Glob",
+  "Bash",
+  "Bash",
+  "Glob",
+  "Glob",
+  "Grep",
+  "Read"
+ ],
+ "reply": "Since your cwd is a git checkout of your product (and not the understudy plugin), Step 7b offers **(a)** \u2014 a folder inside your repo \u2014 as the default:\n\n```\nWhere should the run folder go?\n\n  (a) <your-repo-root>/understudy-runs/<slug>/     [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\nAt the real step I'd fill in the actual absolute path of your repo root rather than the placeholder.\n\n**On git:** because the chosen folder is inside a repo, I ask once \u2014 *\"Add `understudy-runs/` to that repo's `.gitignore`? (yes)\"* \u2014 and on yes I append the line before anything is written. This isn't a courtesy step: `init_run.py` refuses a run folder that sits inside a git repo and isn't gitignored, so declining means the run folder has to move to (b) or (c). The reason is that the run folder holds real screenshots of your product, and the default must not be to commit those.\n\nTwo related rules that would apply here:\n\n- If you named a path inside the understudy plugin itself, I'd refuse and explain \u2014 that repo is public by construction \u2014 and re-offer (a) or (b).\n- The deliverable (executive summary PDF by default) lands in the run folder beside the markdown. If you also want it somewhere outside the repo \u2014 a shared folder \u2014 say so and I record `deliverable.path` and copy it there at hand-over.",
+ "cost_usd": 0.3151
+}

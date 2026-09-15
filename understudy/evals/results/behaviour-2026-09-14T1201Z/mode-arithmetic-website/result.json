@@ -1,0 +1,19 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly stated 2 captures \u2014 one Mode A-visit covering clarity/conversion/trust and one Mode C crawl for seo \u2014 without proposing one capture per lens.",
+  "cost": 0.08849720000000001
+ },
+ "tools_called": [
+  "Glob",
+  "Grep"
+ ],
+ "reply": "**2 captures.**\n\n| # | Mode | Skill | Covers |\n|---|------|-------|--------|\n| 1 | Mode A-visit | `understudy:traversal-visit` | clarity, conversion, trust |\n| 2 | Mode C (crawl) | `understudy:traversal-crawl` | seo |\n\nThe arithmetic: four objectives, but captures are counted by mode, not by lens. Clarity, conversion and trust are all scored from the same persona-driven visit traversal \u2014 one capture feeds three lenses. SEO needs a session-less, persona-less markup crawl, which is a separate capture. No technical objective, so no Mode B measurement; one site only, so no Mode D comparison.\n\nTwo caveats on that number, since they'd change it:\n\n- **Personas multiply capture 1, not capture 2.** A Mode A-visit capture runs as a *single* persona. If the interview settles on more than one persona, it's N visit captures + 1 crawl. I'm quoting 2 on the assumption of one persona.\n- **Adding `aeo` would be free.** It reads the same Mode C crawl as SEO, so it'd be 4 lenses \u2192 5 with no new capture.\n\nNothing has been started \u2014 no browser opened, no interview run.",
+ "cost_usd": 0.2297
+}

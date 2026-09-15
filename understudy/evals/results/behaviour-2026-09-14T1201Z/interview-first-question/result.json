@@ -1,0 +1,18 @@
+{
+ "case": "interview-first-question",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply asks exactly one question, the assessment-type fork with all three options (a/b/c), and explicitly avoids inferring the type from the URL.",
+  "cost": 0.0881232
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Starting the interview. No saved target, so this is a fresh run \u2014 one question at a time.\n\n**Question 1 of ~10 \u2014 what are you evaluating at `https://example-nimbus-notes.test`?**\n\n```\n  (a) A product \u2014 something people sign into and use.\n      Lenses: ux \u00b7 bugs \u00b7 onboarding \u00b7 content\n      ~90 min per persona.\n\n  (b) A website \u2014 something people read and decide from.\n      Lenses: clarity \u00b7 conversion \u00b7 trust \u00b7 technical \u00b7 seo \u00b7 aeo \u00b7 compare\n      ~15\u201325 min per persona, plus a crawl.\n\n  (c) Both \u2014 a marketing site with a product behind it.\n      Runs (b) on the site, then (a) on the product. Two captures.\n```\n\nI'm asking rather than guessing because the URL can't tell me: a page that looks like a marketing site is sometimes a product's login screen, and the two answers produce completely different interviews and different runs. Everything after this \u2014 whether I ask about auth walls and first-value, or about competitors and your conversion goal \u2014 follows from your answer here.",
+ "cost_usd": 0.2806
+}

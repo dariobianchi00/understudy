@@ -1,0 +1,59 @@
+{
+ "contract_pass": true,
+ "planted": 3,
+ "caught": 3,
+ "recall": 1.0,
+ "caught_ids": [
+  "invalid-jsonld",
+  "no-llms-txt",
+  "no-organization-schema"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 3,
+ "band_judged": 3,
+ "band_rows": [
+  {
+   "id": "invalid-jsonld",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "no-organization-schema",
+   "severity": "P1",
+   "band": [
+    "P1"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "no-llms-txt",
+   "severity": "P3",
+   "band": [
+    "P3"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 7,
+ "severities": {
+  "P0": 0,
+  "P1": 1,
+  "P2": 4,
+  "P3": 2
+ },
+ "score": 4,
+ "capture": "site",
+ "lens": "aeo",
+ "model": "sonnet",
+ "run": 1,
+ "files_written": true,
+ "seconds": 175.404874,
+ "cost_usd": 0.7538540000000001,
+ "lens_turns": 34,
+ "lens_error": false
+}

@@ -1,0 +1,120 @@
+{
+ "duration_api_ms": 194343,
+ "stop_reason": "end_turn",
+ "session_id": "6438e563-c0b2-4ae4-b05a-bbfb75f6c662",
+ "total_cost_usd": 0.5791707999999999,
+ "usage": {
+  "input_tokens": 34,
+  "cache_creation_input_tokens": 54425,
+  "cache_read_input_tokens": 829674,
+  "output_tokens": 19437,
+  "output_tokens_details": {
+   "thinking_tokens": 9677
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 54425,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 138,
+    "cache_read_input_tokens": 70991,
+    "cache_creation_input_tokens": 416,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 416
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1018,
+   "outputTokens": 16,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001098,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 34,
+   "outputTokens": 19437,
+   "cacheReadInputTokens": 829674,
+   "cacheCreationInputTokens": 54425,
+   "webSearchRequests": 0,
+   "costUSD": 0.5780727999999999,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 9677,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01FLkZYFDEHscTD5RieQjFKm",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-seo-lkz4ia2q/site\nS=/home/runner/work/understudy/understudy/understudy/scripts/finding_id.py\n\npython3 $S --lens seo --flow \"crawl:page\" --locator \"/pricing.html\" --title \"Pricing page is noindex, blocking it from search results\"\npython3 $S --lens seo --flow \"crawl:site\" --locator \"/sitemap.xml\" --title \"Declared sitemap returns 404, giving crawlers no URL list\"\npython3 $S --lens seo --flow \"crawl:site\" --locator \"/features.html\" --title \"Primary nav links to /features.html on every page, which 404s\"\npython3 $S --lens seo --flow \"crawl:site\" --locator \"/about.html and /privacy.html\" --title \"About and privacy pages share an identical, undersized title tag\"\npython3 $S --lens seo --flow \"crawl:site\" --locator \"/pricing.html and /privacy.html\" --title \"Pricing and privacy pages have no meta description\"\npython3 $S --lens seo --flow \"crawl:site\" --locator \"/pricing.html and /privacy.html\" --title \"Pricing has two H1s, privacy has none\"\npython3 $S --lens seo --flow \"crawl:site\" --locator \"all crawled pages\" --title \"No page carries a canonical tag\"\npython3 $S --lens seo --flow \"crawl:page\" --locator \"/\" --title \"Homepage JSON-LD is malformed and fails to parse\"\npython3 $S --lens seo --flow \"crawl:page\" --locator \"/\" --title \"Homepage hero image has no alt text\"\n"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 35,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed (manifest note is expected \u2014 closing the run is the orchestrator's job, not this lens's).\n\n**Verdict:** The site is technically crawlable, but it tells search engines not to index the one page that answers what it costs, and every page's own navigation links to a Features page that 404s.\n\n**Count by severity:** P0 \u2014 1, P1 \u2014 2, P2 \u2014 4, P3 \u2014 2 (9 findings total).",
+ "ttft_ms": 1413,
+ "type": "result",
+ "duration_ms": 194732,
+ "uuid": "41b8a53c-3646-43cd-812c-f81a0d4f0771",
+ "ttft_stream_ms": 803,
+ "time_to_request_ms": 161,
+ "first_content_frame_ms": 1135,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

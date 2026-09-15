@@ -1,0 +1,138 @@
+{
+ "duration_api_ms": 228423,
+ "stop_reason": "end_turn",
+ "session_id": "a0b16204-0bbd-4849-8004-7a6fc21a8b92",
+ "total_cost_usd": 1.6366699999999998,
+ "usage": {
+  "input_tokens": 42,
+  "cache_creation_input_tokens": 67787,
+  "cache_read_input_tokens": 1049596,
+  "output_tokens": 17309,
+  "output_tokens_details": {
+   "thinking_tokens": 6920
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 67787,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 529,
+    "cache_read_input_tokens": 78735,
+    "cache_creation_input_tokens": 347,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 347
+    },
+    "type": "message",
+    "model": null
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 1012,
+   "outputTokens": 11,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.001067,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-opus-5": {
+   "inputTokens": 42,
+   "outputTokens": 17309,
+   "cacheReadInputTokens": 1049596,
+   "cacheCreationInputTokens": 67787,
+   "webSearchRequests": 0,
+   "costUSD": 1.635603,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 6920,
+   "canonicalModel": "claude-opus-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01GqnSgQcfBhz7ffnJPmUH8y",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy && sed -n 1,80p scripts/finding_id.py; echo \"=== CHECK ===\"; wc -l scripts/check_report.py; sed -n 1,120p scripts/check_report.py",
+    "description": "Read scripts"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01BQtwdAQKD3ZnzNfg6MrKrK",
+   "tool_input": {
+    "command": "S=/home/runner/work/understudy/understudy/understudy/scripts/finding_id.py\nrun() { python3 $S --lens conversion --flow \"$1\" --locator \"$2\" --title \"$3\"; }\nrun shape_3 \"site-wide\" \"No self-serve trial exists: the only site-wide actions are Log in and Contact sales\"\nrun shape_3 \"/pricing.html\" \"Pricing page shows no price: all three plans say only Contact sales\"\nrun shape_2 \"/index.html .news\" \"The newsletter band is the loudest call to action on the home page\"\nrun shape_3 \"/index.html#demo\" \"Demo form asks seven fields with phone required before the product is shown\"\nrun shape_3 \"/about.html\" \"About page carries no next step at the moment the visitor is most convinced\"\nrun shape_3 \"/features.html\" \"Features 404 is a bare server error page with no link back into the site\"\nrun shape_2 \"/index.html .news input\" \"Newsletter asks for an email without saying what is sent or how often\"",
+    "description": "Compute finding IDs"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01AgoR6FKAnD6Fnoqtrp5NcR",
+   "tool_input": {
+    "command": "python3 /home/runner/work/understudy/understudy/understudy/scripts/check_report.py /tmp/understudy-eval-site-conversion-gjg2ox3p/site --lens conversion; echo \"EXIT=$?\"",
+    "description": "Run report gate check"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 35,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed on the first run. Both files written.\n\n**Verdict:** The site offers no way to start a free trial at all \u2014 every route to the product ends at \"Log in\" or \"Contact sales\", so the stated goal is not hard here, it is absent, and the visitor who went looking for a price left to find a competitor.\n\n**Count by severity:** 7 findings \u2014 **2 P0**, **2 P1**, **2 P2**, **1 P3**. Score: **2/10**.\n\n- P0 \u2014 no self-serve trial anywhere (site-wide); pricing page shows no price, all three plans \"Contact sales\"\n- P1 \u2014 newsletter band outweighs every product CTA; demo form 7 fields / 5 required / phone mandatory before the product is shown\n- P2 \u2014 About page (peak trust) has no next step; Features 404 is a bare server error page with no link back\n- P3 \u2014 newsletter asks for an email without stating what is sent\n\n**Dropped for want of evidence:** mobile access to the demo form (sceptic never scrolled past the hero); whether \"Log in\" works (auth wall, never scored); the aggregate deterrent effect of the required phone field \u2014 one visitor, no traffic data, so any fix's size is untested.\n\n**Caveats on the face of the report:** `persona_mode: generic`, so both personas are inferred; `03-demo-form.png` rendered blank white, so field counts come from page markup plus the session log, not that screenshot. Out-of-lens observations (inert hero CTA, Features 404, jargon, cookie-bar/privacy contradiction, `noindex` on pricing) are listed under **For other lenses**.",
+ "ttft_ms": 1415,
+ "type": "result",
+ "duration_ms": 228709,
+ "uuid": "3725284f-0bb7-4252-be88-75d0d48f2474",
+ "ttft_stream_ms": 958,
+ "time_to_request_ms": 171,
+ "first_content_frame_ms": 959,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

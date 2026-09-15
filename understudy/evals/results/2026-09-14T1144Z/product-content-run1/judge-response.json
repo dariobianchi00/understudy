@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 22264,
+ "stop_reason": "tool_use",
+ "session_id": "c4981515-e2ee-4749-8430-1f4e358b55cc",
+ "total_cost_usd": 0.1329766,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 26072,
+  "cache_read_input_tokens": 24133,
+  "output_tokens": 1787,
+  "output_tokens_details": {
+   "thinking_tokens": 1360
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 26072,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1787,
+    "cache_read_input_tokens": 24133,
+    "cache_creation_input_tokens": 26072,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 26072
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 5918,
+   "outputTokens": 14,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.005987999999999999,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1787,
+   "cacheReadInputTokens": 24133,
+   "cacheCreationInputTokens": 26072,
+   "webSearchRequests": 0,
+   "costUSD": 0.1269886,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 1360,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"memories-invented\",\"caught\":true,\"finding_title\":\"\\\"Memories\\\" asserts three facts about the user that are not theirs and captions them as built from their notes\"},{\"id\":\"webhook-toggle-unexplained\",\"caught\":true,\"finding_title\":\"Every Settings toggle is labelled in internal vocabulary with no description\"},{\"id\":\"naming-inconsistent\",\"caught\":true,\"finding_title\":\"One concept is named three ways across the nav, the list heading and the search box\"},{\"id\":\"promise-mismatch\",\"caught\":true,\"finding_title\":\"No copy anywhere reconciles \\\"never start from zero\\\" with an empty notes app the user must fill by hand\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "memories-invented",
+    "caught": true,
+    "finding_title": "\"Memories\" asserts three facts about the user that are not theirs and captions them as built from their notes"
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "caught": true,
+    "finding_title": "Every Settings toggle is labelled in internal vocabulary with no description"
+   },
+   {
+    "id": "naming-inconsistent",
+    "caught": true,
+    "finding_title": "One concept is named three ways across the nav, the list heading and the search box"
+   },
+   {
+    "id": "promise-mismatch",
+    "caught": true,
+    "finding_title": "No copy anywhere reconciles \"never start from zero\" with an empty notes app the user must fill by hand"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 18897,
+ "type": "result",
+ "duration_ms": 21327,
+ "uuid": "f8867ecf-4eef-4774-a484-d14a0dead07a",
+ "ttft_stream_ms": 2653,
+ "time_to_request_ms": 133,
+ "first_content_frame_ms": 2937,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

@@ -1,0 +1,71 @@
+{
+ "contract_pass": true,
+ "planted": 5,
+ "caught": 4,
+ "recall": 0.8,
+ "caught_ids": [
+  "demo-form-burden",
+  "features-404",
+  "newsletter-louder",
+  "no-price"
+ ],
+ "missed_ids": [
+  "dead-cta"
+ ],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 1,
+ "band_judged": 4,
+ "band_rows": [
+  {
+   "id": "no-price",
+   "severity": "P0",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "demo-form-burden",
+   "severity": "P1",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "newsletter-louder",
+   "severity": "P1",
+   "band": [
+    "P2"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "features-404",
+   "severity": "P2",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  }
+ ],
+ "n_findings": 7,
+ "severities": {
+  "P0": 2,
+  "P1": 2,
+  "P2": 2,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "site",
+ "lens": "conversion",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 229.135016,
+ "cost_usd": 1.7750225999999998,
+ "lens_turns": 35,
+ "lens_error": false
+}

@@ -1,0 +1,16 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant answered \"1\" and correctly explained that all four Mode A lenses (ux, bugs, onboarding, content) score the same single persona traversal per the orchestrator contract, without running or interviewing.",
+  "cost": 0.0881692
+ },
+ "tools_called": [],
+ "reply": "**1.**\n\nAll four lenses \u2014 ux, bugs, onboarding, content \u2014 score a **Mode A** (product journey) capture, and capture is separate from scoring. One persona means one persona/goal pair, so one browser traversal produces one evidence folder, and the four lens agents each read that same folder afterwards.\n\nThe multiplier on traversals is modes and personas, not lenses:\n- A second persona would add a traversal.\n- A `technical` (Mode B), `seo`/`aeo` (Mode C), or `compare` (Mode D) objective would add non-persona captures, since those drive the browser differently \u2014 no session, no persona.\n- Adding a fifth Mode A lens would add zero.",
+ "cost_usd": 0.1909
+}

@@ -1,0 +1,33 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply states the file was written and then stops \u2014 no export was offered, and no explicit further question was posed (the closing remark about the unscored objective is an informational flag of a limitation, not a question); it never claims to have changed, re-scored, or merged any lens finding, and its explanation for omitting the corroboration heading matches run.md's rule for a one-lens run.",
+  "cost": 0.10557419999999999
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Glob",
+  "Bash",
+  "Bash",
+  "Glob",
+  "Bash",
+  "Bash",
+  "Skill",
+  "Read",
+  "Read",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Write"
+ ],
+ "reply": "Written to `2026-09-08-run-fixture01/exec-summary.md`.\n\nShape decisions worth flagging:\n\n- **The Top 5 table has two rows, not five.** The clarity lens produced no P0s and only two P1s. \u00a73.6 says fill from P1 when there aren't five P0s, but explicitly forbids padding with P2 or P3 to reach five \u2014 so the table stops at the two serious findings, with a line under it saying so.\n- **\"Raised by more than one check\" is omitted entirely** \u2014 only one check ran, so the heading would be meaningless. The corroboration line under \"How to read these findings\" says plainly that no finding here is corroborated.\n- **\"Against comparable sites\" is omitted** \u2014 no competitors in the manifest.\n- **Four headings left empty for the renderer**: Contents, Objectives, How each area scores. (Objectives is present because the manifest carries `objectives_under_test`.)\n\nOne thing you should know: `objectives/` holds only `criteria.json` \u2014 there is no `results.md`, so the objectives scorer never ran. The renderer will fill that heading from a file that does not exist. The run's own stated question (\"can a visitor find out what it costs without giving an email\") is unscored, and I've said that in the limits rather than answering it from the timelines myself \u2014 the evidence is there in both personas' records if you want that lens run.",
+ "cost_usd": 0.8439
+}

@@ -1,0 +1,154 @@
+{
+ "duration_api_ms": 11719,
+ "stop_reason": "tool_use",
+ "session_id": "41122c4b-54d5-4e19-a7f9-5b8a4707e143",
+ "total_cost_usd": 0.11345960000000001,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 23078,
+  "cache_read_input_tokens": 24133,
+  "output_tokens": 1260,
+  "output_tokens_details": {
+   "thinking_tokens": 822
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 23078,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1260,
+    "cache_read_input_tokens": 24133,
+    "cache_creation_input_tokens": 23078,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 23078
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-haiku-4-5-20251001": {
+   "inputTokens": 3642,
+   "outputTokens": 15,
+   "cacheReadInputTokens": 0,
+   "cacheCreationInputTokens": 0,
+   "webSearchRequests": 0,
+   "costUSD": 0.003717,
+   "contextWindow": 200000,
+   "maxOutputTokens": 32000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-haiku-4-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  },
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1260,
+   "cacheReadInputTokens": 24133,
+   "cacheCreationInputTokens": 23078,
+   "webSearchRequests": 0,
+   "costUSD": 0.10974260000000001,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 822,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"hero-oversized\",\"caught\":true,\"finding_title\":\"Oversized hero image drives 4.1MB page weight and 5.8s mobile LCP\"},{\"id\":\"mobile-lcp-poor\",\"caught\":true,\"finding_title\":\"Oversized hero image drives 4.1MB page weight and 5.8s mobile LCP\"},{\"id\":\"render-blocking-css\",\"caught\":true,\"finding_title\":\"Render-blocking stylesheets delay mobile first paint to 2.9s (+ Static assets ship uncompressed and without cache-control headers)\"},{\"id\":\"console-error-on-load\",\"caught\":true,\"finding_title\":\"Console error fires on every page load of the homepage\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "hero-oversized",
+    "caught": true,
+    "finding_title": "Oversized hero image drives 4.1MB page weight and 5.8s mobile LCP"
+   },
+   {
+    "id": "mobile-lcp-poor",
+    "caught": true,
+    "finding_title": "Oversized hero image drives 4.1MB page weight and 5.8s mobile LCP"
+   },
+   {
+    "id": "render-blocking-css",
+    "caught": true,
+    "finding_title": "Render-blocking stylesheets delay mobile first paint to 2.9s (+ Static assets ship uncompressed and without cache-control headers)"
+   },
+   {
+    "id": "console-error-on-load",
+    "caught": true,
+    "finding_title": "Console error fires on every page load of the homepage"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 8399,
+ "type": "result",
+ "duration_ms": 10872,
+ "uuid": "74a7fdf4-d2a6-4a71-9255-954f8cea49db",
+ "ttft_stream_ms": 1058,
+ "time_to_request_ms": 136,
+ "first_content_frame_ms": 1316,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
