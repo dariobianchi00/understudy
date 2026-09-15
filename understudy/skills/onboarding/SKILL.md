@@ -1,6 +1,6 @@
 ---
 name: onboarding
-description: The understudy interview. Establishes the target product, the objectives, the personas, and the run constraints before any browser opens. Runs on every invocation of /understudy:run — it never assumes and never reuses a target without asking. Use when the user starts an understudy run, asks to evaluate or test a web product, or wants to edit a saved target.
+description: The understudy interview. Establishes the target product, the objectives, the personas, and the run constraints before any browser opens. Runs on every invocation of /understudy:run — it never assumes and never reuses a target without asking. Use when the user starts an understudy run, asks to evaluate or test a web product, wants to edit a saved target, or asks what the interview will ask or default to — where the run folder goes, which personas, which models.
 ---
 
 # Onboarding — the understudy interview

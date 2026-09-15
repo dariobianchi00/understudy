@@ -281,14 +281,19 @@ def run_case(case, model, judge_model, budget, results_dir, dry, timeout=900):
     prompt = case["prompt"].replace("{run}", run or "").replace("{plugin}", PLUGIN)
     out_dir = os.path.join(results_dir, case["name"])
     os.makedirs(out_dir, exist_ok=True)
-    open(os.path.join(out_dir, "prompt.txt"), "w").write(prompt)
+    _write(os.path.join(out_dir, "prompt.txt"), prompt)
     if dry:
         print(f"  dry-run: {case['name']} → {out_dir}")
         shutil.rmtree(tmp, ignore_errors=True)
         return None
 
     before = tree_state()
-    res = run_agent(prompt, model, budget, cwd=tmp, add_dirs=[tmp], timeout=timeout)
+    # The plugin is readable, as it is for a real user: a case that asks how the
+    # interview behaves is answered from the skill, not from memory. Writes into
+    # it are still caught by the hygiene check. Observed 2026-09-15 in CI: with
+    # only the temp dir allowed, the agent spent nine tool calls hunting for
+    # SKILL.md, was refused, and inverted the run-folder default.
+    res = run_agent(prompt, model, budget, cwd=tmp, add_dirs=[tmp, PLUGIN], timeout=timeout)
     if RATE_LIMIT.search(res["reply"] or ""):
         # Not a behaviour result. Observed 2026-09-11: three cases "failed"
         # with the reply "You've hit your session limit". A quota is not a

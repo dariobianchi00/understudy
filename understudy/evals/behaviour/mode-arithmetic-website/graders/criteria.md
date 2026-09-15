@@ -1,2 +1,2 @@
-- The answer says TWO captures: one persona visit (Mode A-visit) that clarity, conversion and trust all score, and one crawl (Mode C) for seo.
+- The answer says TWO captures for one persona: one persona visit (Mode A-visit) that clarity, conversion and trust all score, and one crawl (Mode C) for seo. Stating it as a formula — one visit per persona plus one crawl, so two here — also passes, as long as the two-capture case is stated.
 - It does not propose one capture per lens.
