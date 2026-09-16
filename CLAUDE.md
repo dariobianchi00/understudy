@@ -319,7 +319,9 @@ understudy/                              (public, MIT)
     │   ├── check_report.py      phase-2b gate: checks 1, 3, 4, 6, 7 + --expect-lenses
     │   ├── close_run.py         closes the manifest at run END, read off the disk
     │   ├── compare_runs.py      new/persisting/reworded/resolved + overlap %
-    │   └── render_report.py     md → self-contained HTML / PDF
+    │   ├── render_report.py     md → self-contained HTML / PDF
+    │   ├── watch.py             second-pane live view of a run; --line, --replay
+    │   └── mark.py              orchestrator → status.json (phase, lenses launched)
     ├── tests/                           67 stdlib unittest cases; fixtures built
     │                                    in a temp dir, never committed (§7)
     └── examples/                        fictional product only
@@ -441,6 +443,8 @@ Plus one human check that is not automatable and should not pretend to be: **rea
    - **The summary scope prints each problem once.** A lens section carries only its P0/P1 findings that no other lens raised, with the Observed bullets and one screenshot each, and a one-line account of where the rest went. Corroborated findings live in the cluster table; P2/P3 singletons live in the full export. The old rule — every lens's whole triage table, titles only — was how a reader met a P3 with nothing behind it and could not say why it was a finding. The Objectives section keeps its results table and drops the per-persona narratives, which restated the table across three pages.
 
    *General lesson: a signal that fires on what the product says rather than on what the persona saw is measuring the product's vocabulary, not the lenses' agreement. Any corroboration rule must be checked against a real run with the pairs read by a person before it ships.*
+
+10. **⚑ The user sees nothing while a run works.** Claude Code shows the orchestrator's text and a subagent panel; the hour-long traversal, where the persona thinks aloud into `session.log`, is invisible until it ends. Settled 2026-09-16 (v0.5.0): **the run folder is the display.** `watch.py` is a stdlib curses view for a second pane that reads only the run folder — persona progress against the cap, the auth pause (read from the log, so it cannot disagree with the traversal), screenshots as they land, the persona's commentary as it is written, lenses as they launch and finish. `mark.py` lets the orchestrator name the phase and the lenses it launched; everything else is derived, so the view cannot claim a state the disk does not show. Also `--line` for a status line (a plugin cannot install one; the README carries the snippet) and `--replay` for finished runs. What was ruled out: hooks cannot print into the conversation, a plugin cannot ship a status line, and auto-opening a pane through a hook has a lifecycle nobody owns — the run command prints the command to paste instead.
 
    ✅ **Reshaped again 2026-09-05, on the same client's reading of it.** The production fixes above held; what changed is the document's shape and what it now claims.
 

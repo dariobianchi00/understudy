@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.5.0 — watch it run.** A second-pane dashboard reads the run folder live: who is doing what, the persona's commentary as it is written, the auth pause, every screenshot as it lands. Also a status-line mode and a replay of any finished run. See *Watching it run*.
+>
 > **v0.4.1 — one row per problem.** The summary export names each problem once, with every check's own severity beside it, and corroboration pairs on evidence rather than on product vocabulary.
 >
 > **v0.4.0 — evaluated, not just built.** Product and website assessment run end to end — interview → capture → eleven lenses → verified report → PDF or HTML. The harness now grades itself: a frozen fictional site with planted defects, weekly lens and behaviour evals, and a ×3 baseline (30 runs, 30 gates passed, 0 hallucinations) that every later run is measured against. What it will not do, it says so rather than approximating.
@@ -27,6 +29,7 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 - [Your first run](#your-first-run)
 - [The lenses](#the-lenses) · [Adding one](#adding-a-lens)
 - [Coverage depth](#coverage-depth--how-much-gets-opened)
+- [Watching it run](#watching-it-run)
 - [What a run produces](#what-a-run-produces)
 - [Models — you choose, at both levels](#models--you-choose-at-both-levels)
 - [Personas — read before trusting a report](#personas--read-this-before-trusting-a-report)
@@ -271,6 +274,47 @@ The body carries the framework, the severity rubric, the output schema and the e
 **Don't use `model: inherit`,** even though the general plugin guidance suggests it. It resolves to the *session* model, which silently re-couples the two model levels — see below.
 
 ---
+
+## Watching it run
+
+A product run is an hour or more of a persona thinking aloud into a log file, and Claude Code shows you none of it while it works. So the run folder is the display. Open a second pane (Ghostty ⌘D, tmux, anything) and point the watcher at the run — the run command prints the exact line when it starts:
+
+```
+python3 <plugin root>/scripts/watch.py <run_folder>
+```
+
+```
+ Acme Notes · run 0a1b2c3d · CAPTURE 2 of 3                 ▓▓▓▓▓░░░░░░░░░  07:12 / 45:00
+ ───────────────────────────────────────────────────────────────────────────────────────
+ WHO IS DOING WHAT                          │ PERSONA · power-user · desktop-1440x900
+  ✓ novice           07:00  19 shots        │ [02:32] Clicked the link it gave me. Chrome
+  ▶ power-user       07:12  11 shots        │   says this site can't be reached. Great.
+  · sceptic          iphone-13              │ [02:40] Fine. Left menu → Classrooms. There
+                                            │   it is. Sixteen videos. No date. Where is
+ LENSES (after capture)                     │   the live bit?
+  · ux           opus    · bugs    sonnet   │ [04:25] Asked for three questions to bring
+  · content      opus    · objectives opus  │   to the call. OK — this is the first thing
+                                            │   that felt worth the money.
+ last shot  09-lesson1-3questions.png       │
+ ⏸ PAUSED at the auth wall — log in in the browser, then confirm in Claude Code
+```
+
+Left: each persona done, running or pending, with its time against the cap and its screenshot count, then each lens and its model as the fan-out launches and finishes. Right: the persona's own commentary, streamed as it is written — one action behind real time, never a phase behind. The bottom line is the one you need to look up for: the auth pause. Everything on screen is read off the run folder; nothing is inferred and nothing is sent anywhere.
+
+Three more modes, all stdlib, no install:
+
+- **`--replay --speed 20`** replays a finished run's feed at the persona's own pace, sped up. The quickest way to show someone what the tool does — or to re-live where a persona gave up.
+- **`--line`** prints one coloured line and exits, for a Claude Code status line. Point it at your runs folder and it follows the newest run:
+
+  ```json
+  "statusLine": { "type": "command", "refreshInterval": 2,
+                  "command": "python3 <plugin root>/scripts/watch.py ~/.understudy/runs --line" }
+  ```
+
+  `understudy ▶ power-user 07:12/45:00 · 11 shots · Fine. Left menu → Classrooms. There it is.` — Claude Code cannot install this for you (a plugin cannot ship a status line), so it is one snippet in `~/.claude/settings.json`.
+- **A folder of runs** as the argument watches whichever run started most recently.
+
+The lens agents also show under the prompt in Claude Code itself, named for what they are doing (`lens-ux · scoring 3 personas · opus`), and `/tasks` opens any of their transcripts mid-run.
 
 ## What a run produces
 

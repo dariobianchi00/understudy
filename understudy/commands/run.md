@@ -147,6 +147,19 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/init_run.py --target ~/.understudy/targets/<slug>.
 
 Prints the run folder. Writes `manifest.json` **at run start** — not reconstructed at the end, because a manifest assembled afterwards records what someone remembers rather than what ran. It refuses to write output inside this repo.
 
+**Then offer the live view, once, with the paths resolved** — the user cannot see tool calls, and a run is an hour or more of a persona thinking aloud into a log file:
+
+```
+Watch it live in a second pane (Ghostty ⌘D, or any split):
+  python3 <absolute plugin root>/scripts/watch.py "<run_folder>"
+```
+
+The watcher reads the run folder and nothing else — who is running, where the persona is against its time cap, the auth pause, every screenshot as it lands, and the persona's own commentary as it is written. Mark the phases as you pass them so it can name them:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/mark.py <run_folder> --phase capture
+```
+
 ### 3.2 — Capture, one persona at a time
 
 Invoke the capture skill for the mode:
@@ -193,6 +206,13 @@ Enforces phase-gate checks 2 and 5 — scoring vocabulary in the artifacts, and 
 | `compare` | `lens-compare` | D | opus |
 
 **If the run has objectives**, also dispatch `objectives-scorer` — it reads the expected outcomes for the first time, after capture is fixed.
+
+**Name every agent for the person watching.** The `description` you pass to the `Agent` tool is what Claude Code shows under the prompt for the whole fan-out, so make it say who is doing what: `lens-ux · scoring 3 personas · opus`, `objectives-scorer · 1 objective · opus`. Then tell the watcher, in one call, before the agents start:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/mark.py <run_folder> --phase scoring \
+    --lens ux:opus --lens bugs:sonnet --lens content:opus --lens objectives:opus
+```
 
 **Pass the model explicitly** from `manifest.json` → `models.scoring.<lens>`. Never rely on frontmatter inheritance (CLAUDE.md §6).
 
@@ -500,6 +520,8 @@ misleading note, not a lost finding.
 ```
 ${CLAUDE_PLUGIN_ROOT}/scripts/close_run.py <run_folder>
 ```
+
+(`mark.py <run_folder> --phase closing` first; `close_run.py` sets the manifest to `complete`, which the watcher reads directly.)
 
 Records what was captured, what was scored and when the run finished — **every
 field read off the disk, never from memory**, which is the same reason
