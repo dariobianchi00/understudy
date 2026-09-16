@@ -157,7 +157,8 @@ ASSESSMENT_LABEL = {"website": "Website assessment",
                     "both": "Website and product assessment"}
 
 
-def cover(meta, title, subtitle, n_find, counts, overall=None, provenance=""):
+def cover(meta, title, subtitle, n_find, counts, overall=None, provenance="",
+          n_problems=None):
     """A title page, because the deliverable is read by someone who was not
     in the room when it was commissioned — and it carries the caveat that
     everything else depends on (§4, persona fork; §11.2)."""
@@ -179,6 +180,9 @@ def cover(meta, title, subtitle, n_find, counts, overall=None, provenance=""):
     if n_find:
         sev = " · ".join(f"{counts[k]} {k}" for k in ("P0", "P1", "P2", "P3") if counts[k])
         row("Findings", f"{n_find} — {sev}")
+        if n_problems and n_problems < n_find:
+            row("Distinct problems", f"{n_problems} — the rest are the same problem "
+                                     f"seen by more than one check")
     row("Conversion goal", meta.get("conversion_goal"))
     # "logged out" is only known to be true for a website assessment (§3). A
     # product run signs in, and claiming otherwise on the cover is a factual
@@ -233,9 +237,16 @@ LOCATOR = re.compile(r"^-\s+\*\*Locator:\*\*\s*(.+?)\s*$", re.M)
 # evidence assigns it; check_report.py refuses a score its own severities
 # contradict.
 SCORE = re.compile(r"^-\s+\*\*Score:\*\*\s*(\d{1,2})\s*/\s*10\s*[—–-]?\s*(.*?)\s*$", re.M)
-# Verbatim site copy a finding quotes. Two lenses quoting the same string are
-# almost always describing the same thing — see corroborate().
-QUOTED = re.compile(r'"([^"]{12,90})"')
+# A persona utterance a finding quotes, as a blockquote under its Evidence.
+# Two lenses quoting the same utterance are describing one observation — see
+# corroborate(). This used to match any "quoted string" in the finding, and on
+# an AI product that paired 34 of 45 findings on UI labels ("Capture a note",
+# "Morning Briefing") that every lens transcribes (BlinkLearn run, 2026-09-14).
+PERSONA_QUOTE = re.compile(r'^\s*>\s*["“]?(.{12,}?)["”]?\s*$', re.M)
+# The bullets under `- **Observed:**` — what was actually seen, in the lens's
+# own words. The summary export prints them so a one-line title is never the
+# only thing a reader has to judge a finding by.
+OBSERVED = re.compile(r"^-\s+\*\*Observed:\*\*\s*\n((?:\s+-\s.*\n?)+)", re.M)
 
 # Lens folder names are code identifiers. A client reads a name, not a slug.
 LENS_LABELS = {
@@ -313,10 +324,33 @@ def extract_findings(md, prefix):
             "sowhat": so.group(1) if so else "",
             "fix": fix.group(1) if fix else "",
             "shot": first_shot(ev.group(1)) if ev else "",
+            "shots": set(re.findall(r"[\w\-./]+\.png", ev.group(1))) if ev else set(),
+            "logs": set(re.findall(r"[\w\-./]*session\.log:[\d,\-]+", ev.group(1))) if ev else set(),
             "locator": loc.group(1).strip("`") if loc else "",
-            "quotes": {q.lower() for q in QUOTED.findall(m.group(2) + " " + block)},
+            "quotes": {q.lower().strip() for q in PERSONA_QUOTE.findall(block)},
+            "observed": observed_bullets(block),
             "anchor": slug(m.group(2), prefix),
         })
+    return out
+
+
+def observed_bullets(block, limit=3, width=200):
+    """The first `limit` Observed bullets, each cut at a word boundary. A lens
+    that writes paragraph-length bullets would otherwise turn a triage row
+    into a page."""
+    m = OBSERVED.search(block + "\n")
+    if not m:
+        return []
+    out = []
+    for b in m.group(1).splitlines():
+        t = re.sub(r"^\s*-\s+", "", b).strip()
+        if not t:
+            continue
+        if len(t) > width:
+            t = t[:width].rsplit(" ", 1)[0].rstrip(",;:—-") + "…"
+        out.append(t)
+        if len(out) >= limit:
+            break
     return out
 
 
@@ -483,25 +517,90 @@ def corroborate(toc):
     phrasings also collides two genuinely different findings. This only
     annotates, so a false pair costs a misleading footnote, not a lost finding.
 
-    Two signals, either sufficient:
-      * the same verbatim quoted string (>=12 chars) — site copy both lenses
-        transcribed, the strongest evidence they are looking at one thing;
-      * a normalised title similarity >=0.62 at the same locator.
+    Four signals, any sufficient:
+      * the same persona utterance quoted under Evidence — two lenses citing
+        the same words the persona said are describing one observation;
+      * a normalised title similarity >=0.62 at the same locator;
+      * a normalised title similarity >=0.60 anywhere;
+      * the same screenshots cited — either two in common with a title
+        similarity >=0.40, or at least half of both findings' screenshots in
+        common plus one of: two shared, a shared session-log line, or a title
+        similarity >=0.40. Screenshots are the evidence itself, so two lenses
+        citing the same ones are looking at one thing; the extra condition
+        keeps a busy screen that shows two problems from pairing them.
+
+    Thresholds were set on the 2026-09-14 BlinkLearn run (45 findings, three
+    lenses): 13 clusters, 26 distinct problems against 25 counted by hand, and
+    no pair a reader would call wrong.
+
+    Pairs are then closed into clusters (`f["cluster"]`), so a problem three
+    lenses raised is one problem with three witnesses — not three rows.
     """
     flat = [(e, f) for e in toc[1:] for f in e["find"]]
     for _, f in flat:
         f["also"] = set()
+        f["cluster"] = None
+    parent = list(range(len(flat)))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
     for i, (ei, fi) in enumerate(flat):
-        for ej, fj in flat[i + 1:]:
+        for j in range(i + 1, len(flat)):
+            ej, fj = flat[j]
             if ei is ej:
                 continue
             same_quote = bool(fi["quotes"] & fj["quotes"])
-            same_place = (fi["locator"] and fi["locator"] == fj["locator"]
-                          and _similar(fi["title"], fj["title"]) >= 0.62)
-            if same_quote or same_place:
+            sim = _similar(fi["title"], fj["title"])
+            same_place = (fi["locator"] and fi["locator"] == fj["locator"] and sim >= 0.62)
+            shots = fi["shots"] & fj["shots"]
+            union = fi["shots"] | fj["shots"]
+            same_shots = ((len(shots) >= 2 and sim >= 0.40)
+                          or (union and len(shots) / len(union) >= 0.5
+                              and (len(shots) >= 2 or sim >= 0.40
+                                   or bool(fi["logs"] & fj["logs"]))))
+            if same_quote or same_place or sim >= 0.60 or same_shots:
                 fi["also"].add(ej["lens"])
                 fj["also"].add(ei["lens"])
+                parent[find(i)] = find(j)
+    groups = {}
+    for i, (e, f) in enumerate(flat):
+        if f["also"]:
+            groups.setdefault(find(i), []).append((e, f))
+    for k, (root, members) in enumerate(groups.items()):
+        for _, f in members:
+            f["cluster"] = k
     return [f for _, f in flat if f["also"]]
+
+
+def corroboration_clusters(toc):
+    """One entry per problem several lenses raised: the highest-severity
+    member speaks for the cluster, and every lens's own severity is kept."""
+    flat = [(e, f) for e in toc[1:] for f in e["find"]]
+    by = {}
+    for e, f in flat:
+        if f.get("cluster") is not None:
+            by.setdefault(f["cluster"], []).append((e, f))
+    out = []
+    for members in by.values():
+        members.sort(key=lambda m: (m[1]["sev"], lens_rank(m[0]["dir"])))
+        rep_e, rep_f = members[0]
+        raised, seen = [], {}
+        for e, f in members:
+            if e["lens"] in seen:
+                seen[e["lens"]][1] += 1
+            else:
+                seen[e["lens"]] = [f["sev"], 1]
+                raised.append(e["lens"])
+        out.append({"rep": rep_f, "sev": rep_f["sev"],
+                    "raised": [(l, seen[l][0] + (f" ×{seen[l][1]}" if seen[l][1] > 1 else ""))
+                               for l in raised],
+                    "members": [f for _, f in members]})
+    out.sort(key=lambda c: (c["sev"], -len(c["raised"])))
+    return out
 
 
 def _similar(a, b):
@@ -729,6 +828,10 @@ min-width:78px}
 .ev .shot{background-size:contain;background-color:#fbfbfc;aspect-ratio:16/11}
 .ev figcaption{font-size:12.5px;color:var(--mut);margin-top:5px;line-height:1.45}
 .ev .sev{font-weight:700}
+/* observed bullets under a title, summary scope */
+ul.obs{margin:5px 0 0 0;padding-left:16px;font-weight:400;font-size:12px;color:var(--mut);
+line-height:1.4}
+ul.obs li{margin:0 0 2px}
 /* cross-lens corroboration */
 .also{display:block;font-weight:400;font-size:12px;color:var(--mut);margin-top:3px}
 table.corr td:first-child{width:48px;font-weight:700;text-align:center}
@@ -976,22 +1079,21 @@ def main():
     obj_path = os.path.join(run, "objectives", "results.md")
     if os.path.exists(obj_path):
         obj_md = re.sub(r"^#\s+.*\n", "", _read(obj_path, errors="replace"), count=1)
+        if a.scope == "summary":
+            # The Results table already says what each persona achieved; the
+            # per-persona H3 narratives repeat it across three pages, and the
+            # limits section is a lens-level note. Both stay in the full export.
+            obj_md = re.sub(r"^###\s.*?(?=^##\s|\Z)", "", obj_md, flags=re.M | re.S)
+            obj_md = re.sub(r"^##\s+Limits on this read.*?(?=^##\s|\Z)", "", obj_md,
+                            flags=re.M | re.S)
         objectives_html = render_markdown(obj_md, images, used, "obj-")
 
     shared = corroborate(ours)
+    clusters = corroboration_clusters(ours)
     all_find = [f for e in ours[1:] for f in e["find"]]
     counts = {k: sum(1 for f in all_find if f["sev"] == k) for k in ("P0", "P1", "P2", "P3")}
-
-    corr_html = ""
-    if shared:
-        corr_rows = "".join(
-            f'<tr class="r{f["sev"].lower()}"><td>{sev_cell(f["sev"])}</td>'
-            f'<td><strong>{html.escape(f["title"])}</strong></td>'
-            f'<td>{html.escape(", ".join(sorted(f["also"])))}</td></tr>'
-            for f in sorted(shared, key=lambda x: (x["sev"], -len(x["also"])))[:8])
-        corr_html = ('<table class="fidx corr"><thead><tr><th>Sev</th>'
-                     '<th>Finding</th><th>Also raised by</th></tr></thead>'
-                     f'<tbody>{corr_rows}</tbody></table>')
+    # Distinct problems: one per cluster, plus every finding no other lens raised.
+    n_problems = len(clusters) + sum(1 for f in all_find if f.get("cluster") is None)
 
     def also_note(f):
         if not f.get("also"):
@@ -999,16 +1101,32 @@ def main():
         names = ", ".join(sorted(f["also"]))
         return f'<span class="also">Also raised by {html.escape(names)}</span>'
 
-    def fidx_table(find, link=False, numbered=None):
+    def raised_note(raised):
+        parts = " · ".join(f"{html.escape(l)} ({s})" for l, s in raised)
+        return f'<span class="also">Raised by {parts}</span>'
+
+    def observed_list(f):
+        if not f.get("observed"):
+            return ""
+        items = "".join(f"<li>{html.escape(o)}</li>" for o in f["observed"][:3])
+        return f'<ul class="obs">{items}</ul>'
+
+    def fidx_table(find, link=False, numbered=None, detail=False, raised=None):
+        """`detail` adds the Observed bullets under each title — used where the
+        table is all the reader gets (summary scope). `raised` maps a finding
+        id to its cluster's per-lens severities, replacing the Also-raised note."""
         rows = []
         for i, f in enumerate(sorted(find, key=lambda x: x["sev"]), 1):
             no = f'<span class="secno">{numbered}.{i}</span> ' if numbered else ""
             title = html.escape(f["title"])
             title = f'<a href="#{f["anchor"]}">{title}</a>' if link else title
             fix = html.escape(f["fix"]) if f["fix"] else '<span class="mut">—</span>'
+            note = (raised_note(raised[f["id"]]) if raised and f["id"] in raised
+                    else also_note(f))
+            obs = observed_list(f) if detail else ""
             rows.append(
                 f'<tr class="r{f["sev"].lower()}"><td>{sev_cell(f["sev"])}</td>'
-                f'<td>{no}{title}{also_note(f)}</td>'
+                f'<td>{no}{title}{note}{obs}</td>'
                 f'<td>{html.escape(f["sowhat"])}</td><td>{fix}</td></tr>')
         return ('<table class="fidx"><thead><tr><th>Sev</th><th>Finding</th>'
                 '<th>What it costs</th><th>Recommended fix</th></tr></thead>'
@@ -1019,7 +1137,7 @@ def main():
 
         Evidence that lives only in the full export is evidence the reader of
         the deliverable never sees, which makes every finding a claim to take
-        on faith (§6, invariant 2)."""
+        on faith (§6, invariant 2). `cap=None` embeds one per P0/P1 finding."""
         figs = []
         for f in sorted(find, key=lambda x: x["sev"]):
             if f["sev"] not in ("P0", "P1") or not f["shot"]:
@@ -1031,30 +1149,62 @@ def main():
                 f'<figure><span class="shot {cls}"></span>'
                 f'<figcaption><span class="sev sev-{f["sev"].lower()}">{f["sev"]}</span> '
                 f'{html.escape(f["title"])}</figcaption></figure>')
-            if len(figs) >= cap:
+            if cap is not None and len(figs) >= cap:
                 break
         return f'<div class="ev">{"".join(figs)}</div>' if figs else ""
+
+    # "Raised by more than one check" — one row per PROBLEM, never per finding.
+    # The 2026-09-14 export listed the same fabrication three times in this
+    # table, once in each lens's wording, and the section meant to collapse
+    # repetition became the place a reader met it most. The highest-severity
+    # member speaks for the cluster; every lens's own severity is shown beside
+    # its name, because severities are never averaged (§11.5).
+    corr_html = ""
+    if clusters:
+        reps = [c["rep"] for c in clusters]
+        raised = {c["rep"]["id"]: c["raised"] for c in clusters}
+        corr_html = (fidx_table(reps, detail=(a.scope == "summary"), raised=raised)
+                     + (evidence_block(reps, cap=None) if a.scope == "summary" else ""))
 
     body = []
     for n, e in enumerate(entries):
         prefix = e["prefix"]
 
-        # summary scope: a lens contributes its triage table only, never detail
+        # summary scope: a lens contributes only what no other section already
+        # carries — its P0/P1 findings that no other lens raised, with their
+        # Observed bullets and a screenshot each. Corroborated findings live in
+        # "Raised by more than one check"; P2/P3 singletons in the full export.
+        # Printing every lens's whole table here is how a 3-lens run put 45
+        # rows for 25 problems in front of a client (2026-09-14).
         if a.scope == "summary" and n > 0:
             if not e["find"]:
                 continue
             ctx = ('' if e.get("ours", True) else
                    '<p class="mut">Competitor site — shown for comparison only. '
                    'Not counted in the client\'s score, tally or corroboration.</p>')
+            own = [f for f in e["find"] if f.get("cluster") is None]
+            shown = [f for f in own if f["sev"] in ("P0", "P1")]
+            n_shared = len(e["find"]) - len(own)
+            n_minor = len(own) - len(shown)
+            notes = []
+            if n_shared:
+                notes.append(f'{n_shared} {"were" if n_shared != 1 else "was"} also raised by '
+                             f'another check and {"appear" if n_shared != 1 else "appears"} '
+                             f'under "Raised by more than one check"')
+            if n_minor:
+                notes.append(f'{n_minor} at P2/P3 {"are" if n_minor != 1 else "is"} '
+                             f'in the complete export')
+            lead = (f'The other {n_shared + n_minor}' if shown
+                    else f'All {len(e["find"])} findings from this check are covered elsewhere')
+            note_html = (f'<p class="mut">{lead}: ' + "; ".join(notes) + ".</p>") if notes else ""
+            table = (fidx_table(shown, numbered=e["secno"], detail=True)
+                     + evidence_block(shown, cap=None)) if shown else ""
             body.append(
                 f'<section class="doc" id="{e["anchor"]}">'
                 f'<h2 id="{slug(e["lens"], prefix)}">'
                 f'<span class="secno">{e["secno"]}.</span> {html.escape(e["lens"])} '
                 f'— {len(e["find"])} findings</h2>{ctx}'
-                + fidx_table(e["find"], numbered=e["secno"])
-                + evidence_block(e["find"])
-                + '<p class="mut">Full detail, evidence and reproduction steps '
-                  'for these findings are in the complete export.</p></section>')
+                + table + note_html + '</section>')
             e["sub"] = []
             continue
 
@@ -1124,7 +1274,7 @@ def main():
     for block in reversed(front):
         body.insert(1, block)
     body.insert(0, cover(meta, title, subtitle, len(all_find), counts,
-                         overall, provenance))
+                         overall, provenance, n_problems=n_problems))
 
     page = (f"<!doctype html><html><head><meta charset=utf-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"

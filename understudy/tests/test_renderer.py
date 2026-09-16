@@ -195,6 +195,75 @@ class Units(unittest.TestCase):
         self.assertEqual(rr.lens_label("aeo"), "Answer-engine readiness")
         self.assertEqual(rr.lens_label("compare/comp-a/trust"), "Trust and credibility — comp-a")
 
+    def _toc(self, *specs):
+        """specs: (lens_dir, title, sev, evidence, extra) -> a toc like main() builds."""
+        toc = [None]
+        for lens, title, sev, ev, extra in specs:
+            md = fx.finding(lens, title, sev=sev, evidence=ev, extra=extra)
+            f = rr.extract_findings("## Findings\n" + md, lens + "-")
+            toc.append({"lens": rr.lens_label(lens), "dir": lens, "find": f})
+        return toc
+
+    def test_ui_labels_in_quotes_do_not_corroborate(self):
+        # Two lenses both mention "Capture a note" — a button, not an
+        # observation. The 2026-09-14 run paired 34 of 45 findings this way.
+        toc = self._toc(
+            ("ux", "Hover card eats the first click", "P2",
+             "`persona-a/screenshots/01-home.png`", '- **Repro:**\n  1. Click "Capture a note" on the card\n'),
+            ("content", "Today greeting is a nine-line paragraph", "P2",
+             "`persona-a/screenshots/02-today.png`", '- **Repro:**\n  1. Read the greeting above "Capture a note"\n'))
+        self.assertEqual(rr.corroborate(toc), [])
+        self.assertEqual(rr.corroboration_clusters(toc), [])
+
+    def test_same_screenshots_cluster_into_one_problem(self):
+        # Three lenses, three wordings, one problem — same two screenshots.
+        ev = "`persona-a/screenshots/05-reply.png` · `persona-a/screenshots/06-memory.png`"
+        toc = self._toc(
+            ("ux", "Companion asserts a gym business the user does not have", "P1", ev, ""),
+            ("bugs", "Companion invents and repeats a false personal business", "P0", ev, ""),
+            ("content", "'Knows you' copy invents facts from a stored memory", "P1", ev, ""))
+        shared = rr.corroborate(toc)
+        self.assertEqual(len(shared), 3)
+        clusters = rr.corroboration_clusters(toc)
+        self.assertEqual(len(clusters), 1)
+        c = clusters[0]
+        self.assertEqual(c["sev"], "P0")
+        self.assertEqual(c["rep"]["title"], "Companion invents and repeats a false personal business")
+        self.assertEqual([l for l, _ in c["raised"]], ["Defects", "Usability", "Content"])
+        self.assertEqual([s for _, s in c["raised"]], ["P0", "P1", "P1"])
+
+    def test_one_shared_screenshot_needs_a_second_signal(self):
+        # A busy home screen shows two unrelated problems; one shared shot
+        # and dissimilar titles must not pair them.
+        toc = self._toc(
+            ("ux", "Left nav offers three unexplained labels", "P2",
+             "`persona-a/screenshots/01-home.png`", ""),
+            ("content", "Floating photos are decorative and not clickable", "P3",
+             "`persona-a/screenshots/01-home.png`", ""))
+        self.assertEqual(rr.corroborate(toc), [])
+
+    def test_summary_scope_lists_a_shared_problem_once(self):
+        t = tempfile.mkdtemp(prefix="understudy-t-")
+        run = build(t)
+        ev = "`persona-a/screenshots/05-reply.png` · `persona-a/screenshots/06-memory.png`"
+        fx.lens(run, "ux", [
+            fx.finding("ux", "Companion asserts a gym business the user does not have",
+                       sev="P1", evidence=ev),
+            fx.finding("ux", "Settings toggle has no explanation", sev="P2", flow="surfaces",
+                       locator="/settings")], score=5)
+        fx.lens(run, "clarity", [
+            fx.finding("clarity", "Companion invents a false personal business", sev="P0",
+                       evidence=ev)], score=4)
+        out = render(run, "summary")
+        text = re.sub(r"<[^>]+>", " ", out)
+        # The problem appears in the corroboration table only, not again per lens.
+        self.assertEqual(out.count("Companion invents a false personal business"), 1)
+        self.assertEqual(out.count("Companion asserts a gym business"), 0)
+        self.assertIn("Raised by Clarity (P0) · Usability (P1)", text)
+        self.assertIn("The fold names no audience.", text)      # Observed bullets survive
+        self.assertIn("Distinct problems", text)
+        self.assertNotIn("Settings toggle has no explanation", out)  # P2 singleton → full export
+
     def test_extract_findings_reads_the_whole_block(self):
         md = fx.finding("ux", "Long repro", sev="P2", extra="- **Repro:**\n" +
                         "".join(f"  {i}. step\n" for i in range(1, 20)))
