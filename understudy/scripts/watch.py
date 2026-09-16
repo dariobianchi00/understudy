@@ -48,7 +48,10 @@ def _json(path):
         return None
 
 
-UNDERSTUDY_HOME = os.path.join(os.path.expanduser("~"), ".understudy")
+# UNDERSTUDY_HOME overrides ~/.understudy — set by the tests so a test run never
+# writes a pointer into a real home (it did, once, and the watcher then opened
+# on a temp folder that no longer existed).
+UNDERSTUDY_HOME = os.environ.get("UNDERSTUDY_HOME") or os.path.join(os.path.expanduser("~"), ".understudy")
 
 
 def last_run():
@@ -347,23 +350,36 @@ def replay(run, speed=20.0):
 
 
 def open_window(args):
-    """Open the dashboard in a new terminal window. Tries the terminal the
-    person is likely to have, in order, and falls back to printing the command."""
+    """Open the dashboard in a new terminal window.
+
+    Every terminal is handed ONE executable file and nothing else: macOS
+    Ghostty runs `-e` through /usr/bin/login, which splits a multi-word
+    command and then cannot find it (seen 2026-09-16), and Terminal.app's
+    AppleScript route has its own quoting. A launcher script sidesteps all of
+    it. The launcher appends one line to ~/.understudy/watch-open.log when it
+    starts, so a caller can tell a window that opened from one that did not."""
     import shlex
     import subprocess
+    os.makedirs(UNDERSTUDY_HOME, exist_ok=True)
+    launcher = os.path.join(UNDERSTUDY_HOME, "watch-open.command")
     cmd = " ".join(shlex.quote(a) for a in [sys.executable, os.path.abspath(__file__)] + args)
+    with open(launcher, "w", encoding="utf-8") as fh:
+        fh.write("#!/bin/sh\n"
+                 f"echo \"$(date '+%Y-%m-%dT%H:%M:%S') started\" >> {shlex.quote(os.path.join(UNDERSTUDY_HOME, 'watch-open.log'))}\n"
+                 f"exec {cmd} 2>>{shlex.quote(os.path.join(UNDERSTUDY_HOME, 'watch-open.log'))}\n")
+    os.chmod(launcher, 0o755)
     apps = "/Applications"
     tried = []
     if sys.platform == "darwin":
         if os.path.exists(os.path.join(apps, "Ghostty.app")):
-            tried.append(["open", "-na", "Ghostty", "--args", "-e", cmd])
+            tried.append(["open", "-na", "Ghostty", "--args", "-e", launcher])
         if os.path.exists(os.path.join(apps, "iTerm.app")):
-            tried.append(["osascript", "-e", 'tell application "iTerm" to create window with default profile command "%s"' % cmd.replace('"', '\\"')])
-        tried.append(["osascript", "-e", 'tell application "Terminal" to do script "%s"' % cmd.replace('"', '\\"'),
-                      "-e", 'tell application "Terminal" to activate'])
+            tried.append(["osascript", "-e", f'tell application "iTerm" to create window with default profile command "{launcher}"'])
+        # Terminal.app opens a .command file by running it in a new window.
+        tried.append(["open", "-a", "Terminal", launcher])
     else:
         for term in ("x-terminal-emulator", "gnome-terminal", "konsole", "xterm"):
-            tried.append([term, "-e", cmd] if term != "gnome-terminal" else [term, "--", "bash", "-c", cmd])
+            tried.append([term, "--", launcher] if term == "gnome-terminal" else [term, "-e", launcher])
     for t in tried:
         try:
             subprocess.run(t, check=True, capture_output=True, timeout=15)

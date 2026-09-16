@@ -106,12 +106,13 @@ class NoPath(unittest.TestCase):
         self.home = tempfile.mkdtemp(prefix="understudy-home-")
         self._env = dict(os.environ)
         os.environ["HOME"] = self.home
-        watch.UNDERSTUDY_HOME = os.path.join(self.home, ".understudy")
+        os.environ["UNDERSTUDY_HOME"] = os.path.join(self.home, ".understudy")
+        watch.UNDERSTUDY_HOME = os.environ["UNDERSTUDY_HOME"]
 
     def tearDown(self):
         os.environ.clear()
         os.environ.update(self._env)
-        watch.UNDERSTUDY_HOME = os.path.join(os.path.expanduser("~"), ".understudy")
+        watch.UNDERSTUDY_HOME = os.environ["UNDERSTUDY_HOME"]
 
     def test_init_run_records_the_last_run_and_watch_finds_it(self):
         t = tempfile.mkdtemp(prefix="understudy-w-")

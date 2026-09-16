@@ -14,7 +14,7 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
-> **v0.5.1 — watch it run, with nothing to type.** A run asks "open the live view?" and a yes opens a window on it: who is doing what, the persona's commentary as it is written, the auth pause, every screenshot as it lands. `/understudy:watch` opens it later and sets up the one-line status at the bottom of Claude Code on a yes. See *Watching it run*.
+> **v0.5.2 — watch it run, with nothing to type.** A run asks "open the live view?" and a yes opens a window on it: who is doing what, the persona's commentary as it is written, the auth pause, every screenshot as it lands. `/understudy:watch` opens it later and sets up the one-line status at the bottom of Claude Code on a yes. See *Watching it run*.
 >
 > **v0.4.1 — one row per problem.** The summary export names each problem once, with every check's own severity beside it, and corroboration pairs on evidence rather than on product vocabulary.
 >

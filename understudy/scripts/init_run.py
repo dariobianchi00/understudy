@@ -363,7 +363,7 @@ def main():
     # Remember the newest run, so `watch.py` needs no path at all — the one
     # thing a person watching a run should never have to type or find.
     try:
-        home = os.path.join(os.path.expanduser("~"), ".understudy")
+        home = os.environ.get("UNDERSTUDY_HOME") or os.path.join(os.path.expanduser("~"), ".understudy")
         os.makedirs(home, exist_ok=True)
         with open(os.path.join(home, "last-run"), "w") as f:
             f.write(run_dir + "\n")

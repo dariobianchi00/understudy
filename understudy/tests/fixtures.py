@@ -9,6 +9,11 @@ will one day be committed with a real screenshot in it.
 Every fixture describes a FICTIONAL product. If a real product name would
 make a test clearer, the test is wrong.
 """
+# No test may touch a real ~/.understudy: every script that would write there
+# honours UNDERSTUDY_HOME, and every subprocess the tests spawn inherits this.
+import os as _os, tempfile as _tempfile
+_os.environ["UNDERSTUDY_HOME"] = _tempfile.mkdtemp(prefix="understudy-home-")
+
 import base64
 import json
 import os
