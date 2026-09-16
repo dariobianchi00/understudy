@@ -99,6 +99,67 @@ class State(unittest.TestCase):
         self.assertNotIn(self.t, watch.status_line(s))
 
 
+class NoPath(unittest.TestCase):
+    """No path ever has to be typed: the run command remembers the newest run
+    and the status line is written by a script, not pasted by hand."""
+    def setUp(self):
+        self.home = tempfile.mkdtemp(prefix="understudy-home-")
+        self._env = dict(os.environ)
+        os.environ["HOME"] = self.home
+        watch.UNDERSTUDY_HOME = os.path.join(self.home, ".understudy")
+
+    def tearDown(self):
+        os.environ.clear()
+        os.environ.update(self._env)
+        watch.UNDERSTUDY_HOME = os.path.join(os.path.expanduser("~"), ".understudy")
+
+    def test_init_run_records_the_last_run_and_watch_finds_it(self):
+        t = tempfile.mkdtemp(prefix="understudy-w-")
+        target = os.path.join(t, "target.yaml")
+        fx.write(target, "product_name: Nimbus Notes\nbase_url: https://example-nimbus.test\n"
+                         "objectives: [ux]\npersonas:\n  - name: p\n    device: desktop-1440x900\n")
+        out = os.path.join(t, "runs")
+        p = subprocess.run([sys.executable, os.path.join(fx.SCRIPTS, "init_run.py"), "--target", target,
+                            "--output-dir", out, "--traversal-model", "m",
+                            "--persona-mode", "generic"],
+                           capture_output=True, text=True, env=os.environ)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        run = p.stdout.strip().splitlines()[0]
+        self.assertTrue(os.path.exists(os.path.join(run, "manifest.json")))
+        self.assertEqual(watch.last_run(), run)
+        self.assertEqual(watch.find_run(None), run)
+        line = subprocess.run([sys.executable, os.path.join(fx.SCRIPTS, "watch.py"), "--line", "--no-colour"],
+                              capture_output=True, text=True, env=os.environ).stdout
+        self.assertIn("Nimbus Notes", line)
+
+    def test_no_run_anywhere_is_a_calm_line(self):
+        self.assertIsNone(watch.find_run(None))
+        line = subprocess.run([sys.executable, os.path.join(fx.SCRIPTS, "watch.py"), "--line"],
+                              capture_output=True, text=True, env=os.environ).stdout
+        self.assertIn("no run", line)
+
+    def test_setup_statusline_keeps_everything_else(self):
+        cfg = os.path.join(self.home, ".claude", "settings.json")
+        fx.write(cfg, json.dumps({"theme": "dark", "hooks": {"Stop": [{"hooks": [{"type": "command", "command": "say done"}]}]}}))
+        p = subprocess.run([sys.executable, os.path.join(fx.SCRIPTS, "watch.py"), "--setup-statusline"],
+                           capture_output=True, text=True, env=os.environ)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        with open(cfg) as fh:
+            got = json.load(fh)
+        self.assertEqual(got["theme"], "dark")
+        self.assertEqual(got["hooks"]["Stop"][0]["hooks"][0]["command"], "say done")
+        self.assertEqual(got["statusLine"]["type"], "command")
+        self.assertIn("--line", got["statusLine"]["command"])
+        self.assertTrue(os.path.exists(cfg + ".bak"))
+        # broken JSON is never overwritten
+        fx.write(cfg, "{not json")
+        p = subprocess.run([sys.executable, os.path.join(fx.SCRIPTS, "watch.py"), "--setup-statusline"],
+                           capture_output=True, text=True, env=os.environ)
+        self.assertNotEqual(p.returncode, 0)
+        with open(cfg) as fh:
+            self.assertEqual(fh.read(), "{not json")
+
+
 class FakeScreen:
     """A 24×100 grid that raises, as curses does, on any write outside it."""
     def __init__(self, h=24, w=100):

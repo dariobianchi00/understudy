@@ -147,14 +147,15 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/init_run.py --target ~/.understudy/targets/<slug>.
 
 Prints the run folder. Writes `manifest.json` **at run start** — not reconstructed at the end, because a manifest assembled afterwards records what someone remembers rather than what ran. It refuses to write output inside this repo.
 
-**Then offer the live view, once, with the paths resolved** — the user cannot see tool calls, and a run is an hour or more of a persona thinking aloud into a log file:
+**Then offer the live view, once, as a yes/no** — the user cannot see tool calls, and a run is an hour or more of a persona thinking aloud into a log file. Ask exactly:
 
-```
-Watch it live in a second pane (Ghostty ⌘D, or any split):
-  python3 <absolute plugin root>/scripts/watch.py "<run_folder>"
-```
+> Open the live view in its own window? It shows who is running, where they
+> are against the time cap, every screenshot as it lands, and what the persona
+> is saying as they go. Yes / no
 
-The watcher reads the run folder and nothing else — who is running, where the persona is against its time cap, the auth pause, every screenshot as it lands, and the persona's own commentary as it is written. Mark the phases as you pass them so it can name them:
+On yes, run `${CLAUDE_PLUGIN_ROOT}/scripts/watch.py --open`; it opens a terminal window on the run that was just started (no path — the run command remembered it). If it prints a command instead, show the command and say to paste it into any terminal. On no, say nothing more; `/understudy:watch` opens it later.
+
+The watcher reads the run folder and nothing else. Mark the phases as you pass them so it can name them:
 
 ```bash
 ${CLAUDE_PLUGIN_ROOT}/scripts/mark.py <run_folder> --phase capture

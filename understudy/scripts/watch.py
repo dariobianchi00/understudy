@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Watch an understudy run as it happens, from a second terminal pane.
 
-    watch.py <run_folder>              live dashboard (curses); q quits
-    watch.py <runs_parent>             same, on the newest run under that folder
-    watch.py <run> --line              one line, for a Claude Code status line
+    watch.py                           live dashboard of the newest run; q quits
+    watch.py --open                    the same, in its own terminal window
+    watch.py --line                    one line, for a Claude Code status line
+    watch.py --setup-statusline        put that line at the bottom of Claude Code
     watch.py <run> --replay [--speed N]  replay a finished run's persona feed
+
+With no path, the newest run is the one `init_run.py` last started, recorded in
+~/.understudy/last-run; a path may be a run folder or a folder of runs.
 
 Everything shown is read off the run folder, which the traversal writes as it
 goes: session.log after every action, screenshots the moment they are taken,
@@ -44,8 +48,20 @@ def _json(path):
         return None
 
 
-def find_run(path):
-    """A run folder, or the newest run under a parent folder."""
+UNDERSTUDY_HOME = os.path.join(os.path.expanduser("~"), ".understudy")
+
+
+def last_run():
+    """The run init_run.py started most recently, if it still exists."""
+    p = _read(os.path.join(UNDERSTUDY_HOME, "last-run")).strip()
+    return p if p and os.path.exists(os.path.join(p, "manifest.json")) else None
+
+
+def find_run(path=None):
+    """A run folder, or the newest run under a parent folder, or with no path
+    the last run started — falling back to the newest under ~/.understudy/runs."""
+    if not path:
+        return last_run() or find_run(os.path.join(UNDERSTUDY_HOME, "runs"))
     path = os.path.expanduser(path.rstrip("/"))
     if os.path.exists(os.path.join(path, "manifest.json")):
         return path
@@ -330,9 +346,69 @@ def replay(run, speed=20.0):
         print()
 
 
+def open_window(args):
+    """Open the dashboard in a new terminal window. Tries the terminal the
+    person is likely to have, in order, and falls back to printing the command."""
+    import shlex
+    import subprocess
+    cmd = " ".join(shlex.quote(a) for a in [sys.executable, os.path.abspath(__file__)] + args)
+    apps = "/Applications"
+    tried = []
+    if sys.platform == "darwin":
+        if os.path.exists(os.path.join(apps, "Ghostty.app")):
+            tried.append(["open", "-na", "Ghostty", "--args", "-e", cmd])
+        if os.path.exists(os.path.join(apps, "iTerm.app")):
+            tried.append(["osascript", "-e", 'tell application "iTerm" to create window with default profile command "%s"' % cmd.replace('"', '\\"')])
+        tried.append(["osascript", "-e", 'tell application "Terminal" to do script "%s"' % cmd.replace('"', '\\"'),
+                      "-e", 'tell application "Terminal" to activate'])
+    else:
+        for term in ("x-terminal-emulator", "gnome-terminal", "konsole", "xterm"):
+            tried.append([term, "-e", cmd] if term != "gnome-terminal" else [term, "--", "bash", "-c", cmd])
+    for t in tried:
+        try:
+            subprocess.run(t, check=True, capture_output=True, timeout=15)
+            print("opened the live view in a new window")
+            return True
+        except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            continue
+    print("could not open a window here — run this in any terminal:\n  " + cmd)
+    return False
+
+
+def setup_statusline():
+    """Add the one-line status to ~/.claude/settings.json, keeping everything
+    else in the file exactly as it was. A plugin cannot ship this setting, so
+    it is the one thing that has to be written on the person's own machine."""
+    path = os.path.join(os.path.expanduser("~"), ".claude", "settings.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            settings = json.load(fh)
+    except FileNotFoundError:
+        settings = {}
+    except ValueError:
+        sys.exit(f"{path} is not valid JSON — fix it first, nothing was changed")
+    if not isinstance(settings, dict):
+        sys.exit(f"{path} does not hold an object — nothing was changed")
+    if os.path.exists(path):
+        with open(path + ".bak", "w", encoding="utf-8") as fh:
+            json.dump(settings, fh, indent=2, ensure_ascii=False)
+    cmd = f'"{sys.executable}" "{os.path.abspath(__file__)}" --line'
+    settings["statusLine"] = {"type": "command", "command": cmd, "refreshInterval": 2}
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(settings, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    print(f"status line added to {path} (previous copy at settings.json.bak). "
+          "It appears when Claude Code next starts.")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("path", help="a run folder, or a folder of runs (the newest is watched)")
+    ap.add_argument("path", nargs="?", default=None,
+                    help="a run folder, or a folder of runs; default: the last run started")
+    ap.add_argument("--open", action="store_true", help="open the dashboard in a new terminal window")
+    ap.add_argument("--setup-statusline", action="store_true",
+                    help="add the --line status to ~/.claude/settings.json")
     ap.add_argument("--line", action="store_true", help="print one status line and exit")
     ap.add_argument("--no-colour", action="store_true")
     ap.add_argument("--replay", action="store_true")
@@ -340,12 +416,18 @@ def main():
     ap.add_argument("--interval", type=float, default=1.0)
     ap.add_argument("--frames", type=int, default=None, help=argparse.SUPPRESS)
     a = ap.parse_args()
+    if a.setup_statusline:
+        setup_statusline()
+        return
+    if a.open:
+        sys.exit(0 if open_window([a.path] if a.path else []) else 1)
     run = find_run(a.path)
     if not run:
         if a.line:
             print("understudy · no run")
             return
-        sys.exit(f"no run with a manifest.json at or under {a.path}")
+        sys.exit("no run found" + (f" at or under {a.path}" if a.path else
+                 " — start one with /understudy:run"))
     if a.line:
         print(status_line(read_state(run), colour=not a.no_colour))
     elif a.replay:

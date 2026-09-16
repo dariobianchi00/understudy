@@ -360,6 +360,15 @@ def main():
         json.dump(manifest, f, indent=2)
         f.write("\n")
 
+    # Remember the newest run, so `watch.py` needs no path at all — the one
+    # thing a person watching a run should never have to type or find.
+    try:
+        home = os.path.join(os.path.expanduser("~"), ".understudy")
+        os.makedirs(home, exist_ok=True)
+        with open(os.path.join(home, "last-run"), "w") as f:
+            f.write(run_dir + "\n")
+    except OSError:
+        pass
     print(run_dir)
     if manifest["persona_mode"] == "generic":
         print("NOTE: persona_mode=generic — findings rest on INFERRED personas. "
