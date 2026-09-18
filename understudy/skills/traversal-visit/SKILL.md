@@ -59,6 +59,7 @@ Log the entry expectation **before navigating anywhere** (`visit-shapes.md`, Set
 | **V1** | Land — the first 30 seconds | Persona |
 | **V2** | Orient — build a model of the offer | Persona |
 | **V3** | Evaluate — is this for me, can I trust it | Persona |
+| **V-ICP** | Sweep — pricing, proof, integrations, "for whom" pages. **Only when `manifest.json` → `objectives` includes `icp`**; otherwise skip without comment | Persona |
 | **V4** | Decide and debrief | Persona |
 
 Announce every transition on one line:

@@ -14,13 +14,15 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.6.0 — who is this for?** A twelfth lens, `icp`, derives three ideal customer profiles from the captured evidence — primary, expansion, next-best — each scored on fit and propensity, each carrying the case against it and a persona for a re-run, with the trap segment named. No market research: the product is the world. See *The lenses*.
+>
 > **v0.5.3 — the status line goes quiet.** The one-line status at the bottom of Claude Code clears itself an hour after a run finishes, instead of showing that run forever.
 >
 > **v0.5.2 — watch it run, with nothing to type.** A run asks "open the live view?" and a yes opens a window on it: who is doing what, the persona's commentary as it is written, the auth pause, every screenshot as it lands. `/understudy:watch` opens it later and sets up the one-line status at the bottom of Claude Code on a yes. See *Watching it run*.
 >
 > **v0.4.1 — one row per problem.** The summary export names each problem once, with every check's own severity beside it, and corroboration pairs on evidence rather than on product vocabulary.
 >
-> **v0.4.0 — evaluated, not just built.** Product and website assessment run end to end — interview → capture → eleven lenses → verified report → PDF or HTML. The harness now grades itself: a frozen fictional site with planted defects, weekly lens and behaviour evals, and a ×3 baseline (30 runs, 30 gates passed, 0 hallucinations) that every later run is measured against. What it will not do, it says so rather than approximating.
+> **v0.4.0 — evaluated, not just built.** Product and website assessment run end to end — interview → capture → the lenses → verified report → PDF or HTML. The harness now grades itself: a frozen fictional site with planted defects, weekly lens and behaviour evals, and a ×3 baseline (30 runs, 30 gates passed, 0 hallucinations) that every later run is measured against. What it will not do, it says so rather than approximating.
 
 ---
 
@@ -211,6 +213,7 @@ understudy answers two different questions, and asks you which one first.
 | `bugs` | What's broken? | Repro steps + environment — a bug report, not a findings list | A | sonnet |
 | `onboarding` | Where do people drop off? | A funnel — steps to value, time to value, drop-off points | A | opus |
 | `content` | Does it deliver what it promised? | Promise-vs-delivery, reading level, jargon density | A | opus |
+| `icp` | Who should this be built and sold for? | Three ideal customer profiles from the evidence — see below | A / A-visit | opus |
 
 ### Website assessment — something people read and decide from
 
@@ -219,12 +222,23 @@ understudy answers two different questions, and asks you which one first.
 | `clarity` | Can a visitor tell what this is? | Time-to-comprehension, what they misunderstood | A-visit | opus |
 | `conversion` | Is the next step obvious? | CTA hierarchy, form burden, dead ends — against *your* stated goal | A-visit | opus |
 | `trust` | Would they believe it? | Proof, pricing transparency, provenance, data handling | A-visit | opus |
+| `icp` | Who should this be built and sold for? | Three ideal customer profiles from the site's words, pricing and proof — see below | A-visit / A | opus |
 | `technical` | What does it cost to load? | Core Web Vitals, weight, image hygiene — **lab numbers, mobile and desktop separately** | B | sonnet |
 | `seo` | Can it be found? | Crawlability, meta, canonical, structured data, sitemap | C | sonnet |
 | `aeo` | Can it be answered *from*? | schema.org, answer blocks, entity clarity, `llms.txt` — **static markup only** | C | sonnet |
 | `compare` | How does it stack up? | Differences matrix across your site and competitors *you* name | D | opus |
 
 **Adding a lens inside a mode you are already running is nearly free** — it scores evidence already captured. Adding a *mode* means another pass through the site. `clarity + conversion + trust` is one visit; `clarity + seo` is two captures.
+
+### `icp` — who this should be built and sold for
+
+Most lenses ask whether the product works. `icp` asks **who it works for**, on the evidence of what it is. It reads the captured visit and journey — the site's own words, its proof, its pricing, the flows the product actually has — and returns three **ideal customer profiles**: a primary, an expansion bet and a next-best, each specific enough to find fifty of them, and each arguing with itself.
+
+Per profile: who they are and where to find them · the job they are hiring the product for · the trigger that makes them look · why this product wins for them and what it lacks, every line citing a screenshot or a persona's words · a **fit** score (pain, alignment, evidence, clarity) and a **propensity** score (reach, trigger, willingness to pay, openness to switching), each 1–5 · **the case against** — what they use instead, the switching cost, the one fact that would kill the profile, and the cheapest one-week test · what the run could not tell · and a **persona in the target-file shape**, so the next run can put the product in front of exactly this customer. It also names the **trap**: the segment that is easy to sell to and would churn.
+
+Two things it deliberately does not do. It does **no market research** — no web search, no reviews, no competitor pages; the product is the world, and where the evidence does not reach the profile says *not inferable* rather than guessing. And it never pads: if fewer than three segments clear the fit bar, you get fewer, with the reason.
+
+On a website run it adds a three-to-five-minute **sweep** to each visit — pricing, customers, integrations, docs, careers, the footer's "for whom" language — so the profiles rest on what the site says about its own audience, not on the model's priors. When the run is done, `/understudy:run` offers, once, to save the three re-run personas as a target.
 
 ### Two things these lenses will not do
 

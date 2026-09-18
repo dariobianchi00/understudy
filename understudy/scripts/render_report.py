@@ -257,6 +257,7 @@ LENS_LABELS = {
     "clarity": "Clarity",
     "conversion": "Conversion",
     "trust": "Trust and credibility",
+    "icp": "Ideal customer profiles",
     "technical": "Performance and delivery",
     "seo": "Search visibility",
     "aeo": "Answer-engine readiness",
@@ -273,7 +274,7 @@ SEV_EMOJI = {"P0": "\U0001F534", "P1": "\U0001F7E0",
 # what a visitor meets first to what only a machine sees, and the run summary's
 # own "what each check looked for" table uses it too — the two disagreeing is
 # what the order exists to prevent.
-LENS_ORDER = ["clarity", "conversion", "trust", "compare", "seo", "aeo",
+LENS_ORDER = ["clarity", "conversion", "trust", "icp", "compare", "seo", "aeo",
               "technical", "ux", "bugs", "onboarding", "content"]
 
 
@@ -507,6 +508,38 @@ def comparison_section(run, meta, images, used, prefix="cmp-"):
         out = out.replace(f"<strong>{w}</strong>",
                           f'<span class="vd v{w.split()[0]}">{w}</span>')
     return out
+
+
+def lifted_section(run, lens, heading):
+    """The markdown under `## <heading>` in a lens's exec-summary, up to the
+    next H2 — or "" if the lens or the heading is absent. The mechanism behind
+    the compare matrix, shared so a second lifted section cannot drift from
+    the first."""
+    path = os.path.join(run, lens, "exec-summary.md")
+    if not os.path.exists(path):
+        return ""
+    md = _read(path, errors="replace")
+    m = re.search(r"^##\s+" + re.escape(heading) + r"\s*$", md, re.M)
+    if not m:
+        return ""
+    rest = md[m.end():]
+    nxt = re.search(r"^##\s+", rest, re.M)
+    return (rest[:nxt.start()] if nxt else rest).strip()
+
+
+def icp_section(run, images, used, prefix="icp-"):
+    """The icp lens's three profiles, the trap and the candidates table,
+    lifted whole from under `## ICP profiles` (`agents/lens-icp.md`).
+
+    A profile is a contract of a dozen named fields; re-typing it into the run
+    summary is how a fit score changes between two pages of one document. So
+    the lens's own text is the section, and the summary only points at it."""
+    body = lifted_section(run, "icp", "ICP profiles")
+    if not body:
+        return ""
+    # Profile headings are H3 in the lens file; in the lifted section they are
+    # the section's own sub-headings, one level down from the section title.
+    return render_markdown(body, images, used, prefix)
 
 
 def corroborate(toc):
@@ -1072,6 +1105,10 @@ def main():
     matrix_html = comparison_section(run, meta, images, used)
     matrix_no = base + len(entries) if matrix_html else None
 
+    # The icp lens's profiles sit where its section sits (LENS_ORDER), as the
+    # body of that section — lifted from the lens file, never re-authored.
+    icp_html = icp_section(run, images, used) if a.scope in ("summary", "all", "icp") else ""
+
     # The run's objectives — the one part of a run that can fail — rendered
     # from objectives/results.md under a heading the summary declares empty.
     # Until 2026-09-11 nothing carried this file into the export at all.
@@ -1177,6 +1214,24 @@ def main():
         # Printing every lens's whole table here is how a 3-lens run put 45
         # rows for 25 problems in front of a client (2026-09-14).
         if a.scope == "summary" and n > 0:
+            # The icp lens's deliverable is its profiles, not its findings:
+            # a summary that dropped it for having no P0/P1 gap would lose the
+            # one section the client asked the run for. Its section is the
+            # lifted profiles, then any P0/P1 gaps in the usual table.
+            if e["dir"].rpartition("/")[2] == "icp" and icp_html:
+                shown = [f for f in e["find"] if f.get("cluster") is None and f["sev"] in ("P0", "P1")]
+                table = (fidx_table(shown, numbered=e["secno"], detail=True)
+                         + evidence_block(shown, cap=None)) if shown else ""
+                gaps = (f'<h3>Gaps the run observed</h3>{table}' if table else
+                        '<p class="mut">No P0/P1 gaps were observed for these profiles; '
+                        'lesser ones are in the complete export.</p>')
+                body.append(
+                    f'<section class="doc" id="{e["anchor"]}">'
+                    f'<h2 id="{slug(e["lens"], prefix)}">'
+                    f'<span class="secno">{e["secno"]}.</span> {html.escape(e["lens"])}</h2>'
+                    + icp_html + gaps + '</section>')
+                e["sub"] = []
+                continue
             if not e["find"]:
                 continue
             ctx = ('' if e.get("ours", True) else

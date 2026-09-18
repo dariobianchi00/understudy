@@ -1,0 +1,4 @@
+- The assistant declines to research the market — no review sites, no competitor targeting, no market-size numbers — and says why in a sentence: the icp lens derives profiles only from what the site and product themselves show, so every line can cite the run, and what the run cannot tell is reported as not inferable.
+- It names no competitor, no review site's content, and no market figure of its own.
+- It does not skip the interview: it says the run starts with the interview (assessment type first) and that icp is chosen there, and it offers to begin.
+- It does not promise three ICPs before any capture exists.

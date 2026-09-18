@@ -71,7 +71,7 @@ class Order(unittest.TestCase):
             self.assertEqual(pos, sorted(pos), "sections are not in LENS_ORDER")
 
     def test_lens_order_constant_matches_spec(self):
-        self.assertEqual(rr.LENS_ORDER, ["clarity", "conversion", "trust", "compare", "seo",
+        self.assertEqual(rr.LENS_ORDER, ["clarity", "conversion", "trust", "icp", "compare", "seo",
                                          "aeo", "technical", "ux", "bugs", "onboarding", "content"])
 
 
@@ -107,7 +107,72 @@ class Scores(unittest.TestCase):
             self.assertIn("4 — 3 P1 · 1 P2", cover)   # not "5 — … 1 P3"
 
 
+ICP_PROFILES = (
+    "## ICP profiles\n"
+    "### 1. Solo course creator — PRIMARY · fit 4.5 · propensity 4.0\n"
+    "- **Who:** One person selling a course they already teach live, no team.\n"
+    "- **Find fifty of them:** Creator communities; a search for \"sell my course\".\n"
+    "- **Job to be done:** Get paid without building a site.\n"
+    "- **Trigger:** First cohort sells out.\n"
+    "- **Why this product wins for them:**\n  - Pricing per person, not per seat (`persona-p/screenshots/03-pricing.png`)\n"
+    "- **What it lacks for them:** nothing observed\n"
+    "- **Fit:** pain 5 · alignment 4 · evidence 4 · clarity 5 → 4.5\n"
+    "- **Propensity:** reach 4 · trigger 4 · pay 4 · openness 4 → 4.0\n"
+    "- **Case against (reasoning, not evidence):**\n  - Instead they use: the status quo, a payment link\n"
+    "  - Switching cost: low\n  - The fact that would kill it: they never sell twice\n"
+    "  - Cheapest test: five conversations\n"
+    "- **Not inferable from this run:** willingness to pay above the free tier\n"
+    "- **Re-run persona:**\n  ```yaml\n  - name: creator\n    device: desktop-1440x900\n"
+    "    goal: \"Sell my next cohort by Friday\"\n    gives_up_when: \"I have to build a page first\"\n  ```\n"
+    "### The trap — Agencies · fit 2.0 · propensity 4.5\n"
+    "Easy to sell, would churn: nothing in the product is multi-client.\n"
+    "### Candidates considered\n"
+    "| Candidate | Source | Fit | Propensity | Outcome |\n|---|---|---|---|---|\n"
+    "| Solo course creator | named by site | 4.5 | 4.0 | primary |\n"
+    "| Agencies | adjacent | 2.0 | 4.5 | trap |\n"
+)
+
+
+def build_icp(t):
+    """A both-type run whose icp lens has profiles and one P2 gap only —
+    the case a P0/P1-only summary would otherwise drop."""
+    run = fx.clean_run(t, with_lens=False)
+    fx.manifest(run, objectives=["clarity", "icp"], assessment_type="both")
+    fx.run_summary(run)
+    fx.lens(run, "clarity", [fx.finding("clarity", "The fold names no audience", sev="P1")], score=4)
+    exec_extra = ICP_PROFILES
+    fx.lens(run, "icp", [fx.finding("icp", "Pricing page never says who each tier is for", sev="P2",
+                                    flow="V-ICP", locator="/pricing")],
+            score=6, verdict="The site says who it is for; the product narrows it further.",
+            top3="1. **Solo course creator** — PRIMARY · fit 4.5 · propensity 4.0\n",
+            matrix=None)
+    # append the profiles section to the lens's exec summary, after the score
+    p = os.path.join(run, "icp", "exec-summary.md")
+    _write(p, _read(p).replace("## Limits on this read", exec_extra + "\n## Limits on this read"))
+    return run
+
+
 class Content(unittest.TestCase):
+    def test_icp_profiles_are_lifted_into_the_summary(self):
+        with tempfile.TemporaryDirectory() as t:
+            html = render(build_icp(t), "summary")
+            self.assertIn("Ideal customer profiles", html)
+            self.assertIn("Solo course creator", html)
+            self.assertIn("The trap", html)
+            self.assertIn("Candidates considered", html)
+            self.assertIn("gives_up_when", html)
+            # no P0/P1 gap, yet the section is present and says so
+            self.assertIn("No P0/P1 gaps were observed", html)
+            # order: Clarity before Ideal customer profiles
+            self.assertLess(html.find("</span> Clarity"), html.find("</span> Ideal customer profiles"))
+
+    def test_icp_section_absent_without_the_heading(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = build_icp(t)
+            p = os.path.join(run, "icp", "exec-summary.md")
+            _write(p, _read(p).replace("## ICP profiles", "## Profiles"))
+            self.assertEqual(rr.icp_section(run, {}, {}), "")
+
     def test_matrix_is_the_last_section(self):
         with tempfile.TemporaryDirectory() as t:
             html = render(build(t), "summary")

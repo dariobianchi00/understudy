@@ -128,13 +128,15 @@ Do not re-implement the interview here. Do not shortcut it because the user supp
 
 | Mode | Capture skill | Lenses that score it | Personas |
 |---|---|---|---|
-| **A — Journey** | `traversal-journey` — one traversal per persona | ux · bugs · onboarding · content | yes |
-| **A-visit — Visit** | `traversal-visit` — one visit per persona | clarity · conversion · trust | yes |
+| **A — Journey** | `traversal-journey` — one traversal per persona | ux · bugs · onboarding · content · icp | yes |
+| **A-visit — Visit** | `traversal-visit` — one visit per persona | clarity · conversion · trust · icp | yes |
 | **B — Instrumented** | `traversal-measure` — scripted, mobile + desktop | technical | no |
 | **C — Crawl** | `traversal-crawl` — no session, no login | seo · aeo | no |
 | **D — Comparative** | `traversal-compare` — N sites, then a diff | compare | reuses A-visit / C |
 
 **Mode D has its own command**, `/understudy:compare` — it needs the competitor set confirmed before anything runs. Route there rather than improvising it here.
+
+**`icp` is the one lens that reads across A and A-visit.** It scores whatever the run captured — a visit, a journey, or both — and never triggers a capture of its own. On a *both* run, dispatch it once, after both captures, not once per mode. When it is among the objectives, the visit traversal runs Shape V-ICP (the sweep) — the manifest's `objectives` list is how `traversal-visit` knows.
 
 **Group by mode, then capture once per mode.** `clarity + conversion + trust` is **one** visit traversal scored three ways. `clarity + seo` is **two** captures in different modes. Say the cost out loud before starting.
 
@@ -201,6 +203,7 @@ Enforces phase-gate checks 2 and 5 — scoring vocabulary in the artifacts, and 
 | `clarity` | `lens-clarity` | A-visit | opus |
 | `conversion` | `lens-conversion` | A-visit | opus |
 | `trust` | `lens-trust` | A-visit | opus |
+| `icp` | `lens-icp` | A-visit / A | opus |
 | `technical` | `lens-technical` | B | sonnet |
 | `seo` | `lens-seo` | C | sonnet |
 | `aeo` | `lens-aeo` | C | sonnet |
@@ -370,10 +373,11 @@ naming which markets the comparison sites serve.>
 | Check | Question it answers |
 |---|---|
 | **Clarity** | Can a visitor say what this is, who it is for, and what to do next? |
+| **Ideal customer profiles** | Who should this product be built and sold for, on the evidence of what it is? |
 
-<In LENS_ORDER, always: Clarity, Conversion, Trust, Compare, SEO, AEO,
-Technical — then Usability, Defects, Activation, Content. Include only the
-checks that ran. This table's order IS the document's order.>
+<In LENS_ORDER, always: Clarity, Conversion, Trust, Ideal customer profiles,
+Compare, SEO, AEO, Technical — then Usability, Defects, Activation, Content.
+Include only the checks that ran. This table's order IS the document's order.>
 
 ## How each area scores
 
@@ -441,6 +445,12 @@ where each competitor's own observed value sits beside ours, it is built from
 four separate captures, and a hand-copied second version is how one number
 comes to differ between two pages of one document.
 
+**The `icp` lens's `## ICP profiles` section is lifted the same way** — `render_report.py`
+finds the heading in `icp/exec-summary.md` and renders the three profiles, the
+trap and the candidates table as the *Ideal customer profiles* section, whole.
+Do not re-type a profile into the run summary; quote its name and role and
+point at the section.
+
 `## Against comparable sites` earlier in the summary stays, and stays short: it
 carries our column and the lead/trail/level count, for the reader who stops
 before the findings. The matrix at the end is the evidence behind it — summary
@@ -453,8 +463,9 @@ and detail, the same split as the Top 5 against the per-lens sections.
 
 #### ⚑ The order is fixed, and the table announces it
 
-`LENS_ORDER` in `render_report.py` — **Clarity · Conversion · Trust · Compare ·
-SEO · AEO · Technical**, then **Usability · Defects · Activation · Content** —
+`LENS_ORDER` in `render_report.py` — **Clarity · Conversion · Trust · Ideal
+customer profiles · Compare · SEO · AEO · Technical**, then **Usability ·
+Defects · Activation · Content** —
 is the order the detailed sections appear in, the order the contents lists
 them, and the order "What each check looked for" must use.
 
@@ -471,6 +482,7 @@ what the client reads, never the folder name.
 | `clarity` | Clarity |
 | `conversion` | Conversion |
 | `trust` | Trust and credibility |
+| `icp` | Ideal customer profiles |
 | `compare` | Competitive comparison |
 | `seo` | Search visibility |
 | `aeo` | Answer-engine readiness |
@@ -557,6 +569,27 @@ The three scopes, so you can say what the user is getting:
 - **`summary`** — the run verdict, then a triage table of **every** finding across all lenses with its severity, cost and fix, plus the key screenshots. A few pages. This is the report; it is what gets forwarded.
 - **`<lens>`** — one lens in full, with evidence. What an engineer or designer acts from.
 - **`all`** — everything, screenshots embedded. The archive, not a document anyone reads front to back.
+
+### 3.9 — If `icp` ran: offer the re-run, once
+
+Each profile in `icp/exec-summary.md` ends with a **re-run persona** block in
+the target-file shape. After handing over the deliverable, ask exactly this,
+once, as a yes/no:
+
+> The ICP check wrote a persona for each of its three profiles. Want me to
+> save them as a target and run the product as those three customers next?
+> That report would say how well the product serves the people it should be
+> built for. Yes / no
+
+On **yes**: copy the three `- name / device / goal / gives_up_when` blocks
+verbatim into a new target `~/.understudy/targets/<slug>-icp.yaml` with
+`persona_mode: supplied`, `assessment_type: product` (or `both` if the original
+was), objectives `ux · onboarding · content`, and everything else from the
+original target. Then say `/understudy:run <slug>-icp` starts it — **do not
+start it yourself**; a run is a spend, and the interview confirms the plan.
+
+On **no**, say nothing more. Never invent a fourth persona, and never edit the
+three the lens wrote.
 
 **Never present `summary` as though it were the whole research.** The hand-over names both: the document, and the run folder that holds every lens report and every screenshot behind it.
 

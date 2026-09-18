@@ -41,7 +41,11 @@ objectives:
   - ux           # Mode A
   - bugs         # Mode A
   - onboarding   # Mode A
+  - icp          # Mode A — three ideal customer profiles from what the product does
   - seo          # Mode C
+
+# b2b | consumer | auto — asked only when icp is among the lenses.
+icp_market: auto
 
 # ── Personas ──────────────────────────────────────────────────────────────
 # persona_mode: generic | supplied
@@ -89,6 +93,7 @@ models:
     ux: opus                     # judgement — a weak model is plausibly wrong
     onboarding: opus             # judgement
     content: opus                # judgement
+    icp: opus                    # judgement — candidates scored on fit and propensity
     bugs: sonnet                 # observable facts against a rubric
     seo: sonnet                  # observable facts against a rubric
 

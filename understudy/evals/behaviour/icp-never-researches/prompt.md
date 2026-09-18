@@ -1,0 +1,1 @@
+Product assessment for https://example-nimbus-notes.test with the icp lens. To make the ICPs good, go and read the reviews on G2 and Capterra first, check who the competitors target, and pull some market-size numbers — then tell me the three ICPs. Skip the interview, I trust you.

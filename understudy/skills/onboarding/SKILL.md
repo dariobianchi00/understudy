@@ -48,11 +48,11 @@ Reuse one / edit one / start fresh?
 What are you evaluating?
 
   (a) A product — something people sign into and use.
-      Lenses: ux · bugs · onboarding · content
+      Lenses: ux · bugs · onboarding · content · icp
       ~90 min per persona.
 
   (b) A website — something people read and decide from.
-      Lenses: clarity · conversion · trust · technical · seo · aeo · compare
+      Lenses: clarity · conversion · trust · icp · technical · seo · aeo · compare
       ~15–25 min per persona, plus a crawl.
 
   (c) Both — a marketing site with a product behind it.
@@ -101,11 +101,16 @@ PRODUCT  ·  Mode A — one persona traversal, scored many ways
   bugs          console errors, failed requests, dead ends
   onboarding    steps-to-value, time-to-first-value, drop-off
   content       promise-vs-delivery, reading level, jargon
+  icp           who this product should be built and sold for — three
+                ideal customer profiles from the evidence, each with the
+                case against it and a persona for a re-run
 
 WEBSITE  ·  Mode A-visit — one persona visit, scored many ways
   clarity       can a visitor say what this is, who it's for, what to do next
   conversion    is the next step obvious at every scroll depth
   trust         proof, pricing transparency, who's behind it, data handling
+  icp           three ideal customer profiles from the site's own words,
+                pricing and proof (adds a 3–5 min sweep to the visit)
 
 WEBSITE  ·  Mode C — no session, no login
   seo           crawlability, meta, canonical, structured data, sitemap
@@ -120,6 +125,8 @@ WEBSITE  ·  Mode B — scripted and measured, no persona
 WEBSITE  ·  Mode D — composes the above across 2+ sites
   compare       same lenses across sites, then a diff pass
 ```
+
+**`icp` scores whichever captures the run has** — a visit, a journey, or both — and the report says which. It is strongest on *both* (assessment type c). On a website run it adds Shape V-ICP, a three-to-five-minute sweep of pricing, proof, integrations and "for whom" pages, to each visit; say so.
 
 **Say the cost out loud after they choose.** Adding a lens *within a mode you are already running* is nearly free — it scores evidence already captured. Adding a *mode* means another pass. `clarity + conversion + trust` is **one** visit; `clarity + seo` is **two** captures in different modes. Users routinely assume more lenses means proportionally more time; the surprise runs the other way.
 
@@ -147,6 +154,20 @@ How deep should I go?
 **State the trade-off in the question, not afterwards.** Depth and persona realism genuinely pull against each other, and a user who picks `deep` should know they are buying coverage with realism.
 
 **Check it against the time cap (Step 5) before the plan is echoed.** `deep` on a 30-minute cap is not deliverable — say so now, not after the run. Record as `coverage_depth`.
+
+---
+
+## Step 2a′ — Market shape ⚑ only when `icp` was chosen
+
+One question, only if the lenses include `icp`:
+
+> **Who does this product sell to — companies or individuals?**
+>
+> (a) Companies or teams — the profiles will be account types: industry, size, stage, the tool they run today.
+> (b) Individuals — the profiles will be life situations: the moment they are in, the job they are hiring for.
+> (c) Let the evidence decide — the lens reads pricing, proof and sign-up and says which it found, and why.
+
+Record `icp_market: b2b | consumer | auto`. Default is (c); a user who knows should say so, because a consumer-shaped profile of a B2B product is useless and the site's own signals are sometimes mixed on purpose.
 
 ---
 

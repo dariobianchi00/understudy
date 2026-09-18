@@ -103,6 +103,32 @@ When the site asks for details — demo request, newsletter, trial, contact:
 
 ---
 
+## Shape V-ICP — Sweep (only when the run's objectives include `icp`)
+
+**Goal:** the persona looks, briefly and in character, at the pages that say who this is for — so that a later analysis of *who should buy this* has evidence instead of guesses.
+
+**Skip this shape entirely unless `manifest.json` → `objectives` contains `icp`.** It costs three to five minutes and it is not how an ordinary visitor behaves, which is why it is separate and announced.
+
+Run it after V3, before V4. Announce it: `→ [<persona>] V-ICP — sweep`. Stay in first person; the persona is curious about *who this is for*, not analysing it.
+
+Open, screenshot, and react to each of these **if the site has it** — one screenshot each, no submissions, no more than one minute per page:
+
+| Page | What the persona notes, in their own words |
+|---|---|
+| **Pricing** | every tier's name, its price and unit (per person? per team? per month?), who each tier seems to be for, and whether they could tell which one is *them* |
+| **Customers / case studies / testimonials** | *who* the proof is about — the kind of company or person, not the quote. "All the logos are big companies and I'm one person." |
+| **Integrations** | what it connects to — a list of tools is a list of who already uses those tools |
+| **Docs / help centre** (landing page only) | what the first three articles assume you already have or do |
+| **Careers / jobs** (landing page only) | what the company says it is building and for whom, in its own words |
+| **Footer** | the phrases used for the audience — "for teams", "for creators", "for families", "enterprise" |
+| **Any "for X" or "solutions" page** | who X is, and whether the persona is X |
+
+Log every page as `[MM:SS] sweep: <page> — <reaction>` and record which pages **did not exist** — a product with no pricing page and no customers page is telling the analysis something.
+
+**Do not** search the web, read reviews elsewhere, or open competitors. The sweep is this site only.
+
+---
+
 ## Shape V4 — Decide (12:00–20:00) and debrief
 
 **Goal:** the persona reaches a verdict and says why.
@@ -193,6 +219,8 @@ Under `<run_folder>/persona-<slug>/`:
                 "price_found": false, "price_understood": false,
                 "forms_opened": 0, "forms_submitted": 0,
                 "trust_up": [], "trust_down": [] },
+  "shape_v_icp": { "ran": false, "pages_seen": [], "pages_missing": [],
+                   "pricing_unit": null, "proof_is_about": "" },
   "shape_v4": { "start": "MM:SS", "end": "MM:SS", "verdict": "" },
   "coverage_depth": "standard",
   "auditor_mode_from": null,

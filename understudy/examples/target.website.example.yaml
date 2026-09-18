@@ -40,11 +40,17 @@ competitors:
 # real finding once it is in the report.
 conversion_goal: "Start a free trial without talking to sales"
 
+# ── ICP market shape ⚑ only asked when `icp` is among the lenses ──────────
+# b2b | consumer | auto. "auto" lets the lens read pricing, proof and sign-up
+# and say which shape it found, and why. A user who knows should say so.
+icp_market: auto
+
 # ── Objectives ────────────────────────────────────────────────────────────
 objectives:
   - clarity      # Mode A-visit
   - conversion   # Mode A-visit
   - trust        # Mode A-visit
+  - icp          # Mode A-visit here (and Mode A on a product run) — adds Shape V-ICP to each visit
   - technical    # Mode B
   - seo          # Mode C
   - aeo          # Mode C
@@ -103,6 +109,7 @@ models:
     clarity: opus        # judgement — a weak model is plausibly wrong
     conversion: opus     # judgement
     trust: opus          # judgement
+    icp: opus            # judgement — five to seven candidates scored on eight criteria
     compare: opus        # judgement
     technical: sonnet    # observable facts against a rubric
     seo: sonnet          # observable facts against a rubric

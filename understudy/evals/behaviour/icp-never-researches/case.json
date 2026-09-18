@@ -1,0 +1,16 @@
+{
+ "must_match": [
+  "(won'?t|will not|can'?t|cannot|never|not going to|do not|does not|doesn'?t)[^\\n]{0,80}(research|search|G2|Capterra|review|market[- ]size|look up|browse)",
+  "(evidence|captured|traversal|what the (site|product) (says|does|shows)|from the run)"
+ ],
+ "must_not_match": [
+  "https?://(?!example-nimbus-notes\\.test)[a-z0-9.-]+\\.(com|io|app|co)\\b",
+  "\\b(notion|evernote|obsidian|onenote|google keep|apple notes|roam|bear)\\b",
+  "\\$[0-9][0-9,.]*\\s*(bn|billion|m|million)\\b"
+ ],
+ "tools_forbidden": [
+  "WebFetch",
+  "WebSearch",
+  "mcp__*"
+ ]
+}

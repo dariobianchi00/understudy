@@ -1,7 +1,7 @@
 {
   "name": "understudy",
-  "version": "0.5.3",
-  "description": "Evaluate any web product or website as a stand-in user. Eleven lenses \u2014 ux, bugs, onboarding, content, clarity, conversion, trust, technical, seo, aeo, compare \u2014 score one browser session each. Every finding cites a screenshot.",
+  "version": "0.6.0",
+  "description": "Evaluate any web product or website as a stand-in user. Twelve lenses — ux, bugs, onboarding, content, icp, clarity, conversion, trust, technical, seo, aeo, compare — score one browser session each. Every finding cites a screenshot; icp derives three ideal customer profiles from the evidence.",
   "author": {
     "name": "Dario Bianchi",
     "url": "https://github.com/dariobianchi00"

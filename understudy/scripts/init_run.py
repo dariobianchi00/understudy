@@ -305,6 +305,9 @@ def main():
         "coverage_depth": target.get("coverage_depth") or "standard",
         "conversion_goal": target.get("conversion_goal"),
         "competitors": target.get("competitors") or [],
+        # The interview's answer to "companies or individuals?" for the icp
+        # lens. Absent or "auto" means the lens decides from the evidence.
+        "icp_market": target.get("icp_market"),
         # ⚑ Only the OBJECTIVE reaches the manifest. The success criterion is
         # split out to objectives/criteria.json, which the traversal must never
         # open — see CLAUDE.md §10, "The success criterion is withheld". "Don't look" is not a mechanism when

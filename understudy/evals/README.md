@@ -31,7 +31,7 @@ way — a fixture that drifts out of the contract is worse than none.
 
 They are not a measurement of the traversal skills. A traversal eval drives
 `fixture-site/` for real (`python3 fixture-site/serve.py`) and is a later,
-more expensive layer. These captures test the eleven lenses, the gates and the
+more expensive layer. These captures test the lenses, the gates and the
 renderer against known ground truth.
 
 ## Running the lens evals

@@ -55,8 +55,8 @@ Objectives do not group by topic. They group by **what the agent physically has 
 
 | Mode | Evidence gathering | Lenses |
 |---|---|---|
-| **A — Journey** | A persona with a goal drives the product. **One traversal, many scorings.** | ux · bugs · onboarding · content |
-| **A-visit — Visit** | A persona with a *question* reads a site. Same machinery, different flow shapes, ~1/4 the time. | clarity · conversion · trust · content |
+| **A — Journey** | A persona with a goal drives the product. **One traversal, many scorings.** | ux · bugs · onboarding · content · icp |
+| **A-visit — Visit** | A persona with a *question* reads a site. Same machinery, different flow shapes, ~1/4 the time. | clarity · conversion · trust · icp |
 | **B — Instrumented** | Scripted and measured, no persona. Own traversal. | technical · accessibility · responsive · security-surface |
 | **C — Crawl** | No session, often no login. | seo · aeo · compliance |
 | **D — Comparative** | N runs of A, A-visit or C, then a diff pass. | compare · parity · pricing |
@@ -106,6 +106,7 @@ Each resolves to a lens bundle. Same harness, same gates, same two-pass separati
 9. **seo** — crawlability, meta, canonical, structured data, internal linking, sitemap, indexability
 10. **aeo** — schema.org coverage, extractable answer blocks, entity clarity, `llms.txt`. **Static markup only in v1**; querying live answer engines is deferred — see §11.3
 11. **compare** — the same lenses across 2+ sites, then a diff pass producing a differences matrix
+12. **icp** — who this product should be built and sold for, on the evidence of what it is. Reads A and/or A-visit captures; three ideal customer profiles (primary · expansion · next-best), each scored on fit and propensity, each with the case against it and a re-run persona; the trap segment named. **No market research** — every line cites the run, or says *not inferable*. Method in `references/icp-method.md`; adds Shape V-ICP (a pricing / proof / "for whom" sweep) to the visit when selected
 
 **⚑ `compare` is the key question for website assessment**, not an afterthought. Build it *with* the website bundle, not in a later phase — a site audit that cannot answer *"how do we look next to them?"* is answering the easier question.
 
@@ -137,11 +138,11 @@ Runs on every invocation. Never assumes. One question at a time.
    What are you evaluating?
 
      (a) A product — something people sign into and use.
-         Lenses: ux · bugs · onboarding · content
+         Lenses: ux · bugs · onboarding · content · icp
          ~90 min per persona.
 
      (b) A website — something people read and decide from.
-         Lenses: clarity · conversion · trust · technical · seo · aeo · compare
+         Lenses: clarity · conversion · trust · icp · technical · seo · aeo · compare
          ~15-25 min per persona, plus a crawl.
 
      (c) Both — a marketing site with a product behind it.
@@ -203,6 +204,10 @@ model: inherit | opus | sonnet | haiku   # confirmed by the user at onboarding
 
 Body: the framework, the severity rubric, the output schema, the evidence rule.
 
+### One lens reads across modes — `icp`
+
+Every other lens scores one mode. `icp` (v0.6.0) scores whatever A and A-visit captures the run has, never triggers a capture of its own, and is dispatched once. Its output is three profiles, not a findings list, so its exec-summary carries a `## ICP profiles` section the renderer lifts whole (the compare matrix mechanism, shared as `lifted_section`), while `findings-final.md` carries only the observed gaps. It is the one lens whose method includes reasoning that is not observation — the *case against* each profile — and the contract makes it label that reasoning as such. It does no research: `WebSearch`, `WebFetch` and MCP tools are forbidden in the agent file, and a criterion the run cannot score is `?`, never a 3.
+
 ### Two invariants — never relax these
 
 1. **Naive/analyst separation.** The traversal agent never sees the framework. Banned during capture: *heuristic · severity · usability · Nielsen · HAX · P0/P1/P2/P3*. Contaminating the traversal is how you get a report that confirms its own priors. This is the single most valuable thing the reference skill proved.
@@ -236,7 +241,7 @@ Net effect: no silent coupling, no stale pins, and the manifest records a model 
 
 **⚑ The user confirms both levels during onboarding, before any cost is incurred.** Defaults are offered, not assumed — an evaluation is a real spend, and whether to spend more on scoring or less is the user's call, not the harness's. See §4, step 5a.
 
-**Default scoring allocation** (offered, overridable per lens): opus for `ux` · `content` · `onboarding` · `clarity` · `conversion` · `trust` · `compare` — judgement-heavy, where a weaker model produces plausible findings that are wrong. sonnet for `bugs` · `seo` · `aeo` · `technical` — closer to extraction against a checklist, where the framework does the work.
+**Default scoring allocation** (offered, overridable per lens): opus for `ux` · `content` · `onboarding` · `clarity` · `conversion` · `trust` · `icp` · `compare` — judgement-heavy, where a weaker model produces plausible findings that are wrong. sonnet for `bugs` · `seo` · `aeo` · `technical` — closer to extraction against a checklist, where the framework does the work.
 
 **⚑ The run manifest records the model used for the traversal AND per lens.** Findings are not comparable across models; a cross-model diff must be flagged, never silently presented. The traversal model matters most here, because it is the one that changes without anyone deciding it — a user who switched models between Tuesday and Friday has two runs that cannot be honestly diffed.
 
@@ -296,7 +301,7 @@ understudy/                              (public, MIT)
     │   └── compare.md                   Mode D entry point
     ├── agents/                          one per lens — the Pass-2 scorers
     │   ├── lens-ux.md   lens-bugs.md   lens-onboarding.md   lens-content.md
-    │   ├── lens-clarity.md   lens-conversion.md   lens-trust.md
+    │   ├── lens-clarity.md   lens-conversion.md   lens-trust.md   lens-icp.md
     │   ├── lens-seo.md   lens-aeo.md   lens-technical.md   lens-compare.md
     │   └── objectives-scorer.md         pass/fail against the withheld criterion
     ├── skills/
@@ -310,6 +315,7 @@ understudy/                              (public, MIT)
     │   ├── playwright-patterns.md   flow-shapes.md        visit-shapes.md
     │   ├── first-value.md           evidence-rules.md     severity-rubric.md
     │   ├── heuristics-framework.md  report-template.md    technical-metrics.md
+    │   ├── icp-method.md            (v0.6.0 — the icp lens's method)
     │   ├── lens-output-contract.md  binding on every lens
     │   └── banned-vocabulary.md     the one list check_capture.py reads
     ├── scripts/                         stdlib only, every one
@@ -375,6 +381,9 @@ Plus one human check that is not automatable and should not pretend to be: **rea
 **The success criterion is withheld from the persona, physically.** A run objective reaches the traversal as a goal in the user's words; the expected outcome is written to `objectives/criteria.json`, which only `objectives-scorer` opens, after capture is fixed. "Don't look" is not a mechanism when the orchestrator and the persona are the same agent, so the criterion is not in any file the traversal reads. A persona who knows what success looks like finds it, and the test cannot fail.
 
 **One definition of the run layout and one of the finding heading.** `run_layout.py` says where lenses live and which `compare/<site>` is the client's; `finding_id.FINDING_HEADING` is the heading regex. Every script imports them. Three scripts keeping three private copies produced a gate that checked one report of four and a cover score that averaged in a competitor's — the audit of 2026-09-11 that led to `understudy/tests/`.
+
+**Who is it for? (v0.6.0).** The lenses said whether the product works; nothing said who it works for. `icp` derives three ideal customer profiles from the captured evidence using Dunford's positioning exercise (unique attributes → value → who cares most → segments), scores 5–7 candidates on fit (pain, alignment, evidence, clarity) and propensity (reach, trigger, pay, openness), returns primary · expansion · next-best and names the trap. Two decisions worth keeping: **no market research** — the tool's value is that every line cites the run, and a profile built from the model's priors is the one output that would poison the rest; and **every profile argues with itself** — the case against (alternative, switching cost, kill fact, cheapest test) is reasoning and labelled as such, because an ICP nobody has tried to refute is a wish. The visit gains a conditional sweep shape (V-ICP) so the profiles rest on the site's own pricing, proof and "for whom" pages; the product journey is unchanged. Each profile ends with a persona in target-file shape, and the run command offers once to save the three as a target — closing the loop from *who should we build for* to *how well do we serve them*.
+
 
 ---
 
