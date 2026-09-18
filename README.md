@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.5.3 — the status line goes quiet.** The one-line status at the bottom of Claude Code clears itself an hour after a run finishes, instead of showing that run forever.
+>
 > **v0.5.2 — watch it run, with nothing to type.** A run asks "open the live view?" and a yes opens a window on it: who is doing what, the persona's commentary as it is written, the auth pause, every screenshot as it lands. `/understudy:watch` opens it later and sets up the one-line status at the bottom of Claude Code on a yes. See *Watching it run*.
 >
 > **v0.4.1 — one row per problem.** The summary export names each problem once, with every check's own severity beside it, and corroboration pairs on evidence rather than on product vocabulary.
@@ -301,7 +303,7 @@ Say yes and a terminal window opens on the run. Nothing to type, no path to find
 
 Left: each persona done, running or pending, with its time against the cap and its screenshot count, then each lens and its model as the fan-out launches and finishes. Right: the persona's own commentary, streamed as it is written — one action behind real time, never a phase behind. The bottom line is the one you need to look up for: the auth pause. Everything on screen is read off the run folder; nothing is inferred and nothing is sent anywhere.
 
-**A one-line version at the bottom of Claude Code.** `/understudy:watch` offers it once — say yes and it is set up; it appears the next time Claude Code starts. It follows the newest run:
+**A one-line version at the bottom of Claude Code.** `/understudy:watch` offers it once — say yes and it is set up; it appears the next time Claude Code starts. It follows the newest run, and clears itself an hour after that run finishes:
 
 `understudy ▶ power-user 07:12/45:00 · 11 shots · Fine. Left menu → Classrooms. There it is.`
 

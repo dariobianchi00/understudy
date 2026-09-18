@@ -93,6 +93,29 @@ class State(unittest.TestCase):
         self.assertEqual(p.returncode, 0)
         self.assertIn("no run", p.stdout)
 
+    def test_complete_line_clears_after_an_hour(self):
+        import datetime as dt
+        fx.persona(self.run, "a")
+        fx.persona(self.run, "b")
+        finished = "2026-09-16T08:59:23+00:00"
+        fx.manifest(self.run, objectives=["ux", "bugs"], phase="complete", finished_utc=finished,
+                    personas=[{"name": "a", "device": "desktop-1440x900"},
+                              {"name": "b", "device": "iphone-13"}])
+        s = watch.read_state(self.run)
+        self.assertEqual(s["phase"], "complete")
+        t0 = dt.datetime.fromisoformat(finished)
+        # Just finished: say so.
+        self.assertIn("complete", watch.status_line(s, colour=False, now=t0 + dt.timedelta(minutes=5)))
+        # Two days later: say nothing, so Claude Code hides the line.
+        self.assertEqual("", watch.status_line(s, colour=False, now=t0 + dt.timedelta(days=2)))
+        # No finished_utc at all (older manifests): fall back to the file's mtime,
+        # which is "now" here, so the line still shows.
+        fx.manifest(self.run, objectives=["ux", "bugs"], phase="complete", finished_utc=None,
+                    personas=[{"name": "a", "device": "desktop-1440x900"},
+                              {"name": "b", "device": "iphone-13"}])
+        s = watch.read_state(self.run)
+        self.assertIn("complete", watch.status_line(s, colour=False))
+
     def test_no_filesystem_path_in_status_line(self):
         fx.persona(self.run, "a")
         s = watch.read_state(self.run)

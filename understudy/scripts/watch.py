@@ -4,6 +4,7 @@
     watch.py                           live dashboard of the newest run; q quits
     watch.py --open                    the same, in its own terminal window
     watch.py --line                    one line, for a Claude Code status line
+                                       (blank once a run has been complete for an hour)
     watch.py --setup-statusline        put that line at the bottom of Claude Code
     watch.py <run> --replay [--speed N]  replay a finished run's persona feed
 
@@ -29,6 +30,11 @@ import time
 LOG_LINE = re.compile(r"^\[(\d{2}):(\d{2})(?: persona)?\]\s*(.*)$")
 PAUSE_RE = re.compile(r"PAUSED", re.I)
 RESUME_RE = re.compile(r"wall cleared|resuming", re.I)
+# How long the status line keeps saying "complete" after a run finishes. Past
+# this it prints nothing, so Claude Code hides the line instead of showing a
+# two-day-old run at the bottom of every session.
+COMPLETE_GRACE = dt.timedelta(hours=1)
+
 LENS_DIRS = ("ux", "bugs", "onboarding", "content", "clarity", "conversion", "trust",
              "technical", "seo", "aeo", "compare", "objectives")
 
@@ -46,6 +52,26 @@ def _json(path):
         return json.loads(_read(path, "null"))
     except ValueError:
         return None
+
+
+def _mtime(path):
+    try:
+        return dt.datetime.fromtimestamp(os.path.getmtime(path), dt.timezone.utc)
+    except OSError:
+        return None
+
+
+def finished_at(state):
+    """When the run finished: the manifest's finished_utc, else the moment the
+    manifest was last written (close_run stamps both at the same time)."""
+    raw = state.get("finished_utc")
+    if raw:
+        try:
+            t = dt.datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+            return t if t.tzinfo else t.replace(tzinfo=dt.timezone.utc)
+        except ValueError:
+            pass
+    return state.get("manifest_mtime")
 
 
 # UNDERSTUDY_HOME overrides ~/.understudy — set by the tests so a test run never
@@ -164,6 +190,8 @@ def read_state(run):
         "note": status.get("note", ""),
         "cap": int(manifest.get("time_cap_minutes") or 0) * 60,
         "started_utc": manifest.get("started_utc"),
+        "finished_utc": manifest.get("finished_utc"),
+        "manifest_mtime": _mtime(os.path.join(run, "manifest.json")),
         "personas": personas,
         "active": active,
         "persona_progress": (n_done + (1 if active and active["state"] == "running" else 0), len(personas)),
@@ -182,12 +210,17 @@ def bar(frac, width):
     return "▓" * n + "░" * (width - n)
 
 
-def status_line(state, colour=True):
-    """One line for a Claude Code status line."""
+def status_line(state, colour=True, now=None):
+    """One line for a Claude Code status line — or an empty string, which
+    Claude Code renders as no line at all, once a finished run is old news."""
     C = (lambda code, s: f"\033[{code}m{s}\033[0m") if colour else (lambda code, s: s)
     a = state["active"]
     phase = state["phase"]
     if phase == "complete":
+        done = finished_at(state)
+        now = now or dt.datetime.now(dt.timezone.utc)
+        if done and now - done > COMPLETE_GRACE:
+            return ""
         return C("32", "understudy ✓") + f" {state['product']} · run {state['run_id']} complete"
     if a and a["state"] == "running":
         if a["paused"]:
