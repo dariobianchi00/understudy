@@ -28,8 +28,9 @@ the newest run is remembered by the run command itself.
    which case skip the question. Ask exactly this:
 
    > Want a one-line summary of the run at the bottom of Claude Code too? It
-   > shows the persona, the time, and their latest comment. One-time setup,
-   > takes effect next time Claude Code starts. Yes / no
+   > shows the persona, the time, and their latest comment, and clears itself
+   > an hour after a run finishes. One-time setup, takes effect next time
+   > Claude Code starts. Yes / no
 
    On yes:
 
