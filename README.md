@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.7.2 — profiles get a real illustration.** The face on each ICP card is an illustrated portrait (Open Peeps by Pablo Stanley, CC BY 4.0, via DiceBear), fetched once per profile at render time and cached in `icp/avatars/` so re-renders are offline; when the first render has no network, the drawn silhouette stands in. Each profile starts on its own page in the PDF.
+>
 > **v0.7.1 — Ideal Customer Profiles as people.** Each profile is now a card in both the PDF and the interactive report: a drawn face (a deterministic SVG, never a photo, never a real person), a name and one line of life from the lens's new `Meet:` field, the *Who* sentence, then the job, trigger, where to find fifty, why it wins, what it lacks, fit and propensity as bars, the case against, and the re-run persona. No screenshots in this section — a profile is an inference, and thumbnails dressed it as an observation. `scripts/icp_profiles.py` parses and renders; a profile without a `Meet:` line gets a placeholder name and says so.
 >
 > **v0.7.0 — the interactive report.** `--format html` is now a presentation instrument, not the PDF in a browser: a dashboard over the run (score rings, Top 5, persona cards), a findings explorer with filters and a detail drawer, a session replay per persona with the screen that was showing at each log line, the ICP profiles, a full-screen Present mode, a lightbox, and triage with export. One self-contained file, branded with the site's own icon and accent. The template is `scripts/report_template.html`; `scripts/interactive_report.py` packs a run into it. The printed PDF is unchanged.

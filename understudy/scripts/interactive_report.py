@@ -459,8 +459,8 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
     body = rr.lifted_section(run, "icp", "ICP profiles")
     if body:
         import icp_profiles
-        icp_html = icp_profiles.cards_html(body)
-        icp_struct = icp_profiles.parse(body)
+        icp_html = icp_profiles.cards_html(body, run=run)
+        icp_struct = icp_profiles.parse(body, run)
 
     # ---- personas ------------------------------------------------------------
     personas = []

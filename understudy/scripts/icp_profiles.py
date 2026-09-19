@@ -23,9 +23,24 @@ Both renderers call `cards_html()`; the interactive report also gets the
 parsed structure for its Present mode.
 """
 
+import base64
 import hashlib
 import html
+import os
 import re
+import urllib.parse
+import urllib.request
+
+# The illustrated faces come from DiceBear's "Open Peeps" set (Pablo Stanley,
+# CC BY 4.0 — the section note credits it). Fetched once per profile at render
+# time and cached in the run folder, so a re-render needs no network; if the
+# first render is offline the drawn silhouette below stands in.
+AVATAR_STYLE = os.environ.get("UNDERSTUDY_AVATAR_STYLE", "open-peeps")
+AVATAR_QUERY = {
+    "open-peeps": "face=smile,smileBig,cute,calm,cheeky,driven,explaining&accessoriesProbability=25"
+                  "&maskProbability=0&backgroundColor=dbe4ff,d9f2e6,fde8d8,ece4ff,fff4cc&radius=22&size=240",
+}
+AVATAR_CREDIT = {"open-peeps": "Faces: Open Peeps by Pablo Stanley (CC BY 4.0), via DiceBear."}
 
 PROFILE_H3 = re.compile(r"^###\s+(\d+)\.\s+(.*?)\s+[—–-]\s+(PRIMARY|EXPANSION|NEXT-BEST|SECOND PRIMARY)"
                         r"\s*·\s*fit\s*([\d.?]+)\s*·\s*propensity\s*([\d.?]+)\s*$", re.I | re.M)
@@ -53,6 +68,44 @@ def _h(s):
 def placeholder_name(seed):
     n = _h(seed)
     return f"{FIRST[n % len(FIRST)]} {LAST[(n // 7) % len(LAST)]}"
+
+
+def fetch_avatar(name, seed, run):
+    """An illustrated face as a data URI, cached at <run>/icp/avatars/. "" when
+    the network is not there and nothing is cached — the caller falls back."""
+    if not run:
+        return ""
+    d = os.path.join(run, "icp", "avatars")
+    key = hashlib.md5(f"{AVATAR_STYLE}|{seed}".encode()).hexdigest()[:12]
+    path = os.path.join(d, f"{key}.svg")
+    if not os.path.exists(path):
+        q = AVATAR_QUERY.get(AVATAR_STYLE, "radius=22&size=240")
+        url = (f"https://api.dicebear.com/9.x/{AVATAR_STYLE}/svg?seed="
+               f"{urllib.parse.quote(seed)}&{q}")
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "understudy report renderer"})
+            with urllib.request.urlopen(req, timeout=8) as r:
+                raw = r.read(400_000)
+            if not raw.lstrip().startswith(b"<svg"):
+                return ""
+            os.makedirs(d, exist_ok=True)
+            with open(path, "wb") as f:
+                f.write(raw)
+        except Exception:
+            return ""
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+    except OSError:
+        return ""
+    return "data:image/svg+xml;base64," + base64.b64encode(raw).decode()
+
+
+def avatar_html(name, seed, run):
+    uri = fetch_avatar(name, seed, run)
+    if uri:
+        return f'<img class="icp-avatar" src="{uri}" alt="{html.escape(name)}" width="110" height="110">'
+    return avatar_svg(name, seed, 110)
 
 
 def avatar_svg(name, seed, size=88):
@@ -109,8 +162,9 @@ def _get(fields, *names):
     return {"text": "", "items": []}
 
 
-def parse(body):
-    """Structure from the markdown under `## ICP profiles`."""
+def parse(body, run=None):
+    """Structure from the markdown under `## ICP profiles`. With `run`, each
+    profile carries an illustrated face (fetched and cached there)."""
     heads = list(PROFILE_H3.finditer(body))
     trap = TRAP_H3.search(body)
     cand = CAND_H3.search(body)
@@ -140,7 +194,7 @@ def parse(body):
             "against": [_strip(x) for x in _get(f, "Case against").get("items", [])],
             "notInferable": _strip(_get(f, "Not inferable").get("text", "")),
             "rerun": yaml,
-            "avatar": avatar_svg(name, title),
+            "avatar": avatar_html(name, title, run),
         })
     trap_txt = ""
     trap_title = ""
@@ -200,11 +254,11 @@ def card_html(p, open_details=False):
 </div>'''
 
 
-def cards_html(body, open_details=False):
+def cards_html(body, open_details=False, run=None):
     """The whole section: three cards, the trap, the candidates table.
     `open_details` expands the re-run persona blocks — for print, where a
     collapsed <details> is simply missing."""
-    d = parse(body)
+    d = parse(body, run)
     if not d["profiles"]:
         return ""
     out = ['<div class="icp-cards">' + "".join(card_html(p, open_details) for p in d["profiles"]) + "</div>"]
@@ -217,8 +271,10 @@ def cards_html(body, open_details=False):
                    + "".join(f"<th>{html.escape(h)}</th>" for h in c["head"]) + "</tr></thead><tbody>"
                    + "".join("<tr>" + "".join(f"<td>{html.escape(x)}</td>" for x in r) + "</tr>" for r in c["rows"])
                    + "</tbody></table>")
-    out.append('<p class="icp-note">The faces and names are placeholders drawn for the report; '
-               'no real person is pictured or described. Profiles are inferred from the recorded sessions only.</p>')
+    credit = AVATAR_CREDIT.get(AVATAR_STYLE, "") if any("<img" in p["avatar"] for p in d["profiles"]) else ""
+    out.append('<p class="icp-note">The faces and names are illustrations chosen for the report; '
+               'no real person is pictured or described. Profiles are inferred from the recorded '
+               f'sessions only. {credit}</p>')
     return "\n".join(out)
 
 
@@ -227,8 +283,8 @@ CSS = """
 .icp-card{border:1px solid #e3e6ea;border-radius:14px;padding:18px 20px;background:#fff}
 .icp-head,.icp-scores,.icp-trap,.icp-bar{break-inside:avoid}
 .icp-primary{border-color:#1a56db;box-shadow:inset 4px 0 0 #1a56db}
-.icp-head{display:flex;gap:16px;align-items:center;margin-bottom:10px}
-.icp-avatar{flex:none;width:76px;height:76px}
+.icp-head{display:flex;gap:18px;align-items:center;margin-bottom:12px}
+.icp-avatar{flex:none;width:110px;height:110px;border-radius:22px}
 .icp-role{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#5d6470}
 .icp-title{margin:2px 0 4px;font-size:18px}
 .icp-meet{font-size:14px;color:#16181d;font-weight:600}
@@ -254,4 +310,5 @@ CSS = """
 .icp-cand{font-size:13px}
 .icp-note{font-size:12px;color:#5d6470}
 @media (max-width:760px){.icp-two{grid-template-columns:1fr}.icp-dl{grid-template-columns:1fr}}
+@media print{section.icp-section{break-before:page}.icp-card{break-before:auto}.icp-card+.icp-card{break-before:page}}
 """
