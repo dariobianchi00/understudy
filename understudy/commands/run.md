@@ -358,6 +358,27 @@ configuration, which need building.>
 
 <Their real questions, with times and page counts where they were observed.>
 
+## In their own words
+
+<6–10 lines the personas actually said or wrote during the run, VERBATIM —
+from session.log, persona-debrief.md or findings-raw.json. This is the section
+an executive quotes in a meeting, and it only works if every line is real.>
+
+| Who | When | What they said | Where |
+|---|---|---|---|
+| <persona> | <MM:SS or "debrief Q3"> | "<the exact words, unedited>" | <session.log:41 · 07-pricing.png> |
+
+<Rules, all binding. Verbatim means verbatim: no paraphrase, no tidied grammar,
+no trimmed clause — an ellipsis is allowed only to cut the middle of a line,
+never to change its meaning. Balance it: at least one line where the persona
+got something and said so, at least one where they gave up or doubted; a
+section of only complaints is a selection, not a record. Prefer the moments
+behind the Top 5 — a quote next to the finding it evidences is the strongest
+form of evidence this report has — and say which row in the Where column
+when it applies. Every line cites its source. If persona_mode is generic, the
+one-line caveat under the table says the speakers were constructed personas,
+not customers.>
+
 ## What the site does well
 
 <2–4 bullets. A report that cannot say anything positive is as untrustworthy as
@@ -425,6 +446,10 @@ named independently. Omit the heading entirely if only one check ran.>
 - **No severity tally of your own.** The cover already carries the finding
   count and the P0/P1/P2/P3 split. A second copy in the body is how the two
   come to disagree.
+- **No invented or improved quotation.** "In their own words" carries the
+  persona's exact text with a source. A quote the log does not contain, or a
+  quote made more quotable, is fabricated evidence in the one section a
+  reader will repeat out loud.
 
 Four headings are written empty and filled by the renderer — **Contents**,
 **Objectives** (when the run had any), **How each area scores**, and **Raised by

@@ -368,6 +368,37 @@ class Report(unittest.TestCase):
             self.assertEqual(rc, 0, out)
             self.assertNotIn("Reconcile", out)
 
+    def test_quotes_must_be_verbatim_from_a_persona_file(self):
+        def summary_with(quote):
+            return ("# Nimbus Notes — Website assessment — 1 September 2026\n\n"
+                    "## What this is\n- A fictional notes product.\n\n"
+                    "## Top 5 — fix these first\nThe site never says who it is for.\n\n"
+                    "| # | Severity | What is happening | What it costs | Effort |\n|---|---|---|---|---|\n"
+                    "| 1 | P1 | The fold names no audience | She guessed | Copy change |\n\n"
+                    "## In their own words\n\n"
+                    "| Who | When | What they said | Where |\n|---|---|---|---|\n"
+                    f"| p | 00:00 | “{quote}” | session.log:3 |\n\n"
+                    "## Limits of this assessment\n- Personas were constructed.\n")
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            # verbatim, with curly quotes and different whitespace: passes
+            fx.write(os.path.join(run, "exec-summary.md"),
+                     summary_with("I land on the page.  Big headline, a photo of a cloud."))
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            # an ellipsis cutting the middle: passes
+            fx.write(os.path.join(run, "exec-summary.md"),
+                     summary_with("I land on the page … a photo of a cloud."))
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            # improved wording: fails on the evidence rule
+            fx.write(os.path.join(run, "exec-summary.md"),
+                     summary_with("I land on the page. A big, bold headline and a photo of a cloud."))
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 1)
+            self.assertEqual(checks, {1}, out)
+            self.assertIn("never improved", out)
+
     def test_check7_score_within_ceiling_passes(self):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t, with_lens=False)

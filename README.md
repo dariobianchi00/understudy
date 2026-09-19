@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.6.2 — in their own words.** The run summary gains a section of verbatim lines from the personas — what they said at the moment behind each top finding, with the log line beside it. The gate checks every quote against the persona files and fails a quote the log does not contain; an improved quotation is fabricated evidence in the one section a reader repeats out loud.
+>
 > **v0.6.1 — scores from what the personas did.** A P1 now needs an observed moment (a persona stopped, left, failed, or said they would not pay or return); a complaint with continued use is a P2. The 0–10 bands carry a "looks like" column, the lens scores from the personas' outcome first and checks the severity ceiling second, and the gate prints a note when a verdict says everyone got value above a score that says a meaningful share gave up. The ceilings themselves are unchanged.
 >
 > **v0.6.0 — who is this for?** A twelfth lens, `icp`, derives three ideal customer profiles from the captured evidence — primary, expansion, next-best — each scored on fit and propensity, each carrying the case against it and a persona for a re-run, with the trap segment named. No market research: the product is the world. See *The lenses*.
@@ -334,7 +336,7 @@ The lens agents also show under the prompt in Claude Code itself, named for what
 ```
 ~/.understudy/runs/<slug>/<date>-run-<id>/
 ├── manifest.json              what ran, on which models, with which personas
-├── exec-summary.md            what it is, how it was produced, then the Top 5
+├── exec-summary.md            what it is, how it was produced, the Top 5, the personas' own words
 ├── persona-<name>/
 │   ├── screenshots/NN-*.png   one per distinct screen
 │   ├── session.log            [MM:SS] one line per action, first person

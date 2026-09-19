@@ -27,6 +27,7 @@ Exit 0 = gate passes. Exit 1 = it does not.
 Usage:  check_report.py <run_folder> [--lens <name>]
 """
 import argparse
+import glob
 import json
 import os
 import re
@@ -179,6 +180,52 @@ def check_score(path, findings_path, r, lens):
                f"share gave up. Reconcile: either the verdict is too kind or the "
                f"score started from the ceiling and subtracted. "
                f"(ceiling with a {worst or 'P3'}: {SCORE_CEILING.get(worst, 10)})")
+
+
+QUOTE_CELL = re.compile(r'^\|[^|]*\|[^|]*\|\s*[“"]?(.+?)[”"]?\s*\|[^|]*\|\s*$')
+
+
+def _norm(s):
+    s = s.replace("\u201c", '"').replace("\u201d", '"').replace("\u2018", "'").replace("\u2019", "'")
+    s = s.replace("\u2026", "...")
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def check_quotes(run, r):
+    """Run-level: every line in `## In their own words` is verbatim from a
+    persona file. A quote the log does not contain is fabricated evidence in
+    the one section a reader repeats out loud (commands/run.md §3.6)."""
+    path = os.path.join(run, "exec-summary.md")
+    if not os.path.exists(path):
+        return
+    text = _read(path, errors="replace")
+    m = re.search(r"^##\s+In their own words\s*$", text, re.M)
+    if not m:
+        return
+    rest = text[m.end():]
+    nxt = re.search(r"^##\s+", rest, re.M)
+    section = rest[:nxt.start()] if nxt else rest
+
+    corpus = []
+    for pdir in glob.glob(os.path.join(run, "persona-*")) + glob.glob(os.path.join(run, "compare", "*", "persona-*")):
+        for name in ("session.log", "persona-debrief.md", "findings-raw.json"):
+            corpus.append(_norm(_read(os.path.join(pdir, name), errors="replace")))
+    corpus = "\n".join(corpus)
+
+    rows = [l for l in section.split("\n") if l.startswith("|")][2:]   # skip header + rule
+    if not rows:
+        r.note("run summary: 'In their own words' has no rows")
+        return
+    for ln, row in enumerate(rows, 1):
+        qm = QUOTE_CELL.match(row)
+        if not qm:
+            continue
+        quote = _norm(qm.group(1)).strip('"')
+        parts = [p.strip() for p in quote.split("...") if p.strip()]
+        missing = [p for p in parts if p not in corpus]
+        if missing:
+            r.fail(1, f"run summary, 'In their own words' row {ln}: not found verbatim in any "
+                      f"persona file — “{missing[0][:80]}”. Quotes are copied, never improved.")
 
 
 def first_verdict(text):
@@ -388,6 +435,7 @@ def main():
         check_findings(os.path.join(d, "findings-final.md"), r, lens, run)
         check_score(os.path.join(d, "exec-summary.md"),
                     os.path.join(d, "findings-final.md"), r, lens)
+    check_quotes(run, r)
 
     # A note, never a failure: the run is sound, its record of itself is not.
     # Warning here is what stops the close step being forgotten — the gate is
