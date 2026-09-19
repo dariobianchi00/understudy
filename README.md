@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.6.1 — scores from what the personas did.** A P1 now needs an observed moment (a persona stopped, left, failed, or said they would not pay or return); a complaint with continued use is a P2. The 0–10 bands carry a "looks like" column, the lens scores from the personas' outcome first and checks the severity ceiling second, and the gate prints a note when a verdict says everyone got value above a score that says a meaningful share gave up. The ceilings themselves are unchanged.
+>
 > **v0.6.0 — who is this for?** A twelfth lens, `icp`, derives three ideal customer profiles from the captured evidence — primary, expansion, next-best — each scored on fit and propensity, each carrying the case against it and a persona for a re-run, with the trap segment named. No market research: the product is the world. See *The lenses*.
 >
 > **v0.5.3 — the status line goes quiet.** The one-line status at the bottom of Claude Code clears itself an hour after a run finishes, instead of showing that run forever.

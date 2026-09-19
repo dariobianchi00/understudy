@@ -122,6 +122,22 @@ SCORE_FIELD = re.compile(r"^-\s+\*\*Score:\*\*\s*(\d{1,2})\s*/\s*10\s*[—–-]?
 # here to relitigate it — only to stop "9/10" sitting above a P0.
 SCORE_CEILING = {"P0": 5, "P1": 7, "P2": 9}
 
+# A verdict that says the personas got what they came for and would return,
+# sitting above a score in the "a meaningful share would give up" band or
+# below. The two must tell one story; this is a note, never a failure, because
+# the verdict is prose and a regex can only suspect a contradiction.
+VERDICT_POSITIVE = re.compile(
+    r"\b(every|all|each|both)\s+(?:\w+\s+)?(persona|session|visitor|user|visit)s?\b[^.]{0,120}"
+    r"\b(reached|got|found|achieved|understood|completed)\b[^.]{0,80}"
+    r"\b(value|what they came for|the (offer|point|answer)|first result|through)\b"
+    r"|\bwould\s+(come back|return|keep using|use it again)\b",
+    re.I)
+VERDICT_NEGATIVE = re.compile(
+    r"\b(gave up|abandon|left|would not (pay|return|come back)|wouldn'?t (pay|return|come back)"
+    r"|could not|couldn'?t|never (reached|found|got)|distrust|did not trust|didn'?t trust"
+    r"|fail(ed|s)?|broken|wrong)\b",
+    re.I)
+
 
 def check_score(path, findings_path, r, lens):
     """Check 7 — the score and the severities must be able to coexist."""
@@ -151,6 +167,32 @@ def check_score(path, findings_path, r, lens):
         r.fail(7, f"{lens}: scored {score}/10 while carrying a {worst}. "
                   f"A lens with a {worst} cannot score above "
                   f"{SCORE_CEILING[worst]}/10.")
+
+    # Reconcile the number with the verdict sentence (lens-output-contract.md,
+    # "score from what the personas did"). Observed 2026-09-16: four lenses
+    # wrote "every persona reached value and would come back" above 5/10.
+    verdict = first_verdict(text)
+    if (verdict and score <= 5 and worst != "P0"
+            and VERDICT_POSITIVE.search(verdict) and not VERDICT_NEGATIVE.search(verdict)):
+        r.note(f"{lens}: verdict says the personas got value and would return, "
+               f"but the score is {score}/10 — the 4–5 band means a meaningful "
+               f"share gave up. Reconcile: either the verdict is too kind or the "
+               f"score started from the ceiling and subtracted. "
+               f"(ceiling with a {worst or 'P3'}: {SCORE_CEILING.get(worst, 10)})")
+
+
+def first_verdict(text):
+    """The first non-heading paragraph of an exec-summary — the verdict."""
+    lines = text.split("\n")
+    idx = next((i for i, l in enumerate(lines) if l.strip() and not l.strip().startswith("#")), None)
+    if idx is None:
+        return ""
+    block = []
+    for line in lines[idx:]:
+        if not line.strip():
+            break
+        block.append(line.strip())
+    return " ".join(block)
 
 
 def check_verdict(path, r, lens):

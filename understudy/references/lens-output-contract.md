@@ -28,23 +28,31 @@ run report renders every lens's score in one table with an overall figure, and
 the reason you write becomes a column a paying client reads. A lens that omits
 it is silently dropped from that table.
 
-| Band | Means |
-|---|---|
-| 10 | Nothing a reasonable reviewer would raise |
-| 8–9 | Works; the findings are polish |
-| 6–7 | Works, with friction a real user would notice and complain about |
-| 4–5 | A user gets through, but a meaningful share would give up or distrust it |
-| 2–3 | The job this check covers mostly fails |
-| 0–1 | Unusable on this dimension |
+### ⚑ Score from what the personas did, then check the ceiling — never the reverse
+
+The score answers one question: **on this dimension, did the personas get what they came for, and would they come back?** Read the debriefs and the timelines first. Pick the band from that. Only then check that the number sits under the severity ceiling. A lens that starts from the ceiling and subtracts for each finding produces a 5 for a product every persona said they would return to — that happened on a real run, and it is the failure this section exists to stop.
+
+| Band | Means | Looks like |
+|---|---|---|
+| 10 | Nothing a reasonable reviewer would raise | Every persona reached value fast and said so; findings are P3 |
+| 8–9 | Works; the findings are polish | Every persona reached value and would return; a few P2s nobody mentioned in debrief |
+| 6–7 | Works, with friction a real user would notice and complain about | Every persona reached value and would return; one or two things a persona had to push through (a P1 with an observed moment, or a cluster of P2s that came up in debrief) |
+| 4–5 | A user gets through, but a meaningful share would give up or distrust it | At least one persona **did** give up on a step, distrusted the product in debrief, or would not pay — and the others were close |
+| 2–3 | The job this check covers mostly fails | Most personas did not reach value, or reached it and rejected it |
+| 0–1 | Unusable on this dimension | Nobody got through |
+
+**A 7 with a P1 in it is a normal, defensible score.** So is a 6 with fifteen P2s, if every persona reached value and said they would return. What is not defensible is a 5 under a verdict sentence that says everyone got value — the two must tell the same story, and the gate now prints a warning when they do not.
 
 **Gate check 7 refuses a score your own severities contradict** — above 5 with a
 P0, above 7 with a P1, above 9 with a P2. The ceiling is loose on purpose: it
 stops a number nobody could defend, it does not second-guess a judgement inside
-the band.
+the band. It is a ceiling, not a target: the band comes from the personas, and
+most lenses with a P1 should land *at* 7, not two below it.
 
 Score the **dimension**, not the count of findings. Eleven P3s is a tidy 8, not
-a 3. And **never write an overall score** — it is the mean of the lens scores,
-computed by `render_report.py`, so no two places in the report can disagree.
+a 3; fifteen P2s a persona pushed through is a 6 or 7, not a 4. And **never write
+an overall score** — it is the mean of the lens scores, computed by
+`render_report.py`, so no two places in the report can disagree.
 
 ## House style — binding on every line
 

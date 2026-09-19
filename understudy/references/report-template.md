@@ -70,7 +70,7 @@ and if only one persona ran, say that instead: a flip could not be observed.>
 **You assign it, because you are the only one who read the evidence.** The run
 report renders every lens's score in one table with an overall figure, so this
 number is read by the client beside the other checks — a lens that scores
-generously makes every other lens look worse than it is.
+generously, or harshly, distorts every other lens's number by comparison.
 
 - **10** — nothing to fix that a reasonable reviewer would raise.
 - **8–9** — works; the findings are polish.
@@ -82,8 +82,13 @@ generously makes every other lens look worse than it is.
 **Gate check 7 refuses a score its own severities contradict** — above 5/10
 carrying a P0, above 7/10 carrying a P1, above 9/10 carrying a P2. The ceiling
 is loose on purpose: it stops a number nobody could defend, it does not
-second-guess a judgement inside the band. Score the dimension, not the count of
-findings — eleven P3s is a tidy 8, not a 3.
+second-guess a judgement inside the band — and it is a ceiling, not a target.
+**Score from what the personas did, then check the ceiling; never start from
+the ceiling and subtract.** Every persona reached value and would return is a
+6–7 even with a P1 and a dozen P2s; the 4–5 band means someone actually gave
+up. The bands, with what each looks like, are in `lens-output-contract.md`.
+Score the dimension, not the count of findings — eleven P3s is a tidy 8, not
+a 3.
 
 **Never write the overall score.** It is the mean of the lens scores, computed
 by `render_report.py`, so the cover and the table cannot disagree.

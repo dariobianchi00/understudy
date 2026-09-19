@@ -340,6 +340,34 @@ class Report(unittest.TestCase):
             self.assertEqual(rc, 1)
             self.assertEqual(checks, {7}, out)
 
+    def test_check7_positive_verdict_low_score_is_a_note_not_a_failure(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t, with_lens=False)
+            fx.lens(run, "ux", [fx.finding("ux", "x", sev="P1")], score=5,
+                    verdict="Every persona reached value in under five minutes and would come back.")
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("Reconcile", out)
+            # a matching verdict and score prints nothing
+            fx.lens(run, "ux", [fx.finding("ux", "x", sev="P1")], score=7,
+                    verdict="Every persona reached value in under five minutes and would come back.")
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            self.assertNotIn("Reconcile", out)
+            # a mixed verdict — value reached, core job failed — is left to the lens
+            fx.lens(run, "ux", [fx.finding("ux", "x", sev="P1")], score=5,
+                    verdict="All three sessions reached a first value in under four minutes, "
+                            "but the one thing they came for failed in every session.")
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            self.assertNotIn("Reconcile", out)
+            # a negative verdict with a low score is consistent
+            fx.lens(run, "ux", [fx.finding("ux", "x", sev="P1")], score=4,
+                    verdict="Two of three personas gave up before first value.")
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            self.assertNotIn("Reconcile", out)
+
     def test_check7_score_within_ceiling_passes(self):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t, with_lens=False)

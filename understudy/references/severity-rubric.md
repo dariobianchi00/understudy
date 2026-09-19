@@ -5,8 +5,8 @@
 | Severity | Definition | Examples |
 |---|---|---|
 | **P0 — Blocker** | The persona cannot complete the flow, **or** the product breaks trust irreparably. | Signup errors out. Auth fails silently. The product produces confident nonsense about the persona's own data. Data appears lost. |
-| **P1 — Critical friction** | The persona completes the flow but would realistically churn before paying. | Onboarding over 10 minutes. First value unclear even after it happens. Permissions feel invasive without explanation. The persona says *"I don't trust this"* in the debrief. |
-| **P2 — Friction** | Noticeable annoyance. Erodes perceived value; accumulates into churn risk. | Jargon in copy. Unexpected modals. Navigation ambiguity. Unclear empty states. |
+| **P1 — Critical friction** | The persona completes the flow, but **the run shows** them stopping, leaving, or failing to reach the thing they came for — or saying in the debrief that they would not pay or would not return. | Onboarding over 10 minutes and the persona says so. First value never recognised as value. The persona abandons a step and does something else. *"I don't trust this"* or *"I wouldn't pay for this"* in the debrief. |
+| **P2 — Friction** | Noticeable annoyance the persona pushed through. Erodes perceived value; accumulates into churn risk. **A complaint with continued use is a P2, however loud.** | Jargon in copy. Unexpected modals. Navigation ambiguity. Unclear empty states. A persona who grumbled and carried on. |
 | **P3 — Polish** | Worth fixing; does not change behaviour. | Typos. Minor visual inconsistency. Off-brand microcopy. |
 
 ---
@@ -21,7 +21,8 @@ Scale this to the target's actual price and complexity. An enterprise tool with 
 
 ## Discipline
 
-- **When torn between two severities, choose the higher** and add one sentence explaining the ambiguity. A reader can downgrade a flagged finding; they cannot discover one you buried.
+- **P1 is observed, not predicted.** It needs a moment in the run — a log line, a debrief answer, a screenshot — where the persona stopped, left, failed, or said they would not pay or return. "Would realistically churn" without that moment is a P2 with a sentence about the risk. This is the line most often crossed, and every crossing costs the product two points it did not earn.
+- **Torn between P0 and P1? Choose P0** and add one sentence explaining the ambiguity — a reader can downgrade a flagged blocker; they cannot discover one you buried. **Torn between P1 and P2? Choose P2** and name the churn risk in the *So what* line; the P1 evidence rule above is what settles it, not your feeling about the product.
 - **A finding with no user-visible consequence is not a finding.** Drop it.
 - **A finding without evidence is not a finding.** Drop it — see `evidence-rules.md`. This holds even when the finding is obviously true.
 - **Severity describes impact, never confidence.** Do not upgrade a P2 because you feel strongly about it, and never inflate severity to compensate for weak evidence.
@@ -36,6 +37,9 @@ Scale this to the target's actual price and complexity. An enterprise tool with 
 
 **P1** — The persona completes signup in 8 minutes, reaches the dashboard, cannot find any way to produce a first result. Explores for 4 minutes, gives up.
 → Critical friction; activation fails. `P1` · `B-G1, C-TTFV`
+
+**P2, not P1** — The persona says *"this onboarding is way too long"* at minute 6, finishes it at minute 9, reaches first value at minute 11 and says in the debrief they would use it again.
+→ A loud complaint with continued use. `P2`, with the *So what* naming the risk that a less patient user leaves at minute 6. It becomes a P1 only if a persona actually left.
 
 **P2** — A settings screen labels a toggle *"Enable webhook sync"* with no explanation. The persona, non-technical, shrugs and moves on. No immediate consequence, but trust is nicked.
 → Friction. `P2` · `A2`
