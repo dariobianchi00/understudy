@@ -445,7 +445,7 @@ class IcpCards(unittest.TestCase):
         self.assertEqual(d["trap"]["title"], "Agencies · fit 2.0 · propensity 4.5")
         self.assertEqual(len(d["candidates"]["rows"]), 2)
         html_out = ip.cards_html(body, open_details=True)
-        self.assertIn("<svg", html_out)                       # the drawn face
+        self.assertNotIn("<svg", html_out)                    # no face by default
         self.assertIn("placeholder name", html_out)
         self.assertIn("The case against", html_out)
         self.assertIn("<details class=\"icp-rerun\" open>", html_out)
@@ -460,5 +460,4 @@ class IcpCards(unittest.TestCase):
         self.assertEqual(p["name"], "Dana")
         self.assertFalse(p["invented"])
         self.assertIn("Dana, 34", ip.cards_html(body))
-        # the same seed draws the same face every time
-        self.assertEqual(ip.avatar_svg("Dana", p["title"]), ip.avatar_svg("Dana", p["title"]))
+        self.assertEqual(p["avatar"], "")                     # faces are opt-in

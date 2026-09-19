@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.7.4 — no faces on the profile cards.** The card is the name, the one line of life, the who, and the details. Faces are opt-in (`UNDERSTUDY_ICP_FACES=on`): a generated portrait when an image-model key is present, a trait-drawn illustration otherwise. Off by default because a face that does not match the person is worse than none, and a matching one needs a paid or gated image model.
+>
 > **v0.7.3 — portraits that fit the person.** With no key, the profile's illustration is drawn to the `Meet:` line — pronoun for the gender cue, age for hair colour, work for glasses and clothing — instead of a random face. With a key, a generated portrait of the described person replaces it: `GEMINI_API_KEY` (free tier), `HF_TOKEN` (free tier, FLUX.1-schnell) or `OPENAI_API_KEY` (paid); made once per profile, cached in `icp/avatars/`, embedded in both renders. `UNDERSTUDY_PORTRAITS=off` keeps the illustration.
 >
 > **v0.7.2 — profiles get a real illustration.** The face on each ICP card is an illustrated portrait (Open Peeps by Pablo Stanley, CC BY 4.0, via DiceBear), fetched once per profile at render time and cached in `icp/avatars/` so re-renders are offline; when the first render has no network, the drawn silhouette stands in. Each profile starts on its own page in the PDF.

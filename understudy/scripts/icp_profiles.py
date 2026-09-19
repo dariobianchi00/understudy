@@ -47,7 +47,32 @@ AVATAR_CREDIT = {"open-peeps": "Faces: Open Peeps by Pablo Stanley (CC BY 4.0), 
 # once per profile at render time through a free text-to-image endpoint,
 # cropped, cached as JPEG in the run folder, embedded in both renders. Set
 # UNDERSTUDY_PORTRAITS=off to skip straight to the illustrated fallback.
-PORTRAITS = os.environ.get("UNDERSTUDY_PORTRAITS", "on").lower() not in ("off", "0", "no")
+def _load_env_file():
+    """Keys for the portrait providers may live in ~/.understudy/.env (outside
+    any repo, mode 600) rather than the shell. Loaded once; the shell wins."""
+    path = os.path.expanduser("~/.understudy/.env")
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                k, v = k.strip(), v.strip().strip("'\"")
+                if k and v and not os.environ.get(k):
+                    os.environ[k] = v
+    except OSError:
+        pass
+
+
+_load_env_file()
+
+# No picture by default. A face that does not match the person is worse than
+# none, and matching one needs an image model the user may not want to pay
+# for. UNDERSTUDY_ICP_FACES=on turns the whole face pipeline on (generated
+# portrait with a key, trait-drawn illustration without).
+FACES = os.environ.get("UNDERSTUDY_ICP_FACES", "off").lower() in ("on", "1", "yes")
+PORTRAITS = FACES and os.environ.get("UNDERSTUDY_PORTRAITS", "on").lower() not in ("off", "0", "no")
 # Provider, in order of how well the picture matches the person described:
 #   openai   — gpt-image-1, needs OPENAI_API_KEY; follows age, work, setting
 #   gemini   — Gemini image generation, needs GEMINI_API_KEY (or GOOGLE_API_KEY)
@@ -316,6 +341,8 @@ def fetch_portrait(meet, who, title, run):
 
 
 def avatar_html(name, seed, run, meet="", who=""):
+    if not FACES:
+        return ""
     uri = fetch_portrait(meet, who, seed, run)
     if uri:
         return f'<img class="icp-avatar icp-portrait" src="{uri}" alt="{html.escape(name)}" width="110" height="110">'
@@ -490,9 +517,11 @@ def cards_html(body, open_details=False, run=None):
                    + "</tbody></table>")
     credit = (PORTRAIT_CREDIT if any("icp-portrait" in p["avatar"] for p in d["profiles"])
               else AVATAR_CREDIT.get(AVATAR_STYLE, "") if any("<img" in p["avatar"] for p in d["profiles"]) else "")
-    out.append('<p class="icp-note">The faces and names are illustrations chosen for the report; '
-               'no real person is pictured or described. Profiles are inferred from the recorded '
-               f'sessions only. {credit}</p>')
+    faces = any(p["avatar"] for p in d["profiles"])
+    out.append('<p class="icp-note">' + ("The faces and names are illustrations chosen for the report; "
+               "no real person is pictured or described. " if faces else
+               "The names are invented stand-ins for each profile; no real person is described. ")
+               + f'Profiles are inferred from the recorded sessions only. {credit}</p>')
     return "\n".join(out)
 
 
@@ -502,6 +531,7 @@ CSS = """
 .icp-head,.icp-scores,.icp-trap,.icp-bar{break-inside:avoid}
 .icp-primary{border-color:#1a56db;box-shadow:inset 4px 0 0 #1a56db}
 .icp-head{display:flex;gap:18px;align-items:center;margin-bottom:12px}
+.icp-head:has(> div:only-child){display:block}
 .icp-avatar{flex:none;width:110px;height:110px;border-radius:22px;object-fit:cover;object-position:top}
 .icp-role{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#5d6470}
 .icp-title{margin:2px 0 4px;font-size:18px}
