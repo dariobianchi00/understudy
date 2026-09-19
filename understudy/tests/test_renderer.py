@@ -156,15 +156,15 @@ class Content(unittest.TestCase):
     def test_icp_profiles_are_lifted_into_the_summary(self):
         with tempfile.TemporaryDirectory() as t:
             html = render(build_icp(t), "summary")
-            self.assertIn("Ideal customer profiles", html)
+            self.assertIn("Ideal Customer Profiles", html)
             self.assertIn("Solo course creator", html)
             self.assertIn("The trap", html)
             self.assertIn("Candidates considered", html)
             self.assertIn("gives_up_when", html)
             # no P0/P1 gap, yet the section is present and says so
             self.assertIn("No P0/P1 gaps were observed", html)
-            # order: Clarity before Ideal customer profiles
-            self.assertLess(html.find("</span> Clarity"), html.find("</span> Ideal customer profiles"))
+            # order: Clarity before Ideal Customer Profiles
+            self.assertLess(html.find("</span> Clarity"), html.find("</span> Ideal Customer Profiles"))
 
     def test_icp_section_absent_without_the_heading(self):
         with tempfile.TemporaryDirectory() as t:
@@ -429,3 +429,36 @@ class Interactive(unittest.TestCase):
         self.assertEqual(shots, ["persona-a/screenshots/01-x.png"])
         self.assertEqual(logs, ["persona-a/session.log:4"])
         self.assertEqual(quotes, ["I could not find it anywhere on the page"])
+
+
+class IcpCards(unittest.TestCase):
+    def test_profiles_render_as_cards_with_a_face_and_a_name(self):
+        import icp_profiles as ip
+        body = ICP_PROFILES.split("## ICP profiles\n", 1)[1]
+        d = ip.parse(body)
+        self.assertEqual(len(d["profiles"]), 1)
+        p = d["profiles"][0]
+        self.assertEqual(p["role"], "PRIMARY")
+        self.assertEqual(p["fit"], "4.5")
+        self.assertTrue(p["invented"])                       # no Meet: line → placeholder
+        self.assertIn("gives_up_when", p["rerun"])
+        self.assertEqual(d["trap"]["title"], "Agencies · fit 2.0 · propensity 4.5")
+        self.assertEqual(len(d["candidates"]["rows"]), 2)
+        html_out = ip.cards_html(body, open_details=True)
+        self.assertIn("<svg", html_out)                       # the drawn face
+        self.assertIn("placeholder name", html_out)
+        self.assertIn("The case against", html_out)
+        self.assertIn("<details class=\"icp-rerun\" open>", html_out)
+        self.assertNotIn("class=\"shot", html_out)            # no thumbnails in a profile
+        self.assertNotIn("`", html_out)                       # citations as plain text
+
+    def test_meet_line_names_the_profile(self):
+        import icp_profiles as ip
+        body = ICP_PROFILES.split("## ICP profiles\n", 1)[1].replace(
+            "- **Who:**", "- **Meet:** Dana, 34 — teaches pottery from a shared studio\n- **Who:**", 1)
+        p = ip.parse(body)["profiles"][0]
+        self.assertEqual(p["name"], "Dana")
+        self.assertFalse(p["invented"])
+        self.assertIn("Dana, 34", ip.cards_html(body))
+        # the same seed draws the same face every time
+        self.assertEqual(ip.avatar_svg("Dana", p["title"]), ip.avatar_svg("Dana", p["title"]))

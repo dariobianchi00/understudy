@@ -62,10 +62,11 @@ The exec summary opens with the verdict sentence, then the top 3 (the three prof
 ## ICP profiles
 ```
 
-**⚑ `render_report.py` finds that heading by its exact text and lifts everything under it into the client report as its own section.** Keep the heading exactly as written. Under it, one `###` block per profile, in this shape and this field order — the fields are what the client reads, and the report renders them as written:
+**⚑ `render_report.py` finds that heading by its exact text and lifts everything under it into the client report as its own section** — as a card per profile with a drawn face, the `Meet` name, the `Who` line and the details. Keep the heading exactly as written. Do not cite screenshots as thumbnails here; a profile is an inference, and the renderer keeps citations as text. Under it, one `###` block per profile, in this shape and this field order — the fields are what the client reads, and the report renders them as written:
 
 ```markdown
 ### 1. <Profile name> — PRIMARY · fit 4.5 · propensity 4.0
+- **Meet:** <a fictional person who stands for the profile — first name, age, one clause of their life or role, e.g. "Marta, 41 — project manager in Porto, books the family's one week away". Invented, and the report labels it so; never a real person, never a name from the run.>
 - **Who:** <one sentence — the account type or the life situation. Specific enough to find fifty of them.>
 - **Find fifty of them:** <where — a job title and a channel, an app-store category, a community, a search they would run>
 - **Job to be done:** <what they are hiring the product for, in their words>

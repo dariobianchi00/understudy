@@ -47,6 +47,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import finding_id  # noqa: E402
 import run_layout  # noqa: E402
+from icp_profiles import CSS as ICP_CSS  # noqa: E402
 
 
 def _read(*a, **k):
@@ -335,7 +336,7 @@ LENS_LABELS = {
     "clarity": "Clarity",
     "conversion": "Conversion",
     "trust": "Trust and credibility",
-    "icp": "Ideal customer profiles",
+    "icp": "Ideal Customer Profiles",
     "technical": "Performance and delivery",
     "seo": "Search visibility",
     "aeo": "Answer-engine readiness",
@@ -627,9 +628,14 @@ def icp_section(run, images, used, prefix="icp-"):
     body = lifted_section(run, "icp", "ICP profiles")
     if not body:
         return ""
-    # Profile headings are H3 in the lens file; in the lifted section they are
-    # the section's own sub-headings, one level down from the section title.
-    return render_markdown(body, images, used, prefix)
+    # Cards, not bullets: a drawn face, a name, the "who", then the details.
+    # Screenshot citations stay as text — a profile is an inference, and a
+    # thumbnail beside it would dress it as an observation (icp_profiles.py).
+    import icp_profiles
+    cards = icp_profiles.cards_html(body, open_details=True)
+    if cards:
+        return cards
+    return render_markdown(body, {"__run__": images.get("__run__", run)}, used, prefix)
 
 
 def corroborate(toc):
@@ -1489,7 +1495,7 @@ def main():
 
     page = (f"<!doctype html><html><head><meta charset=utf-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"
-            f"<title>{html.escape(title)}</title><style>{CSS}\n{embed(used)}</style>"
+            f"<title>{html.escape(title)}</title><style>{CSS}\n{ICP_CSS}\n{embed(used)}</style>"
             f"</head><body><div class=wrap>"
             + "\n".join(body)
             + "</div></body></html>")

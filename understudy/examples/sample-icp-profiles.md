@@ -24,6 +24,7 @@ The site says it is for "everyone who takes notes", and the product is built for
 ## ICP profiles
 
 ### 1. Solo course creator — PRIMARY · fit 4.5 · propensity 4.0
+- **Meet:** Dana, 34 — teaches a six-week pottery course from a shared studio, sells the notes by hand
 - **Who:** One person who already teaches something live — a cohort, a class, a workshop — and wants to sell the material without building a site.
 - **Find fifty of them:** Creator communities; anyone with a "join the waitlist" page for a course; a search for "sell my course without a website".
 - **Job to be done:** "Get paid for the notes I already write, before Friday."

@@ -455,15 +455,12 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
         pass
 
     # ---- ICP profiles ----------------------------------------------------------
-    icp_html = ""
-    icp_dir = os.path.join(run, "icp", "exec-summary.md")
-    if os.path.exists(icp_dir):
-        md = rr._read(icp_dir, errors="replace")
-        m = re.search(r"^##\s+ICP profiles\s*$", md, re.M)
-        if m:
-            rest = md[m.end():]
-            nxt = re.search(r"^##\s+", rest, re.M)
-            icp_html = to_html(rest[:nxt.start()] if nxt else rest, images, used, "icp-")
+    icp_html, icp_struct = "", None
+    body = rr.lifted_section(run, "icp", "ICP profiles")
+    if body:
+        import icp_profiles
+        icp_html = icp_profiles.cards_html(body)
+        icp_struct = icp_profiles.parse(body)
 
     # ---- personas ------------------------------------------------------------
     personas = []
@@ -544,6 +541,8 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
         "findings": findings,
         "clusters": clusters,
         "icp": icp_html,
+        "icpProfiles": (icp_struct or {}).get("profiles", []),
+        "icpTrap": (icp_struct or {}).get("trap", {}),
         "personas": personas,
         "images": img,
     }
@@ -552,4 +551,6 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     page = tpl.replace("/*__DATA__*/null", payload, 1)
     page = page.replace("__TITLE__", html.escape(f"{data['meta']['product']} — understudy report"))
+    from icp_profiles import CSS as icp_css
+    page = page.replace("/*__ICP_CSS__*/", icp_css, 1)
     return page

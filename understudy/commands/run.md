@@ -394,9 +394,9 @@ naming which markets the comparison sites serve.>
 | Check | Question it answers |
 |---|---|
 | **Clarity** | Can a visitor say what this is, who it is for, and what to do next? |
-| **Ideal customer profiles** | Who should this product be built and sold for, on the evidence of what it is? |
+| **Ideal Customer Profiles** | Who should this product be built and sold for, on the evidence of what it is? |
 
-<In LENS_ORDER, always: Clarity, Conversion, Trust, Ideal customer profiles,
+<In LENS_ORDER, always: Clarity, Conversion, Trust, Ideal Customer Profiles,
 Compare, SEO, AEO, Technical — then Usability, Defects, Activation, Content.
 Include only the checks that ran. This table's order IS the document's order.>
 
@@ -472,7 +472,7 @@ comes to differ between two pages of one document.
 
 **The `icp` lens's `## ICP profiles` section is lifted the same way** — `render_report.py`
 finds the heading in `icp/exec-summary.md` and renders the three profiles, the
-trap and the candidates table as the *Ideal customer profiles* section, whole.
+trap and the candidates table as the *Ideal Customer Profiles* section, whole.
 Do not re-type a profile into the run summary; quote its name and role and
 point at the section.
 
@@ -507,7 +507,7 @@ what the client reads, never the folder name.
 | `clarity` | Clarity |
 | `conversion` | Conversion |
 | `trust` | Trust and credibility |
-| `icp` | Ideal customer profiles |
+| `icp` | Ideal Customer Profiles |
 | `compare` | Competitive comparison |
 | `seo` | Search visibility |
 | `aeo` | Answer-engine readiness |
