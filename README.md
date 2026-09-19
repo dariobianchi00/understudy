@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.6.3 — quotes with prices.** `check_report.py` now decodes `findings-raw.json` before matching *In their own words* rows; it read the file as text, so `json.dump`'s `\u20ac` escape meant any quote containing a currency sign failed the gate. Found on the first *both* run (a hotel site, three personas, six captures).
+>
 > **v0.6.2 — in their own words.** The run summary gains a section of verbatim lines from the personas — what they said at the moment behind each top finding, with the log line beside it. The gate checks every quote against the persona files and fails a quote the log does not contain; an improved quotation is fabricated evidence in the one section a reader repeats out loud.
 >
 > **v0.6.1 — scores from what the personas did.** A P1 now needs an observed moment (a persona stopped, left, failed, or said they would not pay or return); a complaint with continued use is a P2. The 0–10 bands carry a "looks like" column, the lens scores from the personas' outcome first and checks the severity ceiling second, and the gate prints a note when a verdict says everyone got value above a score that says a meaningful share gave up. The ceilings themselves are unchanged.

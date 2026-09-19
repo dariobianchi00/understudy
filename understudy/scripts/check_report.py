@@ -208,8 +208,26 @@ def check_quotes(run, r):
 
     corpus = []
     for pdir in glob.glob(os.path.join(run, "persona-*")) + glob.glob(os.path.join(run, "compare", "*", "persona-*")):
-        for name in ("session.log", "persona-debrief.md", "findings-raw.json"):
+        for name in ("session.log", "persona-debrief.md"):
             corpus.append(_norm(_read(os.path.join(pdir, name), errors="replace")))
+        # findings-raw.json is JSON: json.dump escapes non-ASCII ("\u20ac" for
+        # "€") and quotes, so a raw-text read never matches a quote that
+        # carries a currency sign. Decode it and walk every string value.
+        raw = _read(os.path.join(pdir, "findings-raw.json"), errors="replace")
+        try:
+            import json as _json
+            def _walk(o):
+                if isinstance(o, str):
+                    yield o
+                elif isinstance(o, dict):
+                    for v in o.values():
+                        yield from _walk(v)
+                elif isinstance(o, list):
+                    for v in o:
+                        yield from _walk(v)
+            corpus.append(_norm("\n".join(_walk(_json.loads(raw)))))
+        except Exception:
+            corpus.append(_norm(raw))
     corpus = "\n".join(corpus)
 
     rows = [l for l in section.split("\n") if l.startswith("|")][2:]   # skip header + rule

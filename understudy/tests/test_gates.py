@@ -399,6 +399,30 @@ class Report(unittest.TestCase):
             self.assertEqual(checks, {1}, out)
             self.assertIn("never improved", out)
 
+    def test_quote_with_currency_sign_in_findings_raw_json_is_found(self):
+        """json.dump escapes "€" as \\u20ac; the corpus must decode the JSON,
+        not read it as text, or every quote with a price fails the gate."""
+        def summary_with(quote):
+            return ("# Nimbus Notes — Website assessment — 1 September 2026\n\n"
+                    "## What this is\n- A fictional notes product.\n\n"
+                    "## Top 5 — fix these first\nThe site never says who it is for.\n\n"
+                    "| # | Severity | What is happening | What it costs | Effort |\n|---|---|---|---|---|\n"
+                    "| 1 | P1 | The fold names no audience | She guessed | Copy change |\n\n"
+                    "## In their own words\n\n"
+                    "| Who | When | What they said | Where |\n|---|---|---|---|\n"
+                    f"| p | 00:00 | “{quote}” | findings-raw.json:3 |\n\n"
+                    "## Limits of this assessment\n- Personas were constructed.\n")
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            import json as _json
+            pdir = next(d for d in os.listdir(run) if d.startswith("persona-"))
+            with open(os.path.join(run, pdir, "findings-raw.json"), "w") as f:
+                _json.dump({"reactions": [{"at": "00:00", "what": "Total €2,048 with a \"member\" price next to it"}]}, f)
+            fx.write(os.path.join(run, "exec-summary.md"),
+                     summary_with("Total €2,048 with a \"member\" price next to it"))
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+
     def test_check7_score_within_ceiling_passes(self):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t, with_lens=False)
