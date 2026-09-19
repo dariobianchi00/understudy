@@ -255,6 +255,8 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     <span class="brand">understudy<span class="dot">_</span></span>
     <nav class="topnav">
       <a href="#lenses">lenses</a>
+      <a href="#icp">who it's for</a>
+      <a href="#report">the report</a>
       <a href="#trust">honesty</a>
       <a href="#install">install</a>
       <a href="https://github.com/dariobianchi00/understudy"><span class="long">github</span><span class="short">gh</span></a>
@@ -328,6 +330,63 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     </div>
 
     <p class="note">Websites get their own set — whether a visitor can say what you do, whether the next step is obvious, whether they believe you, plus crawlability, structured data and page speed. And a comparison against competitors <em>you</em> name.</p>
+  </div>
+</section>
+
+<section id="icp">
+  <div class="wrap">
+    <p class="kicker">the icp lens</p>
+    <h2>Who should this be built and sold for?</h2>
+    <p class="section-lede">Most lenses ask whether the product works. <code>icp</code> asks who it works for — on the evidence of what it is, not on what the market is supposed to want. It reads what the stand-in user saw and did: the site's own words, its proof, its pricing, the flows the product actually has. From that it derives three ideal customer profiles and argues with each of them.</p>
+
+    <div class="rules">
+      <div class="rule-card">
+        <h3>Positioning first, then fit × propensity.</h3>
+        <p>Unique attributes the persona noticed → who cares most about each → five to seven candidate segments, labelled by where they came from (named by the site, implied by the product, the persona's own read, adjacent). Every candidate is scored on <em>fit</em> (pain, alignment, evidence, clarity) and <em>propensity</em> (reach, trigger, willingness to pay, openness to switching), 1–5, with <code>?</code> where the run cannot tell — never a guessed 3.</p>
+      </div>
+      <div class="rule-card">
+        <h3>Every profile carries the case against it.</h3>
+        <p>What they use instead, the switching cost, the one fact that would kill the profile, and the cheapest one-week test — labelled as reasoning, kept apart from the findings. The trap segment (easy to sell, would churn) is named so nobody targets it by accident, and every candidate considered is listed, including the dropped ones.</p>
+      </div>
+    </div>
+
+    <div class="spec">
+      <div class="spec-head">
+        <span class="sev" style="background:var(--green)">PRIMARY</span>
+        <span class="ttl">Solo course creator — fit 4.5 · propensity 4.0</span>
+      </div>
+      <dl>
+        <dt>Meet</dt><dd>Dana, 34 — teaches a six-week pottery course from a shared studio, sells the notes by hand</dd>
+        <dt>Who</dt><dd>One person who already teaches something live and wants to sell the material without building a site.</dd>
+        <dt>Job to be done</dt><dd>“Get paid for the notes I already write, before Friday.”</dd>
+        <dt>Trigger</dt><dd>A cohort sells out, or a student asks “can I buy the notes?”</dd>
+        <dt>Case against</dt><dd>A payment link and a PDF — the status quo the site never names. Kill fact: they never sell twice.</dd>
+        <dt>Re-run as</dt><dd><code>goal: "Sell my next cohort by Friday"</code> · <code>gives_up_when: "I have to build a page first"</code></dd>
+      </dl>
+    </div>
+
+    <p class="note">The person is invented and labelled so — a face for the profile, never a name from the run. No market research: no web search, no reviews, no competitor pages. Where the evidence does not reach, the profile says <em>not inferable</em>. If fewer than three segments clear the bar, you get fewer, with the reason. On a website run the visit adds a short sweep of pricing, customers, integrations and “for whom” pages so the profiles rest on what the site says about its own audience. When the run ends, understudy offers once to save the three re-run personas as a target.</p>
+  </div>
+</section>
+
+<section id="report">
+  <div class="wrap">
+    <p class="kicker">what you get</p>
+    <h2>A document to send, an instrument to present from.</h2>
+    <p class="section-lede">The run folder holds everything as markdown — every screenshot, log and lens report — and that is canonical. At the end you choose a rendered copy, and the two forms do different jobs.</p>
+
+    <div class="rules">
+      <div class="rule-card">
+        <h3>The PDF.</h3>
+        <p>A cover with the site's own icon, the overall score and the finding counts. What the product is, how the run was produced, the Top 5 to fix first with what each costs the buyer, what a buyer could and could not establish, the personas in their own words — verbatim, each line checked against the log — the profile cards, then every lens report with its evidence. What you forward.</p>
+      </div>
+      <div class="rule-card">
+        <h3>The interactive report.</h3>
+        <p>One self-contained HTML file, opens offline, branded with the site's icon and accent. A dashboard with a score ring per check; a findings explorer with severity, check, persona and status filters and a detail drawer; a session replay per persona — the log line by line with the screen that was showing; the profile cards; a full-screen <strong style="color:var(--ink)">Present</strong> mode driven by the arrow keys; and triage — mark each finding accepted, rejected or fixed with a note, then export as JSON, CSV or markdown.</p>
+      </div>
+    </div>
+
+    <p class="note">Neither scores or rewrites anything: every number is read from the lens files, every quote and screenshot is the run's own. A report whose evidence dies on send is worse than one with no evidence, so both embed their screenshots — which also means that once you forward one, it is as sensitive as the run itself.</p>
   </div>
 </section>
 

@@ -55,6 +55,10 @@ Create the run folder if the orchestrator hasn't:
 <output_dir>/<YYYY-MM-DD>-run-<runid>/persona-<slug>/screenshots/
 ```
 
+On a `both` run the website visit already owns `persona-<slug>/`; the
+journey goes in `persona-<slug>-journey/` so neither overwrites the other,
+and the session log's first line says which capture this is.
+
 Log the entry expectation **before navigating anywhere** (`flow-shapes.md`, Setup §4). Afterwards is too late — it is contaminated by what you found.
 
 ### 2. Walk the shapes

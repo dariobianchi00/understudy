@@ -176,6 +176,16 @@ Invoke the capture skill for the mode:
 
 For persona modes, run one persona at a time — sequentially, never in parallel. They share a browser, and parallel personas would interleave into one unreadable session log.
 
+**On a `both` run, one persona produces two captures in two folders:** the
+website visit in `persona-<slug>/` and the product journey in
+`persona-<slug>-journey/`, each with its own screenshots, log, timeline,
+debrief and reactions. Run every visit first, then every journey. Add the
+journey folders to the manifest's `personas` list (same name with the
+`-journey` suffix, a `capture` note) and record both sets under
+`captures`, so the gate, the live view and the report see all six.
+The A-visit lenses read the visit folders only, the Mode A lenses the
+journey folders only, and `icp` reads both — say which in each dispatch.
+
 **Do not pass the scoring framework to the traversal.** Not the heuristics, not the severity rubric, not a previous run's findings. The traversal skill loads only what it needs, and the separation is checked mechanically afterwards.
 
 Between personas: `browser_close()`, fresh context.
@@ -595,7 +605,7 @@ The two rendered forms are different things, and the hand-over says which:
 - **`pdf`** — the printed document: cover, summary, every lens. For reading
   and forwarding.
 - **`html`** — the **interactive report**: one self-contained file (screenshots
-  embedded, no network) for *presenting* the run. A dashboard with the score
+  embedded, opens offline) for *presenting* the run. A dashboard with the score
   rings, Top 5 and persona cards; a findings explorer with severity / check /
   persona filters and a detail drawer; a per-persona **session replay** (the
   log line by line with the screen that was showing) and filmstrip; the ICP

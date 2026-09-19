@@ -4,6 +4,8 @@
 
 understudy answers evaluative questions about a web product or website by separating three things: the target (never in the repo), the traversal (how evidence is gathered — one browser session), and the lens (how that evidence is scored — usability, bugs, onboarding, content, clarity, conversion, trust, icp, technical, SEO, AEO, compare). One traversal, many scorings.
 
+The icp lens derives three ideal customer profiles (primary, expansion, next-best) from the captured evidence, each scored on fit and propensity, each with the case against it, the trap segment named, and a re-run persona — no market research. Reports render as a PDF and as a self-contained interactive HTML (dashboard, findings explorer, per-persona session replay, Present mode, triage with export).
+
 Its published reproducibility floor: scoring identical evidence twice reproduces about 30% of individual findings and 43% of the serious ones. Themes are stable; single findings are one careful reading.
 
 ## Docs

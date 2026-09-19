@@ -174,7 +174,10 @@ def site_logo(run, meta):
         if os.path.exists(cached):
             return _data_uri(cached)
     base = (meta.get("base_url") or "").strip()
-    if not base:
+    # The only network call a default render makes — two requests, to the
+    # site itself and to a favicon service, for a 128px icon. Off with
+    # UNDERSTUDY_SITE_LOGO=off; a cached icon still renders.
+    if not base or os.environ.get("UNDERSTUDY_SITE_LOGO", "on").lower() in ("off", "0", "no"):
         return ""
     import urllib.request
     import urllib.parse

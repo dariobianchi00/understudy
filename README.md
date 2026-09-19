@@ -14,15 +14,7 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
-> **v0.7.4 — no faces on the profile cards.** The card is the name, the one line of life, the who, and the details. Faces are opt-in (`UNDERSTUDY_ICP_FACES=on`): a generated portrait when an image-model key is present, a trait-drawn illustration otherwise. Off by default because a face that does not match the person is worse than none, and a matching one needs a paid or gated image model.
->
-> **v0.7.3 — portraits that fit the person.** With no key, the profile's illustration is drawn to the `Meet:` line — pronoun for the gender cue, age for hair colour, work for glasses and clothing — instead of a random face. With a key, a generated portrait of the described person replaces it: `GEMINI_API_KEY` (free tier), `HF_TOKEN` (free tier, FLUX.1-schnell) or `OPENAI_API_KEY` (paid); made once per profile, cached in `icp/avatars/`, embedded in both renders. `UNDERSTUDY_PORTRAITS=off` keeps the illustration.
->
-> **v0.7.2 — profiles get a real illustration.** The face on each ICP card is an illustrated portrait (Open Peeps by Pablo Stanley, CC BY 4.0, via DiceBear), fetched once per profile at render time and cached in `icp/avatars/` so re-renders are offline; when the first render has no network, the drawn silhouette stands in. Each profile starts on its own page in the PDF.
->
-> **v0.7.1 — Ideal Customer Profiles as people.** Each profile is now a card in both the PDF and the interactive report: a drawn face (a deterministic SVG, never a photo, never a real person), a name and one line of life from the lens's new `Meet:` field, the *Who* sentence, then the job, trigger, where to find fifty, why it wins, what it lacks, fit and propensity as bars, the case against, and the re-run persona. No screenshots in this section — a profile is an inference, and thumbnails dressed it as an observation. `scripts/icp_profiles.py` parses and renders; a profile without a `Meet:` line gets a placeholder name and says so.
->
-> **v0.7.0 — the interactive report.** `--format html` is now a presentation instrument, not the PDF in a browser: a dashboard over the run (score rings, Top 5, persona cards), a findings explorer with filters and a detail drawer, a session replay per persona with the screen that was showing at each log line, the ICP profiles, a full-screen Present mode, a lightbox, and triage with export. One self-contained file, branded with the site's own icon and accent. The template is `scripts/report_template.html`; `scripts/interactive_report.py` packs a run into it. The printed PDF is unchanged.
+> **v0.7 — the interactive report, and profiles as people.** `--format html` is now a presentation instrument, not the PDF in a browser: a dashboard over the run (score rings, Top 5, persona cards), a findings explorer with filters and a detail drawer, a session replay per persona with the screen that was showing at each log line, a full-screen Present mode, a lightbox, and triage with export. One self-contained file, branded with the site's own icon and accent (`scripts/report_template.html`, packed by `scripts/interactive_report.py`). The Ideal Customer Profiles render as cards in both the PDF and the HTML — the lens's new `Meet:` line (a fictional person: first name, age, one clause of life), the *Who*, then the details with fit and propensity as bars, the case against, and the re-run persona; citations stay as text, no thumbnails (`scripts/icp_profiles.py`). No faces by default: `UNDERSTUDY_ICP_FACES=on` draws or generates one (an image-model key in `~/.understudy/.env` for a generated portrait). *(v0.7.0–0.7.4)*
 >
 > **v0.6.4 — the report reads better.** The cover carries the site's own icon (fetched once, cached as `site-logo.<ext>` in the run folder, silently absent offline). The *Where* column of *In their own words* is usable: each screenshot is a thumbnail that opens the file, each log or debrief citation is a short link to it, and *Top 5 row N* jumps to the table. The *Why that score* column is sentence-cased with a full stop, whatever the lens wrote.
 >
@@ -256,6 +248,8 @@ Per profile: who they are and where to find them · the job they are hiring the 
 
 Two things it deliberately does not do. It does **no market research** — no web search, no reviews, no competitor pages; the product is the world, and where the evidence does not reach the profile says *not inferable* rather than guessing. And it never pads: if fewer than three segments clear the fit bar, you get fewer, with the reason.
 
+Each profile opens with a **`Meet:` line** — a fictional person who stands for it, first name, age and one clause of their life ("Inês, 39 — physiotherapist, booking the half-term week for four") — and the report renders the three as cards: that person, the *who*, then the details with fit and propensity as bars. Invented, labelled as such, never a name from the run.
+
 On a website run it adds a three-to-five-minute **sweep** to each visit — pricing, customers, integrations, docs, careers, the footer's "for whom" language — so the profiles rest on what the site says about its own audience, not on the model's priors. When the run is done, `/understudy:run` offers, once, to save the three re-run personas as a target.
 
 ### Two things these lenses will not do
@@ -350,13 +344,20 @@ The lens agents also show under the prompt in Claude Code itself, named for what
 ```
 ~/.understudy/runs/<slug>/<date>-run-<id>/
 ├── manifest.json              what ran, on which models, with which personas
+├── status.json                the phase the run is in — what the live view reads
 ├── exec-summary.md            what it is, how it was produced, the Top 5, the personas' own words
-├── persona-<name>/
+├── report-full.md             every lens report in one file, the canonical export
+├── report-summary.pdf         the printed deliverable (and .html — the interactive one)
+├── site-logo.png              the site's icon, fetched once for the cover
+├── persona-<name>/            a website visit, or a product journey
 │   ├── screenshots/NN-*.png   one per distinct screen
 │   ├── session.log            [MM:SS] one line per action, first person
-│   ├── timeline.json          time-to-first-value, steps, permission prompts
-│   ├── persona-debrief.md     the four debrief answers, in their own words
-│   └── findings-raw.json      reactions — observations, never verdicts
+│   ├── timeline.json          time-to-first-value, steps, prompts — or the visit shapes
+│   ├── persona-debrief.md     the debrief answers, in their own words
+│   ├── findings-raw.json      reactions — observations, never verdicts
+│   ├── console-full.txt       every console message
+│   └── network-full.txt       every request
+├── persona-<name>-journey/    on a *both* run: the product journey, beside the visit
 └── <lens>/
     ├── exec-summary.md        that lens's verdict, top 3 and 0–10 score
     └── findings-final.md      severity-rated, every finding evidence-cited
@@ -436,9 +437,11 @@ The thing clients ask first. By construction, not by discipline.
 └── creds/                  YOURS. understudy reads nothing here, writes nothing here.
 ```
 
-Nothing is transmitted anywhere. No telemetry, no phone-home, no hosted component. Point the run folder inside the understudy plugin and the interview refuses. Point it inside *your* repo — the default when you run from one — and it is added to that repo's `.gitignore` first, because the run folder holds screenshots of your product.
+Nothing about your run is transmitted anywhere. No telemetry, no phone-home, no hosted component. Rendering a report makes exactly one outward request by default — for the site's own icon, to put on the cover (`UNDERSTUDY_SITE_LOGO=off` stops even that) — and carries nothing from the run with it. Point the run folder inside the understudy plugin and the interview refuses. Point it inside *your* repo — the default when you run from one — and it is added to that repo's `.gitignore` first, because the run folder holds screenshots of your product.
 
-**The HTML and PDF exports are local files too.** They are written next to the markdown, in your run folder. Nothing uploads them and understudy has nowhere to upload them to — but they embed real screenshots of your product, so once you forward one it is as sensitive as the run itself. That is the point of them; it is worth knowing before you send one.
+**The HTML and PDF exports are local files too.** They are written next to the markdown, in your run folder. Nothing uploads them and understudy has nowhere to upload them to — but they embed real screenshots of your product, so once you forward one it is as sensitive as the run itself. That is the point of them; it is worth knowing before you send one. Triage marks made in the interactive report stay in that reader's browser until they export them.
+
+**Optional keys live outside the repo.** If you turn on generated portraits for the profile cards, the image-model key is read from your shell or from `~/.understudy/.env` (mode 600, never inside a repo). Nothing else in understudy uses a key.
 
 **And nothing real is in this repo either.** No product names, URLs, credentials, personas or run artifacts — the example target is a fictional product. `.gitignore` has covered targets, runs, `*.env`, `*.png`, `*.webm` and `*.zip` since before the first commit.
 
