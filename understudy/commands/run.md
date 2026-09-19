@@ -586,8 +586,28 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/render_report.py <run_folder> \
 ```
 
 (`md` means no render: the canonical markdown is the deliverable — point at
-`exec-summary.md` and `report-full.md`.) If `deliverable.path` names a second
-location, copy the rendered file there too.
+`exec-summary.md` and `report-full.md`. `both` means run the command twice,
+`--format pdf` then `--format html`.) If `deliverable.path` names a second
+location, copy the rendered file(s) there too.
+
+The two rendered forms are different things, and the hand-over says which:
+
+- **`pdf`** — the printed document: cover, summary, every lens. For reading
+  and forwarding.
+- **`html`** — the **interactive report**: one self-contained file (screenshots
+  embedded, no network) for *presenting* the run. A dashboard with the score
+  rings, Top 5 and persona cards; a findings explorer with severity / check /
+  persona filters and a detail drawer; a per-persona **session replay** (the
+  log line by line with the screen that was showing) and filmstrip; the ICP
+  profiles; a **Present** mode (full-screen, arrow keys: cover → scores →
+  each Top 5 item with its quote and screenshot → each persona → profiles →
+  limits); a screenshot lightbox; and **triage** — accept / reject / fix each
+  finding with a note, saved in the viewer's browser and exportable as JSON,
+  CSV or markdown. Say so when you hand it over: "open it, press Present".
+
+Rendering both is cheap and often right — a PDF to send ahead, the HTML to
+present from. Nothing in either is scored or rewritten; both read the same
+markdown the gate checked.
 
 The three scopes, so you can say what the user is getting:
 

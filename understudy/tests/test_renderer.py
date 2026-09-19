@@ -54,7 +54,7 @@ def build(t):
 
 
 def render(run, scope):
-    p = subprocess.run([sys.executable, RENDER, run, "--format", "html", "--scope", scope],
+    p = subprocess.run([sys.executable, RENDER, run, "--format", "print", "--scope", scope],
                        capture_output=True, text=True)
     assert p.returncode == 0, p.stderr
     with open(p.stdout.strip().split("\n")[-1]) as f:
@@ -377,3 +377,55 @@ class Presentation(unittest.TestCase):
             self.assertIn('class="logo"', html_out)
             # no cache and no network: the cover still renders, without a logo
             self.assertEqual(rr.cover({"product_name": "X"}, "X", "", 0, {}).count('class="logo"'), 0)
+
+
+class Interactive(unittest.TestCase):
+    """--format html is the interactive report: one self-contained file with
+    the run's data as JSON, every view driven from it, no network."""
+    def test_html_format_builds_the_interactive_page(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            p = subprocess.run([sys.executable, RENDER, run, "--format", "html", "--scope", "all"],
+                               capture_output=True, text=True)
+            self.assertEqual(p.returncode, 0, p.stderr)
+            path = p.stdout.strip().splitlines()[-1]
+            page = open(path, encoding="utf-8").read()
+            self.assertIn('<script id="data" type="application/json">', page)
+            self.assertIn('id="btnPresent"', page)
+            self.assertIn('class="drawer"', page)
+            self.assertNotIn("__DATA__", page)          # payload injected
+            self.assertNotIn("__TITLE__", page)
+            self.assertNotIn("https://cdn.", page)      # nothing fetched at open
+            import json as _json
+            m = re.search(r'<script id="data" type="application/json">(.*?)</script>', page, re.S)
+            data = _json.loads(m.group(1).replace("<\\/", "</"))
+            self.assertIn("findings", data)
+            self.assertIn("lenses", data)
+            self.assertIn("personas", data)
+            self.assertTrue(all("id" in f and "sev" in f for f in data["findings"]))
+            # the print layout is not written alongside the interactive one
+            self.assertFalse(os.path.exists(path.replace(".html", "-print.html")))
+
+    def test_print_format_writes_the_document_layout_only(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            p = subprocess.run([sys.executable, RENDER, run, "--format", "print", "--scope", "all"],
+                               capture_output=True, text=True)
+            self.assertEqual(p.returncode, 0, p.stderr)
+            files = os.listdir(run)
+            self.assertIn("report-all-print.html", files)
+            self.assertNotIn("report-all.html", files)
+
+    def test_finding_block_parser_keeps_every_field(self):
+        import interactive_report as ir
+        block = ("- **Severity:** P1\n- **So what:** It costs.\n- **Flow:** shape_2\n"
+                 "- **Locator:** /x — button\n- **Personas hit:** a, b\n- **Observed:**\n"
+                 "  - first thing\n  - second thing\n- **Evidence:** `persona-a/screenshots/01-x.png` · `persona-a/session.log:4`\n"
+                 "  > \"I could not find it anywhere on the page\"\n- **Repro:**\n  1. open\n  2. click\n- **Fix:** Say so.\n")
+        fields, order, quotes, shots, logs = ir.parse_finding_block(block)
+        self.assertEqual(fields["Severity"]["text"], "P1")
+        self.assertEqual(fields["Observed"]["items"], ["first thing", "second thing"])
+        self.assertEqual(fields["Repro"]["items"], ["open", "click"])
+        self.assertEqual(shots, ["persona-a/screenshots/01-x.png"])
+        self.assertEqual(logs, ["persona-a/session.log:4"])
+        self.assertEqual(quotes, ["I could not find it anywhere on the page"])

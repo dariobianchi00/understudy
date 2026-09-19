@@ -351,7 +351,10 @@ At the end you get one document to read or forward. The full research —
 every screenshot, log, and lens report, as markdown — is always kept in the
 run folder whatever you choose here.
 
-  Format   (a) PDF   [default]     (b) HTML, self-contained    (c) Markdown only
+  Format   (a) PDF   [default]     (b) Interactive HTML — one file, for presenting:
+                                    dashboard, findings explorer, session replay,
+                                    Present mode, triage with export
+           (c) Both PDF and HTML   (d) Markdown only
   Scope    (a) Executive summary [default] — the verdict, the Top 5, every
                finding in a triage table with its cost and fix, key screenshots.
                A few pages; the thing you forward.
@@ -360,7 +363,7 @@ run folder whatever you choose here.
            (c) One lens — name it.
 ```
 
-**Default: executive summary, PDF.** Record as `deliverable: {format, scope}`. A user who says
+**Default: executive summary, PDF.** Record as `deliverable: {format: pdf|html|both|md, scope}`. A user who says
 "just give me everything" gets `all`; one who says nothing gets the default and is told so.
 
 ### 7b — Where should the run folder live?

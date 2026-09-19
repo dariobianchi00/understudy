@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<style>
+/* ------------------------------------------------------------------ base */
+:root{
+  --accent:#1a56db;--ink:#16181d;--mut:#5d6470;--line:#e3e6ea;--bg:#f6f7f9;--card:#fff;
+  --p0:#b42318;--p1:#c4620a;--p2:#946200;--p3:#5d6470;--ok:#2f855a;
+  --side:232px;--top:60px;--r:12px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer}
+h1,h2,h3,h4{line-height:1.2;margin:0 0 .5em}
+h2{font-size:22px;letter-spacing:-.01em}h3{font-size:16px}
+p{margin:0 0 .8em}
+code{font:12.5px var(--mono);background:#eef1f5;padding:1px 5px;border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:600}
+blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--accent);color:var(--ink);background:#f7f9fc;border-radius:0 8px 8px 0}
+.mut{color:var(--mut)}.small{font-size:13px}.nowrap{white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin:0 0 16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid transparent;line-height:1.5;vertical-align:middle}
+.sev-P0{background:#fde8e6;color:var(--p0);border-color:#f5c2bd}.sev-P1{background:#fff0e0;color:var(--p1);border-color:#f8d3a8}
+.sev-P2{background:#fff8dc;color:var(--p2);border-color:#f1e3a0}.sev-P3{background:#eef0f3;color:var(--p3);border-color:#dfe3e8}
+.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:#eef1f5;color:var(--mut);margin:0 4px 4px 0}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 12px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.btn:hover{border-color:#c9ced6;background:#fafbfc;text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sm{padding:4px 9px;font-size:12.5px}
+.kicker{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:700;margin:0 0 6px}
+.hide{display:none!important}
+.shot{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:zoom-in}
+.thumb{width:132px;aspect-ratio:16/10;object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:6px;background:#fff;cursor:zoom-in;display:inline-block;margin:4px 6px 4px 0;vertical-align:top}
+.score{font-weight:800;font-variant-numeric:tabular-nums}
+.c0{color:var(--p0)}.c1{color:var(--p1)}.c2{color:var(--p2)}.c3{color:var(--ok)}
+
+/* ------------------------------------------------------------------ shell */
+.top{position:fixed;top:0;left:0;right:0;height:var(--top);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 18px;z-index:20}
+.top .logo{width:34px;height:34px;border-radius:9px;object-fit:contain;border:1px solid var(--line);background:#fff;padding:3px}
+.top .name{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.top .sub{color:var(--mut);font-size:13px}
+.top .sp{flex:1}
+.top .overall{display:flex;align-items:baseline;gap:4px;padding:4px 12px;border-radius:999px;background:#f2f4f8;font-size:13px;color:var(--mut)}
+.top .overall b{font-size:20px}
+.side{position:fixed;top:var(--top);left:0;bottom:0;width:var(--side);background:#fff;border-right:1px solid var(--line);overflow:auto;padding:14px 10px;z-index:10}
+.side a{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;color:var(--ink);font-weight:600;font-size:14px}
+.side a:hover{background:#f2f4f8;text-decoration:none}
+.side a.on{background:var(--accent);color:#fff}
+.side a .n{font-size:12px;color:var(--mut);font-weight:600}.side a.on .n{color:#fff;opacity:.85}
+.side .kicker{padding:14px 12px 4px}
+.side .lens{font-weight:500;font-size:13.5px}
+.side .bar{width:46px;height:5px;border-radius:3px;background:#e9ecf1;overflow:hidden;display:inline-block;margin-left:8px}
+.side .bar i{display:block;height:100%}
+.side a.on .bar{background:rgba(255,255,255,.3)}
+main{margin:var(--top) 0 0 var(--side);padding:26px 30px 80px;max-width:1280px}
+.view{display:none}.view.on{display:block}
+.hero{display:flex;gap:20px;align-items:flex-start;margin-bottom:18px}
+.hero .verdict{font-size:19px;line-height:1.45;font-weight:600;letter-spacing:-.005em}
+.hero .verdict .kicker{margin-bottom:8px}
+@media (max-width:900px){.side{display:none}main{margin-left:0;padding:18px 16px}}
+
+/* ------------------------------------------------------------- rings */
+.rings{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:0 0 18px}
+.ring{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 12px;text-align:center;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.ring:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(20,30,60,.08)}
+.ring svg{width:82px;height:82px;display:block;margin:0 auto 6px}
+.ring .lab{font-weight:700;font-size:13.5px}
+.ring .n{font-size:12px;color:var(--mut)}
+.ring.big svg{width:120px;height:120px}
+
+/* ------------------------------------------------------------- top5 */
+.t5{display:grid;gap:12px}
+.t5 .row{display:grid;grid-template-columns:44px 84px 1fr 1fr 150px;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;align-items:start}
+.t5 .row .num{font-size:26px;font-weight:800;color:#c9ced6;line-height:1}
+.t5 .row .what{font-weight:600}
+.t5 .row .cost{color:var(--mut)}
+.t5 .row .eff{font-size:12.5px;color:var(--mut)}
+.t5 .row .q{grid-column:3/-1;display:flex;gap:12px;align-items:flex-start;border-top:1px dashed var(--line);padding-top:10px;margin-top:2px}
+.t5 .row .q .thumb{flex:none}
+@media (max-width:900px){.t5 .row{grid-template-columns:36px 70px 1fr}.t5 .row .cost,.t5 .row .eff{grid-column:3}.t5 .row .q{grid-column:1/-1}}
+
+/* ------------------------------------------------------------- findings */
+.fx{display:grid;grid-template-columns:1fr;gap:14px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.filters .f{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;font-size:13px;font-weight:600;color:var(--mut)}
+.filters .f.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.filters .f.sevf.on.P0{background:var(--p0);border-color:var(--p0)}.filters .f.sevf.on.P1{background:var(--p1);border-color:var(--p1)}
+.filters .f.sevf.on.P2{background:var(--p2);border-color:var(--p2)}.filters .f.sevf.on.P3{background:var(--p3);border-color:var(--p3)}
+.filters input{border:1px solid var(--line);border-radius:9px;padding:6px 10px;font:inherit;min-width:220px}
+.filters .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.flist{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.frow{display:grid;grid-template-columns:56px 1fr auto;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer;align-items:center}
+.frow:last-child{border-bottom:0}.frow:hover{background:#fafbfd}.frow.on{background:#eef3ff}
+.frow .t{font-weight:600}
+.frow .m{font-size:12.5px;color:var(--mut)}
+.frow .st{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#eef1f5;color:var(--mut)}
+.st-accepted{background:#e6f4ec!important;color:var(--ok)!important}.st-rejected{background:#eef0f3!important;color:#7a8290!important;text-decoration:line-through}
+.st-fixed{background:#e3ecff!important;color:var(--accent)!important}
+.drawer{position:fixed;top:var(--top);right:0;bottom:0;width:min(640px,100%);background:#fff;border-left:1px solid var(--line);box-shadow:-10px 0 30px rgba(20,30,60,.08);transform:translateX(102%);transition:transform .2s;z-index:15;overflow:auto;padding:22px 26px 60px}
+.drawer.on{transform:none}
+.drawer .close{position:absolute;top:12px;right:14px}
+.drawer h2{font-size:19px;margin:8px 0 10px;padding-right:40px}
+.drawer .meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.drawer h4{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:16px 0 6px}
+.drawer ul{margin:0;padding-left:18px}
+.drawer .triage{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+.drawer .triage .opts{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.drawer textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:13.5px}
+
+/* ------------------------------------------------------------- personas */
+.pcard{display:grid;grid-template-columns:150px 1fr;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer}
+.pcard:hover{box-shadow:0 6px 18px rgba(20,30,60,.08)}
+.pcard .shot{aspect-ratio:16/11;cursor:pointer}
+.pcard h3{margin:0 0 4px}
+.pcard .facts{font-size:13px;color:var(--mut)}
+.ptabs{display:flex;gap:6px;margin:12px 0}
+.ptabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--mut)}
+.ptabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.replay{display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+.replay .log{background:#fff;border:1px solid var(--line);border-radius:var(--r);max-height:70vh;overflow:auto}
+.replay .log div{padding:9px 12px;border-bottom:1px solid var(--line);font-size:13.5px;cursor:pointer;display:grid;grid-template-columns:52px 1fr;gap:8px}
+.replay .log div:hover{background:#fafbfd}.replay .log div.on{background:#eef3ff}
+.replay .log .t{font:12px var(--mono);color:var(--mut);padding-top:2px}
+.replay .stage{position:sticky;top:76px}
+.replay .stage .shot{aspect-ratio:auto;max-height:70vh;object-fit:contain;object-position:top;cursor:zoom-in}
+.replay .ctl{display:flex;gap:8px;align-items:center;margin:10px 0}
+.replay .ctl input[type=range]{flex:1}
+.strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.strip figure{margin:0}.strip figcaption{font-size:12px;color:var(--mut);margin-top:4px;word-break:break-all}
+@media (max-width:900px){.replay{grid-template-columns:1fr}.pcard{grid-template-columns:1fr}}
+
+/* ------------------------------------------------------------- quotes */
+.qt td.who{white-space:nowrap;font-weight:600}
+.qt td.q{font-size:15px}
+
+/* ------------------------------------------------------------- lightbox */
+.lb{position:fixed;inset:0;background:rgba(10,12,18,.92);z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;padding:26px}
+.lb.on{display:flex}
+.lb img{max-width:96vw;max-height:84vh;border-radius:6px;background:#fff}
+.lb .cap{color:#dfe3ea;font-size:13px;margin-top:10px;font-family:var(--mono)}
+.lb .x,.lb .nav{position:absolute;color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:999px;width:42px;height:42px;font-size:20px}
+.lb .x{top:16px;right:18px}.lb .nav{top:50%;transform:translateY(-50%)}.lb .prev{left:16px}.lb .next{right:16px}
+
+/* ------------------------------------------------------------- present */
+.pres{position:fixed;inset:0;background:#fff;z-index:40;display:none;flex-direction:column}
+.pres.on{display:flex}
+.pres .slide{flex:1;padding:6vh 8vw;overflow:auto;display:flex;flex-direction:column;justify-content:center}
+.pres .slide h1{font-size:clamp(30px,4.6vw,58px);letter-spacing:-.02em;margin:0 0 .3em}
+.pres .slide h2{font-size:clamp(22px,3vw,38px);margin:0 0 .5em}
+.pres .slide p,.pres .slide li{font-size:clamp(16px,1.6vw,22px)}
+.pres .slide .big{font-size:clamp(60px,10vw,140px);font-weight:800;line-height:1}
+.pres .foot{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+.pres .two{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.pres .two .shot{aspect-ratio:auto;max-height:70vh;object-fit:contain;object-position:top;box-shadow:0 10px 40px rgba(20,30,60,.15)}
+.pres .rings{grid-template-columns:repeat(4,1fr);gap:18px}
+.pres .rings .ring svg{width:130px;height:130px}
+.pres .t5 .row{grid-template-columns:60px 90px 1fr 1fr}
+.pres blockquote{font-size:clamp(18px,2vw,28px);font-weight:600;border-left-width:5px;padding:10px 20px;line-height:1.35}
+.pres .cover-logo{width:96px;height:96px;border-radius:22px;border:1px solid var(--line);padding:10px;object-fit:contain;margin-bottom:24px}
+.pres .caveat{border-left:4px solid var(--p1);padding:10px 16px;background:#fff8f2;border-radius:0 10px 10px 0;max-width:900px}
+.pres .verdict{font-size:clamp(20px,2.4vw,32px);font-weight:600;line-height:1.4;max-width:1000px}
+.pres .persona-facts{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 18px}
+.pres .persona-facts .tag{font-size:15px;padding:5px 12px}
+.pres .icp h3{font-size:clamp(18px,2vw,26px);margin-top:18px}
+.pres .icp li,.pres .icp p{font-size:clamp(14px,1.3vw,18px)}
+.pres .icp pre{display:none}
+
+/* ------------------------------------------------------------- menu */
+.menu{position:relative}
+.menu .dd{position:absolute;right:0;top:110%;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(20,30,60,.12);min-width:230px;padding:6px;display:none;z-index:30}
+.menu.on .dd{display:block}
+.menu .dd button,.menu .dd label{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:7px;font-size:13.5px;font-weight:600;cursor:pointer}
+.menu .dd button:hover,.menu .dd label:hover{background:#f2f4f8}
+.menu .dd .mut{padding:6px 10px 2px;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+
+/* ------------------------------------------------------------- print */
+@media print{.top,.side,.drawer,.lb,.pres,.filters{display:none!important}main{margin:0;padding:0}.view{display:block!important;break-before:page}}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo hide" id="logo" alt="">
+  <div><div class="name" id="hname"></div><div class="sub" id="hsub"></div></div>
+  <div class="sp"></div>
+  <div class="overall" id="hoverall"></div>
+  <button class="btn primary" id="btnPresent">▶ Present</button>
+  <div class="menu" id="triageMenu">
+    <button class="btn" id="btnTriage">Triage ▾</button>
+    <div class="dd">
+      <div class="mut">Export</div>
+      <button data-x="json">JSON (re-importable)</button>
+      <button data-x="csv">CSV for a tracker</button>
+      <button data-x="md">Markdown summary</button>
+      <div class="mut">Import</div>
+      <label>Load a triage JSON… <input type="file" id="triageFile" accept="application/json" class="hide"></label>
+      <button data-x="clear">Clear all triage on this device</button>
+    </div>
+  </div>
+  <button class="btn" id="btnPrint" title="Print or save as PDF">Print</button>
+</header>
+
+<nav class="side" id="side"></nav>
+
+<main id="main">
+  <section class="view" id="v-overview"></section>
+  <section class="view" id="v-top5"></section>
+  <section class="view" id="v-findings"></section>
+  <section class="view" id="v-lens"></section>
+  <section class="view" id="v-personas"></section>
+  <section class="view" id="v-persona"></section>
+  <section class="view" id="v-icp"></section>
+  <section class="view" id="v-quotes"></section>
+  <section class="view" id="v-limits"></section>
+</main>
+
+<aside class="drawer" id="drawer"><button class="btn sm close" id="drawerClose">✕</button><div id="drawerBody"></div></aside>
+
+<div class="lb" id="lb">
+  <button class="x" id="lbClose">✕</button>
+  <button class="nav prev" id="lbPrev">‹</button>
+  <img id="lbImg" alt="">
+  <div class="cap" id="lbCap"></div>
+  <button class="nav next" id="lbNext">›</button>
+</div>
+
+<div class="pres" id="pres">
+  <div class="slide" id="slide"></div>
+  <div class="foot"><span id="presPos"></span><span>← → to move · Esc to leave</span><span id="presTitle"></span></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script id="data" type="application/json">/*__DATA__*/null</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('data').textContent);
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const IMG = D.images || {};
+const LENS = D.lenses || [];
+const F = D.findings || [];
+const byId = Object.fromEntries(F.map(f => [f.id, f]));
+const P = D.personas || [];
+const SEVS = ['P0','P1','P2','P3'];
+const STATUSES = ['open','accepted','rejected','fixed'];
+const hue = s => s == null ? 'var(--mut)' : s <= 3 ? 'var(--p0)' : s <= 5 ? 'var(--p1)' : s <= 7 ? 'var(--p2)' : 'var(--ok)';
+document.documentElement.style.setProperty('--accent', D.meta.accent || '#1a56db');
+
+// ------------------------------------------------------------ helpers
+const src = rel => (IMG[rel] || {}).src || '';
+const img = (rel, cls='shot', ctx) => rel && src(rel)
+  ? `<img class="${cls}" src="${src(rel)}" alt="" data-shot="${esc(rel)}" ${ctx?`data-ctx="${esc(ctx)}"`:''} loading="lazy">` : '';
+const sev = s => `<span class="chip sev-${s}">${esc(s)}</span>`;
+const personaLabel = n => esc(n);
+const fmtSecs = s => s == null ? '—' : `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+function ring(score, size=82, label='') {
+  const r = 34, c = 2*Math.PI*r, v = score == null ? 0 : score/10;
+  return `<svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="${r}" fill="none" stroke="#eceff3" stroke-width="8"/>
+   <circle cx="42" cy="42" r="${r}" fill="none" stroke="${hue(score)}" stroke-width="8" stroke-linecap="round"
+   stroke-dasharray="${(c*v).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 42 42)"/>
+   <text x="42" y="47" text-anchor="middle" font-size="22" font-weight="800" fill="${hue(score)}">${score==null?'–':score}</text></svg>`;
+}
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),1800); }
+
+// ------------------------------------------------------------ triage state
+const TKEY = 'understudy-triage-' + (D.meta.runId || D.meta.product);
+let triage = {};
+try { triage = JSON.parse(localStorage.getItem(TKEY) || '{}') || {}; } catch(e) { triage = {}; }
+const saveTriage = () => { try { localStorage.setItem(TKEY, JSON.stringify(triage)); } catch(e) {} };
+const status = id => (triage[id] || {}).status || 'open';
+
+// ------------------------------------------------------------ header + nav
+$('#hname').textContent = D.meta.product;
+$('#hsub').textContent = `${D.meta.kind} · ${D.meta.date}` + (D.meta.url ? ` · ${D.meta.url.replace(/^https?:\/\//,'')}` : '');
+if (D.meta.logo) { const l=$('#logo'); l.src=D.meta.logo; l.classList.remove('hide'); const link=document.createElement('link'); link.rel='icon'; link.href=D.meta.logo; document.head.appendChild(link); }
+$('#hoverall').innerHTML = D.overall != null ? `Overall <b style="color:${hue(D.overall)}">${D.overall}</b>/10` : '';
+
+const NAV = [
+  ['overview','Overview'], ['top5','Top 5'], ['findings','All findings', F.length],
+  ['personas','Personas', P.length], ...(D.icp ? [['icp','Customer profiles']] : []),
+  ['quotes','In their own words', (D.quotes||[]).length], ['limits','Limits'],
+];
+function renderNav(){
+  const cur = location.hash.slice(1).split('/')[0] || 'overview';
+  const curLens = location.hash.startsWith('#lens/') ? decodeURIComponent(location.hash.slice(6)) : '';
+  $('#side').innerHTML = NAV.map(([k,l,n]) =>
+    `<a href="#${k}" class="${cur===k||(k==='personas'&&cur==='persona')?'on':''}">${l}${n!=null?`<span class="n">${n}</span>`:''}</a>`).join('')
+    + `<div class="kicker">Checks</div>` + LENS.map(l =>
+    `<a href="#lens/${encodeURIComponent(l.dir)}" class="lens ${curLens===l.dir?'on':''}"><span>${esc(l.label)}</span><span class="n">${l.score??'–'}<span class="bar"><i style="width:${(l.score||0)*10}%;background:${hue(l.score)}"></i></span></span></a>`).join('');
+}
+
+// ------------------------------------------------------------ views
+function vOverview(){
+  const caveat = D.meta.personaMode !== 'supplied'
+    ? `<p class="small mut" style="margin-top:10px">The users in this assessment were constructed, not researched. It shows what a capable first-time user can and cannot work out; it does not show what actual customers do.</p>` : '';
+  const counts = SEVS.map(s => `${sev(s)} ${D.counts[s]||0}`).join(' &nbsp; ');
+  return `
+  <div class="hero">
+    <div class="card" style="flex:1;margin:0"><div class="kicker">The verdict</div><div class="verdict">${esc(D.verdict)}</div>${caveat}</div>
+    <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(D.overall,120)}<div class="lab">Overall</div><div class="n">mean of ${LENS.length} checks</div></div>
+  </div>
+  <div class="card"><div class="kicker">How each area scores — click a check for its findings</div>
+    <div class="rings" style="margin:10px 0 0">${LENS.map(l=>`<div class="ring" data-go="lens/${encodeURIComponent(l.dir)}">${ring(l.score)}<div class="lab">${esc(l.label)}</div><div class="n">${l.count} finding${l.count===1?'':'s'}</div></div>`).join('')}</div>
+    <p class="small mut" style="margin:12px 0 0">${D.nFindings} findings — ${counts}${D.nProblems<D.nFindings?` · ${D.nProblems} distinct problems (the rest were raised by more than one check)`:''}</p>
+  </div>
+  <div class="grid g2">
+    <div class="card"><div class="kicker">Fix these first</div>${(D.top5||[]).map(r=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span style="font-weight:800;color:#c9ced6;width:18px">${r.n}</span>${sev(r.sev)}<span>${esc(r.what)}</span></div>`).join('')}<p style="margin:12px 0 0"><a href="#top5" class="btn sm">Open the Top 5 →</a></p></div>
+    <div class="card"><div class="kicker">What the site does well</div><ul style="padding-left:18px;margin:0">${(D.doesWell||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul></div>
+  </div>
+  <div class="card"><div class="kicker">Who was simulated — click to replay the session</div>
+    <div class="grid g3" style="margin-top:8px">${P.map(pcard).join('')}</div></div>
+  ${D.clusters && D.clusters.length ? `<div class="card"><div class="kicker">Raised by more than one check</div><table><thead><tr><th>Sev</th><th>Problem</th><th>Raised by</th></tr></thead><tbody>${D.clusters.map(c=>`<tr><td>${sev(c.sev)}</td><td><a href="#findings/${esc(c.ids[0])}">${esc(c.title)}</a></td><td class="small mut">${c.raised.map(esc).join(' · ')}</td></tr>`).join('')}</tbody></table></div>`:''}
+  <div class="grid g2">
+    <div class="card"><div class="kicker">What this is</div>${D.sections.whatThisIs}</div>
+    <div class="card"><div class="kicker">How it was produced</div>${D.sections.howProduced}</div>
+  </div>`;
+}
+function pcard(p){
+  const f = p.facts||{};
+  const line = f.kind==='journey' ? (f.firstValue ? `Reached first value in ${fmtSecs(f.ttfv)}` : 'Did not reach first value')
+    : f.kind==='visit' ? `Understood the site in ${f.comprehension??'?'}s · ${f.priceFound?'found a price':'no price found'}` : '';
+  return `<div class="pcard" data-go="persona/${encodeURIComponent(p.name)}">${img(p.shots[0],'shot',p.dir)}<div><h3>${personaLabel(p.name)}</h3>
+    <div class="facts">${esc(f.device||'')}${f.kind?` · ${f.kind}`:''}${f.minutes?` · ${f.minutes} min`:''}<br>${esc(line)}${f.leftEarly?' · <b style="color:var(--p1)">left early</b>':''}<br>${p.findings.length} findings · ${p.shots.length} screens</div></div></div>`;
+}
+function vTop5(){
+  const q = n => (D.quotes||[]).filter(x=>x.top5===n);
+  return `<h2>Top 5 — fix these first</h2><p class="verdict" style="font-size:17px;font-weight:600;margin-bottom:18px">${esc(D.verdict)}</p>
+  <div class="t5">${(D.top5||[]).map(r=>`<div class="row"><div class="num">${r.n}</div><div>${sev(r.sev)}</div><div class="what">${esc(r.what)}</div><div class="cost">${esc(r.cost)}</div><div class="eff">${esc(r.effort)}</div>
+   ${q(+r.n).map(x=>`<div class="q">${x.shots[0]?img(x.shots[0],'thumb',x.shots[0].split('/')[0]):''}<div><blockquote>“${esc(x.text)}”</blockquote><div class="small mut">${esc(x.who)} · ${esc(x.when)}</div></div></div>`).join('')}</div>`).join('')}</div>
+  <p class="small mut" style="margin-top:14px">Effort: copy = a wording change · design = a layout or flow change · server configuration = no UI change · build = new functionality.</p>`;
+}
+
+// findings explorer
+const FLT = { sev:new Set(), lens:new Set(), persona:new Set(), status:new Set(), q:'' };
+function passes(f){
+  if (FLT.sev.size && !FLT.sev.has(f.sev)) return false;
+  if (FLT.lens.size && !FLT.lens.has(f.lens)) return false;
+  if (FLT.persona.size && !f.personas.some(p=>FLT.persona.has(p))) return false;
+  if (FLT.status.size && !FLT.status.has(status(f.id))) return false;
+  if (FLT.q){ const q=FLT.q.toLowerCase(); const hay=[f.title,f.sowhat,f.locator,f.id,...(f.observed||[]),f.fix].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
+  return true;
+}
+function vFindings(fixedLens){
+  const list = F.filter(f => (!fixedLens || f.lens===fixedLens) && passes(f))
+    .sort((a,b)=> a.sev.localeCompare(b.sev) || a.lensLabel.localeCompare(b.lensLabel));
+  const chip = (grp,val,label,cls='') => `<button class="f ${cls} ${FLT[grp].has(val)?'on':''} ${val}" data-flt="${grp}" data-val="${esc(val)}">${label}</button>`;
+  const personas = [...new Set(F.flatMap(f=>f.personas))];
+  return `${fixedLens?'':'<h2>All findings</h2>'}
+  <div class="filters">
+    ${SEVS.map(s=>chip('sev',s,s+' '+F.filter(f=>f.sev===s&&(!fixedLens||f.lens===fixedLens)).length,'sevf')).join('')}
+    <span class="sep"></span>
+    ${fixedLens?'':LENS.map(l=>chip('lens',l.dir,esc(l.label))).join('')+'<span class="sep"></span>'}
+    ${personas.map(p=>chip('persona',p,esc(p))).join('')}
+    <span class="sep"></span>
+    ${STATUSES.map(s=>chip('status',s,s)).join('')}
+    <input placeholder="Search title, locator, id…" id="fq" value="${esc(FLT.q)}">
+    <span class="small mut">${list.length} of ${fixedLens?F.filter(f=>f.lens===fixedLens).length:F.length}</span>
+  </div>
+  <div class="flist">${list.map(f=>`<div class="frow ${location.hash.endsWith('/'+f.id)?'on':''}" data-fid="${f.id}"><div>${sev(f.sev)}</div>
+    <div><div class="t">${esc(f.title)}</div><div class="m">${esc(f.lensLabel)} · ${esc(f.locator||f.flow)}${f.personas.length?' · '+f.personas.map(esc).join(', '):''}${f.cluster!=null?' · also raised elsewhere':''}</div></div>
+    <div class="st st-${status(f.id)}">${status(f.id)}</div></div>`).join('') || '<div style="padding:20px" class="mut">Nothing matches these filters.</div>'}</div>`;
+}
+function vLens(dir){
+  const l = LENS.find(x=>x.dir===dir); if(!l) return '<p class="mut">No such check.</p>';
+  return `<div class="hero"><div class="card" style="flex:1;margin:0"><div class="kicker">${esc(l.label)} — ${esc(l.looksFor||'')}</div><div class="verdict">${esc(l.verdict)}</div><p class="small mut" style="margin:10px 0 0">${esc(l.why)}</p></div>
+  <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(l.score,120)}<div class="lab">${esc(l.label)}</div><div class="n">${SEVS.map(s=>`${s} ${l.sev[s]||0}`).join(' · ')}</div></div></div>
+  ${vFindings(dir)}`;
+}
+function vPersonas(){ return `<h2>Personas</h2><p class="mut">Each card is one recorded session. Open one to replay it line by line, see every screen, read the debrief.</p><div class="grid g2">${P.map(pcard).join('')}</div>`; }
+
+let replayTimer = null;
+function vPersona(name, tab='replay'){
+  const p = P.find(x=>x.name===name); if(!p) return '<p class="mut">No such persona.</p>';
+  const f = p.facts||{};
+  const facts = [f.device, f.kind, f.minutes?`${f.minutes} min`:'', f.kind==='journey'?(f.firstValue?`first value at ${fmtSecs(f.ttfv)}`:'no first value'):'', f.leftEarly?'left early':''].filter(Boolean);
+  const tabs = ['replay','screens','reactions','debrief','findings'];
+  let body='';
+  if (tab==='replay'){
+    const first = p.log[0]?.shot || p.shots[0] || '';
+    body = `<div class="replay"><div><div class="ctl"><button class="btn sm" id="rpPlay">▶ Play</button><input type="range" id="rpRange" min="0" max="${Math.max(0,p.log.length-1)}" value="0"><span class="small mut" id="rpPos">1 / ${p.log.length}</span></div>
+      <div class="log" id="rpLog">${p.log.map((l,i)=>`<div data-i="${i}" class="${i===0?'on':''}"><span class="t">${esc(l.t)}</span><span>${esc(l.text)}</span></div>`).join('')}</div></div>
+      <div class="stage"><img class="shot" id="rpShot" src="${src(first)}" data-shot="${esc(first)}" data-ctx="${esc(p.dir)}" alt=""><div class="small mut" id="rpCap" style="margin-top:6px;font-family:var(--mono)">${esc(first)}</div></div></div>`;
+  } else if (tab==='screens'){
+    body = `<div class="strip">${p.shots.map(s=>`<figure>${img(s,'shot',p.dir)}<figcaption>${esc(s.split('/').pop())}</figcaption></figure>`).join('')}</div>`;
+  } else if (tab==='reactions'){
+    body = `<table><thead><tr><th>When</th><th>Where</th><th>What they noticed</th><th>Felt</th><th>Screen</th></tr></thead><tbody>${p.reactions.map(r=>`<tr><td class="nowrap"><code>${esc(r.t)}</code></td><td class="small mut">${esc(r.where)}</td><td>${esc(r.text)}</td><td class="small">${esc(r.feeling)}</td><td>${r.shot?img(r.shot,'thumb',p.dir):''}</td></tr>`).join('')}</tbody></table>`;
+  } else if (tab==='debrief'){
+    body = `<div class="card">${p.debrief || '<p class="mut">No debrief was written.</p>'}</div>
+      ${f.note?`<div class="card"><div class="kicker">Capture note</div><p class="small">${esc(f.note)}</p></div>`:''}
+      <div class="card"><div class="kicker">Timeline (raw)</div><pre style="font:12px var(--mono);white-space:pre-wrap;margin:0">${esc(JSON.stringify(p.timeline,null,2))}</pre></div>`;
+  } else {
+    const fs = p.findings.map(id=>byId[id]).filter(Boolean).sort((a,b)=>a.sev.localeCompare(b.sev));
+    body = `<div class="flist">${fs.map(x=>`<div class="frow" data-fid="${x.id}"><div>${sev(x.sev)}</div><div><div class="t">${esc(x.title)}</div><div class="m">${esc(x.lensLabel)} · ${esc(x.locator||x.flow)}</div></div><div class="st st-${status(x.id)}">${status(x.id)}</div></div>`).join('')||'<div class="mut" style="padding:20px">No finding names this persona.</div>'}</div>`;
+  }
+  return `<p class="small"><a href="#personas">← All personas</a></p><h2>${personaLabel(p.name)}</h2><div>${facts.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>
+    <div class="ptabs">${tabs.map(t=>`<button data-ptab="${t}" class="${t===tab?'on':''}">${t==='findings'?`findings (${p.findings.length})`:t==='screens'?`screens (${p.shots.length})`:t}</button>`).join('')}</div>${body}`;
+}
+function vIcp(){ return `<h2>Ideal customer profiles</h2><p class="mut">Who this product should be built and sold for, on the evidence of what it is. Derived from the recorded sessions only; the case against each profile is reasoning, not evidence.</p><div class="card icp">${D.icp||'<p class="mut">The icp check did not run.</p>'}</div>`; }
+function vQuotes(){
+  return `<h2>In their own words</h2><p class="mut">Verbatim lines from the session logs and debriefs. The speakers are constructed personas driven by the evaluation, not customers.</p>
+  <div class="card"><table class="qt"><thead><tr><th>Who</th><th>When</th><th>What they said</th><th>Screen</th></tr></thead><tbody>${(D.quotes||[]).map(q=>`<tr><td class="who">${esc(q.who)}</td><td class="small mut nowrap">${esc(q.when)}</td><td class="q">“${esc(q.text)}”${q.top5?`<div class="small mut">→ Top 5, row ${q.top5}</div>`:''}</td><td>${q.shots.map(s=>img(s,'thumb',s.split('/')[0])).join('')}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function vLimits(){ return `<h2>Limits of this assessment</h2><div class="card">${D.sections.limits||'<ul>'+(D.limits||[]).map(b=>`<li>${esc(b)}</li>`).join('')+'</ul>'}</div>
+  <div class="card"><div class="kicker">Provenance</div><p class="small">${esc(D.meta.provenance)} · scoring: ${esc(Object.entries(D.meta.scoringModels||{}).map(([k,v])=>`${k} ${v}`).join(', '))} · understudy v${esc(D.meta.version)}</p></div>`; }
+
+// ------------------------------------------------------------ drawer
+function openFinding(id){
+  const f = byId[id]; if(!f) return;
+  const st = status(id), note = (triage[id]||{}).note || '';
+  const cluster = f.cluster!=null ? F.filter(x=>x.cluster===f.cluster && x.id!==id) : [];
+  $('#drawerBody').innerHTML = `
+    <div class="meta">${sev(f.sev)}<span class="tag">${esc(f.lensLabel)}</span><span class="tag"><code>${esc(f.id)}</code></span>${f.personas.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>
+    <h2>${esc(f.title)}</h2>
+    ${f.sowhat?`<p><b>So what:</b> ${esc(f.sowhat)}</p>`:''}
+    ${f.locator?`<p class="small mut">Where: ${esc(f.locator)}${f.flow?` · flow ${esc(f.flow)}`:''}${f.tags?` · ${esc(f.tags)}`:''}</p>`:''}
+    ${f.observed.length?`<h4>Observed</h4><ul>${f.observed.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>`:''}
+    ${f.quotes.length?`<h4>The persona said</h4>${f.quotes.map(q=>`<blockquote>“${esc(q)}”</blockquote>`).join('')}`:''}
+    ${f.shots.length?`<h4>Evidence — click to enlarge</h4><div>${f.shots.map(s=>img(s,'thumb','f-'+f.id)).join('')}</div><p class="small mut">${esc(f.evidence)}</p>`:(f.evidence?`<h4>Evidence</h4><p class="small">${esc(f.evidence)}</p>`:'')}
+    ${f.repro.length?`<h4>Reproduce</h4><ol style="padding-left:18px;margin:0">${f.repro.map(r=>`<li>${esc(r)}</li>`).join('')}</ol>`:''}
+    ${f.fix?`<h4>Fix</h4><p>${esc(f.fix)}</p>`:''}
+    ${Object.keys(f.extra||{}).length?Object.entries(f.extra).map(([k,v])=>`<h4>${esc(k)}</h4><p class="small">${esc(v)}</p>`).join(''):''}
+    ${cluster.length?`<h4>Also raised by</h4><ul>${cluster.map(x=>`<li><a href="#findings/${x.id}">${esc(x.lensLabel)} ${sev(x.sev)} ${esc(x.title)}</a></li>`).join('')}</ul>`:''}
+    <div class="triage"><h4 style="margin-top:0">Triage — saved in this browser</h4>
+      <div class="opts">${STATUSES.map(s=>`<button class="btn sm ${st===s?'primary':''}" data-st="${s}">${s}</button>`).join('')}</div>
+      <textarea id="tnote" placeholder="Note — owner, ticket, decision…">${esc(note)}</textarea>
+      <p class="small mut" style="margin:6px 0 0">Use Triage ▾ in the header to export everything you marked.</p></div>`;
+  $('#drawer').classList.add('on');
+  $('#drawer').dataset.id = id;
+  $('#drawerBody').querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{ triage[id]={...(triage[id]||{}),status:b.dataset.st}; saveTriage(); openFinding(id); render(); });
+  $('#tnote').oninput = e => { triage[id]={...(triage[id]||{}),note:e.target.value,status:status(id)}; saveTriage(); };
+}
+$('#drawerClose').onclick = () => { $('#drawer').classList.remove('on'); if(location.hash.startsWith('#findings/')) history.replaceState(null,'','#findings'); };
+
+// ------------------------------------------------------------ lightbox
+let LB = {list:[], i:0};
+function openLightbox(rel, ctx){
+  let list = [rel];
+  if (ctx && ctx.startsWith('persona-')) { const p=P.find(x=>x.dir===ctx); if(p) list=p.shots; }
+  else if (ctx && ctx.startsWith('f-')) { const f=byId[ctx.slice(2)]; if(f) list=f.shots; }
+  LB = {list, i:Math.max(0,list.indexOf(rel))};
+  showLb();
+}
+function showLb(){ const rel=LB.list[LB.i]; $('#lbImg').src=src(rel); $('#lbCap').textContent=`${rel}  (${LB.i+1}/${LB.list.length})`; $('#lb').classList.add('on'); }
+$('#lbClose').onclick=()=>$('#lb').classList.remove('on');
+$('#lbPrev').onclick=()=>{LB.i=(LB.i-1+LB.list.length)%LB.list.length; showLb();};
+$('#lbNext').onclick=()=>{LB.i=(LB.i+1)%LB.list.length; showLb();};
+$('#lb').onclick=e=>{ if(e.target.id==='lb') $('#lb').classList.remove('on'); };
+
+// ------------------------------------------------------------ present mode
+let SL = [], si = 0;
+function buildSlides(){
+  const s = [];
+  s.push({t:'Cover', h:`${D.meta.logo?`<img class="cover-logo" src="${D.meta.logo}" alt="">`:''}<div class="kicker">${esc(D.meta.kind)}</div><h1>${esc(D.meta.product)}</h1><p class="mut" style="font-size:22px">${esc(D.meta.date)} · ${P.length} simulated ${P.length===1?'user':'users'} · ${LENS.length} checks · ${D.nFindings} findings</p>
+    ${D.meta.personaMode!=='supplied'?`<div class="caveat"><b>The users were constructed, not researched.</b> This shows what a capable first-time user can and cannot work out from the product; it does not show what actual customers do.</div>`:''}`});
+  s.push({t:'What this is', h:`<h2>What this is</h2>${D.sections.whatThisIs}<h2 style="margin-top:.8em">How it was produced</h2>${D.sections.howProduced}`});
+  s.push({t:'The verdict', h:`<div class="kicker">The verdict</div><p class="verdict">${esc(D.verdict)}</p>`});
+  s.push({t:'Scores', h:`<h2>How each area scores${D.overall!=null?` — overall <span class="score" style="color:${hue(D.overall)}">${D.overall}/10</span>`:''}</h2><div class="rings">${LENS.map(l=>`<div class="ring" style="cursor:default">${ring(l.score)}<div class="lab">${esc(l.label)}</div><div class="n">${esc(l.looksFor||'')}</div></div>`).join('')}</div>`});
+  (D.top5||[]).forEach(r=>{
+    const q=(D.quotes||[]).find(x=>x.top5===+r.n);
+    s.push({t:`Fix #${r.n}`, h:`<div class="kicker">Fix these first — ${r.n} of ${D.top5.length}</div><div class="two"><div>${sev(r.sev)}<h2 style="margin-top:.4em">${esc(r.what)}</h2><p><b>What it costs:</b> ${esc(r.cost)}</p><p class="mut">Effort: ${esc(r.effort)}</p>${q?`<blockquote>“${esc(q.text)}”<div class="small mut" style="font-weight:400">${esc(q.who)} · ${esc(q.when)}</div></blockquote>`:''}</div><div>${q&&q.shots[0]?img(q.shots[0],'shot'):''}</div></div>`});
+  });
+  P.forEach(p=>{
+    const f=p.facts||{}; const outcome = f.kind==='journey'?(f.firstValue?`Reached what they came for in ${fmtSecs(f.ttfv)}`:'Never reached what they came for'):f.verdict||'';
+    const quote = (D.quotes||[]).find(q=>q.who===p.name) || null;
+    const hero = (quote&&quote.shots[0]) || p.shots[Math.floor(p.shots.length/2)] || p.shots[0];
+    s.push({t:p.name, h:`<div class="kicker">Persona ${P.indexOf(p)+1} of ${P.length}</div><div class="two"><div><h2>${personaLabel(p.name)}</h2><div class="persona-facts">${[f.device,f.kind,f.minutes?`${f.minutes} min`:'',`${p.shots.length} screens`,`${p.findings.length} findings`].filter(Boolean).map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div><p><b>${esc(outcome)}</b>${f.leftEarly?' — and left early.':''}</p>${quote?`<blockquote>“${esc(quote.text)}”<div class="small mut" style="font-weight:400">${esc(quote.when)}</div></blockquote>`:''}${f.what?`<p class="mut">${esc(f.what)}</p>`:''}</div><div>${img(hero,'shot',p.dir)}</div></div>`});
+  });
+  if (D.icp) s.push({t:'Customer profiles', h:`<h2>Who this should be built and sold for</h2><div class="icp">${D.icp}</div>`});
+  s.push({t:'What works', h:`<h2>What the site does well</h2><ul>${(D.doesWell||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`});
+  s.push({t:'Limits', h:`<h2>Limits of this assessment</h2><ul>${(D.limits||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul><p class="small mut">${esc(D.meta.provenance)} · understudy v${esc(D.meta.version)}</p>`});
+  return s;
+}
+function showSlide(){ const s=SL[si]; $('#slide').innerHTML=s.h; $('#presPos').textContent=`${si+1} / ${SL.length}`; $('#presTitle').textContent=s.t; $('#slide').scrollTop=0; }
+function present(on){ if(on){ SL=buildSlides(); si=0; $('#pres').classList.add('on'); showSlide(); if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); } else { $('#pres').classList.remove('on'); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); } }
+$('#btnPresent').onclick=()=>present(true);
+$('#slide').onclick=e=>{ if(e.target.closest('[data-shot]')) return; const x=e.clientX/innerWidth; if(x<.25&&si>0){si--;showSlide();} else if(x>=.25&&si<SL.length-1){si++;showSlide();} };
+
+// ------------------------------------------------------------ triage export
+function exportTriage(kind){
+  const rows = F.map(f=>({id:f.id, severity:f.sev, check:f.lensLabel, title:f.title, personas:f.personas.join('; '), locator:f.locator, status:status(f.id), note:(triage[f.id]||{}).note||''}));
+  const marked = rows.filter(r=>r.status!=='open'||r.note);
+  let text, name, type='text/plain';
+  if (kind==='json'){ text=JSON.stringify({run:D.meta.runId, product:D.meta.product, exported:new Date().toISOString(), triage}, null, 2); name='triage.json'; type='application/json'; }
+  else if (kind==='csv'){ const q=v=>`"${String(v??'').replace(/"/g,'""')}"`; text=[Object.keys(rows[0]).join(',')].concat(rows.map(r=>Object.values(r).map(q).join(','))).join('\n'); name='findings-triage.csv'; type='text/csv'; }
+  else { text=`# ${D.meta.product} — triage — ${new Date().toISOString().slice(0,10)}\n\n`+STATUSES.filter(s=>s!=='open').map(s=>{const rs=marked.filter(r=>r.status===s); return rs.length?`## ${s} (${rs.length})\n\n`+rs.map(r=>`- **${r.severity}** ${r.title} — ${r.check} · \`${r.id}\`${r.note?`\n  - ${r.note}`:''}`).join('\n')+'\n\n':'';}).join('')+`## open (${rows.filter(r=>r.status==='open').length})\n`; name='triage.md'; type='text/markdown'; }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=`${(D.meta.product||'run').toLowerCase().replace(/[^a-z0-9]+/g,'-')}-${name}`; a.click(); toast(`Exported ${name}`);
+}
+$('#btnTriage').onclick=e=>{ e.stopPropagation(); $('#triageMenu').classList.toggle('on'); };
+document.addEventListener('click',()=>$('#triageMenu').classList.remove('on'));
+$('#triageMenu .dd').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const k=b.dataset.x; if(k==='clear'){ if(confirm('Clear every status and note saved for this report on this device?')){ triage={}; saveTriage(); render(); toast('Triage cleared'); } } else exportTriage(k); };
+$('#triageFile').onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ try{ const j=JSON.parse(t); const t2=j.triage||j; Object.assign(triage,t2); saveTriage(); render(); toast(`Imported ${Object.keys(t2).length} entries`);}catch(err){ toast('Not a triage file'); } }); e.target.value=''; };
+$('#btnPrint').onclick=()=>window.print();
+
+// ------------------------------------------------------------ router
+function render(){
+  const h = location.hash.slice(1) || 'overview';
+  const [view, ...rest] = h.split('/');
+  const arg = decodeURIComponent(rest.join('/'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  clearInterval(replayTimer);
+  let target = 'overview', htmlOut = '';
+  switch(view){
+    case 'top5': target='top5'; htmlOut=vTop5(); break;
+    case 'findings': target='findings'; htmlOut=vFindings(); break;
+    case 'lens': target='lens'; htmlOut=vLens(arg); break;
+    case 'personas': target='personas'; htmlOut=vPersonas(); break;
+    case 'persona': { target='persona'; const [name,tab]=arg.split('/'); htmlOut=vPersona(name,tab||'replay'); break; }
+    case 'icp': target='icp'; htmlOut=vIcp(); break;
+    case 'quotes': target='quotes'; htmlOut=vQuotes(); break;
+    case 'limits': target='limits'; htmlOut=vLimits(); break;
+    default: target='overview'; htmlOut=vOverview();
+  }
+  const el = $('#v-'+target); el.innerHTML = htmlOut; el.classList.add('on');
+  renderNav();
+  wire(el);
+  // A view change closes the drawer; a deep link to a finding reopens it.
+  $('#drawer').classList.remove('on');
+  if (view==='findings' && arg && byId[arg]) openFinding(arg);
+  if (view!=='persona') window.scrollTo(0,0);
+}
+function wire(el){
+  el.querySelectorAll('[data-go]').forEach(x=>x.onclick=e=>{ if(e.target.closest('[data-shot]')) return; location.hash='#'+x.dataset.go; });
+  el.querySelectorAll('.frow').forEach(x=>x.onclick=()=>{ const id=x.dataset.fid; const base=location.hash.split('/')[0]; if(base==='#findings'||base==='#'+'findings') history.replaceState(null,'','#findings/'+id); el.querySelectorAll('.frow').forEach(r=>r.classList.toggle('on',r===x)); openFinding(id); });
+  el.querySelectorAll('[data-flt]').forEach(b=>b.onclick=()=>{ const s=FLT[b.dataset.flt]; s.has(b.dataset.val)?s.delete(b.dataset.val):s.add(b.dataset.val); render(); });
+  const q=el.querySelector('#fq'); if(q){ q.oninput=e=>{ FLT.q=e.target.value; const pos=q.selectionStart; render(); const q2=$('#fq'); if(q2){q2.focus(); q2.setSelectionRange(pos,pos);} }; }
+  el.querySelectorAll('[data-ptab]').forEach(b=>b.onclick=()=>{ const name=decodeURIComponent(location.hash.split('/')[1]); location.hash=`#persona/${encodeURIComponent(name)}/${b.dataset.ptab}`; });
+  // replay
+  const log=el.querySelector('#rpLog');
+  if(log){
+    const name=decodeURIComponent(location.hash.split('/')[1]); const p=P.find(x=>x.name===name);
+    const go=i=>{ i=Math.max(0,Math.min(p.log.length-1,i)); log.querySelectorAll('div').forEach(d=>d.classList.toggle('on',+d.dataset.i===i)); const l=p.log[i]; if(l&&l.shot){ $('#rpShot').src=src(l.shot); $('#rpShot').dataset.shot=l.shot; $('#rpCap').textContent=l.shot; } $('#rpRange').value=i; $('#rpPos').textContent=`${i+1} / ${p.log.length}`; const d=log.querySelector('.on'); if(d) d.scrollIntoView({block:'nearest'}); wire._i=i; };
+    wire._i=0;
+    log.querySelectorAll('div').forEach(d=>d.onclick=()=>go(+d.dataset.i));
+    $('#rpRange').oninput=e=>go(+e.target.value);
+    $('#rpPlay').onclick=()=>{ if(replayTimer){ clearInterval(replayTimer); replayTimer=null; $('#rpPlay').textContent='▶ Play'; return; } $('#rpPlay').textContent='⏸ Pause'; replayTimer=setInterval(()=>{ if(wire._i>=p.log.length-1){ clearInterval(replayTimer); replayTimer=null; $('#rpPlay').textContent='▶ Play'; return; } go(wire._i+1); },2600); };
+    wire.replayGo=go;
+  }
+}
+document.addEventListener('click',e=>{ const s=e.target.closest('[data-shot]'); if(s&&s.dataset.shot){ e.preventDefault(); e.stopPropagation(); openLightbox(s.dataset.shot, s.dataset.ctx); } });
+document.addEventListener('keydown',e=>{
+  if($('#lb').classList.contains('on')){ if(e.key==='Escape') $('#lb').classList.remove('on'); if(e.key==='ArrowLeft') $('#lbPrev').click(); if(e.key==='ArrowRight') $('#lbNext').click(); return; }
+  if($('#pres').classList.contains('on')){ if(e.key==='Escape') present(false); if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ if(si<SL.length-1){si++;showSlide();} e.preventDefault(); } if(e.key==='ArrowLeft'||e.key==='PageUp'){ if(si>0){si--;showSlide();} e.preventDefault(); } if(e.key==='Home'){si=0;showSlide();} if(e.key==='End'){si=SL.length-1;showSlide();} return; }
+  if($('#drawer').classList.contains('on') && e.key==='Escape'){ $('#drawerClose').click(); return; }
+  if(wire.replayGo && !e.target.matches('input,textarea')){ if(e.key==='ArrowDown'||e.key==='j'){ wire.replayGo(wire._i+1); e.preventDefault(); } if(e.key==='ArrowUp'||e.key==='k'){ wire.replayGo(wire._i-1); e.preventDefault(); } }
+});
+window.addEventListener('hashchange', ()=>{ wire.replayGo=null; render(); });
+render();
+})();
+</script>
+</body>
+</html>

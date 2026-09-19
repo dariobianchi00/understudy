@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.7.0 — the interactive report.** `--format html` is now a presentation instrument, not the PDF in a browser: a dashboard over the run (score rings, Top 5, persona cards), a findings explorer with filters and a detail drawer, a session replay per persona with the screen that was showing at each log line, the ICP profiles, a full-screen Present mode, a lightbox, and triage with export. One self-contained file, branded with the site's own icon and accent. The template is `scripts/report_template.html`; `scripts/interactive_report.py` packs a run into it. The printed PDF is unchanged.
+>
 > **v0.6.4 — the report reads better.** The cover carries the site's own icon (fetched once, cached as `site-logo.<ext>` in the run folder, silently absent offline). The *Where* column of *In their own words* is usable: each screenshot is a thumbnail that opens the file, each log or debrief citation is a short link to it, and *Top 5 row N* jumps to the table. The *Why that score* column is sentence-cased with a full stop, whatever the lens wrote.
 >
 > **v0.6.3 — quotes with prices.** `check_report.py` now decodes `findings-raw.json` before matching *In their own words* rows; it read the file as text, so `json.dump`'s `\u20ac` escape meant any quote containing a currency sign failed the gate. Found on the first *both* run (a hotel site, three personas, six captures).
@@ -352,11 +354,18 @@ The lens agents also show under the prompt in Claude Code itself, named for what
     └── findings-final.md      severity-rated, every finding evidence-cited
 ```
 
-**Markdown in the run folder is canonical.** At the end of a run you're offered a copy as **HTML or PDF** — exec summary alone, one lens, or everything. The HTML is a single self-contained file with the screenshots embedded beside the findings that cite them, so it survives being forwarded; a report whose evidence dies on send is worse than one with no evidence, because it still looks complete. PDF goes through headless Chrome. Neither replaces the markdown.
+**Markdown in the run folder is canonical.** At the end of a run you're offered a rendered copy — exec summary alone, one lens, or everything — in two forms that do different jobs:
+
+- **PDF** — the printed document. Cover with the site's own icon, the summary, every lens report. Goes through headless Chrome; what you forward.
+- **Interactive HTML** — one self-contained file for *presenting* the run, no network needed. Dashboard with score rings, Top 5 and persona cards; a findings explorer with severity / check / persona / status filters and a detail drawer; per-persona session replay (the log line by line, with the screen that was showing) and filmstrip; the ICP profiles; a full-screen **Present** mode driven by the arrow keys; a screenshot lightbox; and browser-side **triage** — mark each finding accepted / rejected / fixed with a note, export the result as JSON, CSV or markdown, import a colleague's. Screenshots are embedded downscaled (Pillow, if installed) so a run of 70 screens is ~7 MB; the header takes the site's icon and accent colour.
+
+Both read the same markdown the gate checked; neither scores or rewrites anything. A report whose evidence dies on send is worse than one with no evidence, so both embed their screenshots.
 
 ```
-understudy/scripts/render_report.py <run_folder> --format html|pdf --scope summary|<lens>|all
+understudy/scripts/render_report.py <run_folder> --format html|pdf|print --scope summary|<lens>|all
 ```
+
+(`print` writes the document layout as HTML without Chromium, for a reader who will Print → Save as PDF themselves.)
 
 **Each lens report stands alone.** They are not deduplicated against each other — a `bugs` report and a `ux` report are different documents for different readers, and each has to make sense on its own. The run-level summary is the one place overlap is reconciled, and it reports it as *corroboration*: **when three lenses that never read each other reach the same finding, that agreement is real signal, not padding.**
 

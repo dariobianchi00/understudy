@@ -1,6 +1,6 @@
 {
   "name": "understudy",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Evaluate any web product or website as a stand-in user. Twelve lenses — ux, bugs, onboarding, content, icp, clarity, conversion, trust, technical, seo, aeo, compare — score one browser session each. Every finding cites a screenshot; icp derives three ideal customer profiles from the evidence.",
   "author": {
     "name": "Dario Bianchi",

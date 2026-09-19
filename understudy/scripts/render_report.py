@@ -1172,7 +1172,9 @@ def find_chromium():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("run_folder")
-    ap.add_argument("--format", default="html", choices=["html", "pdf"])
+    ap.add_argument("--format", default="html", choices=["html", "pdf", "print"],
+                    help="html = the interactive report · pdf = the printed document · "
+                         "print = the document layout as HTML, without Chromium")
     ap.add_argument("--scope", default="all",
                     help="summary | all | <lens name>")
     ap.add_argument("--out", default=None)
@@ -1494,28 +1496,43 @@ def main():
 
     stem = a.out or os.path.join(run, f"report-{a.scope}")
     html_path = stem if stem.endswith(".html") else stem + ".html"
-    with open(html_path, "w") as f:
-        f.write(page)
 
     if a.format == "html":
+        # The HTML deliverable is the interactive report — a dashboard over the
+        # same evidence, for presenting the run. The print layout built above
+        # is what the PDF is made from, and it is not written out here.
+        import interactive_report
+        page = interactive_report.build(run, meta, entries, images, used, a.scope,
+                                        logo, provenance)
+        with open(html_path, "w") as f:
+            f.write(page)
         print(html_path)
         print(f"canonical markdown: {dense}", file=sys.stderr)
         return 0
 
+    # PDF: print the document layout through headless Chromium. The print HTML
+    # is a by-product and lives beside the PDF as report-<scope>-print.html
+    # so a reader without Chromium can still Print → Save as PDF themselves.
+    print_path = re.sub(r"\.html$", "-print.html", html_path)
+    with open(print_path, "w") as f:
+        f.write(page)
+    if a.format == "print":
+        print(print_path)
+        return 0
     chrome = find_chromium()
     pdf_path = re.sub(r"\.html$", ".pdf", html_path)
     if not chrome:
-        print(html_path)
+        print(print_path)
         print("PDF skipped: no Chromium or Chrome found. The HTML above is "
               "print-ready — open it and use Print → Save as PDF.", file=sys.stderr)
         return 0
     try:
         subprocess.run(
             [chrome, "--headless", "--disable-gpu", "--no-pdf-header-footer",
-             f"--print-to-pdf={pdf_path}", f"file://{os.path.abspath(html_path)}"],
+             f"--print-to-pdf={pdf_path}", f"file://{os.path.abspath(print_path)}"],
             check=True, capture_output=True, timeout=180)
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
-        print(html_path)
+        print(print_path)
         print(f"PDF generation failed ({type(e).__name__}). The HTML above is "
               f"print-ready — open it and use Print → Save as PDF.", file=sys.stderr)
         return 0

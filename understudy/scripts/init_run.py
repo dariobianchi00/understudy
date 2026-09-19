@@ -172,7 +172,7 @@ def _gitignored(repo, path):
         return False
 
 
-DELIVERABLE_FORMATS = ("pdf", "html", "md")
+DELIVERABLE_FORMATS = ("pdf", "html", "both", "md")
 DELIVERABLE_SCOPES = ("summary", "all")   # or a lens name
 
 
