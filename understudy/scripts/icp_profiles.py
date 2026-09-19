@@ -42,6 +42,26 @@ AVATAR_QUERY = {
 }
 AVATAR_CREDIT = {"open-peeps": "Faces: Open Peeps by Pablo Stanley (CC BY 4.0), via DiceBear."}
 
+# Portraits: a generated picture of the fictional person the `Meet:` line
+# describes — age, work, situation — so the face matches the profile. Made
+# once per profile at render time through a free text-to-image endpoint,
+# cropped, cached as JPEG in the run folder, embedded in both renders. Set
+# UNDERSTUDY_PORTRAITS=off to skip straight to the illustrated fallback.
+PORTRAITS = os.environ.get("UNDERSTUDY_PORTRAITS", "on").lower() not in ("off", "0", "no")
+# Provider, in order of how well the picture matches the person described:
+#   openai   — gpt-image-1, needs OPENAI_API_KEY; follows age, work, setting
+#   gemini   — Gemini image generation, needs GEMINI_API_KEY (or GOOGLE_API_KEY)
+#   free     — pollinations.ai, no key; rate-limited, and it draws everyone
+#              young — kept only as the no-key path, and the note says "rough"
+# UNDERSTUDY_PORTRAIT_PROVIDER picks one explicitly; otherwise the first with
+# a key wins, then free.
+PORTRAIT_PROVIDER = os.environ.get("UNDERSTUDY_PORTRAIT_PROVIDER", "").lower()
+PORTRAIT_STYLE = ("A warm, flat editorial illustration portrait of one person, head and "
+                  "shoulders, centred, looking at the viewer with a gentle smile, muted "
+                  "palette, soft shading, plain soft light background, no text, no logo")
+PORTRAIT_CREDIT = ("Portraits are AI-generated pictures of the fictional person each profile "
+                   "describes; no real person is shown.")
+
 PROFILE_H3 = re.compile(r"^###\s+(\d+)\.\s+(.*?)\s+[—–-]\s+(PRIMARY|EXPANSION|NEXT-BEST|SECOND PRIMARY)"
                         r"\s*·\s*fit\s*([\d.?]+)\s*·\s*propensity\s*([\d.?]+)\s*$", re.I | re.M)
 TRAP_H3 = re.compile(r"^###\s+The trap\s+[—–-]\s+(.*?)\s*$", re.M)
@@ -70,16 +90,69 @@ def placeholder_name(seed):
     return f"{FIRST[n % len(FIRST)]} {LAST[(n // 7) % len(LAST)]}"
 
 
-def fetch_avatar(name, seed, run):
+# Traits the illustration takes from the Meet line, so the face fits the
+# person: a pronoun gives the gender cue, the age the hair colour, the work a
+# pair of glasses or a blazer colour. Everything else is seeded so the same
+# profile draws the same face every render.
+HAIR_F = ["long", "longBangs", "longCurly", "mediumBangs", "mediumStraight", "bun", "bun2",
+          "medium1", "medium2", "medium3", "bangs", "twists", "cornrows", "buns"]
+HAIR_M = ["short1", "short2", "short3", "short4", "short5", "pomp", "flatTop", "shaved2",
+          "afro", "dreads1", "twists2", "cornrows2"]
+HAIR_N = HAIR_F + HAIR_M
+GRAY = {"f": ["grayBun", "grayMedium"], "m": ["grayShort", "grayMedium"], "n": ["grayShort", "grayMedium", "grayBun"]}
+WORK_GLASSES = ("manager", "director", "engineer", "analyst", "accountant", "lawyer", "consultant",
+                "founder", "head of", "lead", "officer", "professor", "teacher", "doctor", "physio")
+CLOTH_FORMAL = ["8fa7df", "9ddadb", "e78276"]          # muted: blazer-ish
+CLOTH_CASUAL = ["ffcf77", "78e185", "e279c7", "fdea6b"]
+
+
+def traits(meet, who=""):
+    text = f"{meet} {who}".lower()
+    g = "n"
+    if re.search(r"\b(she|her|hers|herself|woman|mother|wife|daughter)\b", text):
+        g = "f"
+    elif re.search(r"\b(he|his|him|himself|man|father|husband|son)\b", text):
+        g = "m"
+    age = re.search(r"\b(\d{2})\b", meet or "")
+    age = int(age.group(1)) if age else 38
+    formal = any(w in text for w in ("manager", "director", "officer", "executive", "consultant",
+                                     "lawyer", "finance", "procurement", "corporate", "head of"))
+    return {"gender": g, "age": age, "formal": formal,
+            "glasses": age >= 45 or (any(w in text for w in WORK_GLASSES) and _h(text) % 3 == 0)}
+
+
+def avatar_params(meet, who, seed):
+    t = traits(meet, who)
+    n = _h(seed)
+    pool = GRAY[t["gender"]] if t["age"] >= 58 else {"f": HAIR_F, "m": HAIR_M, "n": HAIR_N}[t["gender"]]
+    head = pool[n % len(pool)]
+    q = {
+        "head": head,
+        "face": "smile,smileBig,cute,calm,cheeky",
+        "facialHairProbability": "45" if t["gender"] == "m" and t["age"] >= 24 else "0",
+        "accessoriesProbability": "90" if t["glasses"] else "0",
+        "accessories": "glasses,glasses2,glasses3,glasses4,glasses5",
+        "maskProbability": "0",
+        "clothingColor": ",".join(CLOTH_FORMAL if t["formal"] else CLOTH_CASUAL),
+        "backgroundColor": "dbe4ff,d9f2e6,fde8d8,ece4ff,fff4cc",
+        "radius": "22", "size": "240",
+    }
+    if t["age"] >= 50 and t["age"] < 58:
+        q["headContrastColor"] = "e8e1e1,ecdcbf,d6b370"   # greying
+    return q
+
+
+def fetch_avatar(name, seed, run, meet="", who=""):
     """An illustrated face as a data URI, cached at <run>/icp/avatars/. "" when
     the network is not there and nothing is cached — the caller falls back."""
     if not run:
         return ""
     d = os.path.join(run, "icp", "avatars")
-    key = hashlib.md5(f"{AVATAR_STYLE}|{seed}".encode()).hexdigest()[:12]
+    params = avatar_params(meet, who, seed) if AVATAR_STYLE == "open-peeps" else {}
+    key = hashlib.md5(f"{AVATAR_STYLE}|{seed}|{sorted(params.items())}".encode()).hexdigest()[:12]
     path = os.path.join(d, f"{key}.svg")
     if not os.path.exists(path):
-        q = AVATAR_QUERY.get(AVATAR_STYLE, "radius=22&size=240")
+        q = urllib.parse.urlencode(params, safe=",") if params else AVATAR_QUERY.get(AVATAR_STYLE, "radius=22&size=240")
         url = (f"https://api.dicebear.com/9.x/{AVATAR_STYLE}/svg?seed="
                f"{urllib.parse.quote(seed)}&{q}")
         try:
@@ -101,8 +174,152 @@ def fetch_avatar(name, seed, run):
     return "data:image/svg+xml;base64," + base64.b64encode(raw).decode()
 
 
-def avatar_html(name, seed, run):
-    uri = fetch_avatar(name, seed, run)
+def portrait_prompt(meet, who, title):
+    """One person, described as the Meet line has them — age, work, life —
+    with the Who line for setting. The age is repeated on purpose; models
+    drift young."""
+    subject = re.sub(r"\s*\(.*?\)", "", meet or who or title).strip().rstrip(".")
+    age = re.search(r"\b(\d{2})\b", subject)
+    age_line = f" They are {age.group(1)} years old and look it." if age else ""
+    return (f"{PORTRAIT_STYLE}. The person: {subject}.{age_line}"
+            f"{(' Context: ' + who) if meet and who else ''} Exactly one person in the picture.")
+
+
+def _provider():
+    if PORTRAIT_PROVIDER in ("openai", "gemini", "hf", "free", "none"):
+        return PORTRAIT_PROVIDER
+    if os.environ.get("OPENAI_API_KEY"):
+        return "openai"
+    if os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"):
+        return "gemini"
+    if os.environ.get("HF_TOKEN"):
+        return "hf"
+    # No key: the illustration, drawn to the profile's traits. The free
+    # text-to-image service is opt-in (UNDERSTUDY_PORTRAIT_PROVIDER=free) —
+    # it rate-limits and ignores the age it is given.
+    return "none"
+
+
+def _is_image(raw):
+    return raw[:3] == b"\xff\xd8\xff" or raw[:8] == b"\x89PNG\r\n\x1a\n" or raw[:4] == b"RIFF"
+
+
+def _gen_openai(prompt, seed):
+    import json as _json
+    req = urllib.request.Request(
+        "https://api.openai.com/v1/images/generations",
+        data=_json.dumps({"model": "gpt-image-1", "prompt": prompt, "size": "1024x1024",
+                          "quality": "medium", "n": 1}).encode(),
+        headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
+                 "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=180) as r:
+        body = _json.loads(r.read())
+    return base64.b64decode(body["data"][0]["b64_json"])
+
+
+def _gen_gemini(prompt, seed):
+    import json as _json
+    key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    model = os.environ.get("UNDERSTUDY_GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
+    req = urllib.request.Request(
+        f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+        data=_json.dumps({"contents": [{"parts": [{"text": prompt}]}],
+                          "generationConfig": {"responseModalities": ["IMAGE"]}}).encode(),
+        headers={"x-goog-api-key": key, "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=180) as r:
+        body = _json.loads(r.read())
+    for part in body["candidates"][0]["content"]["parts"]:
+        if "inlineData" in part:
+            return base64.b64decode(part["inlineData"]["data"])
+    raise ValueError("no image in response")
+
+
+def _gen_free(prompt, seed):
+    url = ("https://image.pollinations.ai/prompt/" + urllib.parse.quote(prompt)
+           + f"?width=512&height=640&nologo=true&seed={seed % 100000}")
+    req = urllib.request.Request(url, headers={"User-Agent": "understudy report renderer"})
+    with urllib.request.urlopen(req, timeout=150) as r:
+        return r.read(6_000_000)
+
+
+def _gen_hf(prompt, seed):
+    """Hugging Face Inference API, free tier with a token (HF_TOKEN):
+    FLUX.1-schnell follows a described person well."""
+    import json as _json
+    model = os.environ.get("UNDERSTUDY_HF_IMAGE_MODEL", "black-forest-labs/FLUX.1-schnell")
+    req = urllib.request.Request(
+        f"https://router.huggingface.co/hf-inference/models/{model}",
+        data=_json.dumps({"inputs": prompt, "parameters": {"width": 768, "height": 768,
+                                                            "seed": seed % 2_000_000_000}}).encode(),
+        headers={"Authorization": f"Bearer {os.environ['HF_TOKEN']}",
+                 "Content-Type": "application/json", "Accept": "image/png"})
+    with urllib.request.urlopen(req, timeout=180) as r:
+        return r.read(8_000_000)
+
+
+GENERATORS = {"openai": _gen_openai, "gemini": _gen_gemini, "hf": _gen_hf, "free": _gen_free}
+
+
+def fetch_portrait(meet, who, title, run):
+    """A generated portrait as a data URI, cached at <run>/icp/avatars/<key>.jpg.
+    "" when portraits are off, no provider works, or the answer is not an
+    image (the free service rate-limits; one retry)."""
+    if not run or not PORTRAITS:
+        return ""
+    provider = _provider()
+    if provider == "none":
+        return ""
+    d = os.path.join(run, "icp", "avatars")
+    seed = f"portrait|{provider}|{title}|{meet}"
+    key = hashlib.md5(seed.encode()).hexdigest()[:12]
+    path = os.path.join(d, f"{key}.jpg")
+    if not os.path.exists(path):
+        prompt = portrait_prompt(meet, who, title)
+        raw = b""
+        for attempt in range(2):
+            try:
+                raw = GENERATORS[provider](prompt, _h(seed))
+                if _is_image(raw):
+                    break
+                raw = b""
+            except Exception as e:
+                print(f"  · portrait ({provider}) failed: {type(e).__name__}: {e}"[:200], file=__import__("sys").stderr)
+                raw = b""
+            import time
+            time.sleep(6)
+        if not raw:
+            return ""
+        try:
+            from PIL import Image
+            import io
+            im = Image.open(io.BytesIO(raw)).convert("RGB")
+            w, h = im.size
+            if provider == "free" and h > w:
+                im = im.crop((0, 0, w, w))              # the free service marks the bottom edge
+            if im.width > 640:
+                im = im.resize((640, round(im.height * 640 / im.width)))
+            os.makedirs(d, exist_ok=True)
+            im.save(path, "JPEG", quality=86, optimize=True)
+        except Exception:
+            # No Pillow: keep the image whole rather than lose it.
+            os.makedirs(d, exist_ok=True)
+            with open(path, "wb") as f:
+                f.write(raw)
+        print(f"  · portrait generated ({provider}) for “{title}”", file=__import__("sys").stderr)
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+    except OSError:
+        return ""
+    mime = "image/png" if raw[:4] == b"\x89PNG" else "image/jpeg"
+    return f"data:{mime};base64," + base64.b64encode(raw).decode()
+
+
+def avatar_html(name, seed, run, meet="", who=""):
+    uri = fetch_portrait(meet, who, seed, run)
+    if uri:
+        return f'<img class="icp-avatar icp-portrait" src="{uri}" alt="{html.escape(name)}" width="110" height="110">'
+    uri = fetch_avatar(name, seed, run, meet, who)
     if uri:
         return f'<img class="icp-avatar" src="{uri}" alt="{html.escape(name)}" width="110" height="110">'
     return avatar_svg(name, seed, 110)
@@ -194,7 +411,7 @@ def parse(body, run=None):
             "against": [_strip(x) for x in _get(f, "Case against").get("items", [])],
             "notInferable": _strip(_get(f, "Not inferable").get("text", "")),
             "rerun": yaml,
-            "avatar": avatar_html(name, title, run),
+            "avatar": avatar_html(name, title, run, meet, _strip(_get(f, "Who").get("text", ""))),
         })
     trap_txt = ""
     trap_title = ""
@@ -271,7 +488,8 @@ def cards_html(body, open_details=False, run=None):
                    + "".join(f"<th>{html.escape(h)}</th>" for h in c["head"]) + "</tr></thead><tbody>"
                    + "".join("<tr>" + "".join(f"<td>{html.escape(x)}</td>" for x in r) + "</tr>" for r in c["rows"])
                    + "</tbody></table>")
-    credit = AVATAR_CREDIT.get(AVATAR_STYLE, "") if any("<img" in p["avatar"] for p in d["profiles"]) else ""
+    credit = (PORTRAIT_CREDIT if any("icp-portrait" in p["avatar"] for p in d["profiles"])
+              else AVATAR_CREDIT.get(AVATAR_STYLE, "") if any("<img" in p["avatar"] for p in d["profiles"]) else "")
     out.append('<p class="icp-note">The faces and names are illustrations chosen for the report; '
                'no real person is pictured or described. Profiles are inferred from the recorded '
                f'sessions only. {credit}</p>')
@@ -284,7 +502,7 @@ CSS = """
 .icp-head,.icp-scores,.icp-trap,.icp-bar{break-inside:avoid}
 .icp-primary{border-color:#1a56db;box-shadow:inset 4px 0 0 #1a56db}
 .icp-head{display:flex;gap:18px;align-items:center;margin-bottom:12px}
-.icp-avatar{flex:none;width:110px;height:110px;border-radius:22px}
+.icp-avatar{flex:none;width:110px;height:110px;border-radius:22px;object-fit:cover;object-position:top}
 .icp-role{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#5d6470}
 .icp-title{margin:2px 0 4px;font-size:18px}
 .icp-meet{font-size:14px;color:#16181d;font-weight:600}

@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.7.3 — portraits that fit the person.** With no key, the profile's illustration is drawn to the `Meet:` line — pronoun for the gender cue, age for hair colour, work for glasses and clothing — instead of a random face. With a key, a generated portrait of the described person replaces it: `GEMINI_API_KEY` (free tier), `HF_TOKEN` (free tier, FLUX.1-schnell) or `OPENAI_API_KEY` (paid); made once per profile, cached in `icp/avatars/`, embedded in both renders. `UNDERSTUDY_PORTRAITS=off` keeps the illustration.
+>
 > **v0.7.2 — profiles get a real illustration.** The face on each ICP card is an illustrated portrait (Open Peeps by Pablo Stanley, CC BY 4.0, via DiceBear), fetched once per profile at render time and cached in `icp/avatars/` so re-renders are offline; when the first render has no network, the drawn silhouette stands in. Each profile starts on its own page in the PDF.
 >
 > **v0.7.1 — Ideal Customer Profiles as people.** Each profile is now a card in both the PDF and the interactive report: a drawn face (a deterministic SVG, never a photo, never a real person), a name and one line of life from the lens's new `Meet:` field, the *Who* sentence, then the job, trigger, where to find fifty, why it wins, what it lacks, fit and propensity as bars, the case against, and the re-run persona. No screenshots in this section — a profile is an inference, and thumbnails dressed it as an observation. `scripts/icp_profiles.py` parses and renders; a profile without a `Meet:` line gets a placeholder name and says so.
