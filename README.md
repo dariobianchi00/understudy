@@ -14,6 +14,8 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 /understudy:run
 ```
 
+> **v0.6.4 — the report reads better.** The cover carries the site's own icon (fetched once, cached as `site-logo.<ext>` in the run folder, silently absent offline). The *Where* column of *In their own words* is usable: each screenshot is a thumbnail that opens the file, each log or debrief citation is a short link to it, and *Top 5 row N* jumps to the table. The *Why that score* column is sentence-cased with a full stop, whatever the lens wrote.
+>
 > **v0.6.3 — quotes with prices.** `check_report.py` now decodes `findings-raw.json` before matching *In their own words* rows; it read the file as text, so `json.dump`'s `\u20ac` escape meant any quote containing a currency sign failed the gate. Found on the first *both* run (a hotel site, three personas, six captures).
 >
 > **v0.6.2 — in their own words.** The run summary gains a section of verbatim lines from the personas — what they said at the moment behind each top finding, with the log line beside it. The gate checks every quote against the persona files and fails a quote the log does not contain; an improved quotation is fabricated evidence in the one section a reader repeats out loud.

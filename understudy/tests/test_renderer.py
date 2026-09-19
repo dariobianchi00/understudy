@@ -339,3 +339,41 @@ class Units(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Presentation(unittest.TestCase):
+    def test_score_reason_is_sentence_cased_with_full_stop(self):
+        self.assertEqual(rr.sentence("every visitor saw a price"), "Every visitor saw a price.")
+        self.assertEqual(rr.sentence("Two left."), "Two left.")
+        self.assertEqual(rr.sentence(""), "")
+
+    def test_where_cell_links_sources_and_thumbnails_screenshots(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            pdir = next(d for d in os.listdir(run) if d.startswith("persona-"))
+            shots = os.path.join(run, pdir, "screenshots")
+            os.makedirs(shots, exist_ok=True)
+            with open(os.path.join(shots, "07-pricing.png"), "wb") as f:
+                f.write(b"\x89PNG\r\n\x1a\n")
+            images = rr.find_images(run); images["__run__"] = run
+            used = {}
+            cell = f"{pdir}/session.log:41 · 07-pricing.png · Top 5 row 2 · something else"
+            out = rr.where_cell(cell, images, used, prefix="d0-")
+            self.assertIn('href="file://', out)
+            self.assertIn("log · line 41", out)
+            self.assertIn('class="shot ', out)          # thumbnail for the screenshot
+            self.assertIn('href="#d0-top-5-fix-these-first"', out)
+            self.assertIn("something else", out)         # unknown token left as text
+            self.assertTrue(used)                        # screenshot registered for embedding
+
+    def test_cover_carries_logo_when_cached(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            with open(os.path.join(run, "site-logo.png"), "wb") as f:
+                f.write(b"\x89PNG\r\n\x1a\n" + b"0" * 300)
+            uri = rr.site_logo(run, {"base_url": "https://example.invalid"})
+            self.assertTrue(uri.startswith("data:image/png;base64,"))
+            html_out = rr.cover({"product_name": "X"}, "X", "", 0, {}, logo=uri)
+            self.assertIn('class="logo"', html_out)
+            # no cache and no network: the cover still renders, without a logo
+            self.assertEqual(rr.cover({"product_name": "X"}, "X", "", 0, {}).count('class="logo"'), 0)

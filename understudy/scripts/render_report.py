@@ -152,13 +152,90 @@ def image_class(key, images, used):
     return css_class(rel)
 
 
+# ------------------------------------------------------------------ logo ----
+LOGO_STEM = "site-logo"
+LOGO_MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+             ".webp": "image/webp", ".svg": "image/svg+xml", ".ico": "image/x-icon",
+             ".gif": "image/gif"}
+
+
+def site_logo(run, meta):
+    """The site's own icon for the cover, as a data URI — or "" if none.
+
+    Fetched once per run and cached beside the manifest as site-logo.<ext>, so
+    a re-render works offline and the cover is stable across renders. Looked
+    for in order: the page's apple-touch-icon, then its icon link, then a
+    favicon service. Any failure is silent — a report without a logo is
+    still a report; a render that dies for want of one is not.
+    """
+    for ext in LOGO_MIME:
+        cached = os.path.join(run, LOGO_STEM + ext)
+        if os.path.exists(cached):
+            return _data_uri(cached)
+    base = (meta.get("base_url") or "").strip()
+    if not base:
+        return ""
+    import urllib.request
+    import urllib.parse
+    host = urllib.parse.urlparse(base).netloc
+    ua = {"User-Agent": "Mozilla/5.0 (understudy report renderer)"}
+    candidates = []
+    try:
+        req = urllib.request.Request(base, headers=ua)
+        with urllib.request.urlopen(req, timeout=8) as r:
+            page = r.read(400_000).decode("utf-8", "replace")
+        for rel in ("apple-touch-icon", "apple-touch-icon-precomposed", "icon", "shortcut icon"):
+            for m in re.finditer(r"<link[^>]+>", page, re.I):
+                tag = m.group(0)
+                rm = re.search(r'rel=["\']([^"\']+)["\']', tag, re.I)
+                hm = re.search(r'href=["\']([^"\']+)["\']', tag, re.I)
+                if rm and hm and rel in rm.group(1).lower().split():
+                    candidates.append(urllib.parse.urljoin(base, hm.group(1)))
+    except Exception:
+        pass
+    # The favicon service goes before the page's own <link rel=icon>: that is
+    # usually a 16px .ico, which prints as a smudge; the service serves 128px.
+    touch = [c for c in candidates if "apple-touch" in c.lower() or "touch-icon" in c.lower()]
+    rest = [c for c in candidates if c not in touch]
+    candidates = touch + [f"https://www.google.com/s2/favicons?domain={host}&sz=128"] + rest
+    for url in candidates:
+        try:
+            req = urllib.request.Request(url, headers=ua)
+            with urllib.request.urlopen(req, timeout=8) as r:
+                raw = r.read(2_000_000)
+                ctype = (r.headers.get("Content-Type") or "").split(";")[0].strip().lower()
+        except Exception:
+            continue
+        ext = {v: k for k, v in LOGO_MIME.items()}.get(ctype) or os.path.splitext(
+            urllib.parse.urlparse(url).path)[1].lower()
+        if ext not in LOGO_MIME or len(raw) < 200:
+            continue
+        cached = os.path.join(run, LOGO_STEM + ext)
+        try:
+            with open(cached, "wb") as f:
+                f.write(raw)
+        except OSError:
+            continue
+        return _data_uri(cached)
+    return ""
+
+
+def _data_uri(path):
+    ext = os.path.splitext(path)[1].lower()
+    try:
+        raw = _read(path, "rb")
+    except OSError:
+        return ""
+    return f"data:{LOGO_MIME.get(ext, 'image/png')};base64," + base64.b64encode(raw).decode()
+
+
 ASSESSMENT_LABEL = {"website": "Website assessment",
                     "product": "Product assessment",
                     "both": "Website and product assessment"}
 
 
 def cover(meta, title, subtitle, n_find, counts, overall=None, provenance="",
-          n_problems=None):
+          n_problems=None, logo=""):
     """A title page, because the deliverable is read by someone who was not
     in the room when it was commissioned — and it carries the caveat that
     everything else depends on (§4, persona fork; §11.2)."""
@@ -212,9 +289,10 @@ def cover(meta, title, subtitle, n_find, counts, overall=None, provenance="",
                   f'cannot work out from the {thing}; it does not show what actual '
                   f'customers do.</p>')
 
+    logo_html = (f'<img class="logo" src="{logo}" alt="">' if logo else "")
     return (f'<section class="cover">'
             f'<p class="kicker">{html.escape(kind)}</p>'
-            f'<h1>{html.escape(product)}</h1>'
+            f'<h1>{logo_html}{html.escape(product)}</h1>'
             f'<p class="sub">{html.escape(subtitle)}</p>'
             f'{headline}<dl>{"".join(rows)}</dl>{caveat}'
             f'<p class="meta prov">{html.escape(provenance)}</p></section>')
@@ -372,6 +450,18 @@ def read_score(run, lens_dir):
     return {"score": max(0, min(10, int(m.group(1)))), "why": m.group(2).strip()}
 
 
+def sentence(text):
+    """Capital first letter, full stop at the end. Eight lenses write the
+    Score line eight ways; the table they land in should read as one."""
+    t = (text or "").strip()
+    if not t:
+        return t
+    t = t[0].upper() + t[1:]
+    if t[-1] not in ".!?…":
+        t += "."
+    return t
+
+
 def score_table(entries, run):
     """Per-check scores and the overall, or "" when no lens published one.
 
@@ -394,7 +484,7 @@ def score_table(entries, run):
             f'<tr><td><strong>{html.escape(e["lens"])}</strong></td>'
             f'<td>{sc["score"]}/10<span class="bar">'
             f'<i style="width:{sc["score"] * 10}%;background:{hue}"></i></span></td>'
-            f'<td>{html.escape(sc["why"])}</td></tr>')
+            f'<td>{html.escape(sentence(sc["why"]))}</td></tr>')
     if not rows:
         return "", None
     overall = round(sum(vals) / len(vals), 1)
@@ -640,11 +730,60 @@ def _similar(a, b):
     return finding_id.title_similarity(a, b)
 
 
+WHERE_SRC = re.compile(r"^(?P<path>(?:[\w.-]+/)*)(?P<file>session\.log|persona-debrief\.md|"
+                       r"findings-raw\.json|timeline\.json)(?::(?P<line>\d+))?$")
+WHERE_TOP5 = re.compile(r"^Top\s*5\s*(?:[·,—-]\s*)?row\s*(\d+)", re.I)
+WHERE_LABEL = {"session.log": "log", "persona-debrief.md": "debrief",
+               "findings-raw.json": "notes", "timeline.json": "timeline"}
+
+
+def where_cell(cell, images, used, prefix=""):
+    """The Where column of *In their own words*, made usable.
+
+    The run summary cites each quote as `persona-x/session.log:20 ·
+    03-results.png · Top 5 row 3` — exact, and useless to a reader who will
+    not open the run folder. Each token becomes something they can use: a
+    screenshot token becomes a thumbnail that opens the file, a log or debrief
+    token becomes a short link to that file, a "Top 5 row N" token jumps to
+    the table. Anything unrecognised is left as written.
+    """
+    run = images.get("__run__", "")
+    out = []
+    for tok in [t.strip() for t in re.split(r"\s+·\s+", cell) if t.strip()]:
+        key = tok.strip("`")
+        hit = images.get(key) or images.get(os.path.basename(key))
+        if hit and key.lower().endswith(".png"):
+            rel = os.path.relpath(hit, run)
+            used[rel] = hit
+            out.append(f'<a class="where-shot" href="file://{html.escape(hit)}" '
+                       f'title="{html.escape(rel)}"><span class="shot {css_class(rel)}"></span></a>')
+            continue
+        m = WHERE_SRC.match(key)
+        if m and run:
+            path = os.path.join(run, m.group("path") or "", m.group("file"))
+            if not os.path.exists(path) and m.group("path") and not m.group("path").startswith("persona-"):
+                path = os.path.join(run, "persona-" + m.group("path"), m.group("file"))
+            label = WHERE_LABEL[m.group("file")]
+            if m.group("line"):
+                label += f" · line {m.group('line')}"
+            out.append(f'<a class="where-src" href="file://{html.escape(path)}" '
+                       f'title="{html.escape(key)}">{html.escape(label)}</a>')
+            continue
+        m = WHERE_TOP5.match(key)
+        if m:
+            out.append(f'<a class="where-src" href="#{slug("Top 5 — fix these first", prefix)}">'
+                       f'Top 5 · row {m.group(1)}</a>')
+            continue
+        out.append(inline(tok, images, used))
+    return " ".join(out)
+
+
 def render_markdown(md, images, used, prefix=""):
     lines = md.split("\n")
     html_out, i = [], 0
     list_stack = []            # 'ul' | 'ol'
     in_code = False
+    section = ""               # last h2 text, lower-cased — some tables render by section
 
     def close_lists(to=0):
         while len(list_stack) > to:
@@ -685,10 +824,16 @@ def render_markdown(md, images, used, prefix=""):
                             "".join(f"<th>{inline(c, images, used)}</th>" for c in head) +
                             "</tr></thead><tbody>")
             i += 2
+            own_words = section.startswith("in their own words")
             while i < len(lines) and lines[i].strip().startswith("|"):
                 cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
-                html_out.append("<tr>" + "".join(
-                    f"<td>{inline(c, images, used)}</td>" for c in cells) + "</tr>")
+                tds = []
+                for n, c in enumerate(cells):
+                    if own_words and n == 3:
+                        tds.append(f'<td class="where">{where_cell(c, images, used, prefix)}</td>')
+                    else:
+                        tds.append(f"<td>{inline(c, images, used)}</td>")
+                html_out.append("<tr>" + "".join(tds) + "</tr>")
                 i += 1
             html_out.append("</tbody></table>")
             continue
@@ -699,6 +844,8 @@ def render_markdown(md, images, used, prefix=""):
             close_lists()
             lvl = len(m.group(1))
             text = m.group(2)
+            if lvl == 2:
+                section = _norm_head(text)
             fm = FINDING_H3.match(stripped)
             if fm:
                 anchor = slug(fm.group(2), prefix)
@@ -791,6 +938,10 @@ hr{border:0;border-top:1px solid var(--line);margin:26px 0}
 a{color:var(--accent)}
 .sev-p0{color:var(--p0)}.sev-p1{color:var(--p1)}
 .sev-p2{color:var(--p2)}.sev-p3{color:var(--p3)}
+td.where{white-space:nowrap;font-size:12px}
+td.where a{margin-right:6px;text-decoration:none;color:var(--accent)}
+td.where a.where-shot{display:inline-block;vertical-align:middle;margin:2px 6px 2px 0}
+td.where a.where-shot .shot{width:96px;max-width:96px;margin:0;aspect-ratio:16/10}
 .shot{display:block;width:100%;max-width:400px;aspect-ratio:16/10;margin:8px 0 4px;
 border:1px solid var(--line);border-radius:8px;background-size:cover;
 background-position:top center;background-repeat:no-repeat}
@@ -839,7 +990,9 @@ padding:2px 7px;border-radius:5px;background:var(--p3)}
 .cover{min-height:80vh;display:flex;flex-direction:column;justify-content:center}
 .cover .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;
 color:var(--mut);margin:0 0 18px}
-.cover h1{font-size:38px;line-height:1.15;margin:0 0 14px}
+.cover h1{font-size:38px;line-height:1.15;margin:0 0 14px;display:flex;align-items:center;gap:16px}
+.cover h1 .logo{width:64px;height:64px;border-radius:14px;object-fit:contain;
+  background:#fff;border:1px solid var(--line);padding:6px;flex:none}
 .cover .sub{font-size:19px;color:var(--mut);margin:0 0 34px;border:0;padding:0}
 .cover dl{display:grid;grid-template-columns:170px 1fr;gap:7px 18px;margin:0;
 font-size:14px;border-top:1px solid var(--line);padding-top:20px}
@@ -1328,8 +1481,9 @@ def main():
 
     for block in reversed(front):
         body.insert(1, block)
+    logo = site_logo(run, meta)
     body.insert(0, cover(meta, title, subtitle, len(all_find), counts,
-                         overall, provenance, n_problems=n_problems))
+                         overall, provenance, n_problems=n_problems, logo=logo))
 
     page = (f"<!doctype html><html><head><meta charset=utf-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"
