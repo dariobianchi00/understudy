@@ -267,7 +267,7 @@ Scoring models — three shapes:
                   Best judgement everywhere. Highest cost.
 
   (b) balanced    opus  → ux, content, onboarding, clarity, conversion,
-      ← default            trust, compare
+      ← default            trust, icp, compare
                   sonnet → bugs, seo, aeo, technical
                   Opus where judgement is load-bearing; sonnet where the
                   framework does the work and the task is closer to

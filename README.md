@@ -64,8 +64,8 @@ The natural instinct is to group by subject. The useful grouping is *what the ag
 
 | Mode | Evidence gathering | Lenses |
 |---|---|---|
-| **A — Journey** | A persona with a goal drives the product. One traversal, many scorings. | `ux` `bugs` `onboarding` `content` |
-| **A-visit — Visit** | A persona with a *question* reads a site. Same machinery, different flow shapes, a quarter of the time. | `clarity` `conversion` `trust` |
+| **A — Journey** | A persona with a goal drives the product. One traversal, many scorings. | `ux` `bugs` `onboarding` `content` `icp` |
+| **A-visit — Visit** | A persona with a *question* reads a site. Same machinery, different flow shapes, a quarter of the time. | `clarity` `conversion` `trust` `icp` |
 | **B — Instrumented** | Scripted and measured. No persona. | `technical` |
 | **C — Crawl** | No session, no login. | `seo` `aeo` |
 | **D — Comparative** | N runs of A-visit or C, then a diff pass. | `compare` |
@@ -377,7 +377,7 @@ An evaluation is a real spend, so understudy asks rather than assumes. Two model
 | Shape | Allocation | When |
 |---|---|---|
 | **thorough** | opus everywhere | Best judgement throughout, highest cost |
-| **balanced** *(default)* | opus → `ux` `content` `onboarding` `clarity` `conversion` `trust` `compare`<br>sonnet → `bugs` `seo` `aeo` `technical` | Opus where judgement is load-bearing |
+| **balanced** *(default)* | opus → `ux` `content` `onboarding` `clarity` `conversion` `trust` `icp` `compare`<br>sonnet → `bugs` `seo` `aeo` `technical` | Opus where judgement is load-bearing |
 | **cheap** | sonnet everywhere | Fastest; expect weaker `ux` and `content` |
 
 Per-lens overrides accepted. The split exists because `ux` and `content` ask a model to judge whether something is *good* — where a weaker model produces findings that are plausible and wrong, and **a wrong P0 costs more than a missed P2**. `bugs`, `seo` and `aeo` check observable facts against a rubric; the framework carries those.

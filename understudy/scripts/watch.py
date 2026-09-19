@@ -35,7 +35,7 @@ RESUME_RE = re.compile(r"wall cleared|resuming", re.I)
 # two-day-old run at the bottom of every session.
 COMPLETE_GRACE = dt.timedelta(hours=1)
 
-LENS_DIRS = ("ux", "bugs", "onboarding", "content", "clarity", "conversion", "trust",
+LENS_DIRS = ("ux", "bugs", "onboarding", "content", "clarity", "conversion", "trust", "icp",
              "technical", "seo", "aeo", "compare", "objectives")
 
 
