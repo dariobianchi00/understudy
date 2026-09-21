@@ -1,0 +1,106 @@
+{
+ "duration_api_ms": 126230,
+ "stop_reason": "end_turn",
+ "session_id": "a4be7e39-f658-46bb-b95b-87149fa690bd",
+ "total_cost_usd": 0.4535795999999999,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 58311,
+  "cache_read_input_tokens": 414478,
+  "output_tokens": 13740,
+  "output_tokens_details": {
+   "thinking_tokens": 6285
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 58311,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 158,
+    "cache_read_input_tokens": 57963,
+    "cache_creation_input_tokens": 348,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 348
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 20,
+   "outputTokens": 13740,
+   "cacheReadInputTokens": 414478,
+   "cacheCreationInputTokens": 58311,
+   "webSearchRequests": 0,
+   "costUSD": 0.4535795999999999,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 6285,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01PMRVCbWoce1v3VmDRXmk6p",
+   "tool_input": {
+    "command": "\ncd /home/runner/work/understudy/understudy/understudy/scripts\necho \"F1:\"; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"crawl/pages/*.json#structured_data\" --title \"No Organization schema anywhere; entity identity exists only in prose\"\necho \"F2:\"; python3 finding_id.py --lens aeo --flow \"crawl:page\" --locator \"crawl/pages/1-index.json#structured_data\" --title \"Homepage's only JSON-LD is invalid and unparsable\"\necho \"F3:\"; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"crawl/pages/*.json#answer_blocks\" --title \"Four of five crawled pages have zero extractable answer blocks\"\necho \"F4:\"; python3 finding_id.py --lens aeo --flow \"crawl:page\" --locator \"crawl/pages/4-about.json#structured_data\" --title \"FAQPage schema on About omits one of three visible Q&A pairs\"\necho \"F5:\"; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"crawl/pages/*.json#og\" --title \"No Open Graph metadata on any page\"\necho \"F6:\"; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"crawl/site.json#llms_txt\" --title \"llms.txt absent at root\"\n"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 23,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed. \n\n**Verdict:** An answer engine could extract almost nothing cleanly from this site: Organization schema is absent everywhere, the homepage's only JSON-LD is broken, and four of the five crawled pages carry zero question-shaped content \u2014 only the About page gives an engine anything it could quote and attribute.\n\n**Findings by severity:** P0: 0 \u00b7 P1: 3 \u00b7 P2: 2 \u00b7 P3: 1 (6 total) \u2014 Score 4/10.",
+ "ttft_ms": 1293,
+ "type": "result",
+ "duration_ms": 127023,
+ "uuid": "94f7b4dc-1be0-4221-afce-7639e1a8b9fe",
+ "ttft_stream_ms": 802,
+ "time_to_request_ms": 109,
+ "first_content_frame_ms": 803,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

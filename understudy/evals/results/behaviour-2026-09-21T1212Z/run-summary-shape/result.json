@@ -1,0 +1,33 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant wrote exec-summary.md, stopped with no export offer or further questions, explicitly stated no finding was rewritten/merged/re-scored, and its explanation for omitting the \"Raised by more than one check\" heading is permitted since only one lens ran.",
+  "cost": 0.1107628
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Bash",
+  "Grep",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Read",
+  "Read",
+  "Bash",
+  "Write"
+ ],
+ "reply": "I'll start by reading the spec section and looking at the run folder.\n\nNow I'll write the run-level exec summary.\n\nWritten to `/tmp/understudy-beh-run-summary-shape-zogb41hs/2026-09-08-run-fixture01/exec-summary.md`.\n\nHow it follows \u00a73.6:\n\n- **Section order and set** \u2014 What this is \u2192 How it was produced \u2192 Contents \u2192 Objectives \u2192 Top 5 \u2192 What a buyer could and could not establish \u2192 In their own words \u2192 What the site does well \u2192 What each check looked for \u2192 How each area scores \u2192 How to read these findings \u2192 Limits.\n- **Four renderer-filled headings** \u2014 *Contents*, *Objectives* (kept, because the manifest carries `objectives_under_test`), and *How each area scores* are written empty. *Raised by more than one check* is omitted entirely since only one check ran, and *Against comparable sites* is omitted since `competitors` is empty.\n- **Length** \u2014 one lens, so roughly one page.\n- **No verdict at the top**; the verdict is the single sentence introducing the Top 5. No \"Recommended first action\", no technical annexe, no hand-written section numbers, no severity tally.\n- **Top 5** \u2014 exactly five rows. Clarity produced no P0s, so it's the two P1s then the three strongest P2s; no P3 padding. Effort line groups them underneath (three copy, two build).\n- **Quotes** \u2014 nine verbatim lines pulled from `session.log`, `findings-raw.json` and `persona-debrief.md`, each cited, six of them tied to the Top 5 row they evidence. Balanced: two where the buyers got what they wanted (the About page, the Frankfurt answer), the rest where they gave up. `persona_mode` is `generic`, so the caveat under the table says the speakers were constructed.\n- **Jargon** \u2014 no \"lens\", \"P0\", \"persona\" or folder path in client-facing prose; the check is called Clarity, per `LENS_LABELS`. No finding was rewritten, merged or re-scored \u2014 severities and wording come from the clarity report as issued.\n\nOne thing worth flagging: the manifest planned six checks (clarity, conversion, trust, technical, seo, aeo) but only clarity has scored output, and `phase` is still `2a-capture`. The summary says so plainly in the Limits section rather than reading as a complete assessment.",
+ "cost_usd": 1.0457
+}

@@ -1,0 +1,140 @@
+{
+ "duration_api_ms": 17432,
+ "stop_reason": "tool_use",
+ "session_id": "5315d430-575f-4d41-9318-f37363a49b41",
+ "total_cost_usd": 0.13244820000000002,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 27934,
+  "cache_read_input_tokens": 24241,
+  "output_tokens": 1586,
+  "output_tokens_details": {
+   "thinking_tokens": 1155
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 27934,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1586,
+    "cache_read_input_tokens": 24241,
+    "cache_creation_input_tokens": 27934,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 27934
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1586,
+   "cacheReadInputTokens": 24241,
+   "cacheCreationInputTokens": 27934,
+   "webSearchRequests": 0,
+   "costUSD": 0.13244820000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 1155,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"hero-oversized\",\"caught\":true,\"finding_title\":\"Homepage hero image ships at 10x display size, driving poor mobile LCP\"},{\"id\":\"mobile-lcp-poor\",\"caught\":true,\"finding_title\":\"Homepage hero image ships at 10x display size, driving poor mobile LCP\"},{\"id\":\"render-blocking-css\",\"caught\":true,\"finding_title\":\"Render-blocking stylesheets delay first paint on homepage and pricing (compression aspect also covered by 'Text responses served without compression across the site')\"},{\"id\":\"console-error-on-load\",\"caught\":true,\"finding_title\":\"Homepage throws a ReferenceError on load\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "hero-oversized",
+    "caught": true,
+    "finding_title": "Homepage hero image ships at 10x display size, driving poor mobile LCP"
+   },
+   {
+    "id": "mobile-lcp-poor",
+    "caught": true,
+    "finding_title": "Homepage hero image ships at 10x display size, driving poor mobile LCP"
+   },
+   {
+    "id": "render-blocking-css",
+    "caught": true,
+    "finding_title": "Render-blocking stylesheets delay first paint on homepage and pricing (compression aspect also covered by 'Text responses served without compression across the site')"
+   },
+   {
+    "id": "console-error-on-load",
+    "caught": true,
+    "finding_title": "Homepage throws a ReferenceError on load"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 14802,
+ "type": "result",
+ "duration_ms": 17512,
+ "uuid": "59acc6e4-3a29-4e0a-82f2-462782953e80",
+ "ttft_stream_ms": 2462,
+ "time_to_request_ms": 95,
+ "first_content_frame_ms": 2462,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

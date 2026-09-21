@@ -1,0 +1,21 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [
+  "reply lacks /\\b(one|1)\\b[^\\n]{0,40}(traversal|capture)/"
+ ],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly answered \"One,\" explaining that ux, bugs, onboarding, and content are all Mode A lenses scored from the same single persona journey capture, consistent with the orchestrator contract in CLAUDE.md \u00a72/\u00a73, and did not run or interview as instructed.",
+  "cost": 0.1077148
+ },
+ "tools_called": [
+  "Bash",
+  "Grep"
+ ],
+ "reply": "**One.**\n\nAll four of those objectives \u2014 ux, bugs, onboarding, content \u2014 are scored from the same Mode A journey capture (`run.md:131`). The traversal count is driven by modes and personas, not by lens count: one journey per persona. One persona, one mode, so one browser session.\n\nThe four lenses then read that single evidence folder (screenshots, session log, timeline, debrief) in parallel afterwards \u2014 scoring is cheap, driving the browser is not. Adding a second persona would make it two; adding an objective like seo or technical would add a separate capture, since those run without a session.",
+ "cost_usd": 0.2706
+}

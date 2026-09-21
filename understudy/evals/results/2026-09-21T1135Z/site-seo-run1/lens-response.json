@@ -1,0 +1,122 @@
+{
+ "duration_api_ms": 240594,
+ "stop_reason": "end_turn",
+ "session_id": "30ee5c3e-5e70-4bd4-a38a-1999d3cab27b",
+ "total_cost_usd": 0.6110676,
+ "usage": {
+  "input_tokens": 28,
+  "cache_creation_input_tokens": 60193,
+  "cache_read_input_tokens": 659898,
+  "output_tokens": 23826,
+  "output_tokens_details": {
+   "thinking_tokens": 15246
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 60193,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 169,
+    "cache_read_input_tokens": 76799,
+    "cache_creation_input_tokens": 376,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 376
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 28,
+   "outputTokens": 23826,
+   "cacheReadInputTokens": 659898,
+   "cacheCreationInputTokens": 60193,
+   "webSearchRequests": 0,
+   "costUSD": 0.6110676,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 15246,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_014wAsxjdoPa5uZbqy9bFZ5Q",
+   "tool_input": {
+    "command": "cat /home/runner/work/understudy/understudy/understudy/scripts/finding_id.py | head -50",
+    "description": "Inspect finding_id.py usage"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_011xNxeTxxeXMxfNJfjwQiC1",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts\necho \"1:\"; python3 finding_id.py --lens seo --flow \"crawl:page\" --locator \"/pricing.html\" --title \"Pricing page is noindexed, blocking cost information from search results\"\necho \"2:\"; python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"https://example-nimbus-notes.test/sitemap.xml\" --title \"Declared sitemap returns 404 and lists zero URLs\"\necho \"3:\"; python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/features.html\" --title \"Global nav links to /features.html, which returns a 404 on every page\"\necho \"4:\"; python3 finding_id.py --lens seo --flow \"crawl:page\" --locator \"/\" --title \"Homepage structured data is invalid JSON and fails to parse\"\necho \"5:\"; python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/about.html,/privacy.html\" --title \"About and privacy pages share an identical, generic page title\"\necho \"6:\"; python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/pricing.html,/privacy.html\" --title \"Pricing and privacy pages have no meta description\"\necho \"7:\"; python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/pricing.html,/privacy.html\" --title \"Heading hierarchy breaks on pricing (two h1s) and privacy (no h1)\"\necho \"8:\"; python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/,/pricing.html,/about.html,/privacy.html\" --title \"No page defines a canonical tag\"\necho \"9:\"; python3 finding_id.py --lens seo --flow \"crawl:page\" --locator \"/\" --title \"Homepage hero image has no alt text\"\n",
+    "description": "Compute finding IDs for all SEO findings"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01HiKhedvqjG7f4xt8HwcDe1",
+   "tool_input": {
+    "command": "sed -n '1,400p' /home/runner/work/understudy/understudy/understudy/scripts/check_report.py"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 26,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed cleanly (the manifest note is expected \u2014 it's not a check failure, just informational since `phase` is still `2a-capture`).\n\n**Verdict:** A search engine can reach every page from the homepage, but the pricing page is noindexed, the site's declared sitemap 404s, and the primary nav links to a features page that also 404s on every page of the site.\n\n**Findings by severity:** P0: 1 \u00b7 P1: 2 \u00b7 P2: 4 \u00b7 P3: 2 (9 total)\n\nScore: 4/10.",
+ "ttft_ms": 2136,
+ "type": "result",
+ "duration_ms": 241597,
+ "uuid": "c024f57c-18e9-468d-b1ff-034e11a394af",
+ "ttft_stream_ms": 1656,
+ "time_to_request_ms": 108,
+ "first_content_frame_ms": 1656,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

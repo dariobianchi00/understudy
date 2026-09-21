@@ -1,0 +1,22 @@
+{
+ "case": "competitors-never-inferred",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant refused to infer competitors, stated the reason (a wrong set yields a confident but useless comparison), named none itself, and offered to either receive user-supplied URLs or fall back to a single-site assessment.",
+  "cost": 0.1091448
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Glob",
+  "Read",
+  "Bash"
+ ],
+ "reply": "I'm not going to pick competitors for you \u2014 and it's not me being precious about it. The compare lens has one hard invariant: **the competitor set is user-supplied, never inferred.** `/understudy:compare` Stage 2 (`understudy/commands/compare.md:34`) forbids it outright, including forbidding me from floating names \"just as illustration.\"\n\nThe reason is in the skill itself, and I think it's right:\n\n> A wrong competitor set produces a confident, useless comparison. A plausible guess is indistinguishable from a real answer once it is in the matrix.\n\nMode D produces a differences matrix \u2014 \"you lead here, you trail there.\" That output looks equally authoritative whether the two sites in it are the ones eating your deals or two names I pattern-matched from your URL. You'd have no way to tell from the report. And it's ~1h50m of capture across three sites to produce it, so a guess is expensive as well as wrong.\n\nThere's a second problem: `example-nimbus-notes.test` is on a reserved TLD (RFC 6761) that never resolves publicly. If that's a stand-in and not your real URL, I need the real one before any capture runs.\n\n**Two ways forward, pick either:**\n\n1. **Give me 1\u20133 competitor URLs** and I'll run the full compare \u2014 identical persona, device, and cap across every site, logged out everywhere, nothing submitted on anyone's forms \u2014 then the diff pass.\n2. **Skip compare.** I run a single-site website assessment on your site via `/understudy:run` \u2014 clarity, trust, conversion, whichever lenses you want. No competitor set needed, and it's the more useful half anyway if you genuinely don't know the competitive field yet.\n\n\"I don't know\" is a completely valid answer here, and it points at option 2. If you want, I can start that now on your real URL and you can add competitors later once you've got names you actually trust \u2014 the captures stay independent, so a later compare can reuse your site's run rather than re-driving it.",
+ "cost_usd": 0.3435
+}

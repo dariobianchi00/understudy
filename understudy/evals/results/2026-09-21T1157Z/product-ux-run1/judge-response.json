@@ -1,0 +1,145 @@
+{
+ "duration_api_ms": 15070,
+ "stop_reason": "tool_use",
+ "session_id": "65f7e981-56b7-42d4-b474-e95b2a9b8278",
+ "total_cost_usd": 0.1384522,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30315,
+  "cache_read_input_tokens": 24241,
+  "output_tokens": 1234,
+  "output_tokens_details": {
+   "thinking_tokens": 774
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30315,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1234,
+    "cache_read_input_tokens": 24241,
+    "cache_creation_input_tokens": 30315,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30315
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1234,
+   "cacheReadInputTokens": 24241,
+   "cacheCreationInputTokens": 30315,
+   "webSearchRequests": 0,
+   "costUSD": 0.1384522,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 774,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"workspace-type-before-value\",\"caught\":true,\"finding_title\":\"Signup forces an irreversible workspace-type choice between three undefined terms before the product is visible\"},{\"id\":\"memories-invented\",\"caught\":true,\"finding_title\":\"Memories states three facts that are not the user's, and the novice stops trusting Save as a result\"},{\"id\":\"empty-state-no-guidance\",\"caught\":true,\"finding_title\":\"Empty dashboard names no next step after signup\"},{\"id\":\"search-always-empty\",\"caught\":true,\"finding_title\":\"Save reports success but the note never appears in the cards list or search\"},{\"id\":\"webhook-toggle-unexplained\",\"caught\":true,\"finding_title\":\"Settings exposes three infrastructure toggles neither persona could define\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "workspace-type-before-value",
+    "caught": true,
+    "finding_title": "Signup forces an irreversible workspace-type choice between three undefined terms before the product is visible"
+   },
+   {
+    "id": "memories-invented",
+    "caught": true,
+    "finding_title": "Memories states three facts that are not the user's, and the novice stops trusting Save as a result"
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "caught": true,
+    "finding_title": "Empty dashboard names no next step after signup"
+   },
+   {
+    "id": "search-always-empty",
+    "caught": true,
+    "finding_title": "Save reports success but the note never appears in the cards list or search"
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "caught": true,
+    "finding_title": "Settings exposes three infrastructure toggles neither persona could define"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 12399,
+ "type": "result",
+ "duration_ms": 15211,
+ "uuid": "e1a262ed-fb9b-48ed-9b76-c2405784a4b6",
+ "ttft_stream_ms": 2376,
+ "time_to_request_ms": 140,
+ "first_content_frame_ms": 2376,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

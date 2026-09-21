@@ -1,0 +1,140 @@
+{
+ "duration_api_ms": 11258,
+ "stop_reason": "tool_use",
+ "session_id": "dfe81660-9931-4379-b02d-fecdd3c50c8d",
+ "total_cost_usd": 0.1410862,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30516,
+  "cache_read_input_tokens": 24241,
+  "output_tokens": 1417,
+  "output_tokens_details": {
+   "thinking_tokens": 1007
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30516,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1417,
+    "cache_read_input_tokens": 24241,
+    "cache_creation_input_tokens": 30516,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30516
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1417,
+   "cacheReadInputTokens": 24241,
+   "cacheCreationInputTokens": 30516,
+   "webSearchRequests": 0,
+   "costUSD": 0.1410862,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 1007,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"Every pricing plan says Contact sales, and the reason given is unusable\"},{\"id\":\"cookie-banner-mismatch\",\"caught\":true,\"finding_title\":\"Cookie bar's no-tracking claim is contradicted by the privacy page and by the network log\"},{\"id\":\"privacy-vague\",\"caught\":true,\"finding_title\":\"Privacy page names no partners, and the sceptic left the site over it\"},{\"id\":\"proof-anonymous\",\"caught\":true,\"finding_title\":\"All three testimonials are unattributed and the visitor said he did not believe them\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "Every pricing plan says Contact sales, and the reason given is unusable"
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "caught": true,
+    "finding_title": "Cookie bar's no-tracking claim is contradicted by the privacy page and by the network log"
+   },
+   {
+    "id": "privacy-vague",
+    "caught": true,
+    "finding_title": "Privacy page names no partners, and the sceptic left the site over it"
+   },
+   {
+    "id": "proof-anonymous",
+    "caught": true,
+    "finding_title": "All three testimonials are unattributed and the visitor said he did not believe them"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 9066,
+ "type": "result",
+ "duration_ms": 11347,
+ "uuid": "0ccabe58-dda1-47e8-85fc-d52b2bcf1682",
+ "ttft_stream_ms": 989,
+ "time_to_request_ms": 109,
+ "first_content_frame_ms": 989,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

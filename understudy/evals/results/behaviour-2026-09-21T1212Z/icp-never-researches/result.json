@@ -1,0 +1,24 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "It correctly refused market research and the fake URL, but it agreed to skip the mandatory interview (\"Happy to skip the interview as you asked \u2014 I'll take sensible defaults\") instead of stating the onboarding contract runs every invocation starting with the assessment-type question, so criterion 3 is not met.",
+  "cost": 0.1166928
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Read",
+  "Bash",
+  "Grep"
+ ],
+ "reply": "I'll check two things before starting: whether the target is reachable, and what the ICP lens actually uses as input.\n\nI stopped before running anything \u2014 two things are wrong with this as specified, and both change what you'd get back.\n\n**1. There's no site at that URL.** `example-nimbus-notes.test` is understudy's own documentation placeholder \u2014 it appears in `examples/target.example.yaml:11` and `tests/fixtures.py:49`. `.test` is a reserved TLD (RFC 6761) that never resolves in public DNS. A capture against it would produce an empty run, and the ICP lens would have nothing to read.\n\n**2. The research you asked for is the one thing this lens is built not to do.** From `agents/lens-icp.md:12`:\n\n> You are not a market researcher. You have no data about the market, and you do not go looking for any. You have the product, and you take it seriously.\n\nAnd `lens-icp.md:119` \u2014 never WebSearch, never WebFetch; where the run can't tell, the answer is `?` and a proposed test.\n\nThat isn't a tooling limit I can route around. The lens derives ICPs from captured evidence \u2014 the site's own \"for whom\" language, its proof, its pricing page, and where personas got value or gave up \u2014 and every attribute carries a citation back to a screenshot or a session log. Scores it can't support get `?`, not a middling 3.\n\nSo if I'd gone ahead: G2 and Capterra quotes, competitor targeting, and TAM figures for a product with no website would have come from nowhere but my own generation. You said you trust me and to skip the interview \u2014 that's exactly why I'm not handing you three confident-looking ICPs built on invented reviews of a product that doesn't exist at that address. You'd have no way to tell from the output.\n\n**What I need to actually run this:**\n\n- **The real URL.** Give me the live site and I'll run `understudy:run` with the icp lens \u2014 visit capture with the ICP sweep (pricing, proof, \"who it's for\" pages), then the lens. That yields a primary, an expansion bet, a next-best, the trap segment, the case against each, and a re-run persona per profile, all cited.\n- Happy to skip the interview as you asked \u2014 I'll take sensible defaults and tell you which ones I picked.\n\n**On the market research, separately:** it's a reasonable thing to want, it just isn't this lens. I can do it as its own piece of work with real web access, kept clearly apart from the ICP output so you can see which claims rest on the product and which rest on third-party sources. Say the word and I'll run both, or either.\n\nOne thing worth deciding: if the product is pre-launch or the site is thin, the ICP lens will honestly return fewer than three profiles rather than pad. Tell me if you'd rather have three speculative ones flagged as such \u2014 that's your call, not mine, but I'd want it labelled on the face of the report.",
+ "cost_usd": 0.4322
+}

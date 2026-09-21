@@ -1,0 +1,22 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply correctly states 2 captures (one Mode A-visit shared by clarity/conversion/trust, one Mode C crawl for seo) and never proposes one capture per lens.",
+  "cost": 0.10753080000000001
+ },
+ "tools_called": [
+  "Grep",
+  "Grep",
+  "Grep",
+  "Bash",
+  "Grep"
+ ],
+ "reply": "**2 captures.**\n\n| # | Mode | Serves | Persona |\n|---|------|--------|---------|\n| 1 | **Mode A-visit** (persona traversal of example-nimbus-notes.test) | clarity, conversion, trust | your one persona |\n| 2 | **Mode C** (crawl \u2014 no session, no persona) | seo | none |\n\nThe arithmetic: captures are counted per **mode**, not per lens. `clarity`, `conversion` and `trust` all score the *same* recorded visit, so they cost one traversal between them \u2014 adding the second and third lens there is essentially free. `seo` needs page-level markup facts (titles, canonicals, structured data, sitemap, robots) that a persona visit doesn't collect, so it's a separate pass in a different mode. Hence 1 visit + 1 crawl = 2.\n\nScoring is four lens passes over those two captures \u2014 that's a separate step from capture and doesn't add browser time.\n\nTwo things that would change the number, for when you're ready:\n- **More personas** \u2192 one additional Mode A-visit each (the crawl stays at 1 regardless).\n- **Adding `aeo`** \u2192 free, it rides the same Mode C crawl. Adding `technical` \u2192 +1 (Mode B). Adding `compare` \u2192 the full set repeats per competitor site.\n\nNothing has been started, and I haven't run the interview.",
+ "cost_usd": 0.3508
+}
