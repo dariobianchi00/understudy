@@ -1,0 +1,16 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly answered \"1,\" matching the orchestrator contract (\u00a72) that all Mode-A lenses share one capture with N scorings, and did not run or interview as instructed.",
+  "cost": 0.106391
+ },
+ "tools_called": [],
+ "reply": "**1.**\n\nAll four lenses (ux, bugs, onboarding, content) score the same kind of capture: a Mode-A journey traversal. The capture step only collects evidence (screenshots, session log, timeline, debrief). The lenses then read that saved evidence afterwards, and none of them opens a browser. So one persona needs one traversal of `https://example-nimbus-notes.test/app`, and all four lenses score it.\n\nThe count only goes up if you add something that needs a different capture: another persona (one traversal each), technical (a Mode-B measurement), seo/aeo (a Mode-C crawl), or compare (one capture per site).",
+ "cost_usd": 0.1773
+}

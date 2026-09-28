@@ -1,0 +1,130 @@
+{
+ "duration_api_ms": 42950,
+ "stop_reason": "tool_use",
+ "session_id": "742b2904-6e58-4784-9422-f141b70a2a8e",
+ "total_cost_usd": 0.1676804,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 29450,
+  "cache_read_input_tokens": 24232,
+  "output_tokens": 4503,
+  "output_tokens_details": {
+   "thinking_tokens": 4126
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 29450,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 4503,
+    "cache_read_input_tokens": 24232,
+    "cache_creation_input_tokens": 29450,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 29450
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 4503,
+   "cacheReadInputTokens": 24232,
+   "cacheCreationInputTokens": 29450,
+   "webSearchRequests": 0,
+   "costUSD": 0.1676804,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 4126,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"workspace-type-before-value\",\"caught\":true,\"finding_title\":\"Signup forces an irreversible, unexplained workspace-type choice before the user has seen the product\"},{\"id\":\"empty-state-no-guidance\",\"caught\":true,\"finding_title\":\"Empty dashboard says only \\\"Nothing here yet.\\\" with no route to a first note\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":true,\"finding_title\":\"Funnel \u2014 \\\"First value reached\\\" marked \u2717 for both personas; Gap note dismisses the logged first_value_reached:true live word-count preview at 161s/02:41 as not counting\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "workspace-type-before-value",
+    "caught": true,
+    "finding_title": "Signup forces an irreversible, unexplained workspace-type choice before the user has seen the product"
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "caught": true,
+    "finding_title": "Empty dashboard says only \"Nothing here yet.\" with no route to a first note"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": true,
+    "finding_title": "Funnel \u2014 \"First value reached\" marked \u2717 for both personas; Gap note dismisses the logged first_value_reached:true live word-count preview at 161s/02:41 as not counting"
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 40735,
+ "type": "result",
+ "duration_ms": 43045,
+ "uuid": "9ef951da-7c09-4fe9-9887-57b1f2ba6f71",
+ "ttft_stream_ms": 851,
+ "time_to_request_ms": 126,
+ "first_content_frame_ms": 852,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

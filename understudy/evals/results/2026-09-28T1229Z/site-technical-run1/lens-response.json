@@ -1,0 +1,106 @@
+{
+ "duration_api_ms": 138837,
+ "stop_reason": "end_turn",
+ "session_id": "788f5eb1-a8a5-4bad-9217-5a25777c00a6",
+ "total_cost_usd": 0.39381720000000003,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 41217,
+  "cache_read_input_tokens": 383116,
+  "output_tokens": 15229,
+  "output_tokens_details": {
+   "thinking_tokens": 8574
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 41217,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 177,
+    "cache_read_input_tokens": 57854,
+    "cache_creation_input_tokens": 345,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 345
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 18,
+   "outputTokens": 15229,
+   "cacheReadInputTokens": 383116,
+   "cacheCreationInputTokens": 41217,
+   "webSearchRequests": 0,
+   "costUSD": 0.39381720000000003,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 8574,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01XbdaM1BVZ5ToW8Y4kVZ97v",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts\necho \"F1:\"; python3 finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/assets/generated/hero.png\" --title \"Unresized hero image drives mobile LCP to 5.8 s\"\necho \"F2:\"; python3 finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/style.css\" --title \"Render-blocking stylesheet and font CSS delay first paint\"\necho \"F3:\"; python3 finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/style.css\" --title \"CSS and HTML served without compression\"\necho \"F4:\"; python3 finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"/style.css\" --title \"Static assets served without cache-control headers\"\necho \"F5:\"; python3 finding_id.py --lens technical --flow \"measure:index:mobile\" --locator \"console:nimbusBootstrap\" --title \"Uncaught ReferenceError fires before homepage load completes\"\n"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 18,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed. The manifest note about `finished_utc` is not scoring-related, so no action needed there.\n\n**Verdict:** The homepage's mobile LCP is poor at 5.8 s, driven almost entirely by a 3.9 MB hero image delivered at native 3000\u00d72000 resolution and shown at 350\u00d7233; the pricing page and both desktop views are fast and clean.\n\n**Findings by severity:** P0: 0 \u00b7 P1: 1 \u00b7 P2: 3 \u00b7 P3: 1 (5 total). Score: 6/10.",
+ "ttft_ms": 1101,
+ "type": "result",
+ "duration_ms": 139352,
+ "uuid": "7eaaeef7-d773-4749-b4ec-3a9cbeb90d0f",
+ "ttft_stream_ms": 679,
+ "time_to_request_ms": 116,
+ "first_content_frame_ms": 680,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

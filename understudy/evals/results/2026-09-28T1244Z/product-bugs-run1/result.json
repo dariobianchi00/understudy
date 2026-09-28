@@ -1,0 +1,68 @@
+{
+ "contract_pass": true,
+ "planted": 4,
+ "caught": 4,
+ "recall": 1.0,
+ "caught_ids": [
+  "api-500-notes",
+  "console-error-dashboard",
+  "lying-toast",
+  "search-always-empty"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [],
+ "band_ok": 0,
+ "band_judged": 0,
+ "band_rows": [
+  {
+   "id": "lying-toast",
+   "severity": "",
+   "band": [
+    "P0"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "api-500-notes",
+   "severity": "",
+   "band": [
+    "P1"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "search-always-empty",
+   "severity": "",
+   "band": [
+    "P1"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "console-error-dashboard",
+   "severity": "",
+   "band": [
+    "P3"
+   ],
+   "in_band": null
+  }
+ ],
+ "n_findings": 4,
+ "severities": {
+  "P0": 1,
+  "P1": 1,
+  "P2": 1,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "product",
+ "lens": "bugs",
+ "model": "sonnet",
+ "run": 1,
+ "files_written": true,
+ "seconds": 174.576313,
+ "cost_usd": 0.6855694,
+ "lens_turns": 27,
+ "lens_error": false
+}

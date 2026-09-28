@@ -1,0 +1,145 @@
+{
+ "duration_api_ms": 33979,
+ "stop_reason": "tool_use",
+ "session_id": "b5773a6f-b801-412a-aa38-c7694b0e662d",
+ "total_cost_usd": 0.1626944,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30361,
+  "cache_read_input_tokens": 24232,
+  "output_tokens": 3640,
+  "output_tokens_details": {
+   "thinking_tokens": 3063
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30361,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 3640,
+    "cache_read_input_tokens": 24232,
+    "cache_creation_input_tokens": 30361,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30361
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 3640,
+   "cacheReadInputTokens": 24232,
+   "cacheCreationInputTokens": 30361,
+   "webSearchRequests": 0,
+   "costUSD": 0.1626944,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 3063,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"workspace-type-before-value\",\"caught\":true,\"finding_title\":\"093bb613a876 \u2014 Signup forces an irreversible workspace type in unexplained terms before the product is shown\"},{\"id\":\"memories-invented\",\"caught\":true,\"finding_title\":\"c8ffc1a29fac \u2014 Memories page states invented facts about a brand-new novice, who then stopped trusting Saved\"},{\"id\":\"empty-state-no-guidance\",\"caught\":true,\"finding_title\":\"3a9ffccfb568 \u2014 Empty dashboard says only \\\"Nothing here yet.\\\" with no first step, contradicting \\\"never start from zero\\\"\"},{\"id\":\"search-always-empty\",\"caught\":true,\"finding_title\":\"7af4bccaa564 \u2014 Save shows \\\"Saved \u2713\\\" but the note never reaches \\\"Your cards\\\" or search (search 'No results for Dentist' for a card just written)\"},{\"id\":\"webhook-toggle-unexplained\",\"caught\":true,\"finding_title\":\"19142670f66e \u2014 Settings toggles use unexplained terms and \\\"Federated graph replication\\\" is on whichever workspace type was chosen\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "workspace-type-before-value",
+    "caught": true,
+    "finding_title": "093bb613a876 \u2014 Signup forces an irreversible workspace type in unexplained terms before the product is shown"
+   },
+   {
+    "id": "memories-invented",
+    "caught": true,
+    "finding_title": "c8ffc1a29fac \u2014 Memories page states invented facts about a brand-new novice, who then stopped trusting Saved"
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "caught": true,
+    "finding_title": "3a9ffccfb568 \u2014 Empty dashboard says only \"Nothing here yet.\" with no first step, contradicting \"never start from zero\""
+   },
+   {
+    "id": "search-always-empty",
+    "caught": true,
+    "finding_title": "7af4bccaa564 \u2014 Save shows \"Saved \u2713\" but the note never reaches \"Your cards\" or search (search 'No results for Dentist' for a card just written)"
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "caught": true,
+    "finding_title": "19142670f66e \u2014 Settings toggles use unexplained terms and \"Federated graph replication\" is on whichever workspace type was chosen"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 30653,
+ "type": "result",
+ "duration_ms": 34075,
+ "uuid": "8cbd70c3-e890-4c3e-997d-ffa96d404fee",
+ "ttft_stream_ms": 1192,
+ "time_to_request_ms": 128,
+ "first_content_frame_ms": 1192,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

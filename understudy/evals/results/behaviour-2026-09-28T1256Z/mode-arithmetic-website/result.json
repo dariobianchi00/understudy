@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant correctly stated 2 captures for one persona \u2014 one Mode A-visit capture scored by clarity/conversion/trust, plus one Mode C crawl for seo \u2014 without proposing per-lens captures or starting/interviewing.",
+  "cost": 0.107313
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "That's **2 captures**, in two different modes:\n\n1. **Mode A-visit: one persona visit** (`traversal-visit`). Clarity, conversion and trust all score this same visit, so it's one capture scored three ways, with no extra pass per lens. It's roughly 15\u201325 minutes for one persona.\n2. **Mode C: one crawl** (`traversal-crawl`). SEO scores this. It runs with no persona and no session, so the persona count doesn't change it.\n\nThe formula is (1 visit \u00d7 1 persona) + 1 crawl = **2 captures**. Four lenses score them, and each lens reads evidence that has already been captured. Adding more lenses in these two modes costs almost nothing. Adding another persona would add one more visit, which would make it 3 captures.\n\nNothing has been started.",
+ "cost_usd": 0.2274
+}

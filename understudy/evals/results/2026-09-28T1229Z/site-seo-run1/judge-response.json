@@ -1,0 +1,155 @@
+{
+ "duration_api_ms": 13938,
+ "stop_reason": "tool_use",
+ "session_id": "0e6061fd-f939-47cd-a0a8-5a2578af4c72",
+ "total_cost_usd": 0.1408584,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 29902,
+  "cache_read_input_tokens": 24232,
+  "output_tokens": 1640,
+  "output_tokens_details": {
+   "thinking_tokens": 1099
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 29902,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1640,
+    "cache_read_input_tokens": 24232,
+    "cache_creation_input_tokens": 29902,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 29902
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 1640,
+   "cacheReadInputTokens": 24232,
+   "cacheCreationInputTokens": 29902,
+   "webSearchRequests": 0,
+   "costUSD": 0.1408584,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 1099,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"pricing-noindex\",\"caught\":true,\"finding_title\":\"Pricing page is noindexed, blocking it from search results\"},{\"id\":\"sitemap-404\",\"caught\":true,\"finding_title\":\"Declared sitemap returns 404 and cannot be crawled\"},{\"id\":\"features-404\",\"caught\":true,\"finding_title\":\"Primary nav links to /features.html on every page, which 404s\"},{\"id\":\"duplicate-titles\",\"caught\":true,\"finding_title\":\"About and Privacy pages share an identical, generic title tag\"},{\"id\":\"heading-structure\",\"caught\":true,\"finding_title\":\"Pricing page renders two H1 elements / Privacy page has no H1, starts at H2\"},{\"id\":\"invalid-jsonld\",\"caught\":true,\"finding_title\":\"Homepage JSON-LD is invalid and fails to parse\"},{\"id\":\"pricing-no-meta-description\",\"caught\":true,\"finding_title\":\"Pricing and Privacy pages have no meta description\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "pricing-noindex",
+    "caught": true,
+    "finding_title": "Pricing page is noindexed, blocking it from search results"
+   },
+   {
+    "id": "sitemap-404",
+    "caught": true,
+    "finding_title": "Declared sitemap returns 404 and cannot be crawled"
+   },
+   {
+    "id": "features-404",
+    "caught": true,
+    "finding_title": "Primary nav links to /features.html on every page, which 404s"
+   },
+   {
+    "id": "duplicate-titles",
+    "caught": true,
+    "finding_title": "About and Privacy pages share an identical, generic title tag"
+   },
+   {
+    "id": "heading-structure",
+    "caught": true,
+    "finding_title": "Pricing page renders two H1 elements / Privacy page has no H1, starts at H2"
+   },
+   {
+    "id": "invalid-jsonld",
+    "caught": true,
+    "finding_title": "Homepage JSON-LD is invalid and fails to parse"
+   },
+   {
+    "id": "pricing-no-meta-description",
+    "caught": true,
+    "finding_title": "Pricing and Privacy pages have no meta description"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 10962,
+ "type": "result",
+ "duration_ms": 14036,
+ "uuid": "9c73e881-2e4d-4a19-8d6a-3046dc559f26",
+ "ttft_stream_ms": 1054,
+ "time_to_request_ms": 130,
+ "first_content_frame_ms": 1054,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

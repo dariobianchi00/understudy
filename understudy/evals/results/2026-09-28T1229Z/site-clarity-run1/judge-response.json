@@ -1,0 +1,135 @@
+{
+ "duration_api_ms": 8164,
+ "stop_reason": "tool_use",
+ "session_id": "c5fc9008-a8aa-44ce-b36c-e84ac6badeef",
+ "total_cost_usd": 0.1356424,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30553,
+  "cache_read_input_tokens": 24232,
+  "output_tokens": 858,
+  "output_tokens_details": {
+   "thinking_tokens": 477
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30553,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 858,
+    "cache_read_input_tokens": 24232,
+    "cache_creation_input_tokens": 30553,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30553
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 2,
+   "outputTokens": 858,
+   "cacheReadInputTokens": 24232,
+   "cacheCreationInputTokens": 30553,
+   "webSearchRequests": 0,
+   "costUSD": 0.1356424,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 477,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-audience\",\"caught\":true,\"finding_title\":\"3ae8ad9901d8 \u2014 Landing page never says who it is for; the only audience lines sit on the Pricing page\"},{\"id\":\"jargon-fold\",\"caught\":true,\"finding_title\":\"af20ddbac96a \u2014 Hero subhead explains the product in jargon neither persona could parse\"},{\"id\":\"dead-cta\",\"caught\":true,\"finding_title\":\"ce7a83b1106e \u2014 The See it in action button does nothing, so the remembers-everything promise is never shown\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-audience",
+    "caught": true,
+    "finding_title": "3ae8ad9901d8 \u2014 Landing page never says who it is for; the only audience lines sit on the Pricing page"
+   },
+   {
+    "id": "jargon-fold",
+    "caught": true,
+    "finding_title": "af20ddbac96a \u2014 Hero subhead explains the product in jargon neither persona could parse"
+   },
+   {
+    "id": "dead-cta",
+    "caught": true,
+    "finding_title": "ce7a83b1106e \u2014 The See it in action button does nothing, so the remembers-everything promise is never shown"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 6140,
+ "type": "result",
+ "duration_ms": 8269,
+ "uuid": "b8f13539-2840-48ad-a8a9-4ebd47845b60",
+ "ttft_stream_ms": 2117,
+ "time_to_request_ms": 143,
+ "first_content_frame_ms": 2117,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

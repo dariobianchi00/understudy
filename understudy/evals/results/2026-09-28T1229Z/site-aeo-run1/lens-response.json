@@ -1,0 +1,113 @@
+{
+ "duration_api_ms": 164301,
+ "stop_reason": "end_turn",
+ "session_id": "d71f1db6-6c4b-4ffb-a2a7-fd6f54d44807",
+ "total_cost_usd": 0.6097222,
+ "usage": {
+  "input_tokens": 30,
+  "cache_creation_input_tokens": 72447,
+  "cache_read_input_tokens": 699271,
+  "output_tokens": 18002,
+  "output_tokens_details": {
+   "thinking_tokens": 10557
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 72447,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 169,
+    "cache_read_input_tokens": 72089,
+    "cache_creation_input_tokens": 358,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 358
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 30,
+   "outputTokens": 18002,
+   "cacheReadInputTokens": 699271,
+   "cacheCreationInputTokens": 72447,
+   "webSearchRequests": 0,
+   "costUSD": 0.6097222,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 10557,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01TTGQ7gWZQpeHm2XhVZskEb",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy\necho \"F1:\"; python3 scripts/finding_id.py --lens aeo --flow \"crawl:site\" --locator \"site-wide\" --title \"No Organization schema anywhere on the site\"\necho \"F2:\"; python3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/\" --title \"Homepage JSON-LD is malformed and fails to parse\"\necho \"F3:\"; python3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/pricing.html\" --title \"Pricing page states no prices, structured or visual\"\necho \"F4:\"; python3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/\" --title \"Homepage has zero extractable answer blocks\"\necho \"F5:\"; python3 scripts/finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/about.html\" --title \"About page FAQPage schema omits a third visible Q&A\"\necho \"F6:\"; python3 scripts/finding_id.py --lens aeo --flow \"crawl:site\" --locator \"site-wide\" --title \"llms.txt is absent\"\n"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01PeCpso9JcGXGjs5tzABFZd",
+   "tool_input": {
+    "command": "cat /home/runner/work/understudy/understudy/understudy/scripts/check_report.py"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 27,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed cleanly. The manifest note about an open phase is expected (not part of this scoring task \u2014 that's the run orchestrator's job).\n\n**Verdict:** An answer engine can cleanly lift two Q&A pairs from the About page and nothing else \u2014 Organization schema is absent everywhere, the homepage's only JSON-LD is broken, and no page states a price.\n\n**Findings by severity:** 6 total \u2014 0 P0, 2 P1, 3 P2, 1 P3.\n\nScore: 4/10.",
+ "ttft_ms": 1193,
+ "type": "result",
+ "duration_ms": 165338,
+ "uuid": "42e867d7-39a5-466f-a463-ed03aa4ec786",
+ "ttft_stream_ms": 787,
+ "time_to_request_ms": 165,
+ "first_content_frame_ms": 787,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

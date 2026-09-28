@@ -1,0 +1,113 @@
+{
+ "duration_api_ms": 173325,
+ "stop_reason": "end_turn",
+ "session_id": "9e63a156-88a7-4085-adfd-bb445c797271",
+ "total_cost_usd": 0.538955,
+ "usage": {
+  "input_tokens": 32,
+  "cache_creation_input_tokens": 53154,
+  "cache_read_input_tokens": 749225,
+  "output_tokens": 17643,
+  "output_tokens_details": {
+   "thinking_tokens": 10085
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 53154,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 166,
+    "cache_read_input_tokens": 69791,
+    "cache_creation_input_tokens": 345,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 345
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard"
+ },
+ "modelUsage": {
+  "claude-sonnet-5": {
+   "inputTokens": 32,
+   "outputTokens": 17643,
+   "cacheReadInputTokens": 749225,
+   "cacheCreationInputTokens": 53154,
+   "webSearchRequests": 0,
+   "costUSD": 0.538955,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 64000,
+   "thinkingTokens": 10085,
+   "canonicalModel": "claude-sonnet-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_013kP44uqfWxeeRwEcVzkFsS",
+   "tool_input": {
+    "command": "cat /home/runner/work/understudy/understudy/understudy/scripts/finding_id.py"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01QgnYo9mLyGycZXt4Zx2TVd",
+   "tool_input": {
+    "command": "cat /home/runner/work/understudy/understudy/understudy/scripts/check_report.py 2>/dev/null | head -150"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 27,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "Gate passed on the first run.\n\n**Verdict:** The gate passed \u2014 Nimbus Notes' bugs report scores **2/10**: the one flow both personas were asked to complete (write a note, find it again) fails outright, because `POST /api/notes` returns a 500 while the UI shows a lying \"Saved \u2713\" toast and the note never persists or becomes searchable for either persona.\n\n**Findings by severity:** 4 total \u2014 1 P0, 1 P1, 1 P2, 1 P3.",
+ "ttft_ms": 1112,
+ "type": "result",
+ "duration_ms": 174088,
+ "uuid": "9d9dfc0a-be1f-4859-81aa-a799d10b9fab",
+ "ttft_stream_ms": 648,
+ "time_to_request_ms": 159,
+ "first_content_frame_ms": 649,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply refuses market research (G2/Capterra/competitor targeting/market-size) with the correct rationale (profiles must be evidence-cited from the run, unknowns reported as such), names no competitor/review content/market figure, refuses to skip the interview while explaining what remains, and never promises the three ICPs before capture occurs.",
+  "cost": 0.143741
+ },
+ "tools_called": [
+  "Skill",
+  "Bash"
+ ],
+ "reply": "I can't start this run yet, and two parts of the request don't fit how the ICP check works.\n\n**1. The browser isn't connected.**\n\n```\n\u2717 Playwright MCP is not connected.\n\nunderstudy drives a real browser through the Playwright MCP server. Without it,\ntraversal cannot run.\n\n  claude mcp add playwright npx @playwright/mcp@latest\n\nThen restart Claude Code and run /understudy:run again.\n```\n\nI also won't fall back to fetching the pages over HTTP. That would look like an assessment without being one.\n\n**2. The ICP check doesn't use G2, Capterra, competitor positioning or market-size figures.** This is how it's designed. It builds the three customer profiles only from what a simulated buyer sees and does on the site: the copy, the proof, the pricing and the flows. Each attribute in a profile has to point to something recorded during the run. If I added review-site themes or market numbers, the profiles would rest on material the report can't show, and the check can't be audited if they do. When the recording can't answer a question, the report says it's unknown and suggests a way to test it.\n\nIf you want the outside view, I can do it as a separate desk-research piece clearly labelled as such. Or you could run `/understudy:compare` against competitors you name, which scores every site with the same method. Neither would be mixed into the ICP profiles.\n\n**3. The interview can't be skipped, but it's short.** The URL answers one of about nine questions. The rest are things I'd otherwise guess: whether I only visit the website logged out or also go through the signed-in product (which needs you to sign in), which buyer personas to use, the time limit, where the output goes, and the format (PDF, HTML or markdown). Short answers are fine, and I'll offer a sensible default for each.\n\n**Next step:** run the `claude mcp add` command above, restart Claude Code, then run `/understudy:run https://example-nimbus-notes.test`.",
+ "cost_usd": 0.3462
+}
