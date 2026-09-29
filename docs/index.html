@@ -204,20 +204,19 @@ code{font-family:var(--mono);font-size:.82em;color:var(--green);
   padding:.05rem .35rem;border-radius:var(--radius-sm)}
 
 /* honesty numbers */
-.grid-label{margin:2.25rem 0 0;font-family:var(--mono);font-size:.78rem;color:var(--muted);letter-spacing:.04em}
-.grid-label+.grid{margin-top:.75rem}
+.group{margin-top:2.75rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.group h3{margin:0;font-size:1.35rem;color:var(--ink)}
+.group span{color:var(--muted);font-size:.98rem}
+.group+.grid{margin-top:1.1rem}
 .grid.web{grid-template-columns:repeat(4,minmax(0,1fr))}
-.shots{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:2.25rem}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin-top:2.25rem}
+.shots figure.plain{display:flex;align-items:center;padding:1rem 1.1rem}
+.shots figure.plain p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.55}
+.shots figure.plain strong{color:var(--ink)}
 .shots figure{margin:0;border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;background:var(--bg-elevated)}
-.shots figure.tall{grid-row:span 2}
 .shots img{display:block;width:100%;height:auto;opacity:.82;transition:opacity .2s}
 .shots figure:hover img{opacity:1}
 .shots figcaption{padding:.6rem .8rem;font-family:var(--mono);font-size:.72rem;color:var(--muted);border-top:1px solid var(--line)}
-.shots-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin-top:.75rem;align-items:start}
-.shots-row figure{margin:0;border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;background:var(--bg-elevated)}
-.shots-row img{display:block;width:100%;height:auto;opacity:.82;transition:opacity .2s}
-.shots-row figure:hover img{opacity:1}
-.shots-row figcaption{padding:.6rem .8rem;font-family:var(--mono);font-size:.72rem;color:var(--muted);border-top:1px solid var(--line)}
 .nums small{display:block;margin-top:.3rem;font-family:var(--mono);font-size:.7rem;color:var(--muted-2)}
 .steps{margin:1.4rem 0 0;padding-left:1.2rem;color:var(--ink-soft);font-size:.98rem;max-width:70ch}
 .steps li{margin:.35rem 0}
@@ -246,8 +245,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
 
 @media (max-width:960px){
   .grid.web{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .shots{grid-template-columns:1fr}.shots figure.tall{grid-row:auto}
-  .shots-row{grid-template-columns:1fr}
+  .shots{grid-template-columns:1fr 1fr}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nums{grid-template-columns:1fr}
   .rules{grid-template-columns:1fr}
@@ -259,6 +257,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
   .hero-right{padding:2.5rem 1.25rem}
 }
 @media (max-width:620px){
+  .shots{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
   .topnav .long{display:none}
   .topnav .short{display:inline}
@@ -323,7 +322,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     <h2>One session. Twelve questions answered.</h2>
     <p class="section-lede">Driving the product is the expensive part, so understudy does it once and scores that single recording through as many lenses as you asked for. Adding a question costs minutes, not another hour in the browser. A product gets five lenses; a website gets seven, and a comparison with competitors you name.</p>
 
-    <p class="grid-label">product — something people sign into and use</p>
+    <div class="group"><h3>Product</h3><span>something people sign into and use · five lenses · ~90 min per persona</span></div>
     <div class="grid">
       <div class="card">
         <span class="num">01 / ux</span>
@@ -352,7 +351,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
       </div>
     </div>
 
-    <p class="grid-label">website — something people read and decide from</p>
+    <div class="group"><h3>Website</h3><span>something people read and decide from · seven lenses · ~20 min per persona plus a crawl</span></div>
     <div class="grid web">
       <div class="card">
         <span class="num">06 / clarity</span>
@@ -448,14 +447,12 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     </div>
 
     <div class="shots">
-      <figure><a href="img/report-overview.jpg"><img src="img/report-overview.jpg" alt="The interactive report's overview: the verdict, an overall score ring, a ring per check, the Top 5 and what the site does well" loading="lazy" width="1400" height="933"></a><figcaption>interactive report — overview: the verdict, a score per check, the Top 5</figcaption></figure>
-      <figure><a href="img/report-compare.jpg"><img src="img/report-compare.jpg" alt="The competitive comparison view: three sites with logos, a lead/trail/level tally, every check's score side by side, and where each competitor does better or worse" loading="lazy" width="1400" height="933"></a><figcaption>competitive comparison — logos, tally, scores side by side, better and worse per competitor</figcaption></figure>
-    </div>
-    <div class="shots-row">
-      <figure><a href="img/report-cover.jpg"><img src="img/report-cover.jpg" alt="The PDF cover: product name and icon, overall score, scope, simulated buyers, checks applied, finding counts and the constructed-personas caveat" loading="lazy" width="1400" height="1478"></a><figcaption>the PDF — cover page, with the caveat on the front</figcaption></figure>
-      <figure><a href="img/report-replay.jpg"><img src="img/report-replay.jpg" alt="A persona's session replay: the log line by line on the left, the screen that was showing on the right" loading="lazy" width="1400" height="933"></a><figcaption>session replay — the log, line by line, with the screen that was showing</figcaption></figure>
-      <figure><a href="img/report-icp.jpg"><img src="img/report-icp.jpg" alt="The ideal customer profile cards: three profiles with fit and propensity bars, the trap segment and the candidates considered" loading="lazy" width="1400" height="933"></a><figcaption>ideal customer profiles — three cards, the trap, every candidate</figcaption></figure>
-      <figure><div style="padding:1rem .9rem;color:var(--muted);font-size:.9rem;line-height:1.55">Every screen here is a render of a <strong style="color:var(--ink)">fictional</strong> product — the test fixture that ships with the tool — greyed so nothing reads as a real client. Open one to see it full size. Real runs stay on your machine.</div></figure>
+      <figure><a href="img/report-overview.jpg"><img src="img/report-overview.jpg" alt="Overview of the interactive report: the verdict, an overall score ring and one ring per check" loading="lazy" width="1200" height="750"></a><figcaption>overview — the verdict, a score per check</figcaption></figure>
+      <figure><a href="img/report-compare.jpg"><img src="img/report-compare.jpg" alt="Competitive comparison: three sites with logos, a lead/trail/level tally and scores side by side" loading="lazy" width="1200" height="750"></a><figcaption>competitive comparison — tally, scores side by side</figcaption></figure>
+      <figure><a href="img/report-replay.jpg"><img src="img/report-replay.jpg" alt="Session replay: the persona's log line by line beside the screen that was showing" loading="lazy" width="1200" height="750"></a><figcaption>session replay — the log, with the screen showing</figcaption></figure>
+      <figure><a href="img/report-icp.jpg"><img src="img/report-icp.jpg" alt="An ideal customer profile card with fit and propensity bars and the case against it" loading="lazy" width="1200" height="750"></a><figcaption>ideal customer profiles — cards with the case against</figcaption></figure>
+      <figure><a href="img/report-cover.jpg"><img src="img/report-cover.jpg" alt="The PDF cover: product, overall score, scope, buyers, checks and finding counts" loading="lazy" width="1200" height="750"></a><figcaption>the PDF — cover, with the caveat on the front</figcaption></figure>
+      <figure class="plain"><p>Every screen is a render of a <strong>fictional</strong> product — the test fixture that ships with the tool — greyed so nothing reads as a real client. Click one for full size.</p></figure>
     </div>
 
     <p class="note">Neither scores or rewrites anything: every number is read from the lens files, every quote and screenshot is the run's own. A report whose evidence dies on send is worse than one with no evidence, so both embed their screenshots — which also means that once you forward one, it is as sensitive as the run itself.</p>
@@ -493,23 +490,6 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <p class="kicker">how much to trust one finding</p>
-    <h2>Score the same evidence twice and you get a different list.</h2>
-    <p class="section-lede">We took one recording and had the reviewers score it a second time, on the same models, without changing anything. Then we compared the two lists of findings. The problems they described were the same. The findings were not.</p>
-
-    <div class="nums">
-      <div><b>3 in 10</b><span>findings from the first scoring that came back in the second, in any wording</span><small>30.4% measured</small></div>
-      <div><b>4 in 10</b><span>of the serious ones (P0 and P1) came back — the important findings are steadier, not steady</span><small>42.9% measured</small></div>
-      <div><b>1 finding</b><span>was rated P0 in one scoring and P1 in the other — severity is the least stable thing in a report</span></div>
-    </div>
-
-    <p class="note"><strong style="color:var(--ink)">Why the lists differ when the problems don't.</strong> Both scorings said the audience is never named, four features are sold and never explained, and the most important capability is buried in the privacy policy. What moved was how those were cut up: one long finding in the first list became three short ones in the second, a P0 became a P1, the order changed. A reviewer chooses which observations become findings, and that choice is not stable.</p>
-    <p class="note"><strong style="color:var(--ink)">What to do with that.</strong> Read the report for its themes and its Top 5, not for the exact count. Treat any single finding as one careful reading, and open its screenshot before you act on it — that is what the citations are for. Don't build a threshold or an alert on a single severity. We publish the number because a report you can't calibrate is worse than no report.</p>
-    <p class="note">Two more limits worth knowing up front. If you don't supply your own personas, understudy invents plausible ones and says so on the face of every report — inferred personas produce materially weaker findings. And it never handles a credential: at a login screen it stops and hands you the browser.</p>
-  </div>
-</section>
 
 <section id="install">
   <div class="wrap">
