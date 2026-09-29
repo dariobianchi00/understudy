@@ -16,4 +16,9 @@ Its published reproducibility floor: scoring identical evidence twice reproduces
 
 ## Install
 
-- `/plugin marketplace add dariobianchi00/understudy` then `/plugin install understudy` in Claude Code; requires Playwright MCP
+- Claude Code: `/plugin marketplace add dariobianchi00/understudy` then `/plugin install understudy`; requires Playwright MCP (`claude mcp add playwright npx @playwright/mcp@latest`)
+- Claude Cowork: Customize → Browse plugins → Personal → + → Add marketplace from GitHub → `https://github.com/dariobianchi00/understudy`, then install understudy; needs the Playwright plugin or a local Playwright MCP entry in claude_desktop_config.json
+
+## Reports
+
+Two deliverables from one run: a PDF (cover with score, scope, caveat; Top 5; quotes; every lens with evidence) and a self-contained interactive HTML (dashboard, findings explorer, session replay, ICP cards, competitive comparison with logos and side-by-side scores, Present mode, triage). Screenshots of both, rendered from a fictional fixture product, are on the landing page.

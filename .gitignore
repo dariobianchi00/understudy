@@ -53,6 +53,10 @@ playwright-report/
 !understudy/evals/fixture-run/**
 # The landing page's social card. Not a capture — a render of docs/index.html copy.
 !docs/og-image.png
+# The landing page's report screenshots: renders of the FICTIONAL fixture run
+# (evals/fixture-run + invented competitors), greyed. Never a real product.
+!docs/img/
+!docs/img/*.jpg
 
 # Local machine settings — not part of the plugin
 .claude/settings.local.json

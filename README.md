@@ -107,6 +107,27 @@ claude mcp add playwright npx @playwright/mcp@latest
 
 Restart Claude Code afterwards.
 
+### In Claude Cowork
+
+understudy also runs in Claude Cowork, the agent in the Claude desktop app. Cowork
+keeps its own plugin list — a plugin installed in the Claude Code terminal is not
+visible there — so add it through Cowork's menu:
+
+1. Claude desktop app → **Cowork** → **Customize** → **Browse plugins** → **Personal**.
+2. **+** → **Add marketplace from GitHub** → `https://github.com/dariobianchi00/understudy`.
+3. Install **understudy** from that marketplace.
+4. Give Cowork a browser: install the official Playwright plugin
+   (`claude plugin install playwright@claude-plugins-official`), or add Playwright
+   to Claude Desktop's local MCP config — Cowork bridges the servers in
+   `claude_desktop_config.json` into a session when it starts.
+5. Start a session and type `/understudy:run`.
+
+Slash commands, skills, sub-agents and hooks all run in Cowork, so the whole
+plugin works there. What is not documented is whether an MCP server bundled
+inside a plugin reaches Cowork on its own, which is why step 4 installs
+Playwright separately. Cowork's menus are new and move; the current steps are on
+[the plugins page in Claude's docs](https://claude.com/docs/plugins/overview).
+
 <details>
 <summary><b>Two version-dependent quirks — <code>browser_resize</code> and where screenshots land</b></summary>
 
