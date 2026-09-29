@@ -113,8 +113,8 @@ understudy also runs in Claude Cowork, the agent in the Claude desktop app. Cowo
 keeps its own plugin list — a plugin installed in the Claude Code terminal is not
 visible there — so add it through Cowork's menu:
 
-1. Claude desktop app → **Cowork** → **Customize** → **Browse plugins** → **Personal**.
-2. **+** → **Add marketplace from GitHub** → `https://github.com/dariobianchi00/understudy`.
+1. Claude desktop app → **Cowork** → **Customize** → **Plugins** tab → **Yours**.
+2. **+** (top right) → add a marketplace from GitHub → `https://github.com/dariobianchi00/understudy`.
 3. Install **understudy** from that marketplace.
 4. Give Cowork a browser: install the official Playwright plugin
    (`claude plugin install playwright@claude-plugins-official`), or add Playwright

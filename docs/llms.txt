@@ -17,7 +17,7 @@ Its published reproducibility floor: scoring identical evidence twice reproduces
 ## Install
 
 - Claude Code: `/plugin marketplace add dariobianchi00/understudy` then `/plugin install understudy`; requires Playwright MCP (`claude mcp add playwright npx @playwright/mcp@latest`)
-- Claude Cowork: Customize → Browse plugins → Personal → + → Add marketplace from GitHub → `https://github.com/dariobianchi00/understudy`, then install understudy; needs the Playwright plugin or a local Playwright MCP entry in claude_desktop_config.json
+- Claude Cowork: Customize → Plugins → Yours → + → add marketplace from GitHub → `https://github.com/dariobianchi00/understudy`, then install understudy; needs the Playwright plugin or a local Playwright MCP entry in claude_desktop_config.json
 
 ## Reports
 

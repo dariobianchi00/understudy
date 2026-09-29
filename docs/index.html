@@ -511,8 +511,8 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     <p class="section-lede">Cowork installs plugins from the same GitHub repo, through its own menu. A plugin installed in the Claude Code terminal is <em>not</em> visible to Cowork, so add it there as well.</p>
     <ol class="steps">
       <li>Open the Claude desktop app and switch to <strong>Cowork</strong>.</li>
-      <li>In the left sidebar choose <strong>Customize</strong> → <strong>Browse plugins</strong> → <strong>Personal</strong>.</li>
-      <li>Click <strong>+</strong> → <strong>Add marketplace from GitHub</strong> and paste <code>https://github.com/dariobianchi00/understudy</code>.</li>
+      <li>In the left sidebar choose <strong>Customize</strong>, open the <strong>Plugins</strong> tab and switch to <strong>Yours</strong>.</li>
+      <li>Click <strong>+</strong> at the top right, choose to add a marketplace from GitHub, and paste <code>https://github.com/dariobianchi00/understudy</code>.</li>
       <li>Install <strong>understudy</strong> from that marketplace.</li>
       <li>Give Cowork a browser: install the official Playwright plugin (<code>claude plugin install playwright@claude-plugins-official</code>), or add Playwright to Claude Desktop's local MCP config — Cowork reads local MCP servers from <code>claude_desktop_config.json</code> when a session starts.</li>
       <li>Start a session and type <code>/understudy:run</code>.</li>
@@ -538,7 +538,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
       </div>
       <div class="rule-card">
         <h3>Does it work in Claude Cowork?</h3>
-        <p>Yes. Add the GitHub repo as a marketplace from Cowork's Customize → Browse plugins menu and install understudy there; a terminal install does not carry over. Cowork also needs the Playwright browser plugin or a local Playwright MCP entry in Claude Desktop's config.</p>
+        <p>Yes. In Cowork go to Customize → Plugins → Yours, press + to add the GitHub repo as a marketplace, and install understudy there; a terminal install does not carry over. Cowork also needs the Playwright browser plugin or a local Playwright MCP entry in Claude Desktop's config.</p>
       </div>
       <div class="rule-card">
         <h3>How reproducible are the findings?</h3>
