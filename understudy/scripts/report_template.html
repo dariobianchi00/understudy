@@ -64,6 +64,7 @@ blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--accent);col
 .side .bar{width:46px;height:5px;border-radius:3px;background:#e9ecf1;overflow:hidden;display:inline-block;margin-left:8px}
 .side .bar i{display:block;height:100%}
 .side a.on .bar{background:rgba(255,255,255,.3)}
+.side a.on .n span{color:#fff!important}
 main{margin:var(--top) 0 0 var(--side);padding:26px 30px 80px;max-width:1280px}
 .view{display:none}.view.on{display:block}
 .hero{display:flex;gap:20px;align-items:flex-start;margin-bottom:18px}
@@ -177,6 +178,43 @@ main{margin:var(--top) 0 0 var(--side);padding:26px 30px 80px;max-width:1280px}
 .pres .icp li,.pres .icp p{font-size:clamp(14px,1.3vw,18px)}
 .pres .icp pre{display:none}
 
+/* ------------------------------------------------------------- compare */
+.vd{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;text-transform:capitalize}
+.vleads{background:#e6f4ec;color:var(--ok)}.vtrails{background:#fff0e0;color:var(--p1)}.vlevel{background:#eef0f3;color:#6b7482}.vnot{background:#f4f5f7;color:#9aa3b1}
+.mk{font-weight:800;margin-right:2px}.mk2{color:var(--ok)}.mk1{color:var(--p2)}.mk0{color:var(--p0)}
+.tally{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.tally div{padding:10px 6px;border-radius:10px;background:#f6f7f9}
+.tally b{display:block;font-size:30px;font-weight:800;line-height:1.1}
+.tally span{font-size:12px;color:var(--mut);text-transform:capitalize}
+.sites{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin:8px 0 14px}
+.site{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+.site.ours{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.slogo{width:44px;height:44px;border-radius:10px;object-fit:contain;border:1px solid var(--line);background:#fff;padding:3px;flex:none}
+.slogo.blank{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--mut);background:#f2f4f8}
+.site .nm{font-weight:700;line-height:1.2}.site .hs{font-size:12px;color:var(--mut)}
+.site .mean{margin-left:auto;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+table.scoreby td.ours,table.scoreby th.ours{background:#f7f9ff}
+table.scoreby td.sc{font-weight:800;font-variant-numeric:tabular-nums;font-size:16px}
+.vs{border:1px solid var(--line);border-radius:var(--r);background:#fff;padding:16px 18px;margin:0 0 16px}
+.vs .hd{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.vs h3{margin:0}.vs .hd .hs{font-size:12.5px;color:var(--mut)}
+.vs .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.vs ul{margin:0;padding-left:0;list-style:none}
+.vs li{padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.vs li:last-child{border-bottom:0}
+.vs li b{display:block;font-weight:600}
+.vs li .cl{color:var(--mut);font-size:12.5px}
+.vs .k{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.vs .k.up{color:var(--ok)}.vs .k.down{color:var(--p1)}
+table.matrix{font-size:13px}table.matrix td:first-child{font-weight:600;min-width:160px}
+table.matrix td.ours,table.matrix th.ours{background:#f7f9ff}
+table.matrix tr.hide{display:none}
+@media (max-width:900px){.vs .cols{grid-template-columns:1fr}.tally{grid-template-columns:repeat(2,1fr)}}
+.pres .tally b{font-size:clamp(40px,6vw,84px)}.pres .tally span{font-size:16px}
+.pres .sites{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.pres .slogo{width:64px;height:64px}
+.pres table.matrix{font-size:clamp(12px,1.1vw,16px)}
+.pres .vs li{font-size:clamp(13px,1.3vw,18px)}
 /*__ICP_CSS__*/
 .icp-card{background:var(--card)}
 .icp-primary{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
@@ -234,6 +272,7 @@ main{margin:var(--top) 0 0 var(--side);padding:26px 30px 80px;max-width:1280px}
   <section class="view" id="v-personas"></section>
   <section class="view" id="v-persona"></section>
   <section class="view" id="v-icp"></section>
+  <section class="view" id="v-compare"></section>
   <section class="view" id="v-quotes"></section>
   <section class="view" id="v-limits"></section>
 </main>
@@ -286,6 +325,21 @@ function ring(score, size=82, label='') {
    stroke-dasharray="${(c*v).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 42 42)"/>
    <text x="42" y="47" text-anchor="middle" font-size="22" font-weight="800" fill="${hue(score)}">${score==null?'–':score}</text></svg>`;
 }
+const VCLS = v => v==='leads'?'vleads':v==='trails'?'vtrails':v==='level'?'vlevel':'vnot';
+const vd = v => `<span class="vd ${VCLS(v)}">${esc(v)}</span>`;
+const mk = c => { const s=String(c??''); const m={'✓':2,'⚠':1,'✗':0}[s[0]]; return m==null?esc(s):`<span class="mk mk${m}">${s[0]}</span>${esc(s.slice(1).trim())}`; };
+const slogo = (st, cls='slogo') => st.logo ? `<img class="${cls}" src="${st.logo}" alt="">` : `<span class="${cls} blank">${esc((st.name||'?')[0].toUpperCase())}</span>`;
+function tallyRing(t, size=82){
+  const r=34, c=2*Math.PI*r, n=(t.leads||0)+(t.trails||0)+(t.level||0)||1;
+  const segs=[['leads','var(--ok)'],['trails','var(--p1)'],['level','#c9ced6']]; let off=0, arcs='';
+  for (const [k,col] of segs){ const len=c*(t[k]||0)/n; arcs+=`<circle cx="42" cy="42" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-dasharray="${len.toFixed(1)} ${c.toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 42 42)"/>`; off+=len; }
+  return `<svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="${r}" fill="none" stroke="#eceff3" stroke-width="8"/>${arcs}
+   <text x="42" y="40" text-anchor="middle" font-size="15" font-weight="800" fill="var(--ok)">▲ ${t.leads||0}</text>
+   <text x="42" y="58" text-anchor="middle" font-size="15" font-weight="800" fill="var(--p1)">▼ ${t.trails||0}</text></svg>`;
+}
+const lensRing = (l, go=true) => l.tally
+  ? `<div class="ring" ${go?'data-go="compare"':'style="cursor:default"'}>${tallyRing(l.tally)}<div class="lab">${esc(l.label)}</div><div class="n">leads ${l.tally.leads} · trails ${l.tally.trails} · level ${l.tally.level}</div></div>`
+  : `<div class="ring" ${go?`data-go="lens/${encodeURIComponent(l.dir)}"`:'style="cursor:default"'}>${ring(l.score)}<div class="lab">${esc(l.label)}</div><div class="n">${go?`${l.count} finding${l.count===1?'':'s'}`:esc(l.looksFor||'')}</div></div>`;
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),1800); }
 
 // ------------------------------------------------------------ triage state
@@ -303,7 +357,7 @@ $('#hoverall').innerHTML = D.overall != null ? `Overall <b style="color:${hue(D.
 
 const NAV = [
   ['overview','Overview'], ['top5','Top 5'], ['findings','All findings', F.length],
-  ['personas','Personas', P.length], ...(D.icp ? [['icp','Ideal Customer Profiles']] : []),
+  ['personas','Personas', P.length], ...(D.compare ? [['compare','Competitive comparison']] : []), ...(D.icp ? [['icp','Ideal Customer Profiles']] : []),
   ['quotes','In their own words', (D.quotes||[]).length], ['limits','Limits'],
 ];
 function renderNav(){
@@ -312,7 +366,7 @@ function renderNav(){
   $('#side').innerHTML = NAV.map(([k,l,n]) =>
     `<a href="#${k}" class="${cur===k||(k==='personas'&&cur==='persona')?'on':''}">${l}${n!=null?`<span class="n">${n}</span>`:''}</a>`).join('')
     + `<div class="kicker">Checks</div>` + LENS.map(l =>
-    `<a href="#lens/${encodeURIComponent(l.dir)}" class="lens ${curLens===l.dir?'on':''}"><span>${esc(l.label)}</span><span class="n">${l.score??'–'}<span class="bar"><i style="width:${(l.score||0)*10}%;background:${hue(l.score)}"></i></span></span></a>`).join('');
+    `<a href="#${l.tally?'compare':'lens/'+encodeURIComponent(l.dir)}" class="lens ${curLens===l.dir||(l.tally&&cur==='compare')?'on':''}"><span>${esc(l.label)}</span>${l.tally?`<span class="n"><span style="color:var(--ok)">▲${l.tally.leads}</span> <span style="color:var(--p1)">▼${l.tally.trails}</span></span>`:`<span class="n">${l.score??'–'}<span class="bar"><i style="width:${(l.score||0)*10}%;background:${hue(l.score)}"></i></span></span>`}</a>`).join('');
 }
 
 // ------------------------------------------------------------ views
@@ -326,20 +380,25 @@ function vOverview(){
     <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(D.overall,120)}<div class="lab">Overall</div><div class="n">mean of ${LENS.length} checks</div></div>
   </div>
   <div class="card"><div class="kicker">How each area scores — click a check for its findings</div>
-    <div class="rings" style="margin:10px 0 0">${LENS.map(l=>`<div class="ring" data-go="lens/${encodeURIComponent(l.dir)}">${ring(l.score)}<div class="lab">${esc(l.label)}</div><div class="n">${l.count} finding${l.count===1?'':'s'}</div></div>`).join('')}</div>
+    <div class="rings" style="margin:10px 0 0">${LENS.map(l=>lensRing(l)).join('')}</div>
     <p class="small mut" style="margin:12px 0 0">${D.nFindings} findings — ${counts}${D.nProblems<D.nFindings?` · ${D.nProblems} distinct problems (the rest were raised by more than one check)`:''}</p>
   </div>
   <div class="grid g2">
     <div class="card"><div class="kicker">Fix these first</div>${(D.top5||[]).map(r=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span style="font-weight:800;color:#c9ced6;width:18px">${r.n}</span>${sev(r.sev)}<span>${esc(r.what)}</span></div>`).join('')}<p style="margin:12px 0 0"><a href="#top5" class="btn sm">Open the Top 5 →</a></p></div>
     <div class="card"><div class="kicker">What the site does well</div><ul style="padding-left:18px;margin:0">${(D.doesWell||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul></div>
   </div>
+  ${D.compare ? `<div class="card"><div class="kicker">Against comparable sites</div>
+    <div class="sites">${D.compare.sites.map(st=>`<div class="site ${st.ours?'ours':''}" data-go="compare">${slogo(st)}<div><div class="nm">${esc(st.name)}</div><div class="hs">${st.ours?'this site':esc(st.host)}</div></div></div>`).join('')}</div>
+    <div class="grid g2" style="align-items:start"><div>${D.sections.against||''}</div><div class="tally">${['leads','trails','level','not comparable'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${D.compare.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div></div>
+    <p style="margin:12px 0 0"><a href="#compare" class="btn sm">Open the comparison →</a></p></div>` : ''}
   <div class="card"><div class="kicker">Who was simulated — click to replay the session</div>
     <div class="grid g3" style="margin-top:8px">${P.map(pcard).join('')}</div></div>
   ${D.clusters && D.clusters.length ? `<div class="card"><div class="kicker">Raised by more than one check</div><table><thead><tr><th>Sev</th><th>Problem</th><th>Raised by</th></tr></thead><tbody>${D.clusters.map(c=>`<tr><td>${sev(c.sev)}</td><td><a href="#findings/${esc(c.ids[0])}">${esc(c.title)}</a></td><td class="small mut">${c.raised.map(esc).join(' · ')}</td></tr>`).join('')}</tbody></table></div>`:''}
   <div class="grid g2">
     <div class="card"><div class="kicker">What this is</div>${D.sections.whatThisIs}</div>
     <div class="card"><div class="kicker">How it was produced</div>${D.sections.howProduced}</div>
-  </div>`;
+  </div>
+  ${(D.extraSections||[]).length ? `<div class="kicker" style="margin-top:6px">More from the summary</div><div class="grid g2">${D.extraSections.map(x=>`<div class="card"><div class="kicker">${esc(x.title)}</div>${x.html}</div>`).join('')}</div>` : ''}`;
 }
 function pcard(p){
   const f = p.facts||{};
@@ -389,7 +448,8 @@ function vFindings(fixedLens){
 function vLens(dir){
   const l = LENS.find(x=>x.dir===dir); if(!l) return '<p class="mut">No such check.</p>';
   return `<div class="hero"><div class="card" style="flex:1;margin:0"><div class="kicker">${esc(l.label)} — ${esc(l.looksFor||'')}</div><div class="verdict">${esc(l.verdict)}</div><p class="small mut" style="margin:10px 0 0">${esc(l.why)}</p></div>
-  <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(l.score,120)}<div class="lab">${esc(l.label)}</div><div class="n">${SEVS.map(s=>`${s} ${l.sev[s]||0}`).join(' · ')}</div></div></div>
+  <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${l.tally?tallyRing(l.tally,120):ring(l.score,120)}<div class="lab">${esc(l.label)}</div><div class="n">${SEVS.map(s=>`${s} ${l.sev[s]||0}`).join(' · ')}</div></div></div>
+  ${l.tally?`<p class="small" style="margin:-6px 0 14px"><a href="#compare">Open the site-by-site comparison →</a></p>`:''}
   ${vFindings(dir)}`;
 }
 function vPersonas(){ return `<h2>Personas</h2><p class="mut">Each card is one recorded session. Open one to replay it line by line, see every screen, read the debrief.</p><div class="grid g2">${P.map(pcard).join('')}</div>`; }
@@ -422,6 +482,43 @@ function vPersona(name, tab='replay'){
     <div class="ptabs">${tabs.map(t=>`<button data-ptab="${t}" class="${t===tab?'on':''}">${t==='findings'?`findings (${p.findings.length})`:t==='screens'?`screens (${p.shots.length})`:t}</button>`).join('')}</div>${body}`;
 }
 function vIcp(){ return `<h2>Ideal Customer Profiles</h2><p class="mut">Who this product should be built and sold for, on the evidence of what it is. Three profiles, the trap to avoid, and every candidate considered. Derived from the recorded sessions only; the case against each profile is reasoning, not evidence.</p><div class="icp">${D.icp||'<p class="mut">The icp check did not run.</p>'}</div>`; }
+function matrixTable(rows, cls='matrix', filter=''){
+  const C=D.compare, sites=C.sites.filter(s=>s.col!=null).sort((a,b)=>a.col-b.col);
+  const cols=C.headers.slice(1,-1).map((h,i)=>{ const st=sites.find(s=>s.col===i); return {name: st?st.name:h, ours: !!(st&&st.ours)}; });
+  return `<table class="${cls}"><thead><tr><th>${esc(C.headers[0]||'Dimension')}</th>${cols.map(c=>`<th class="${c.ours?'ours':''}">${esc(c.name)}</th>`).join('')}<th>Verdict</th></tr></thead>
+  <tbody>${rows.map(r=>`<tr data-v="${esc(r.verdict)}" class="${filter&&r.verdict!==filter?'hide':''}"><td>${esc(r.dim)}</td>${r.cells.map((c,i)=>`<td class="${cols[i]&&cols[i].ours?'ours':''}">${mk(c)}</td>`).join('')}<td>${vd(r.verdict)}</td></tr>`).join('')}</tbody></table>`;
+}
+function vsCard(st){
+  const C=D.compare, me=C.product;
+  const li=(x,who)=>`<li><b>${esc(x.dim)}</b><span class="cl">${esc(who==='them'?st.name:me)}: ${esc(x.theirs)}<br>${esc(who==='them'?me:st.name)}: ${esc(x.ours)}</span></li>`;
+  const li2=x=>`<li><b>${esc(x.dim)}</b><span class="cl">${esc(st.name)}: ${esc(x.theirs)}<br>${esc(me)}: ${esc(x.ours)}</span></li>`;
+  return `<div class="vs"><div class="hd">${slogo(st)}<div><h3>${esc(me)} vs ${esc(st.name)}</h3><div class="hs">${esc(st.host)}${st.mean!=null?` · mean of the shared checks ${st.mean}/10`:''} · ${st.better.length} better · ${st.worse.length} worse · ${st.same.length} level</div></div></div>
+  <div class="cols"><div><div class="k up">Where ${esc(st.name)} does better</div><ul>${st.better.map(li2).join('')||'<li class="mut">No row where the check marked them ahead.</li>'}</ul></div>
+  <div><div class="k down">Where ${esc(st.name)} does worse</div><ul>${st.worse.map(li2).join('')||'<li class="mut">No row where the check marked them behind.</li>'}</ul></div></div>
+  ${st.same.length?`<p class="small mut" style="margin:10px 0 0">Level on: ${st.same.map(x=>esc(x.dim)).join(' · ')}</p>`:''}</div>`;
+}
+let MFILT='';
+function vCompare(){
+  const C=D.compare; if(!C) return '<p class="mut">This run has no comparison.</p>';
+  const comp=C.sites.filter(s=>!s.ours), ours=C.sites.find(s=>s.ours);
+  const shared=C.sharedChecks||[];
+  const scoreby = shared.length ? `<table class="scoreby"><thead><tr><th>Check</th>${C.sites.map(s=>`<th class="${s.ours?'ours':''}">${esc(s.name)}</th>`).join('')}</tr></thead><tbody>
+    ${shared.map(k=>`<tr><td>${esc(C.checkLabels[k]||k)}</td>${C.sites.map(s=>{const v=(s.scores[k]||{}).score; return `<td class="sc ${s.ours?'ours':''}" style="color:${hue(v)}" title="${esc((s.scores[k]||{}).why||'')}">${v??'–'}</td>`;}).join('')}</tr>`).join('')}
+    <tr><td><b>Mean of these checks</b></td>${C.sites.map(s=>`<td class="sc ${s.ours?'ours':''}" style="color:${hue(s.mean)}">${s.mean??'–'}</td>`).join('')}</tr></tbody></table>
+    <p class="small mut" style="margin:8px 0 0">Each score is the one that site's own check wrote; the run's overall score counts ${esc(C.product)}'s checks only. Hover a number for the check's reason.</p>` : '';
+  return `<h2>How ${esc(C.product)} compares with ${comp.map(s=>esc(s.name)).join(' and ')}</h2>
+  ${C.note?`<p class="mut">${esc(C.note)}</p>`:''}
+  <div class="hero"><div class="card" style="flex:1;margin:0"><div class="kicker">The comparison verdict</div><div class="verdict">${esc(C.verdict)}</div></div>
+    <div class="card" style="margin:0;min-width:340px"><div class="kicker">Rows of the matrix where ${esc(C.product)}…</div><div class="tally">${['leads','trails','level','not comparable'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${C.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div></div></div>
+  <div class="card"><div class="kicker">The sites</div><div class="sites">${C.sites.map(st=>`<div class="site ${st.ours?'ours':''}">${slogo(st)}<div><div class="nm">${esc(st.name)}</div><div class="hs">${st.ours?'this site':esc(st.host)}</div></div>${st.mean!=null?`<div class="mean" style="color:${hue(st.mean)}">${st.mean}</div>`:''}</div>`).join('')}</div>${scoreby}</div>
+  ${comp.map(vsCard).join('')}
+  <div class="card"><div class="kicker">Differences matrix — every row, with the check's own verdict</div>
+    <div class="filters" style="margin:8px 0 10px">${['','leads','trails','level','not comparable'].map(v=>`<button class="f ${MFILT===v?'on':''}" data-mf="${esc(v)}">${v||'all'} ${v?C.tally[v]||0:C.rows.length}</button>`).join('')}</div>
+    <div style="overflow:auto">${matrixTable(C.rows,'matrix',MFILT)}</div>
+    <p class="small mut" style="margin:10px 0 0">Verdict rule, the same on every row: <b>leads</b> = ahead of at least one competitor and behind neither · <b>trails</b> = behind at least one and ahead of neither · <b>level</b> = level with all, or ahead of one and behind another.</p></div>
+  <div class="grid g2">${(C.narrative||[]).map(n=>`<div class="card"><div class="kicker">${esc(n.title)}</div>${n.html}</div>`).join('')}</div>
+  <p><a href="#lens/compare" class="btn sm">Findings from this check →</a></p>`;
+}
 function vQuotes(){
   return `<h2>In their own words</h2><p class="mut">Verbatim lines from the session logs and debriefs. The speakers are constructed personas driven by the evaluation, not customers.</p>
   <div class="card"><table class="qt"><thead><tr><th>Who</th><th>When</th><th>What they said</th><th>Screen</th></tr></thead><tbody>${(D.quotes||[]).map(q=>`<tr><td class="who">${esc(q.who)}</td><td class="small mut nowrap">${esc(q.when)}</td><td class="q">“${esc(q.text)}”${q.top5?`<div class="small mut">→ Top 5, row ${q.top5}</div>`:''}</td><td>${q.shots.map(s=>img(s,'thumb',s.split('/')[0])).join('')}</td></tr>`).join('')}</tbody></table></div>`;
@@ -480,7 +577,19 @@ function buildSlides(){
     ${D.meta.personaMode!=='supplied'?`<div class="caveat"><b>The users were constructed, not researched.</b> This shows what a capable first-time user can and cannot work out from the product; it does not show what actual customers do.</div>`:''}`});
   s.push({t:'What this is', h:`<h2>What this is</h2>${D.sections.whatThisIs}<h2 style="margin-top:.8em">How it was produced</h2>${D.sections.howProduced}`});
   s.push({t:'The verdict', h:`<div class="kicker">The verdict</div><p class="verdict">${esc(D.verdict)}</p>`});
-  s.push({t:'Scores', h:`<h2>How each area scores${D.overall!=null?` — overall <span class="score" style="color:${hue(D.overall)}">${D.overall}/10</span>`:''}</h2><div class="rings">${LENS.map(l=>`<div class="ring" style="cursor:default">${ring(l.score)}<div class="lab">${esc(l.label)}</div><div class="n">${esc(l.looksFor||'')}</div></div>`).join('')}</div>`});
+  s.push({t:'Scores', h:`<h2>How each area scores${D.overall!=null?` — overall <span class="score" style="color:${hue(D.overall)}">${D.overall}/10</span>`:''}</h2><div class="rings">${LENS.map(l=>lensRing(l,false)).join('')}</div>`});
+  if (D.compare){
+    const C=D.compare, comp=C.sites.filter(s=>!s.ours), shared=C.sharedChecks||[];
+    s.push({t:'Against comparable sites', h:`<h2>Against ${comp.map(s=>esc(s.name)).join(' and ')}</h2><p class="mut" style="font-size:18px">${esc(C.verdict)}</p>
+      <div class="sites">${C.sites.map(st=>`<div class="site ${st.ours?'ours':''}">${slogo(st)}<div><div class="nm" style="font-size:20px">${esc(st.name)}</div><div class="hs">${st.ours?'this site':esc(st.host)}</div></div>${st.mean!=null?`<div class="mean" style="color:${hue(st.mean)};font-size:28px">${st.mean}</div>`:''}</div>`).join('')}</div>
+      <div class="two" style="align-items:start"><div class="tally">${['leads','trails','level','not comparable'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${C.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div>
+      ${shared.length?`<table class="scoreby"><thead><tr><th>Check</th>${C.sites.map(s=>`<th class="${s.ours?'ours':''}">${esc(s.name)}</th>`).join('')}</tr></thead><tbody>${shared.map(k=>`<tr><td>${esc(C.checkLabels[k]||k)}</td>${C.sites.map(s=>{const v=(s.scores[k]||{}).score; return `<td class="sc ${s.ours?'ours':''}" style="color:${hue(v)}">${v??'–'}</td>`;}).join('')}</tr>`).join('')}</tbody></table>`:''}</div>`});
+    comp.forEach(st=>s.push({t:`vs ${st.name}`, h:`<div class="kicker">${esc(C.product)} against</div><div class="hd" style="display:flex;gap:16px;align-items:center;margin-bottom:14px">${slogo(st)}<h2 style="margin:0">${esc(st.name)}</h2></div>
+      <div class="vs" style="border:0;padding:0"><div class="cols"><div><div class="k up">Where ${esc(st.name)} does better</div><ul>${st.better.slice(0,7).map(x=>`<li><b>${esc(x.dim)}</b><span class="cl">${esc(x.theirs)}</span></li>`).join('')||'<li class="mut">Nowhere the check marked them ahead.</li>'}</ul></div>
+      <div><div class="k down">Where ${esc(st.name)} does worse</div><ul>${st.worse.slice(0,7).map(x=>`<li><b>${esc(x.dim)}</b><span class="cl">${esc(x.theirs)}</span></li>`).join('')||'<li class="mut">Nowhere the check marked them behind.</li>'}</ul></div></div></div>`}));
+    const lt=C.rows.filter(r=>r.verdict==='leads'||r.verdict==='trails');
+    s.push({t:'Differences matrix', h:`<h2>Where ${esc(C.product)} leads and trails</h2>${matrixTable(lt)}<p class="small mut">${C.rows.length-lt.length} rows that are level or not comparable are in the full report.</p>`});
+  }
   (D.top5||[]).forEach(r=>{
     const q=(D.quotes||[]).find(x=>x.top5===+r.n);
     s.push({t:`Fix #${r.n}`, h:`<div class="kicker">Fix these first — ${r.n} of ${D.top5.length}</div><div class="two"><div>${sev(r.sev)}<h2 style="margin-top:.4em">${esc(r.what)}</h2><p><b>What it costs:</b> ${esc(r.cost)}</p><p class="mut">Effort: ${esc(r.effort)}</p>${q?`<blockquote>“${esc(q.text)}”<div class="small mut" style="font-weight:400">${esc(q.who)} · ${esc(q.when)}</div></blockquote>`:''}</div><div>${q&&q.shots[0]?img(q.shots[0],'shot'):''}</div></div>`});
@@ -535,6 +644,7 @@ function render(){
     case 'personas': target='personas'; htmlOut=vPersonas(); break;
     case 'persona': { target='persona'; const [name,tab]=arg.split('/'); htmlOut=vPersona(name,tab||'replay'); break; }
     case 'icp': target='icp'; htmlOut=vIcp(); break;
+    case 'compare': target='compare'; htmlOut=vCompare(); break;
     case 'quotes': target='quotes'; htmlOut=vQuotes(); break;
     case 'limits': target='limits'; htmlOut=vLimits(); break;
     default: target='overview'; htmlOut=vOverview();
@@ -550,6 +660,7 @@ function render(){
 function wire(el){
   el.querySelectorAll('[data-go]').forEach(x=>x.onclick=e=>{ if(e.target.closest('[data-shot]')) return; location.hash='#'+x.dataset.go; });
   el.querySelectorAll('.frow').forEach(x=>x.onclick=()=>{ const id=x.dataset.fid; const base=location.hash.split('/')[0]; if(base==='#findings'||base==='#'+'findings') history.replaceState(null,'','#findings/'+id); el.querySelectorAll('.frow').forEach(r=>r.classList.toggle('on',r===x)); openFinding(id); });
+  el.querySelectorAll('[data-mf]').forEach(b=>b.onclick=()=>{ MFILT=b.dataset.mf; render(); });
   el.querySelectorAll('[data-flt]').forEach(b=>b.onclick=()=>{ const s=FLT[b.dataset.flt]; s.has(b.dataset.val)?s.delete(b.dataset.val):s.add(b.dataset.val); render(); });
   const q=el.querySelector('#fq'); if(q){ q.oninput=e=>{ FLT.q=e.target.value; const pos=q.selectionStart; render(); const q2=$('#fq'); if(q2){q2.focus(); q2.setSelectionRange(pos,pos);} }; }
   el.querySelectorAll('[data-ptab]').forEach(b=>b.onclick=()=>{ const name=decodeURIComponent(location.hash.split('/')[1]); location.hash=`#persona/${encodeURIComponent(name)}/${b.dataset.ptab}`; });

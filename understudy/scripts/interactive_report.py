@@ -35,6 +35,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import render_report as rr  # noqa: E402
+import compare_view  # noqa: E402
 
 TEMPLATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "report_template.html")
 
@@ -380,6 +381,25 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
     how_s, how_h = sec("how it was produced")
     checks_s, _ = sec("what each check looked for")
     objectives_s, objectives_h = sec("objectives")
+    against_s, against_h = sec("against comparable sites")
+
+    # Every other H2 the summary wrote still reaches the page. The allow-list
+    # above is how "Against comparable sites" went missing for a whole run
+    # (2026-09-28); a heading nobody anticipated now lands in "More from the
+    # summary" rather than nowhere, and the render says so.
+    known = ("top 5", "in their own words", "what a buyer could", "what the site does well",
+             "what the product does well", "what works", "limits", "what this is",
+             "how it was produced", "what each check looked for", "objectives",
+             "against comparable sites", "contents", "how each area scores",
+             "raised by more than one check", "icp profiles", "ideal customer profiles")
+    extra = []
+    for k, st in sec_struct.items():
+        if any(k.startswith(n) for n in known):
+            continue
+        extra.append({"title": st["title"], "html": sec_html.get(k, "")})
+        print(f"note: run summary section '{st['title']}' has no place of its own "
+              f"in the interactive report — shown under 'More from the summary'",
+              file=sys.stderr)
 
     top5 = []
     for r in (top5_s or {}).get("rows", []):
@@ -434,9 +454,15 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
                 verdict_l = body.split("\n\n")[0].strip()
             except Exception:
                 verdict_l = ""
+        why = sc.get("why", "")
+        if not sc:
+            # A lens that declined to score says why under `## Score`; the
+            # compare lens always does (a position is not a quality score).
+            why = compare_view.no_score_reason(run, e["dir"])
         lens_payload.append({
             "dir": e["dir"], "label": e["lens"],
-            "score": sc.get("score"), "why": rr.sentence(sc.get("why", "")),
+            "score": sc.get("score"), "why": rr.sentence(why),
+            "noScore": bool(why) and not sc,
             "verdict": strip_md(verdict_l),
             "looksFor": checks.get(e["lens"].lower(), ""),
             "count": len(fs),
@@ -453,6 +479,13 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
                              "raised": [f"{l} {s}" for l, s in c["raised"]]})
     except Exception:
         pass
+
+    # ---- comparison (Mode D) ------------------------------------------------
+    cmp = compare_view.payload(run, meta)
+    if cmp:
+        for l in lens_payload:
+            if l["dir"] == "compare":
+                l["tally"] = cmp["tally"]
 
     # ---- ICP profiles ----------------------------------------------------------
     icp_html, icp_struct = "", None
@@ -532,7 +565,10 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
         "sections": {
             "whatThisIs": what_h, "howProduced": how_h, "top5": top5_h,
             "buyer": buyer_h, "limits": limits_h, "objectives": objectives_h,
+            "against": against_h,
         },
+        "extraSections": extra,
+        "compare": cmp,
         "top5": top5,
         "quotes": quotes,
         "doesWell": [strip_md(b) for b in (well_s or {}).get("bullets", [])],

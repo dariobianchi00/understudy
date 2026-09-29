@@ -406,6 +406,72 @@ class Interactive(unittest.TestCase):
             # the print layout is not written alongside the interactive one
             self.assertFalse(os.path.exists(path.replace(".html", "-print.html")))
 
+    def _data(self, page):
+        import json as _json
+        m = re.search(r'<script id="data" type="application/json">(.*?)</script>', page, re.S)
+        return _json.loads(m.group(1).replace("<\\/", "</"))
+
+    def _html(self, run, scope="summary"):
+        p = subprocess.run([sys.executable, RENDER, run, "--format", "html", "--scope", scope],
+                           capture_output=True, text=True, env={**os.environ, "UNDERSTUDY_SITE_LOGO": "off"})
+        self.assertEqual(p.returncode, 0, p.stderr)
+        return open(p.stdout.strip().splitlines()[-1], encoding="utf-8").read(), p.stderr
+
+    def test_mode_d_run_carries_the_comparison(self):
+        """The bug of 2026-09-28: the interactive report dropped the matrix and
+        the run summary's 'Against comparable sites' while the PDF kept both."""
+        with tempfile.TemporaryDirectory() as t:
+            run = build(t)
+            p = os.path.join(run, "exec-summary.md")
+            _write(p, _read(p).replace("## Limits of this assessment",
+                   "## Against comparable sites\n- **Lead · trail · level:** trails on 1.\n\n"
+                   "## Limits of this assessment"))
+            page, _ = self._html(run)
+            self.assertGreaterEqual(len(re.findall(r"Differences matrix|Against comparable", page)), 2)
+            d = self._data(page)
+            c = d["compare"]
+            self.assertEqual(c["tally"], {"leads": 0, "trails": 1, "level": 0, "not comparable": 0})
+            self.assertEqual([r["verdict"] for r in c["rows"]], ["trails"])
+            self.assertEqual(c["sites"][0]["ours"], True)
+            self.assertEqual(c["sites"][0]["name"], fx.PRODUCT)          # never "Ours"
+            self.assertEqual(c["sites"][1]["name"], "Stratus")            # the matrix's own header
+            self.assertEqual(c["sites"][1]["scores"]["clarity"]["score"], 10)
+            self.assertEqual(c["sites"][1]["better"][0]["dim"], "Price findable")
+            self.assertIn("Lead · trail · level", d["sections"]["against"])
+            comp = next(l for l in d["lenses"] if l["dir"] == "compare")
+            self.assertEqual(comp["tally"]["trails"], 1)
+            # competitor lenses never enter the run's lens list or its mean
+            self.assertFalse(any(l["dir"].startswith("compare/") for l in d["lenses"]))
+
+    def test_run_without_compare_has_no_comparison(self):
+        with tempfile.TemporaryDirectory() as t:
+            page, _ = self._html(fx.clean_run(t), "all")
+            self.assertIsNone(self._data(page)["compare"])
+
+    def test_compare_lens_without_a_score_says_why(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = build(t)
+            p = os.path.join(run, "compare", "exec-summary.md")
+            _write(p, re.sub(r"- \*\*Score:\*\*.*", "- No score for this lens. A position is not a quality score.", _read(p)))
+            d = self._data(self._html(run)[0])
+            comp = next(l for l in d["lenses"] if l["dir"] == "compare")
+            self.assertIsNone(comp["score"])
+            self.assertTrue(comp["noScore"])
+            self.assertIn("position is not a quality score", comp["why"])
+
+    def test_unknown_summary_section_is_kept_not_dropped(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.run_summary(run)
+            p = os.path.join(run, "exec-summary.md")
+            _write(p, _read(p).replace("## Limits of this assessment",
+                   "## How to read these findings\n- Severity is by user impact.\n\n## Limits of this assessment"))
+            page, err = self._html(run, "all")
+            d = self._data(page)
+            self.assertEqual([x["title"] for x in d["extraSections"]], ["How to read these findings"])
+            self.assertIn("Severity is by user impact", d["extraSections"][0]["html"])
+            self.assertIn("How to read these findings", err)
+
     def test_print_format_writes_the_document_layout_only(self):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t)

@@ -169,11 +169,19 @@ def site_logo(run, meta):
     favicon service. Any failure is silent — a report without a logo is
     still a report; a render that dies for want of one is not.
     """
+    return fetch_logo(run, meta.get("base_url"))
+
+
+def fetch_logo(folder, base_url):
+    """`site_logo` for any site: the icon of `base_url`, cached in `folder` as
+    site-logo.<ext>. A Mode D run keeps each competitor's under its own
+    compare/<site>/ so the comparison view can show who is who."""
+    run = folder
     for ext in LOGO_MIME:
         cached = os.path.join(run, LOGO_STEM + ext)
         if os.path.exists(cached):
             return _data_uri(cached)
-    base = (meta.get("base_url") or "").strip()
+    base = (base_url or "").strip()
     # The only network call a default render makes — two requests, to the
     # site itself and to a favicon service, for a 128px icon. Off with
     # UNDERSTUDY_SITE_LOGO=off; a cached icon still renders.
