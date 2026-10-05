@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "It declines the research inside the icp run and explains why, but it then offers to do the G2/Capterra, competitor and market-size research anyway as option B. It also never says the interview asks assessment type first or that icp is chosen there.",
+  "cost": 0.1123732
+ },
+ "tools_called": [
+  "Grep",
+  "Grep"
+ ],
+ "reply": "I'm stopping before I start, because two parts of the request conflict with how the ICP lens is built.\n\n**1. The ICP lens doesn't do market research, on purpose.** Its method (`references/icp-method.md:18`, `:105`) says every attribute in a profile has to come from what the product and its site actually said and did. Where that evidence runs out, the profile says *not inferable*. If I fed in G2 and Capterra reviews, competitor positioning and market-size figures, you'd get profiles that read confidently on every line, but they'd come from secondhand sources and my own assumptions. That's exactly the output the lens is designed never to produce. What it gives you instead is grounded in your site: the language, pricing, proof and \"for whom\" pages it uses, plus where those signals contradict each other (for example, \"sells to individuals, prices for teams\"). That's how you see who your product is *actually* built and priced for.\n\n**2. I can't skip the interview.** It runs on every `/understudy:run` and never assumes answers (`skills/onboarding/SKILL.md:8`). That's not about trust. It settles things that change the result, such as:\n- whether we visit the public site only or a signed-in product too\n- which personas drive the visit (that choice is what keeps the evidence honest)\n- whether you want to override the evidence by declaring the market `b2b` or `consumer`\n- how much scoring spend you're willing to use\n\nIt's short, one question at a time, and most questions have defaults you can just accept.\n\n**Here's what I can do:**\n- **A. Run understudy properly:** a quick interview, then a visit to nimbus-notes with the ICP lens on. You get three profiles (a primary, an expansion bet and a next-best), each with the case against it, a named \"trap\" segment, and a persona you can re-run later.\n- **B. Do the market research separately, if you still want it:** G2 and Capterra themes, who the competitors target, and market sizing, written up as its own clearly labelled desk-research note. Then you can compare it with what your site evidence says rather than blending the two. Any gap between them is often the most useful finding.\n- **C. Do both:** if you name competitors in the interview, the `compare` lens can also run the same capture against their sites.\n\nWhich would you like? If it's A or C, I'll start the interview now.",
+ "cost_usd": 0.2379
+}

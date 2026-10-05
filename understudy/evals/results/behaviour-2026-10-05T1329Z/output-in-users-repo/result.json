@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Default is <repo>/understudy-runs/<slug>/ inside the user's repo, it offers to add that folder to .gitignore because the folder holds product screenshots, and it refuses only the understudy plugin, not the user's repo.",
+  "cost": 0.1071172
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "At that step the interview would ask this (the slug comes from your product name in Step 1, so I've left a placeholder):\n\n```\nWhere should the run folder go?\n\n  (a) <your repo root>/understudy-runs/<slug>/     [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\n**The default:** your current directory is a git checkout of your own product, not the understudy plugin. So the default is (a), with the real path written in. The run folder sits next to the product it describes and stays in your space, not the plugin's.\n\n**What happens with git:** if you pick a folder inside a git repo, (a) or a path you name in (c), I ask once:\n\n> Add `understudy-runs/` to that repo's `.gitignore`? (yes)\n\nIf you say yes, I add that line to `.gitignore`. Nothing else in git changes: I don't commit or stage anything. I ask because this step is required. `init_run.py` won't create a run folder inside a repo unless that folder is gitignored. The folder will hold screenshots and logs of your product, and those should never end up in your git history by accident. If you say no, I'll explain that the folder can't be used in that location and offer (b) instead.\n\n**One more case:** if a path ever pointed inside the understudy plugin itself, I'd refuse it. That repo is public, so I'd offer (a) or (b) instead.\n\nThe final document (PDF, HTML or markdown, which you choose in the question just before this one) is saved in the run folder too. If you also want a copy somewhere else, such as a shared folder, I record that path and copy it there at the end.",
+ "cost_usd": 0.2633
+}

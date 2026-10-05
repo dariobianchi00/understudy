@@ -1,0 +1,121 @@
+{
+ "duration_api_ms": 77134,
+ "stop_reason": "end_turn",
+ "session_id": "9b6c675f-d2dd-430b-859a-f6cfc9a38fa0",
+ "total_cost_usd": 0.3525456,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 45984,
+  "cache_read_input_tokens": 253518,
+  "output_tokens": 11787,
+  "output_tokens_details": {
+   "thinking_tokens": 571
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 45984,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 466,
+    "cache_read_input_tokens": 41066,
+    "cache_creation_input_tokens": 4918,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4918
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 18,
+   "outputTokens": 11787,
+   "cacheReadInputTokens": 253518,
+   "cacheCreationInputTokens": 45984,
+   "webSearchRequests": 0,
+   "costUSD": 0.3525456,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 571,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01JA5W8Ua3ZoApNUx7inxxPz",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-aeo-lhm_gb14/site/crawl; cat pages/*.json; cat html/1-index.html html/3-pricing.html html/4-about.html; sed -n 1,200p /home/runner/work/understudy/understudy/understudy/references/report-template.md"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01Vkwk9TmKCrPcNwtqRjXPxT",
+   "tool_input": {
+    "command": "cd /tmp; S=/home/runner/work/understudy/understudy/understudy/scripts/finding_id.py\nf(){ python3 $S --lens aeo --flow \"$1\" --locator \"$2\" --title \"$3\"; }\nf crawl:site \"site:structured_data\" \"No Organization schema on any of the 5 crawled pages, so no machine-readable publisher, logo or sameAs\"\nf crawl:page \"/ (JSON-LD)\" \"Homepage JSON-LD is invalid JSON, so the only product schema on the site is unreadable\"\nf crawl:page \"/pricing.html\" \"Pricing page states no price in text or schema, so no plan cost can be quoted\"\nf crawl:page \"/\" \"Homepage has zero extractable answer blocks: no question-shaped headings\"\nf crawl:page \"/about.html (FAQPage)\" \"FAQPage schema lists 2 questions but the page shows 3, omitting the data-residency answer\"\nf crawl:site \"site:entity\" \"Entity and category are never stated plainly: no og:site_name, generic titles, jargon-only description\"\nf crawl:site \"/llms.txt\" \"llms.txt is absent (404)\""
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01Uig42sAGB6K88Ai4iskNSk",
+   "tool_input": {
+    "command": "mkdir -p /tmp/understudy-eval-site-aeo-lhm_gb14/site/aeo; cd /tmp/understudy-eval-site-aeo-lhm_gb14/site/aeo\ncat > exec-summary.md <<'EOF'\n# Nimbus Notes \u2014 aeo \u2014 Run 2026-09-08 (fixture01)\n\nAn answer engine could quote the three FAQ answers on /about.html and nothing else: no Organization schema, a broken homepage JSON-LD, no price anywhere, and no llms.txt.\n\n> **Scope: static markup only.** This report judges whether an answer engine\n> *could* extract and attribute this site. It does **not** query live answer\n> engines and says nothing about whether the site is cited today \u2014 that half is\n> not in v1.\n\n## Coverage\n| | |\n|---|---|\n| Pages with any structured data | 2 of 5 (1 of the 2 invalid) |\n| Organization schema | absent |\n| Extractable answer blocks | 3 across 1 page |\n| llms.txt | absent |\n\n## Top 3\n1. **[P1] No Organization schema on any page** \u2014 publisher name, logo and sameAs cannot be attributed from markup (n/a)\n2. **[P1] Homepage JSON-LD is invalid JSON** \u2014 the only SoftwareApplication declaration is discarded by parsers (n/a)\n3. **[P2] Pricing page states no price** \u2014 \"what does Nimbus Notes cost\" has no quotable answer (n/a)\n\n## Score\n- **Score:** 4/10 \u2014 one clean FAQ page works, but publisher identity, product schema and pricing cannot be extracted.\n\n## Limits on this read\n- **Personas:** n/a \u2014 no-persona lens; static markup only\n- **Not reached:** /features.html (404), /app/login.html (disallowed by robots.txt /app/), two off-domain assets\n- **Excluded:** none; auth wall not reported\n- **Models:** traversal `fixture-hand-authored` \u00b7 scoring `sonnet`\n- Persona mode is `generic`; this lens does not depend on personas.\n\n## Numbers\n| Persona | TTFV | Reading | Self-explanatory | Promise match |\n|---|---|---|---|---|\n| n/a | n/a | n/a | n/a | n/a |\n\n## Severity flips\nNone \u2014 no personas in this lens.\n\n## Next action\nAdd one valid Organization JSON-LD block (name, url, logo, sameAs) site-wide and fix the homepage JSON-LD.\nEOF\ncat > findings-final.md <<'EOF'\n# Nimbus Notes \u2014 aeo findings \u2014 Run 2026-09-08 (fixture01)\n\n## Method\n- Framework: schema.org coverage, answer-block extractability, entity clarity, llms.txt \u2014 extractability only, never citation\n- Pass 1 naive capture \u2192 Pass 2 analyst scoring\n- Personas: generic \u2014 INFERRED (not used by this lens)\n- Scoring model: sonnet\n- Every finding cites an artifact; unsupported observations dropped, listed at the end\n- Not crawled (read first): /app/login.html (robots.txt), two off-domain assets; /features.html returned 404\n- Structured-data validity is shared with seo; reported here only where it blocks extraction\n\n---\n\n## Findings\n\n### 804269d6e3e5 \u2014 No Organization schema on any of the 5 crawled pages, so no machine-readable publisher, logo or sameAs\n- **Severity:** P1\n- **So what:** An engine cannot attribute claims to a named publisher from markup; identity facts live only in /about.html prose.\n- **Framework tags:** AEO-schema, AEO-entity\n- **Flow:** crawl:site\n- **Locator:** site:structured_data\n- **Personas hit:** n/a\n- **Observed:**\n  - 0 of 5 pages declare Organization; only FAQPage (/about.html) and a broken SoftwareApplication (/) exist.\n  - No WebSite, BreadcrumbList or logo/sameAs anywhere.\n  - Facts exist only as prose: \"made by Nimbus Notes Ltd \u2026 founded in 2023 by Priya Raman \u2026 Bristol\".\n- **Evidence:** `crawl/pages/1-index.json` \u00b7 `crawl/pages/4-about.json` \u00b7 `crawl/html/4-about.html`\n  > \"Nimbus Notes is made by Nimbus Notes Ltd, a company of eight people founded in 2023 by Priya Raman\"\n- **Repro:**\n  1. Open each `crawl/pages/*.json` and list `structured_data` types.\n  2. Observe no Organization type on any page.\n- **Fix:** Add an Organization JSON-LD block (name \"Nimbus Notes Ltd\", url, logo, foundingDate 2023, founder, address, sameAs) to every page template.\n\n### 82bb1301d005 \u2014 Homepage JSON-LD is invalid JSON, so the only product schema on the site is unreadable\n- **Severity:** P1\n- **So what:** The one declaration of what Nimbus Notes is (SoftwareApplication) is discarded by any parser.\n- **Framework tags:** AEO-schema\n- **Flow:** crawl:page\n- **Locator:** / (JSON-LD)\n- **Personas hit:** n/a\n- **Observed:**\n  - Crawl recorded `valid: false`, error \"Expecting value: line 1 column 111\".\n  - The `price` property has no value and the object is unclosed.\n  - Overlaps seo on validity; reported here because it removes the product entity.\n- **Evidence:** `crawl/pages/1-index.json` \u00b7 `crawl/html/1-index.html`\n  > \"\\\"offers\\\": {\\\"@type\\\": \\\"Offer\\\", \\\"price\\\": }\"\n- **Repro:**\n  1. Open `crawl/html/1-index.html`, find the `application/ld+json` script.\n  2. Parse it as JSON; it fails at column 111.\n- **Fix:** Rewrite the homepage JSON-LD as valid SoftwareApplication with name, applicationCategory, operatingSystem and a real Offer, or remove price until one is published.\n\n### 2c838d74944d \u2014 Pricing page states no price in text or schema, so no plan cost can be quoted\n- **Severity:** P2\n- **So what:** The most common product question, \"what does it cost\", has no extractable answer.\n- **Framework tags:** AEO-answer-blocks, AEO-schema\n- **Flow:** crawl:page\n- **Locator:** /pricing.html\n- **Personas hit:** n/a\n- **Observed:**\n  - 0 structured data; 0 answer blocks; 60 words; all three plans point to \"Contact sales\".\n  - Only statement: \"Pricing depends on your workspace type and sync topology.\"\n  - The page has `noindex` (seo's concern; noted once).\n- **Evidence:** `crawl/pages/3-pricing.json` \u00b7 `crawl/html/3-pricing.html`\n  > \"Pricing depends on your workspace type and sync topology.\"\n- **Repro:**\n  1. Open `crawl/html/3-pricing.html`.\n  2. Search for a currency amount; none found.\n- **Fix:** Publish a price or \"from\" price per plan in visible text and mark each up as Offer inside the SoftwareApplication schema.\n\n### afe5dbe1560f \u2014 Homepage has zero extractable answer blocks: no question-shaped headings\n- **Severity:** P2\n- **So what:** The highest-traffic page offers nothing an engine can lift out and quote cleanly.\n- **Framework tags:** AEO-answer-blocks\n- **Flow:** crawl:page\n- **Locator:** /\n- **Personas hit:** n/a\n- **Observed:**\n  - `answer_blocks` is empty; H2s are \"How it works\", \"Loved by teams\", \"Book a demo\".\n  - Answer text depends on context: \"Nimbus remembers everything so you never start from zero.\"\n  - Testimonials are unattributed: \"\u2014 a happy customer\", \"\u2014 anonymous\".\n- **Evidence:** `crawl/pages/1-index.json` \u00b7 `crawl/html/1-index.html`\n  > \"A bi-directional sync graph with a zero-knowledge vault, so nothing you write is ever lost or exposed.\"\n- **Repro:**\n  1. Open `crawl/pages/1-index.json`; read `answer_blocks` and `h2`.\n- **Fix:** Add a \"What is Nimbus Notes?\" H2 with a one-sentence plain-language definition, and attribute testimonials to named people.\n\n### 6db55c7b0103 \u2014 FAQPage schema lists 2 questions but the page shows 3, omitting the data-residency answer\n- **Severity:** P2\n- **So what:** Schema and visible content disagree, so an engine reading schema misses \"Where is my data stored?\".\n- **Framework tags:** AEO-schema, AEO-answer-blocks\n- **Flow:** crawl:page\n- **Locator:** /about.html (FAQPage)\n- **Personas hit:** n/a\n- **Observed:**\n  - 3 visible Q&As in `answer_blocks`; 2 in `mainEntity`.\n  - The three visible answers lead with the answer and stand alone (strength).\n  - The missing answer: \"In the EU (Frankfurt) by default. Enterprise plans can choose a region.\" \u2014 \"Enterprise plans\" is unexplained without the pricing page.\n- **Evidence:** `crawl/pages/4-about.json` \u00b7 `crawl/html/4-about.html`\n  > \"In the EU (Frankfurt) by default. Enterprise plans can choose a region.\"\n- **Repro:**\n  1. Compare `answer_blocks` (3) with the FAQPage `mainEntity` (2) in `crawl/pages/4-about.json`.\n- **Fix:** Add the \"Where is my data stored?\" Question to the FAQPage mainEntity, generated from the same source as the visible list.\n\n### c4a34fba4921 \u2014 Entity and category are never stated plainly: no og:site_name, generic titles, jargon-only description\n- **Severity:** P2\n- **So what:** A machine cannot state in one line that Nimbus Notes is a note-taking app, nor reconcile the name across pages.\n- **Framework tags:** AEO-entity\n- **Flow:** crawl:site\n- **Locator:** site:entity\n- **Personas hit:** n/a\n- **Observed:**\n  - `og` is empty on 5 of 5 pages; no og:site_name.\n  - Titles vary: \"Nimbus Notes \u2014 Your thoughts, everywhere.\", \"Nimbus Notes\" (x2), \"Pricing \u2014 Nimbus Notes\".\n  - Category appears only as \"bi-directional sync graph with a zero-knowledge vault\"; \"note-taking app\" is not stated.\n- **Evidence:** `crawl/pages/1-index.json` \u00b7 `crawl/pages/4-about.json` \u00b7 `crawl/pages/5-privacy.json`\n  > \"Nimbus Notes keeps every thought in a bi-directional sync graph with a zero-knowledge vault.\"\n- **Repro:**\n  1. Read `og`, `title` and `meta_description` across `crawl/pages/*.json`.\n- **Fix:** Add og:site_name \"Nimbus Notes\" and rewrite the homepage description to open \"Nimbus Notes is a note-taking app that \u2026\".\n\n### d881d6c3fa06 \u2014 llms.txt is absent (404)\n- **Severity:** P3\n- **So what:** Agents get no curated summary or canonical page list; emerging convention, so low weight.\n- **Framework tags:** AEO-llms-txt\n- **Flow:** crawl:site\n- **Locator:** /llms.txt\n- **Personas hit:** n/a\n- **Observed:**\n  - `llms_txt.present` is false, status 404.\n- **Evidence:** `crawl/site.json`\n  > \"llms_txt\": {\"present\": false, \"status\": 404}\n- **Repro:**\n  1. Request `/llms.txt` at the site root.\n- **Fix:** Publish /llms.txt with a two-line description of Nimbus Notes and links to /about.html and /pricing.html.\n\n---\n\n## Dropped for want of evidence\n- Whether any answer engine cites Nimbus Notes today \u2014 out of scope; no live querying in v1.\n\n## For other lenses\n- Pricing page has two H1s and `noindex`; sitemap declared on a different host returns 404 \u2014 seo.\n- Unattributed testimonials, \"(fictional)\" in footer \u2014 trust.\n- Pricing hidden behind \"Contact sales\" \u2014 conversion.\n\n## Coverage gaps\n- /features.html returned 404 and was not assessable.\n- /app/login.html disallowed by robots.txt.\n- Live answer engines not queried (not in v1).\nEOF\npython3 /home/runner/work/understudy/understudy/understudy/scripts/check_report.py /tmp/understudy-eval-site-aeo-lhm_gb14/site --lens aeo"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 16,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "An answer engine could quote the three FAQ answers on /about.html and nothing else. The site has no Organization schema, the homepage JSON-LD is broken, there is no price anywhere, and there is no `llms.txt`.\n\nI scored it 4/10. The gate check passed.\n\n**Findings by severity:** 0 P0 \u00b7 2 P1 \u00b7 4 P2 \u00b7 1 P3\n\n- **P1:** No Organization schema on any of the 5 crawled pages.\n- **P1:** The homepage JSON-LD is invalid, so the only product schema is unreadable.\n- **P2:** The pricing page states no price in text or schema.\n- **P2:** The homepage has zero extractable answer blocks.\n- **P2:** The `FAQPage` schema lists 2 questions but the page shows 3.\n- **P2:** The entity and its category are never stated plainly.\n- **P3:** `llms.txt` is absent.\n\n**Dropped for want of evidence:** whether any answer engine cites the site today. That is out of scope for v1, and the exec summary carries the scope block saying so.\n\nThe gate also printed a note that the manifest is still open (phase `2a-capture`). That is the orchestrator's `close_run.py` step, not something to fix in this report.\n\nFiles are in `/tmp/understudy-eval-site-aeo-lhm_gb14/site/aeo`:\n- exec-summary.md\n- findings-final.md",
+ "ttft_ms": 1902,
+ "type": "result",
+ "duration_ms": 78342,
+ "uuid": "ecad8ba3-e823-494e-9dd1-a1672e84ce8c",
+ "ttft_stream_ms": 1505,
+ "time_to_request_ms": 482,
+ "first_content_frame_ms": 1506,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

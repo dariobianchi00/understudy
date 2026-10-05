@@ -1,0 +1,141 @@
+{
+ "duration_api_ms": 3863,
+ "stop_reason": "tool_use",
+ "session_id": "7a0fbfc1-6788-40f9-a5b7-d93917ee9b56",
+ "total_cost_usd": 0.1204526,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 28472,
+  "cache_read_input_tokens": 12253,
+  "output_tokens": 411,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 28472,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 411,
+    "cache_read_input_tokens": 12253,
+    "cache_creation_input_tokens": 28472,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 28472
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 411,
+   "cacheReadInputTokens": 12253,
+   "cacheCreationInputTokens": 28472,
+   "webSearchRequests": 0,
+   "costUSD": 0.1204526,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"hero-oversized\",\"caught\":true,\"finding_title\":\"3.9 MB 3000\u00d72000 PNG hero shown at 350\u00d7233 drives 5.8 s mobile LCP\"},{\"id\":\"mobile-lcp-poor\",\"caught\":true,\"finding_title\":\"3.9 MB 3000\u00d72000 PNG hero shown at 350\u00d7233 drives 5.8 s mobile LCP\"},{\"id\":\"render-blocking-css\",\"caught\":true,\"finding_title\":\"Third-party font stylesheet blocks render, FCP 2.9 s on mobile\"},{\"id\":\"console-error-on-load\",\"caught\":true,\"finding_title\":\"Landing page throws ReferenceError on load\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "hero-oversized",
+    "caught": true,
+    "finding_title": "3.9 MB 3000\u00d72000 PNG hero shown at 350\u00d7233 drives 5.8 s mobile LCP"
+   },
+   {
+    "id": "mobile-lcp-poor",
+    "caught": true,
+    "finding_title": "3.9 MB 3000\u00d72000 PNG hero shown at 350\u00d7233 drives 5.8 s mobile LCP"
+   },
+   {
+    "id": "render-blocking-css",
+    "caught": true,
+    "finding_title": "Third-party font stylesheet blocks render, FCP 2.9 s on mobile"
+   },
+   {
+    "id": "console-error-on-load",
+    "caught": true,
+    "finding_title": "Landing page throws ReferenceError on load"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 4094,
+ "type": "result",
+ "duration_ms": 4121,
+ "uuid": "74c0c24e-d386-4f4f-8353-0987f85462bb",
+ "ttft_stream_ms": 2171,
+ "time_to_request_ms": 257,
+ "first_content_frame_ms": 2171,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

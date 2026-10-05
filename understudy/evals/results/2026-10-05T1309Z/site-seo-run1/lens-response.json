@@ -1,0 +1,128 @@
+{
+ "duration_api_ms": 73914,
+ "stop_reason": "end_turn",
+ "session_id": "77a1e201-8a10-4949-859d-5df3ba764a7f",
+ "total_cost_usd": 0.3222508,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 35581,
+  "cache_read_input_tokens": 312084,
+  "output_tokens": 11747,
+  "output_tokens_details": {
+   "thinking_tokens": 615
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 35581,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 379,
+    "cache_read_input_tokens": 46671,
+    "cache_creation_input_tokens": 312,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 312
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 20,
+   "outputTokens": 11747,
+   "cacheReadInputTokens": 312084,
+   "cacheCreationInputTokens": 35581,
+   "webSearchRequests": 0,
+   "costUSD": 0.3222508,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 615,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_019eB4HJaYL2szy1dGyFUQPH",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-seo-3zr_jjdd/site/crawl; for f in pages/*.json; do echo \"== $f\"; cat $f; done; for f in html/*.html; do echo \"== $f\"; head -c 2500 $f; done; cat /home/runner/work/understudy/understudy/understudy/references/report-template.md | head -80"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01QE1EvQYaC7TYhjWyCxeLk9",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts && f(){ python3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"$1\" --title \"$2\"; }\nf \"/pricing.html\" \"Pricing page is noindex, so search engines are told to drop it\"\nf \"/features.html\" \"Features page returns 404 yet is linked from the nav on every page\"\nf \"/\" \"Home page JSON-LD is invalid and cannot be parsed\"\nf \"/robots.txt\" \"Sitemap declared in robots.txt returns 404 and points at a different host\"\nf \"/about.html\" \"Two pages share the bare title \\\"Nimbus Notes\\\" and a third is thin\"\nf \"/pricing.html\" \"3 of 4 live pages have no meta description\"\nf \"/privacy.html\" \"Heading structure is broken on pricing (two h1) and privacy (no h1)\"\nf \"site\" \"No page declares a canonical URL\""
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01MzaY4X7FgPY7uzVTrxNgqg",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/pricing.html\" --title \"Pricing page is noindex, so search engines are told to drop it\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/features.html\" --title \"Features page returns 404 yet is linked from the nav on every page\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/\" --title \"Home page JSON-LD is invalid and cannot be parsed\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/robots.txt\" --title \"Sitemap declared in robots.txt returns 404 and points at a different host\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/about.html\" --title \"About and privacy pages share the generic title Nimbus Notes\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/pricing.html\" --title \"3 of 4 live pages have no meta description\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"/privacy.html\" --title \"Heading structure is broken on pricing (two h1) and privacy (no h1)\"\npython3 finding_id.py --lens seo --flow \"crawl:site\" --locator \"site\" --title \"No page declares a canonical URL\""
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01UFtu113EiGgVZGA7y8gv9c",
+   "tool_input": {
+    "command": "D=/tmp/understudy-eval-site-seo-3zr_jjdd/site/seo; mkdir -p $D\ncat > $D/exec-summary.md <<'EOF'\n# Nimbus Notes \u2014 seo \u2014 Run 2026-09-08 (fixture01)\n\nThe pricing page tells search engines not to index it, and the sitemap, structured data and nav links all contradict what the site wants found.\n\n## Crawl coverage\n- **Pages crawled:** 5 of 6 found \u00b7 depth `standard`\n- **Not crawled:** 3 \u2014 1 disallowed by robots.txt (`/app/login.html`), 2 off-domain (tracker script, font CSS); none over cap or timed out\n- **Indexable:** 3 \u00b7 **Blocked:** 2 (pricing `noindex`; `/app/` disallowed)\n\n## Top 3\n1. **[P0] Pricing page is noindex, so search engines are told to drop it** \u2014 a page that should rank is removed from the index (n/a)\n2. **[P1] Features page returns 404 yet is linked from the nav on every page** \u2014 5 of 5 crawled pages link to a dead URL (n/a)\n3. **[P1] Home page JSON-LD is invalid and cannot be parsed** \u2014 entry page's structured data is ignored (n/a)\n\n## Score\n- **Score:** 5/10 \u2014 a `noindex` on the pricing page caps the score; titles, descriptions and headings are also weak, though the entry page is crawlable.\n\n## Limits on this read\n- **Personas:** n/a \u2014 crawl-only lens, no persona; `persona_mode` is generic, so findings rest on inferred personas\n- **Not reached:** `/app/login.html` (robots-disallowed) \u2014 correctly excluded; no sitemap URLs to check (sitemap 404)\n- **Excluded:** none in scope exclusions; auth wall never reported\n- **Models:** traversal `fixture-hand-authored` \u00b7 scoring `sonnet`\n- **Not checked:** rankings, traffic, keywords, backlinks \u2014 no such data in a crawl\n\n## Numbers\n| Persona | TTFV | Reading | Self-explanatory | Promise match |\n|---|---|---|---|---|\n| n/a (crawl) | n/a | n/a | n/a | n/a |\n\n## Severity flips\n- None \u2014 Mode C has no persona, so a flip could not be observed.\n\n## Next action\n- Remove `<meta name=\"robots\" content=\"noindex\">` from `/pricing.html`, then fix the dead `features.html` link.\nEOF\ncat > $D/findings-final.md <<'EOF'\n# Nimbus Notes \u2014 seo findings \u2014 Run 2026-09-08 (fixture01)\n\n## Method\n- Framework: crawlability, indexability, sitemap, titles/meta, canonicals, headings, structured data, linking\n- Pass 1 naive capture \u2192 Pass 2 analyst scoring\n- Personas: generic \u2014 INFERRED (none used; crawl-only lens)\n- Scoring model: sonnet\n- Every finding cites an artifact; unsupported observations dropped, listed at the end\n\n---\n\n## Findings\n\n### 5e7e83b08d13 \u2014 Pricing page is noindex, so search engines are told to drop it\n- **Severity:** P0\n- **So what:** The page a buyer searches for (\"Pricing\") cannot appear in results at all.\n- **Framework tags:** Indexability, robots meta\n- **Flow:** crawl:site\n- **Locator:** /pricing.html\n- **Personas hit:** n/a\n- **Observed:**\n  - `robots_meta` is `noindex` on `/pricing.html`; no other crawled page has it.\n  - `X-Robots-Tag` is empty, so the directive is in the markup only.\n  - The page is linked from the nav and footer of all 5 crawled pages.\n- **Evidence:** `crawl/pages/3-pricing.json` \u00b7 `crawl/html/3-pricing.html`\n  > `<meta name=\"robots\" content=\"noindex\">`\n- **Repro:**\n  1. Open `crawl/html/3-pricing.html`.\n  2. Read the `<head>`.\n- **Fix:** Delete the `<meta name=\"robots\" content=\"noindex\">` tag from `pricing.html`.\n\n### 4163987271fb \u2014 Features page returns 404 yet is linked from the nav on every page\n- **Severity:** P1\n- **So what:** Crawlers hit a dead end from every page, and the site has no indexable features content.\n- **Framework tags:** Non-200 internal links\n- **Flow:** crawl:site\n- **Locator:** /features.html\n- **Personas hit:** n/a\n- **Observed:**\n  - `/features.html` returned 404, title \"Not found \u2014 Nimbus Notes\".\n  - All 5 crawled pages link to it in the nav.\n  - The 404 page has no `noindex` and returns a 404 body.\n- **Evidence:** `crawl/index.json` \u00b7 `crawl/pages/2-features.json` \u00b7 `crawl/pages/1-index.json`\n- **Repro:**\n  1. Open `crawl/index.json`.\n  2. Find `features.html` with status 404.\n- **Fix:** Publish `features.html`, or remove the \"Features\" link from the nav and footer on every page.\n\n### 788b8a050a3a \u2014 Home page JSON-LD is invalid and cannot be parsed\n- **Severity:** P1\n- **So what:** The entry page's SoftwareApplication data is discarded, so no rich result can come from it.\n- **Framework tags:** Structured data validity\n- **Flow:** crawl:site\n- **Locator:** /\n- **Personas hit:** n/a\n- **Observed:**\n  - `structured_data[0].valid` is false: \"Expecting value: line 1 column 111\".\n  - The `price` property has no value.\n  - The block is a `SoftwareApplication` with an `Offer`.\n- **Evidence:** `crawl/pages/1-index.json` \u00b7 `crawl/html/1-index.html`\n  > `\"offers\": {\"@type\": \"Offer\", \"price\": }`\n- **Repro:**\n  1. Open `crawl/html/1-index.html`.\n  2. Parse the `application/ld+json` block as JSON.\n- **Fix:** Give `price` a value (and `priceCurrency`) in the home page JSON-LD, then validate it.\n\n### 27b936886d52 \u2014 Sitemap declared in robots.txt returns 404 and points at a different host\n- **Severity:** P2\n- **So what:** Crawlers get no sitemap, so discovery relies on links alone.\n- **Framework tags:** Sitemap\n- **Flow:** crawl:site\n- **Locator:** /robots.txt\n- **Personas hit:** n/a\n- **Observed:**\n  - robots.txt declares `https://example-nimbus-notes.test/sitemap.xml`; status 404, `url_count` 0.\n  - The declared host differs from the crawled host `localhost:8765`.\n  - Site is small (5 pages), so the cost is limited.\n- **Evidence:** `crawl/site.json`\n  > \"Sitemap: https://example-nimbus-notes.test/sitemap.xml\"\n- **Repro:**\n  1. Open `crawl/site.json`.\n  2. Read `sitemap.status`.\n- **Fix:** Publish a sitemap.xml on the live host listing the indexable pages, and correct the `Sitemap:` line in robots.txt.\n\n### 62e7b769bd16 \u2014 About and privacy pages share the generic title Nimbus Notes\n- **Severity:** P2\n- **So what:** Duplicate, brand-only titles tell a search engine the two pages are the same.\n- **Framework tags:** Titles\n- **Flow:** crawl:site\n- **Locator:** /about.html\n- **Personas hit:** n/a\n- **Observed:**\n  - `/about.html` and `/privacy.html` both have title \"Nimbus Notes\" (12 characters, under the ~30 floor).\n  - Pricing's title is 22 characters, also under 30.\n  - Home (41) is within range.\n- **Evidence:** `crawl/pages/4-about.json` \u00b7 `crawl/pages/5-privacy.json` \u00b7 `crawl/pages/3-pricing.json`\n  > \"title\": \"Nimbus Notes\"\n- **Repro:**\n  1. Compare `title` in `crawl/pages/4-about.json` and `5-privacy.json`.\n- **Fix:** Give each page a unique title of ~30\u201360 characters, such as \"About Nimbus Notes \u2014 Who We Are\".\n\n### ed8a92033b3a \u2014 3 of 4 live pages have no meta description\n- **Severity:** P2\n- **So what:** Search engines write the snippet themselves for pricing, privacy and any other page lacking one.\n- **Framework tags:** Meta description\n- **Flow:** crawl:site\n- **Locator:** /pricing.html\n- **Personas hit:** n/a\n- **Observed:**\n  - `/pricing.html` and `/privacy.html` have an empty `meta_description`.\n  - Home (92 characters) and About (56, under the ~70 floor) have one.\n  - The 404 page is excluded from the count.\n- **Evidence:** `crawl/pages/3-pricing.json` \u00b7 `crawl/pages/5-privacy.json`\n- **Repro:**\n  1. Check `meta_description` across `crawl/pages/*.json`.\n- **Fix:** Add a unique 70\u2013160 character meta description to pricing and privacy; lengthen the about page's.\n\n### 5e451c366731 \u2014 Heading structure is broken on pricing (two h1) and privacy (no h1)\n- **Severity:** P2\n- **So what:** Pages without a single clear h1 give crawlers a weaker statement of topic.\n- **Framework tags:** Headings\n- **Flow:** crawl:site\n- **Locator:** /privacy.html\n- **Personas hit:** n/a\n- **Observed:**\n  - `/pricing.html` has two h1: \"Pricing\" and \"Plans for every team\".\n  - `/privacy.html` has no h1; \"Privacy\" is an h2.\n  - Both are flagged `heading_order_valid: false`.\n- **Evidence:** `crawl/pages/3-pricing.json` \u00b7 `crawl/pages/5-privacy.json` \u00b7 `crawl/html/5-privacy.html`\n  > `<h2>Privacy</h2>`\n- **Repro:**\n  1. Read `h1` in the two page records.\n- **Fix:** Make \"Pricing\" the only h1 on pricing, demote the second to h2; change privacy's h2 to an h1.\n\n### 7a643a0462d1 \u2014 No page declares a canonical URL\n- **Severity:** P3\n- **So what:** Nothing disambiguates `index.html#demo`-style or alternate URL forms; low risk at 5 pages.\n- **Framework tags:** Canonicals\n- **Flow:** crawl:site\n- **Locator:** site\n- **Personas hit:** n/a\n- **Observed:**\n  - `canonical` is empty on all 5 crawled pages.\n  - The nav links to both `/` and `index.html`-style paths.\n- **Evidence:** `crawl/pages/1-index.json` \u00b7 `crawl/pages/4-about.json`\n- **Repro:**\n  1. Check `canonical` across `crawl/pages/*.json`.\n- **Fix:** Add a self-referencing `<link rel=\"canonical\">` to every indexable page.\n\n---\n\n## Dropped for want of evidence\n- Hero image missing alt \u2014 crawl counts 1, but markup shows `alt=\"\"`, a valid decorative image; not a finding.\n- Client-rendered content risk \u2014 `nimbusBootstrap()` runs on load, but nothing recorded shows content depends on it.\n\n## For other lenses\n- FAQPage schema lists 2 of the 3 visible questions; \"Where is my data stored?\" is missing \u2014 aeo.\n- Pricing shows no prices, only \"Contact sales\" \u2014 conversion.\n- `llms.txt` absent (404) \u2014 aeo.\n\n## Coverage gaps\n- `/app/login.html` disallowed by robots.txt \u2014 not crawled; not a missing page.\n- Sitemap unreachable, so URL-to-crawl matching was not performed.\n- Image alt checked for 1 image only.\n\n## Appendices\n- A. Persona debriefs \u2014 n/a (no persona in this lens)\n- B. Session timelines \u2014 n/a\n- C. Screenshot index \u2014 n/a\nEOF\npython3 /home/runner/work/understudy/understudy/understudy/scripts/check_report.py /tmp/understudy-eval-site-seo-3zr_jjdd/site --lens seo"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 15,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "The pricing page tells search engines not to index it, and the sitemap, structured data and nav links all contradict what the site wants found. Score is 5/10, and the gate passed.\n\n**Findings by severity:** 8 total \u2014 1 P0, 2 P1, 4 P2, 1 P3.\n- **P0:** `/pricing.html` carries `noindex`.\n- **P1:** `/features.html` returns 404 but is linked in the nav on every page, and the home page JSON-LD is invalid.\n- **P2:** the robots.txt sitemap 404s on a different host, About and privacy share the title \"Nimbus Notes\", 3 of 4 live pages lack a meta description, and pricing has two h1s while privacy has none.\n- **P3:** no page declares a canonical URL.\n\n**Dropped for want of evidence:**\n- The hero \"missing alt\" count, because the markup shows `alt=\"\"` (decorative).\n- Client-rendered content risk, because nothing recorded shows content depends on JavaScript.\n\n**Gate warning:** the manifest is still open (phase `2a-capture`). `scripts/close_run.py` needs running at the run level.",
+ "ttft_ms": 1242,
+ "type": "result",
+ "duration_ms": 74930,
+ "uuid": "2513c81e-6ce3-4ac5-9207-524d76b42ba3",
+ "ttft_stream_ms": 870,
+ "time_to_request_ms": 229,
+ "first_content_frame_ms": 870,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

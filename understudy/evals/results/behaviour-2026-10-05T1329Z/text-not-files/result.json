@@ -1,0 +1,22 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply says the text was saved verbatim and split at the lens's own sections. It does not claim to have edited, re-scored or corrected anything, and it adds no verdict or findings of its own. It only points out mismatches in the lens output, and it stopped without running the report check.",
+  "cost": 0.1097452
+ },
+ "tools_called": [
+  "Grep",
+  "Read",
+  "Bash",
+  "Write",
+  "Write"
+ ],
+ "reply": "Nothing to overwrite. Writing both files verbatim.\n\nI saved the clarity lens's report as two files in `2026-09-08-run-fixture01/clarity/`. I split it where the lens's own sections divide, and the text is exactly as returned. The `clarity/` folder didn't exist yet, so nothing was overwritten.\n\n- **`exec-summary.md`**: the title, the one-sentence verdict, the Top 3 and the score.\n- **`findings-final.md`**: the title, then everything from `## Findings` onward.\n\nPer your instruction I stopped there: I didn't run the report check (\u00a73.5) and didn't change anything. Two problems in the lens's own output are worth knowing about before the check runs:\n\n1. **The summary and the findings don't match.** The Top 3 lists three findings: no audience named, \"See it in action\" goes nowhere, and jargon in the subheading. Only the first one, `77a357f2d026`, appears as a full finding with evidence. The other two have no finding entry, and \"Dropped for want of evidence\" says \"none\". So they are neither backed up nor recorded as dropped. If you want them, the fix is to re-run the lens; I didn't add them myself.\n2. **The summary has no stated limits.** \u00a73.4 expects the summary to include the lens's stated limits, and this report has none. I didn't write any for it.",
+ "cost_usd": 0.2691
+}

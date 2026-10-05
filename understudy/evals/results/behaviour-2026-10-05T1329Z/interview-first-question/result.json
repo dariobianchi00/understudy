@@ -1,0 +1,18 @@
+{
+ "case": "interview-first-question",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant's single question is the assessment type, with all three options (product, website, both). It asks nothing else and does not infer the type from the URL. It says explicitly that it won't guess from the URL.",
+  "cost": 0.1052312
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "What are you evaluating at https://example-nimbus-notes.test?\n\n  **(a) A product:** something people sign into and use.\n      Lenses: ux \u00b7 bugs \u00b7 onboarding \u00b7 content \u00b7 icp\n      About 90 min per persona.\n\n  **(b) A website:** something people read and decide from.\n      Lenses: clarity \u00b7 conversion \u00b7 trust \u00b7 icp \u00b7 technical \u00b7 seo \u00b7 aeo \u00b7 compare\n      About 15\u201325 min per persona, plus a crawl.\n\n  **(c) Both:** a marketing site with a product behind it.\n      This runs (b) on the site, then (a) on the product, so it's two captures.\n\nI won't guess this from the URL. A marketing-looking address can turn out to be a product's login page, and each answer leads to a completely different run.",
+ "cost_usd": 0.2496
+}

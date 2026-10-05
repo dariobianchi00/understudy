@@ -1,0 +1,19 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States two captures: one A-visit scored by clarity, conversion and trust, plus one Mode C crawl for seo. It does not propose a capture per lens.",
+  "cost": 0.1052892
+ },
+ "tools_called": [
+  "Grep",
+  "Read"
+ ],
+ "reply": "**2 captures.**\n\n1. **Mode A-visit (Visit), 1 capture.** One `traversal-visit` run as your single persona. Clarity, conversion and trust all score this same visit, so it's one capture scored three ways, not three captures.\n2. **Mode C (Crawl), 1 capture.** One `traversal-crawl` of the site with no session and no persona. SEO scores this crawl.\n\nThat gives 1 visit + 1 crawl = 2 captures, then 4 scoring passes (clarity, conversion, trust, seo) run in parallel afterwards. Adding personas would add more visits, but the crawl would stay at one.\n\nNothing has been started.",
+ "cost_usd": 0.2264
+}

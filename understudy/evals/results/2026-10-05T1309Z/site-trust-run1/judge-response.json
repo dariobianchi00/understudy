@@ -1,0 +1,141 @@
+{
+ "duration_api_ms": 2724,
+ "stop_reason": "tool_use",
+ "session_id": "2d2d58a3-4fb5-4c5c-abeb-bcd660d00939",
+ "total_cost_usd": 0.1321466,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 31443,
+  "cache_read_input_tokens": 12253,
+  "output_tokens": 392,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31443,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "not_available",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 392,
+    "cache_read_input_tokens": 12253,
+    "cache_creation_input_tokens": 31443,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 31443
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 392,
+   "cacheReadInputTokens": 12253,
+   "cacheCreationInputTokens": 31443,
+   "webSearchRequests": 0,
+   "costUSD": 0.1321466,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"No plan shows a price, so the evaluator could not learn the cost and gave up\"},{\"id\":\"cookie-banner-mismatch\",\"caught\":true,\"finding_title\":\"Cookie banner says \\\"no tracking cookies\\\" while every visit sends a visitor ID to a third-party tracker\"},{\"id\":\"privacy-vague\",\"caught\":true,\"finding_title\":\"Privacy page names no partners, and the sceptic left because of it\"},{\"id\":\"proof-anonymous\",\"caught\":true,\"finding_title\":\"All three testimonials are anonymous, and the evaluator did not believe them\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "No plan shows a price, so the evaluator could not learn the cost and gave up"
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "caught": true,
+    "finding_title": "Cookie banner says \"no tracking cookies\" while every visit sends a visitor ID to a third-party tracker"
+   },
+   {
+    "id": "privacy-vague",
+    "caught": true,
+    "finding_title": "Privacy page names no partners, and the sceptic left because of it"
+   },
+   {
+    "id": "proof-anonymous",
+    "caught": true,
+    "finding_title": "All three testimonials are anonymous, and the evaluator did not believe them"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 2969,
+ "type": "result",
+ "duration_ms": 2995,
+ "uuid": "70b17e06-4a03-4293-a917-e6eaa5bfc242",
+ "ttft_stream_ms": 1201,
+ "time_to_request_ms": 271,
+ "first_content_frame_ms": 1202,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

@@ -1,0 +1,31 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant wrote the summary and stopped, with no export offer or follow-up questions. It did not claim to change, re-score or merge any finding, and it explained its omissions in line with run.md.",
+  "cost": 0.1063992
+ },
+ "tools_called": [
+  "Grep",
+  "Bash",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Read",
+  "Write"
+ ],
+ "reply": "Read the spec, the clarity report and both persona logs. Checking the About page for facts about the product, then I'll write the summary.\n\nI've written the run summary to `2026-09-08-run-fixture01/exec-summary.md`, following \u00a73.6. I didn't run the report check, close the manifest or export anything.\n\n- **Top 5 has two rows, not five.** Clarity found no P0s and only two P1s: the landing page never says what the product is, and the \"See it in action\" button links nowhere. The spec says to fill from P1 but never pad with P2 or P3, so a line under the table says the other six findings are in the Clarity report.\n- **Headings left for the renderer:** Contents, Objectives (the run had one objective under test) and How each area scores are written with nothing under them.\n- **Sections left out:** \"Raised by more than one check\" (only one check ran) and \"Against comparable sites\" (no competitors).\n- **Quotes:** all ten are copied word for word from the session logs and debriefs, with line numbers. They include positive lines about the About page alongside the complaints, and a note says the speakers were constructed personas.\n- **Limits:** the run was planned with six checks but only Clarity was scored. The limits section says this, and says the pricing, demo-form and privacy problems in the summary are what the visitors saw, not scored findings.",
+ "cost_usd": 0.5588
+}

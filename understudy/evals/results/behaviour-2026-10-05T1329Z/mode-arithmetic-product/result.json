@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The answer is one traversal, and it explains that all four lenses (ux, bugs, onboarding, content) are Mode A and score the same persona capture.",
+  "cost": 0.1050692
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "**One.**\n\nUX, bugs, onboarding and content are all Mode A (Journey) lenses. Understudy groups objectives by mode and captures once per mode, per persona. A single `traversal-journey` run drives the product as your persona and writes the evidence to disk. The four lenses then score that same capture in parallel. Running one traversal per lens would cost about 4\u00d7 as much and produce identical evidence (`commands/run.md:131`, `:141`, `:205`).\n\nThe count would only go up if you:\n- **Add personas:** each persona is its own traversal, and wall time grows linearly with them.\n- **Add an objective from another mode:** for example, `technical` needs a separate Mode B measurement, and `seo` or `aeo` need a Mode C crawl.\n\nExpect about 90 minutes for the one traversal at the default cap, plus scoring time.",
+ "cost_usd": 0.2226
+}
