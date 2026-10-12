@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States two captures: one A-visit scored by clarity, conversion and trust, plus one Mode C crawl for seo. It does not propose one capture per lens.",
+  "cost": 0.1050114
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "That's **2 captures**:\n\n1. **Mode A-visit** (website visit): your one persona drives the site once. The **clarity**, **conversion** and **trust** lenses all score that same traversal. All three read visit evidence, so they share a single capture rather than getting one each.\n2. **Mode C** (crawl): **seo** needs a crawl of the public site, which runs with no persona and no session. It's a separate capture.\n\nSo with one persona it's 1 visit plus 1 crawl, and four lenses score the evidence from those two captures. If you add more personas, you get one more visit per persona, but still only one crawl.\n\nNothing has been started.",
+ "cost_usd": 0.217
+}

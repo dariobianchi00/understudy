@@ -1,0 +1,22 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply says the text was saved verbatim with no wording changed. It flags the Top 3 versus findings mismatch as an observation without fixing it or adding findings, and it states it stopped before the gate.",
+  "cost": 0.1083394
+ },
+ "tools_called": [
+  "Grep",
+  "Read",
+  "Bash",
+  "Write",
+  "Write"
+ ],
+ "reply": "I saved the clarity lens's report word for word into `2026-09-08-run-fixture01/clarity/`. The `clarity/` folder didn't exist yet, so nothing was overwritten.\n\n- **`exec-summary.md`** has the one-sentence verdict, the Top 3 and the 3/10 score.\n- **`findings-final.md`** has `## Findings` and everything after it: one finding (`77a357f2d026`, P1) and the \"Dropped for want of evidence\" section, which says none.\n\nI split the text where the lens's own `--- filename ---` markers put the break. That matches the \u00a73.4 rule: the verdict, top 3 and stated limits go in the summary, and `## Findings` onward goes in the findings file. I didn't change any wording.\n\nThe report doesn't match itself. The summary's Top 3 lists three issues, but `findings-final.md` contains only the first, the missing audience. Neither \"'See it in action' goes nowhere\" (P1) nor \"Hero subhead is undefined jargon\" (P2) appears as a finding, and neither is listed as dropped. I left this alone because the rules say not to change the lens's output. Running the 3.5 gate may flag it; whether to re-run the lens or accept it is your call.\n\nAs you asked, I stopped there: I haven't run the 3.5 gate (`check_report.py`) or anything after it.",
+ "cost_usd": 0.2692
+}

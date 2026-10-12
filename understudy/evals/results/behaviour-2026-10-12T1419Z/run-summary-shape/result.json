@@ -1,0 +1,32 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant wrote the summary and stopped, with no export offered and no questions asked. It didn't claim to change, re-score or merge any finding. It explained the omitted headings, which is allowed.",
+  "cost": 0.1065034
+ },
+ "tools_called": [
+  "Grep",
+  "Bash",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Write",
+  "Edit",
+  "Edit",
+  "Edit"
+ ],
+ "reply": "Writing the run-level summary now. I've read \u00a73.6, the clarity report and both visitors' logs and debriefs.\n\nI've written the run-level summary to `2026-09-08-run-fixture01/exec-summary.md`, following the \u00a73.6 template order. I haven't run the report check script or the renderer on it.\n\n- **Top 5 has two rows, not five.** The clarity check produced no P0s and only two P1s: the hero never says what the product is, and the \"See it in action\" button goes nowhere. \u00a73.6 says never to fill the table with P2s, so a line under it says the other six findings are minor and live in the full report.\n- **Empty headings for the renderer:** Contents, Objectives (the run had one objective), and How each area scores. I left out \"Raised by more than one check\" and \"Against comparable sites\", because only one check ran and there were no competitors.\n- **Quotes are copied word for word.** All eight come from the session logs or debriefs, with their line references. Three are positive (the About page, the FAQ answers) to keep the section balanced. A line under the table says the speakers were constructed personas.\n- **Limits says plainly that only Clarity was scored.** The manifest also planned Conversion, Trust and credibility, Performance and delivery, Search visibility and Answer-engine readiness, and none of them is in this report. It also says the sessions were hand-authored rather than recorded live, and lists the gaps: Features returned a 404, the scrolled screenshot is blank, and the phone visitor never opened Pricing.\n\nI've stopped here: no export and no manifest close.",
+ "cost_usd": 0.6014
+}

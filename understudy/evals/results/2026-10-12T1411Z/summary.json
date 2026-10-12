@@ -1,0 +1,273 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast",
+   "search-always-empty"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 1,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 3,
+  "severities": {
+   "P0": 1,
+   "P1": 1,
+   "P2": 1,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 72.170744,
+  "cost_usd": 0.3908399,
+  "lens_turns": 24,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "\"Saved \u2713\" confirms a save that never reaches the list or search"
+  ],
+  "band_ok": 3,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 5,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 130.924774,
+  "cost_usd": 0.9023535,
+  "lens_turns": 33,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [
+   "first-value-reached"
+  ],
+  "out_of_lens": [
+   "Memories page presents invented facts as \"What Nimbus remembers about you\" (P1)",
+   "Memories page presents invented facts as \"What Nimbus remembers about you\" (P2)",
+   "Three names for one object (cards, blocks, notes) sent the novice hunting for how to write"
+  ],
+  "band_ok": 1,
+  "band_judged": 2,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P2",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 7,
+  "severities": {
+   "P0": 1,
+   "P1": 1,
+   "P2": 5,
+   "P3": 0
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 149.510278,
+  "cost_usd": 1.0701037,
+  "lens_turns": 38,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 3,
+  "band_judged": 5,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P2",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 6,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 137.455421,
+  "cost_usd": 0.9677661000000001,
+  "lens_turns": 35,
+  "lens_error": false
+ }
+]

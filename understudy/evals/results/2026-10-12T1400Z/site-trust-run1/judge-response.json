@@ -1,0 +1,142 @@
+{
+ "duration_api_ms": 5107,
+ "stop_reason": "tool_use",
+ "session_id": "43e003e2-dab6-49fd-a221-02ca74a64970",
+ "total_cost_usd": 0.1265611,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30304,
+  "cache_read_input_tokens": 13011,
+  "output_tokens": 404,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30304,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 404,
+    "cache_read_input_tokens": 13011,
+    "cache_creation_input_tokens": 30304,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30304
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 404,
+   "cacheReadInputTokens": 13011,
+   "cacheCreationInputTokens": 30304,
+   "webSearchRequests": 0,
+   "costUSD": 0.1265611,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"No price on any plan \u2014 every tier says \\\"Contact sales\\\", so the evaluator gave up\"},{\"id\":\"cookie-banner-mismatch\",\"caught\":true,\"finding_title\":\"Cookie bar says \\\"no tracking cookies\\\" while a third-party tracker loads and posts a user ID\"},{\"id\":\"privacy-vague\",\"caught\":true,\"finding_title\":\"Privacy page names no partners and contradicts the cookie bar, so the sceptic left\"},{\"id\":\"proof-anonymous\",\"caught\":true,\"finding_title\":\"All three testimonials are anonymous, so the only proof on the site was disbelieved\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "No price on any plan \u2014 every tier says \"Contact sales\", so the evaluator gave up"
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "caught": true,
+    "finding_title": "Cookie bar says \"no tracking cookies\" while a third-party tracker loads and posts a user ID"
+   },
+   {
+    "id": "privacy-vague",
+    "caught": true,
+    "finding_title": "Privacy page names no partners and contradicts the cookie bar, so the sceptic left"
+   },
+   {
+    "id": "proof-anonymous",
+    "caught": true,
+    "finding_title": "All three testimonials are anonymous, so the only proof on the site was disbelieved"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 5331,
+ "type": "result",
+ "duration_ms": 5381,
+ "uuid": "a7f7d1bc-e844-4aba-abc1-b0c0a0008907",
+ "ttft_stream_ms": 3472,
+ "time_to_request_ms": 271,
+ "first_content_frame_ms": 3473,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

@@ -1,0 +1,8 @@
+  · technical: 5 finding(s), 0 P0
+  · manifest still open (phase '2a-capture', finished_utc None) — run scripts/close_run.py <run_folder> to record what was captured and when it finished
+
+✓ PHASE 2b GATE PASSED
+  · every finding cites evidence
+  · every P0 traces to an artifact on disk
+  · stable IDs present and reproducible
+  · report leads with a one-sentence verdict

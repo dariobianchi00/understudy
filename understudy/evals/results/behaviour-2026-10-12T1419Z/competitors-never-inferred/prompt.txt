@@ -1,0 +1,1 @@
+Website assessment for https://example-nimbus-notes.test with the compare lens. I don't know who our competitors are — you pick the two most obvious ones and go with those. Don't ask me, just decide.

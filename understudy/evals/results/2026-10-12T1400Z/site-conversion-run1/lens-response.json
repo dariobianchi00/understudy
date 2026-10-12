@@ -1,0 +1,117 @@
+{
+ "duration_api_ms": 115113,
+ "stop_reason": "end_turn",
+ "session_id": "763a862d-d029-4c99-9012-2b6a46de9635",
+ "total_cost_usd": 0.6495514,
+ "usage": {
+  "input_tokens": 24,
+  "cache_creation_input_tokens": 46682,
+  "cache_read_input_tokens": 418397,
+  "output_tokens": 9616,
+  "output_tokens_details": {
+   "thinking_tokens": 1610
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 46682,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 703,
+    "cache_read_input_tokens": 57949,
+    "cache_creation_input_tokens": 374,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 374
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 24,
+   "outputTokens": 9616,
+   "cacheReadInputTokens": 418397,
+   "cacheCreationInputTokens": 46682,
+   "webSearchRequests": 0,
+   "costUSD": 0.6495514,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 1610,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_018LkHfsy6g8XypT6fi5QWe2",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-conversion-xja3qb1c/site; find . -type f | head -50; cat manifest.json; R=/home/runner/work/understudy/understudy/understudy/references; cat $R/lens-output-contract.md",
+    "description": "List run folder, manifest, contract"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01CWb8xUUs4MjLeQdyBMRN6V",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-conversion-xja3qb1c/site; find . -type f | head -50; cat manifest.json; cat /home/runner/work/understudy/understudy/understudy/references/lens-output-contract.md",
+    "description": "List run folder, manifest, contract"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 29,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "**Verdict:** No visitor can start a free trial because the site has no trial path at all. Every route ends at \"Contact sales\" or a demo form that requires a phone number.\n\n**Count by severity:** 1 P0 \u00b7 2 P1 \u00b7 2 P2 \u00b7 0 P3. Score is **2/10**.\n\n- **P0:** None of the 5 crawled pages has a trial, sign-up or \"get started\" action. The goal was \"Start a free trial without talking to sales\", so I recorded the outcome as **could not**.\n- **P1:** The pricing page shows no prices, and all three plans go to sales, including the one labelled \"For individuals.\" The evaluator gave up there. Asked what she'd do next, she said: \"Nothing\u2026 I'd search for an alternative with a price on the page.\"\n- **P1:** The demo form has 7 fields, 5 of them required, including phone. The evaluator opened it and backed out without submitting.\n- **P2:** The newsletter box is the loudest call to action on the home page, and the only filled button in the header is \"Log in\".\n- **P2:** The About page, which won the evaluator's trust, has no button or link to a next step.\n\n**Caveats:**\n- Both personas were inferred, not researched. The report says so in the summary.\n- The sceptic left over trust before she reached pricing or the form, so the two P1s were only seen with the evaluator.\n\nThe check script passed. It also noted that the manifest is still open (phase `2a-capture`). Closing it with `close_run.py` is the orchestrator's job, so I didn't touch it.\n\n**Dropped for want of evidence:**\n- **Required-field markers on the demo form:** the screenshot `03-demo-form.png` is blank, so I counted the fields from the page's HTML instead.\n- **Whether calls to action stay reachable on mobile:** the sceptic never scrolled past the hero.\n\nFiles are in `/tmp/understudy-eval-site-conversion-xja3qb1c/site/conversion/`:\n- `exec-summary.md`\n- `findings-final.md`",
+ "ttft_ms": 3670,
+ "type": "result",
+ "duration_ms": 115897,
+ "uuid": "3062ccb1-0ff0-49f6-bad5-a9ced4c28bec",
+ "ttft_stream_ms": 2294,
+ "time_to_request_ms": 211,
+ "first_content_frame_ms": 2294,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

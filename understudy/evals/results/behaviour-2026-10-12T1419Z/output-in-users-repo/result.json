@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Default is understudy-runs/<slug>/ inside the user's own repo, with an offer to add it to .gitignore because it holds product screenshots, and only the understudy plugin is refused.",
+  "cost": 0.1066894
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Since you're inside your product's git checkout (and it isn't the understudy plugin), the default is a folder in that repo. I'd also ask to add it to `.gitignore`. At Step 7b, the question would look like this:\n\n```\nWhere should the run folder go?\n\n  (a) /tmp/understudy-beh-output-in-users-repo-adkolpnm/understudy-runs/<slug>/   [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\n`<slug>` would be the real slug from Step 1, for example `acme-notes`.\n\n**What happens with git:** if you choose (a), or any folder of your own that's inside a git repo, I ask once:\n\n> Add `understudy-runs/` to that repo's `.gitignore`? (yes)\n\nIf you say yes, I add that line to the repo's `.gitignore`. This step is required, not a courtesy. The run folder holds screenshots of your product, and `init_run.py` refuses to set up a run folder inside a repo unless it's gitignored. If you say no, I'd suggest (b) or a folder outside the repo instead.\n\nThe plan summary would then show:\n\n```\nRun folder    ./understudy-runs/<slug>/   (gitignored in this repo)\n```\n\nTwo other cases:\n- If the current directory weren't in a git repo, the default would be (b), `~/.understudy/runs/<slug>/`.\n- If the path you gave were inside the understudy plugin itself, I'd refuse because that repo is public, and offer (a) or (b) instead.",
+ "cost_usd": 0.2656
+}

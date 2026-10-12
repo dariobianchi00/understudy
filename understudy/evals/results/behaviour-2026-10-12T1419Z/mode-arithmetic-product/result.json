@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The answer is one traversal, and it explains that all four Mode A lenses score the same persona capture.",
+  "cost": 0.10458540000000001
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "**One traversal.**\n\nAll four objectives (ux, bugs, onboarding and content) are Mode A Journey lenses. The plugin's mode table (`commands/run.md:131`) maps Mode A to `traversal-journey`, with \"one traversal per persona\". The skill works on \"capture once, score many times\" (`skills/traversal-journey/SKILL.md:10`): a single signed-in journey writes the screenshots, session log, timeline and debrief, and each of the four lenses scores that same capture afterwards.\n\nSo it's 1 mode \u00d7 1 persona = 1 traversal. The four lenses add scoring passes, not browser runs. The number would only go up if you added a persona or an objective from another mode, such as clarity (website visit), seo (crawl) or technical (measurement).",
+ "cost_usd": 0.2141
+}
