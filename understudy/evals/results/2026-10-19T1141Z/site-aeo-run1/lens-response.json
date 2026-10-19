@@ -1,0 +1,136 @@
+{
+ "duration_api_ms": 73494,
+ "stop_reason": "end_turn",
+ "session_id": "5f92ee97-9772-4d81-aebf-25d34c5e378f",
+ "total_cost_usd": 0.2841823,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 43998,
+  "cache_read_input_tokens": 277603,
+  "output_tokens": 8039,
+  "output_tokens_details": {
+   "thinking_tokens": 408
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 43998,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 426,
+    "cache_read_input_tokens": 39111,
+    "cache_creation_input_tokens": 4887,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4887
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 20,
+   "outputTokens": 8039,
+   "cacheReadInputTokens": 277603,
+   "cacheCreationInputTokens": 43998,
+   "webSearchRequests": 0,
+   "costUSD": 0.2841823,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 408,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01FDi4r7wHbooZXLWpczHxCM",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-aeo-34hpfajj/site; cat manifest.json | head -50; cat crawl/index.json | head -60; cat crawl/site.json | head -40; ls crawl/pages crawl/html; cd /home/runner/work/understudy/understudy/understudy/references; cat lens-output-contract.md severity-rubric.md"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01HyzojZiemwsVWaoAc3W7ic",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-aeo-34hpfajj/site/crawl; cat pages/*.json; cat html/1-index.html html/3-pricing.html html/4-about.html; cat /home/runner/work/understudy/understudy/understudy/references/report-template.md"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01Nr1atAfADf4Tn4zysec1Gn",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts; f(){ python3 finding_id.py --lens aeo --flow \"$1\" --locator \"$2\" --title \"$3\"; }\nf crawl:site \"site:structured_data\" \"No Organization schema on any of 4 crawled pages, so the publisher cannot be attributed\"\nf crawl:page \"/ script[type=application/ld+json]\" \"Homepage JSON-LD is invalid, so its only structured data cannot be parsed\"\nf crawl:page \"/about.html FAQPage\" \"FAQPage schema covers 2 of the 3 visible FAQ answers\"\nf crawl:page \"/pricing.html main\" \"Pricing page states no price or plan facts an engine could quote\"\nf crawl:site \"site:entity-naming\" \"Entity is named three ways and its category is never stated in plain words\"\nf crawl:site \"/llms.txt\" \"No llms.txt at the site root\"\nf crawl:page \"/ main h2\" \"Homepage has zero question-shaped headings, so zero extractable answer blocks\""
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01K9Wiz5QdFisRmoVmaW65pL",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts; for t in \"crawl:site|site:structured_data|No Organization schema on any of 4 crawled pages, so the publisher cannot be attributed\" \"crawl:page|/ script[type=application/ld+json]|Homepage JSON-LD is invalid, so its only structured data cannot be parsed\" \"crawl:page|/about.html FAQPage|FAQPage schema covers 2 of the 3 visible FAQ answers\" \"crawl:page|/pricing.html main|Pricing page states no price or plan facts an engine could quote\" \"crawl:site|site:entity-naming|Entity is named three ways and its category is never stated in plain words\" \"crawl:site|/llms.txt|No llms.txt at the site root\" \"crawl:page|/ main h2|Homepage has zero question-shaped headings, so zero extractable answer blocks\"; do IFS='|' read fl lo ti <<< \"$t\"; python3 finding_id.py --lens aeo --flow \"$fl\" --locator \"$lo\" --title \"$ti\"; done"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01MxwSYsbfMtf8ZD3c7QTiTd",
+   "tool_input": {
+    "command": "cd /home/runner/work/understudy/understudy/understudy/scripts; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"site:structured_data\" --title \"No Organization schema on any of 4 crawled pages, so the publisher cannot be attributed\"; python3 finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/ script[type=application/ld+json]\" --title \"Homepage JSON-LD is invalid, so its only structured data cannot be parsed\"; python3 finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/about.html FAQPage\" --title \"FAQPage schema covers 2 of the 3 visible FAQ answers\"; python3 finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/pricing.html main\" --title \"Pricing page states no price or plan facts an engine could quote\"; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"site:entity-naming\" --title \"Entity is named three ways and its category is never stated in plain words\"; python3 finding_id.py --lens aeo --flow \"crawl:site\" --locator \"/llms.txt\" --title \"No llms.txt at the site root\"; python3 finding_id.py --lens aeo --flow \"crawl:page\" --locator \"/ main h2\" --title \"Homepage has zero question-shaped headings, so zero extractable answer blocks\""
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 17,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "An answer engine could quote the three FAQ answers on /about.html, but couldn't attribute them to any declared organisation, and no other page offers anything extractable.\n\nThe check_report.py gate passed. Score is 4/10.\n\n| Severity | Count |\n|---|---|\n| P0 | 0 |\n| P1 | 1 |\n| P2 | 4 |\n| P3 | 2 |\n\n- **P1:** No `Organization` schema on any crawled page.\n- **P2:**\n  - The homepage JSON-LD is invalid.\n  - The pricing page states no price.\n  - The organisation is named inconsistently and its category is never stated plainly.\n  - The homepage has no question-shaped headings.\n- **P3:**\n  - The `FAQPage` schema covers 2 of the 3 visible FAQ answers.\n  - There is no `llms.txt`.\n\nI dropped nothing for want of evidence, apart from the question of whether any engine cites the site today, which is out of scope for v1. The exec summary carries the \"static markup only\" scope block.\n\nThe gate also noted that the manifest is still open (phase `2a-capture`). That is for the orchestrator to close with `close_run.py`.\n\nThe two report files are `aeo/exec-summary.md` and `aeo/findings-final.md` in the run folder.",
+ "ttft_ms": 2289,
+ "type": "result",
+ "duration_ms": 74228,
+ "uuid": "bff0443c-d5e3-4d99-ba37-0987af9ae323",
+ "ttft_stream_ms": 1109,
+ "time_to_request_ms": 177,
+ "first_content_frame_ms": 1109,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

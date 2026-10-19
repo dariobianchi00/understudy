@@ -1,0 +1,144 @@
+{
+ "duration_api_ms": 9544,
+ "stop_reason": "tool_use",
+ "session_id": "3cdbb2b9-b51c-4bb7-93c3-9d4ab5949cd6",
+ "total_cost_usd": 0.1312061,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 31404,
+  "cache_read_input_tokens": 13261,
+  "output_tokens": 426,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31404,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 426,
+    "cache_read_input_tokens": 13261,
+    "cache_creation_input_tokens": 31404,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 31404
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 426,
+   "cacheReadInputTokens": 13261,
+   "cacheCreationInputTokens": 31404,
+   "webSearchRequests": 0,
+   "costUSD": 0.1312061,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"memories-invented\",\"caught\":true,\"finding_title\":\"Memories page states invented facts about the novice, so she stops trusting every other message\"},{\"id\":\"webhook-toggle-unexplained\",\"caught\":true,\"finding_title\":\"Settings toggles Enable webhook sync and Vault attestation are unexplained engineering terms\"},{\"id\":\"naming-inconsistent\",\"caught\":true,\"finding_title\":\"The same object is called a note, a card and a block across nav, dashboard and editor\"},{\"id\":\"promise-mismatch\",\"caught\":true,\"finding_title\":\"Product contradicts its remembers-everything pitch: it starts empty and keeps nothing the persona writes\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[\"Saved confirmation reports success for notes that never appear in the list or in search\"]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "memories-invented",
+    "caught": true,
+    "finding_title": "Memories page states invented facts about the novice, so she stops trusting every other message"
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "caught": true,
+    "finding_title": "Settings toggles Enable webhook sync and Vault attestation are unexplained engineering terms"
+   },
+   {
+    "id": "naming-inconsistent",
+    "caught": true,
+    "finding_title": "The same object is called a note, a card and a block across nav, dashboard and editor"
+   },
+   {
+    "id": "promise-mismatch",
+    "caught": true,
+    "finding_title": "Product contradicts its remembers-everything pitch: it starts empty and keeps nothing the persona writes"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": [
+   "Saved confirmation reports success for notes that never appear in the list or in search"
+  ]
+ },
+ "ttft_ms": 9721,
+ "type": "result",
+ "duration_ms": 9751,
+ "uuid": "c6cae42a-813b-47a3-be25-a77128eb7b78",
+ "ttft_stream_ms": 7726,
+ "time_to_request_ms": 206,
+ "first_content_frame_ms": 7727,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

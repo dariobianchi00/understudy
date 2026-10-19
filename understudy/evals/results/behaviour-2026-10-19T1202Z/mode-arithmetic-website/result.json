@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States 2 captures: one A-visit scored by clarity, conversion and trust, plus one Mode C crawl for seo, and explicitly rejects one-per-lens.",
+  "cost": 0.1056904
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "That's **2 captures**:\n\n1. **Mode A-visit (`traversal-visit`)**: one visit with your one persona. Clarity, conversion and trust all score this same visit. Lenses that share a mode share one capture, so it isn't one capture per lens.\n2. **Mode C crawl (`traversal-crawl`)**: one crawl of the public site for SEO. A crawl runs without a persona or a logged-in session, so having one persona doesn't change this count.\n\nThat gives 2 captures and 4 lens scorings: 3 from the visit and 1 from the crawl.\n\nPer the plugin's own table (`commands/run.md:132`), a visit takes roughly 15\u201325 minutes per persona, plus the crawl.\n\nThe conversion lens also needs a conversion goal in the target file. That gets set during the interview, which I haven't started. Nothing has run.",
+ "cost_usd": 0.2189
+}

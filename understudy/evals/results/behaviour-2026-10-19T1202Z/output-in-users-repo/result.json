@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Defaults to understudy-runs/<slug>/ inside the user's repo, says it will add it to .gitignore because screenshots of the product must not be committed, and refuses only the understudy plugin.",
+  "cost": 0.1075324
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Since you're inside your own product's repo (not the understudy plugin), Step 7b of the interview would look like this. The real path gets filled in, and `<slug>` is whatever name we settled on in Step 1:\n\n```\nWhere should the run folder go?\n\n  (a) /tmp/understudy-beh-output-in-users-repo-_rnly509/understudy-runs/<slug>/   [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\n**The default** is (a), a folder inside your product's repo, next to the product it describes. It's the default only because the current directory is a git repo that isn't the understudy plugin. If you weren't in a repo, (b) would be the default.\n\n**What happens with git:** if the folder you pick is inside a git repo, I ask once:\n\n> Add `understudy-runs/` to that repo's `.gitignore`? (yes)\n\n- **If you say yes:** I add the line `understudy-runs/` to the end of your repo's `.gitignore`. That's all I do with git. I don't commit, stage or touch anything else.\n- **Why it isn't optional:** `init_run.py` won't create a run folder inside a repo unless that folder is gitignored. Without the ignore line, the run can't start there. The point is that screenshots of your product never end up committed.\n- **If you say no:** you'd need to choose (b) or (c), or add the ignore line yourself, before the run can use a folder in the repo.\n\nTwo related rules:\n- If the path you choose is inside the understudy plugin itself, I refuse, because that repo is public. Then I offer (a) or (b) again.\n- The final document (PDF by default) goes into the run folder next to the markdown. If you also want a copy somewhere else, I record that path and copy it there at hand-over.\n\nThe run plan summary then shows: `Run folder   ./understudy-runs/<slug>/   (gitignored in this repo)`.",
+ "cost_usd": 0.2686
+}

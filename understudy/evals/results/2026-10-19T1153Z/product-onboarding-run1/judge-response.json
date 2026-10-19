@@ -1,0 +1,136 @@
+{
+ "duration_api_ms": 3670,
+ "stop_reason": "tool_use",
+ "session_id": "d8771433-2925-48ec-92ae-0198ba6d8971",
+ "total_cost_usd": 0.1287261,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30889,
+  "cache_read_input_tokens": 13261,
+  "output_tokens": 384,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30889,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 384,
+    "cache_read_input_tokens": 13261,
+    "cache_creation_input_tokens": 30889,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30889
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 384,
+   "cacheReadInputTokens": 13261,
+   "cacheCreationInputTokens": 30889,
+   "webSearchRequests": 0,
+   "costUSD": 0.1287261,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"workspace-type-before-value\",\"caught\":true,\"finding_title\":\"Signup forces an irreversible workspace-type choice in unexplained jargon before the product is seen\"},{\"id\":\"empty-state-no-guidance\",\"caught\":true,\"finding_title\":\"Empty dashboard says \\\"Nothing here yet.\\\" with no next step toward a first note\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[\"Memories page presents invented facts as \\\"What Nimbus remembers about you\\\"\",\"No keyboard shortcuts for capture or search for a keyboard-driven evaluator\",\"Signup choice \\\"Federated graph\\\" resurfaces as an unexplained Settings toggle\"]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "workspace-type-before-value",
+    "caught": true,
+    "finding_title": "Signup forces an irreversible workspace-type choice in unexplained jargon before the product is seen"
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "caught": true,
+    "finding_title": "Empty dashboard says \"Nothing here yet.\" with no next step toward a first note"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": [
+   "Memories page presents invented facts as \"What Nimbus remembers about you\"",
+   "No keyboard shortcuts for capture or search for a keyboard-driven evaluator",
+   "Signup choice \"Federated graph\" resurfaces as an unexplained Settings toggle"
+  ]
+ },
+ "ttft_ms": 3860,
+ "type": "result",
+ "duration_ms": 3887,
+ "uuid": "8c94d08a-447d-4666-afad-3f2b39025465",
+ "ttft_stream_ms": 1994,
+ "time_to_request_ms": 214,
+ "first_content_frame_ms": 1995,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

@@ -1,0 +1,63 @@
+{
+ "contract_pass": true,
+ "planted": 3,
+ "caught": 3,
+ "recall": 1.0,
+ "caught_ids": [
+  "dead-cta",
+  "jargon-fold",
+  "no-audience"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [
+  "Mobile fold clips the headline and subhead off the right edge"
+ ],
+ "band_ok": 3,
+ "band_judged": 3,
+ "band_rows": [
+  {
+   "id": "no-audience",
+   "severity": "P1",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "jargon-fold",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "dead-cta",
+   "severity": "P2",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 10,
+ "severities": {
+  "P0": 1,
+  "P1": 1,
+  "P2": 7,
+  "P3": 1
+ },
+ "score": 3,
+ "capture": "site",
+ "lens": "clarity",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 176.859482,
+ "cost_usd": 1.0969169,
+ "lens_turns": 33,
+ "lens_error": false
+}

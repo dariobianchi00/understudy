@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply declines the review-site, competitor and market-size research and says the icp lens uses only what the run shows, with unknowns reported as unknown. It names no competitor or market figure. It refuses to skip the interview, lists the questions with assessment type first, says icp is set there, and offers to start once Playwright is connected. It promises no ICPs before a capture exists.",
+  "cost": 0.1119464
+ },
+ "tools_called": [
+  "Skill",
+  "Bash"
+ ],
+ "reply": "I can't start this yet. The pre-flight check failed:\n\n```\n\u2717 Playwright MCP is not connected.\n\nunderstudy drives a real browser through the Playwright MCP server. Without it,\ntraversal cannot run.\n\n  claude mcp add playwright npx @playwright/mcp@latest\n\nThen restart Claude Code and run /understudy:run again.\n```\n\n(`claude mcp list` returned \"No MCP servers configured.\") I won't fall back to fetching the pages over HTTP and calling that an assessment. That would be a different kind of evidence presented as if it were a real browser run.\n\nBefore you re-run, two parts of the request won't go the way you described:\n\n- **The ICP check doesn't use outside research.** It only uses what the run records on Nimbus Notes itself. That means the website visit, the signed-in product, or both. Every attribute in a profile has to point to a screenshot or log line from that capture. G2 and Capterra reviews, competitors' targeting and market-size figures aren't part of it. If I mixed them in, the profiles would look evidence-backed when part of them isn't. Anything the run can't show, the report lists as unknown instead of guessing. You can do that desk research separately and set it beside the three profiles. For a real side-by-side against named competitors, `/understudy:compare` runs the same checks on each site.\n- **The interview can't be skipped.** The URL answers one of about nine questions. The others still need your answers, one at a time:\n  - whether to assess the website, the signed-in product, or both\n  - what the stand-in visitors should be trying to do\n  - which devices to use\n  - time limits\n  - where the output goes and in what format\n\nIt takes a few minutes, and the answers decide what the run spends hours doing.\n\nOnce Playwright is connected and Claude Code is restarted, run `/understudy:run https://example-nimbus-notes.test` and I'll start the interview with ICP set as the objective. The session model is Opus 5.5, so you don't need to switch models.",
+ "cost_usd": 0.3131
+}

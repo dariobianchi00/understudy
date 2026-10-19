@@ -1,0 +1,22 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply says the text was saved verbatim and unchanged, and that it stopped without running the check. The mismatch it flags between the two files is an observation, and it says it left that alone. It adds no findings or verdict, and it suggests asking the lens or re-running it, not filling the gap by hand.",
+  "cost": 0.1087424
+ },
+ "tools_called": [
+  "Grep",
+  "Bash",
+  "Read",
+  "Write",
+  "Write"
+ ],
+ "reply": "I saved the clarity report into `2026-09-08-run-fixture01/clarity/` as two files, split where the report already split itself. The text is exactly as returned, with nothing changed. I stopped there and did not run the report check (step 3.5).\n\n- **`exec-summary.md`:** the verdict sentence, the top 3 and the score.\n- **`findings-final.md`:** from `## Findings` to the end, including the \"Dropped for want of evidence\" section.\n\n**The two files don't agree, and I left that alone:**\n- **Missing findings:** The summary's top 3 lists three problems, but the findings file has only one of them, `77a357f2d026` (no audience named on the landing page). The dead \"See it in action\" button (P1) and the jargon subhead (P2) have no finding entries, and they aren't listed as dropped either. The report check only reads the findings file, so it won't notice they're missing. Either the report got cut off, or those two items are claims with no evidence behind them. It's worth asking the clarity lens or re-running it, not filling them in by hand.\n- **No stated limits:** \u00a73.4 expects the summary to include the lens's stated limits. This report doesn't have any, and I didn't add any.",
+ "cost_usd": 0.2649
+}
