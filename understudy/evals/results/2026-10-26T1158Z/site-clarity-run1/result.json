@@ -1,0 +1,64 @@
+{
+ "contract_pass": true,
+ "planted": 3,
+ "caught": 3,
+ "recall": 1.0,
+ "caught_ids": [
+  "dead-cta",
+  "jargon-fold",
+  "no-audience"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [
+  "The Features nav link returns a 404, removing the page meant to explain the product",
+  "On a 390px phone the headline and subhead are cut off at the right edge"
+ ],
+ "band_ok": 3,
+ "band_judged": 3,
+ "band_rows": [
+  {
+   "id": "no-audience",
+   "severity": "P2",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "jargon-fold",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "dead-cta",
+   "severity": "P2",
+   "band": [
+    "P1",
+    "P2"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 12,
+ "severities": {
+  "P0": 0,
+  "P1": 1,
+  "P2": 9,
+  "P3": 2
+ },
+ "score": 3,
+ "capture": "site",
+ "lens": "clarity",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 176.452211,
+ "cost_usd": 1.1265069,
+ "lens_turns": 26,
+ "lens_error": false
+}

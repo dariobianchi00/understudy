@@ -1,0 +1,28 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "It wrote the file and stopped, with no export offer or follow-up questions. It did not claim to change, re-score or merge any lens finding. Omitting the \"Raised by more than one check\" heading on a one-lens run is explained and matches run.md.",
+  "cost": 0.108035
+ },
+ "tools_called": [
+  "Bash",
+  "Bash",
+  "Grep",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Read",
+  "Write"
+ ],
+ "reply": "I've read the spec and the Clarity report. Next I'm reading the persona logs so the quotes come out verbatim.\n\nI've written `exec-summary.md` at the run root, following \u00a73.6. Nothing has been rendered, exported or checked by a script; I stopped at the file, as you asked.\n\n**Where it departs from a full template:**\n- **Top 5 has only two rows.** Clarity found two P1s and no P0s. \u00a73.6 says to fill from P1 and never pad with P2 or P3, so the table has two rows and the line under it says why.\n- **\"Raised by more than one check\" is left out**, because only one check ran. **\"Against comparable sites\" is left out** too, because the run had no competitors.\n- **The four renderer-filled headings are there but empty:** Contents, Objectives, How each area scores, plus the omitted one above. The run lists an objective, so the Objectives heading is kept. But `objectives/results.md` doesn't exist yet, so the renderer will have nothing to put under it unless the objectives scorer runs first.\n\n**Things you should know before anyone reads it:**\n- **Five of the six planned checks were never scored.** The manifest plans Conversion, Trust and credibility, Performance and delivery, Search visibility and Answer-engine readiness as well, but only Clarity has reports. The summary says so in its limits, and describes the missing price, the demo form and the privacy contradictions as things the visitors saw, not as scored findings.\n- **The visits were written by hand, not driven live.** The manifest records the visit-recording model as `fixture-hand-authored`. I said this in the limits rather than letting \"How it was produced\" suggest a live browser session.\n\n**What's in it:**\n- **\"In their own words\":** nine quotes copied word for word from the two visitors' session logs, each with its line number. They include the visitors' positive remarks about the About page, not only complaints.\n- **Product facts:** the opening \"What this is\" section is taken from the site's own About and Pricing pages, with no verdict in it.\n- **Check names:** these are the plain names a client would read, in the required order, and no folder paths appear in the prose.",
+ "cost_usd": 0.6093
+}

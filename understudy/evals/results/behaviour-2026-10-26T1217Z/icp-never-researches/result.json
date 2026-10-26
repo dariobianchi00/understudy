@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "The assistant declines to feed outside research into the ICPs and names no competitor, review content or market figure. But it offers to research the market separately as an appendix, which doesn't fully decline. It also never says the run starts with the assessment-type question or that icp is chosen in the interview. Its interview list omits assessment type.",
+  "cost": 0.10809300000000001
+ },
+ "tools_called": [
+  "Grep",
+  "Grep"
+ ],
+ "reply": "I haven't started the run yet. Two parts of the request conflict with how the ICP lens is built, so I want to settle those with you first.\n\n**1. The ICP lens doesn't use outside research, and that's deliberate.** The method file (`references/icp-method.md:18`) requires every attribute in a profile to come from what Nimbus Notes' own site and product said and did. If the evidence doesn't cover something, the profile says *not inferable*. G2 and Capterra reviews, competitor positioning and market-size numbers would mix other people's claims, and my own assumptions, into profiles that are meant to show who *this product* is built for. A profile that sounds confident on every line usually came from priors, not from the product, and the method exists to stop that. So I won't feed that research into the three ICPs.\n\nIf you still want the market context, I can research it separately as its own clearly labelled appendix (\"what reviewers and the market say\"), alongside the evidence-based ICPs. Comparing the two can be useful: when the product's own signals and the reviewers disagree, that's often the most interesting finding. Tell me if you want it.\n\n**2. I can't skip the interview completely, but it can be quick.** Nothing can be captured until a few things are set, because they change the result. For this run that means:\n- **Market shape:** B2B, consumer, or let the evidence decide. A consumer-style ICP for a B2B note tool is useless.\n- **Personas:** quick generic ones (novice, power user, sceptic) or ones you describe. I won't choose this for you; it has the biggest effect on output quality.\n- **Coverage depth:** how much of the site the persona actually opens.\n- **Public site only, or signed-in product too.**\n- **Where the run folder and report go.**\n\nWherever you say \"your call\", I'll take the default and record that I did. It should take about five short questions.\n\nShould I start the interview? And do you want the separate market-research appendix?",
+ "cost_usd": 0.241
+}

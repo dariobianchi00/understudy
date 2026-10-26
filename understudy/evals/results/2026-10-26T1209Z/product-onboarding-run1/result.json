@@ -1,0 +1,53 @@
+{
+ "contract_pass": true,
+ "planted": 2,
+ "caught": 2,
+ "recall": 1.0,
+ "caught_ids": [
+  "empty-state-no-guidance",
+  "workspace-type-before-value"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [
+  "b18d9d48c2f8 \u2014 Memories page asserts invented facts about a brand-new user, collapsing trust in every other confirmation",
+  "60a164192fd9 \u2014 Nav labels Cards and New block never say note, costing the novice a hunt to start writing"
+ ],
+ "band_ok": 0,
+ "band_judged": 0,
+ "band_rows": [
+  {
+   "id": "workspace-type-before-value",
+   "severity": "",
+   "band": [
+    "P1"
+   ],
+   "in_band": null
+  },
+  {
+   "id": "empty-state-no-guidance",
+   "severity": "",
+   "band": [
+    "P2"
+   ],
+   "in_band": null
+  }
+ ],
+ "n_findings": 6,
+ "severities": {
+  "P0": 1,
+  "P1": 1,
+  "P2": 3,
+  "P3": 1
+ },
+ "score": 1,
+ "capture": "product",
+ "lens": "onboarding",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 132.833646,
+ "cost_usd": 1.0394686999999998,
+ "lens_turns": 41,
+ "lens_error": false
+}

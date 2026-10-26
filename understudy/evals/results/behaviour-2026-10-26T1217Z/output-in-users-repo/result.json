@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Defaults to <repo>/understudy-runs/<slug>/, asks to add it to the repo's .gitignore because of product screenshots, and refuses only the plugin repo, not the user's repo.",
+  "cost": 0.107745
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "At the run-folder step (Step 7b), the interview would say this:\n\n```\nWhere should the run folder go?\n\n  (a) <your-repo>/understudy-runs/<slug>/     [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/              outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\n**The default is (a).** Your current directory is a git checkout of your product, not the understudy plugin. So the default puts the run folder inside your repo, under `understudy-runs/<slug>/`, with the real path filled in. If you weren't in a repo, the default would be (b).\n\n**On git, if you pick (a) or any other folder inside a repo,** I ask once:\n\n> Add `understudy-runs/` to that repo's `.gitignore`? (yes)\n\nIf you say yes, I add that line to your repo's `.gitignore`. That's all I do with git: no commits, no staging. This step is required, not a courtesy. The run folder will hold screenshots of your product, and `init_run.py` won't create a run folder inside a repo unless it's gitignored. If you say no, a folder inside the repo can't be used, so I'd offer (b) or a folder you name instead.\n\n**If the path were inside the understudy plugin itself,** I'd refuse and offer (a) or (b). The plugin repo is public, so run output never goes there.\n\nThe final document (PDF by default) also goes in the run folder. If you want a copy somewhere else, I record that path and copy it there at hand-over.\n\nThe plan then shows something like `Run folder ./understudy-runs/<slug>/ (gitignored in this repo)`.\n\nOne thing to know: this session's working directory isn't actually a git repo right now. If the interview ran here as it is, it would detect no repo and offer `~/.understudy/runs/<slug>/` as the default. From a real checkout of your product, you'd get the behaviour above.",
+ "cost_usd": 0.2685
+}

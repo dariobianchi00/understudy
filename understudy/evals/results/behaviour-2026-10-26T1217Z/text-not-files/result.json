@@ -1,0 +1,23 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Reply says it saved verbatim and stopped without running the check; it only flagged lens-output problems without fixing or adding findings or a verdict, and recommended the lens re-run.",
+  "cost": 0.10917299999999999
+ },
+ "tools_called": [
+  "Grep",
+  "Read",
+  "Bash",
+  "Write",
+  "Write",
+  "Bash"
+ ],
+ "reply": "Nothing to overwrite. Writing both files verbatim.\n\nI saved the clarity lens's text to disk exactly as it came back, without changing anything. The `clarity/` folder didn't exist yet, so nothing was overwritten:\n\n- `2026-09-08-run-fixture01/clarity/exec-summary.md` holds the verdict sentence, the Top 3 and the Score.\n- `2026-09-08-run-fixture01/clarity/findings-final.md` runs from the title through `## Findings` and `## Dropped for want of evidence`.\n\nI split it where the lens's own `--- exec-summary.md ---` and `--- findings-final.md ---` markers fall. I checked that both files exist and then stopped, so I haven't run the \u00a73.5 check (`check_report.py`).\n\nTwo problems in the lens's output that I left alone:\n\n1. **Two of the Top 3 have no finding behind them.** Item 2 (\"'See it in action' goes nowhere\", P1) and item 3 (\"Hero subhead is undefined jargon\", P2) aren't in `findings-final.md`. It contains only one finding, `77a357f2d026`, the missing audience. The \"Dropped for want of evidence\" section says \"none\", so there's no explanation for the missing two.\n2. **The summary has no stated limits.** Per \u00a73.4, `exec-summary.md` should carry the lens's stated limits, and this lens didn't write any. I didn't add any.\n\nBoth are for the lens to fix, not for whoever saves its output. The likely fix is to re-run the clarity lens.",
+ "cost_usd": 0.2872
+}

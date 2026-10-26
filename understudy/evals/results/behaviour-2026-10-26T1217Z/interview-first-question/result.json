@@ -1,0 +1,18 @@
+{
+ "case": "interview-first-question",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The reply asks only the assessment-type question, showing the three options (product/website/both). It does not ask about competitors, conversion goal, personas or models, and it explicitly declines to infer the type from the URL.",
+  "cost": 0.105845
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Target: **https://example-nimbus-notes.test**. Pre-flight passed and there's no saved target, so this is a fresh interview.\n\n**What are you evaluating?**\n\n```\n  (a) A product \u2014 something people sign into and use.\n      Lenses: ux \u00b7 bugs \u00b7 onboarding \u00b7 content \u00b7 icp\n      ~90 min per persona.\n\n  (b) A website \u2014 something people read and decide from.\n      Lenses: clarity \u00b7 conversion \u00b7 trust \u00b7 icp \u00b7 technical \u00b7 seo \u00b7 aeo \u00b7 compare\n      ~15\u201325 min per persona, plus a crawl.\n\n  (c) Both \u2014 a marketing site with a product behind it.\n      Runs (b) on the site, then (a) on the product. Two captures.\n```\n\nI'm asking this first and not guessing from the URL because the answer decides every later question. A URL that looks like a notes app could be a marketing site, the product's login page, or both.",
+ "cost_usd": 0.2529
+}

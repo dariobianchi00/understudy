@@ -1,0 +1,115 @@
+{
+ "duration_api_ms": 54030,
+ "stop_reason": "end_turn",
+ "session_id": "12add6ca-92f2-48f0-afa1-d11be69d0dda",
+ "total_cost_usd": 0.21571250000000003,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 29957,
+  "cache_read_input_tokens": 248785,
+  "output_tokens": 7097,
+  "output_tokens_details": {
+   "thinking_tokens": 726
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 29957,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 385,
+    "cache_read_input_tokens": 41888,
+    "cache_creation_input_tokens": 345,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 345
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 18,
+   "outputTokens": 7097,
+   "cacheReadInputTokens": 248785,
+   "cacheCreationInputTokens": 29957,
+   "webSearchRequests": 0,
+   "costUSD": 0.21571250000000003,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 726,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01TZJmgN4Jo9AB5XSQsaE25r",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-technical-s3ka8cwy/site; cat manifest.json; ls -R . | head -50; R=/home/runner/work/understudy/understudy/understudy/references; cat $R/lens-output-contract.md $R/technical-metrics.md"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01BT2aFeobyFuSkYyRrtxQg7",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-technical-s3ka8cwy/site; cat manifest.json; ls -R . | head -50; cat /home/runner/work/understudy/understudy/understudy/references/lens-output-contract.md /home/runner/work/understudy/understudy/understudy/references/technical-metrics.md"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 17,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "The gate passed, so I'm reporting the result now.\n\n**Verdict:** One unoptimised 3.9 MB hero image makes the home page a 4.1 MB, 5.8 s-LCP \"poor\" load on mobile, while the pricing page is tiny and fast.\n\n**Findings by severity:** P0: 0 \u00b7 P1: 1 \u00b7 P2: 3 \u00b7 P3: 1. The score is 7/10.\n\nNothing was dropped for want of evidence. All four measurements had `viewport_verified: true`.\n\n- **Gate warning:** the gate printed that the manifest is still open (phase `2a-capture`). That is for the orchestrator to close with `close_run.py`; I did not touch it.\n- **Coverage gap:** only the home and pricing pages were measured, once each, with no throttling.\n- **Data oddity:** the measurements record `https: true` and `hsts: true` for an `http://localhost` URL. I noted this in the coverage gaps and did not treat it as evidence.\n\nFiles are in `/tmp/understudy-eval-site-technical-s3ka8cwy/site/technical`:\n- `exec-summary.md`\n- `findings-final.md`",
+ "ttft_ms": 2471,
+ "type": "result",
+ "duration_ms": 54667,
+ "uuid": "df9634c4-5e2d-4b12-aed2-10b7b962f86d",
+ "ttft_stream_ms": 1480,
+ "time_to_request_ms": 191,
+ "first_content_frame_ms": 1480,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

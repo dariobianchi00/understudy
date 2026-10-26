@@ -1,0 +1,16 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant answered one traversal, because all four lenses score the same Mode A persona capture, which meets the criterion.",
+  "cost": 0.105245
+ },
+ "tools_called": [],
+ "reply": "**1.**\n\nAll four lenses (ux, bugs, onboarding, content) score the same kind of capture: a Mode A traversal, where one persona drives the signed-in product toward a goal. Capturing and scoring are separate steps. The traversal records evidence to disk (screenshots, session log, timeline, debrief, raw observations) and doesn't score anything. Each lens then reads that same run folder on its own. With one persona and one product URL, a single traversal gives all four lenses what they need.\n\nYou'd only need more traversals if you added another persona (one more each), another site to compare against, or objectives that need a different capture mode: technical needs Mode B measurement, seo/aeo need a Mode C crawl, and clarity, trust and conversion need a website visit.",
+ "cost_usd": 0.1798
+}

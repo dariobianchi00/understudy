@@ -1,0 +1,72 @@
+{
+ "contract_pass": true,
+ "planted": 4,
+ "caught": 4,
+ "recall": 1.0,
+ "caught_ids": [
+  "memories-invented",
+  "naming-inconsistent",
+  "promise-mismatch",
+  "webhook-toggle-unexplained"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [
+  "'Saved \u2713' confirmation claims a save that the cards list and search never reflect (persistence bug, belongs to bugs lens)",
+  "Signup forces an irreversible workspace choice worded in jargon a novice cannot parse (partly onboarding)",
+  "Empty dashboard says 'Nothing here yet.' with no pointer to writing a first note (onboarding)"
+ ],
+ "band_ok": 2,
+ "band_judged": 4,
+ "band_rows": [
+  {
+   "id": "memories-invented",
+   "severity": "P0",
+   "band": [
+    "P0"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "webhook-toggle-unexplained",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  },
+  {
+   "id": "naming-inconsistent",
+   "severity": "P2",
+   "band": [
+    "P3"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "promise-mismatch",
+   "severity": "P0",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  }
+ ],
+ "n_findings": 8,
+ "severities": {
+  "P0": 3,
+  "P1": 0,
+  "P2": 4,
+  "P3": 1
+ },
+ "score": 2,
+ "capture": "product",
+ "lens": "content",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 136.781845,
+ "cost_usd": 0.9591794999999999,
+ "lens_turns": 35,
+ "lens_error": false
+}

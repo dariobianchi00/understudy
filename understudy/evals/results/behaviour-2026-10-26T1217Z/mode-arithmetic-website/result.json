@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States two captures: one Mode A-visit persona visit scored by clarity, conversion and trust, plus one Mode C crawl for seo. It does not propose one capture per lens.",
+  "cost": 0.106377
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "That's **2 captures**:\n\n| # | Mode | Skill | Feeds lenses |\n|---|------|-------|--------------|\n| 1 | **Mode A-visit** (one visit, as your one persona) | `traversal-visit` | clarity, conversion, trust |\n| 2 | **Mode C** crawl (no persona, no session) | `traversal-crawl` | seo |\n\n**How I got there:**\n- Clarity, conversion and trust are all Mode A-visit lenses. Mode A-visit runs one visit per persona, and every lens scores that same visit. With one persona, that's 1 visit, scored three ways.\n- SEO is a Mode C lens. Mode C crawls the site with no persona, so the crawl count doesn't depend on how many personas you have. That's 1 crawl.\n- 1 + 1 = **2 captures**, which then get **4 lens scorings**.\n\nThere's no Mode B measurement or Mode A product journey, because none of these four lenses use them.\n\nI haven't started anything. One thing to know for later: the conversion lens needs a conversion goal in the target file, so that question will come up when the run starts.",
+ "cost_usd": 0.2334
+}

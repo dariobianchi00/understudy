@@ -1,0 +1,265 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 3,
+  "recall": 0.75,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast"
+  ],
+  "missed_ids": [
+   "search-always-empty"
+  ],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 1,
+  "band_judged": 3,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 4,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 1,
+   "P3": 0
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 66.386129,
+  "cost_usd": 0.36262700000000003,
+  "lens_turns": 15,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "'Saved \u2713' confirmation claims a save that the cards list and search never reflect (persistence bug, belongs to bugs lens)",
+   "Signup forces an irreversible workspace choice worded in jargon a novice cannot parse (partly onboarding)",
+   "Empty dashboard says 'Nothing here yet.' with no pointer to writing a first note (onboarding)"
+  ],
+  "band_ok": 2,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 3,
+   "P1": 0,
+   "P2": 4,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 136.781845,
+  "cost_usd": 0.9591794999999999,
+  "lens_turns": 35,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "b18d9d48c2f8 \u2014 Memories page asserts invented facts about a brand-new user, collapsing trust in every other confirmation",
+   "60a164192fd9 \u2014 Nav labels Cards and New block never say note, costing the novice a hunt to start writing"
+  ],
+  "band_ok": 0,
+  "band_judged": 0,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "",
+    "band": [
+     "P1"
+    ],
+    "in_band": null
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "",
+    "band": [
+     "P2"
+    ],
+    "in_band": null
+   }
+  ],
+  "n_findings": 6,
+  "severities": {
+   "P0": 1,
+   "P1": 1,
+   "P2": 3,
+   "P3": 1
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 132.833646,
+  "cost_usd": 1.0394686999999998,
+  "lens_turns": 41,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 3,
+  "band_judged": 5,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P2",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 5,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 126.04049,
+  "cost_usd": 0.9341795000000002,
+  "lens_turns": 35,
+  "lens_error": false
+ }
+]
