@@ -1,0 +1,144 @@
+{
+ "duration_api_ms": 6291,
+ "stop_reason": "tool_use",
+ "session_id": "3eb9bf97-f935-42d8-87ba-226bffbb470a",
+ "total_cost_usd": 0.1288524,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30873,
+  "cache_read_input_tokens": 13364,
+  "output_tokens": 402,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30873,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 402,
+    "cache_read_input_tokens": 13364,
+    "cache_creation_input_tokens": 30873,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30873
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 402,
+   "cacheReadInputTokens": 13364,
+   "cacheCreationInputTokens": 30873,
+   "webSearchRequests": 0,
+   "costUSD": 0.1288524,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 30873,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"memories-invented\",\"caught\":true,\"finding_title\":\"Memories page asserts three facts about the user that neither persona ever supplied (-a and -b)\"},{\"id\":\"webhook-toggle-unexplained\",\"caught\":true,\"finding_title\":\"Settings labels three toggles in engineering jargon with no explanation\"},{\"id\":\"naming-inconsistent\",\"caught\":true,\"finding_title\":\"One object is called note, card and block across the core screens\"},{\"id\":\"promise-mismatch\",\"caught\":true,\"finding_title\":\"\\\"Saved \u2713\\\" confirms notes that never appear, breaking the \\\"remembers everything\\\" promise (plus Promise vs delivery table)\"}],\"clean_reported\":[{\"id\":\"first-value-reached\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"login-wall\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"export-exists\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "memories-invented",
+    "caught": true,
+    "finding_title": "Memories page asserts three facts about the user that neither persona ever supplied (-a and -b)"
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "caught": true,
+    "finding_title": "Settings labels three toggles in engineering jargon with no explanation"
+   },
+   {
+    "id": "naming-inconsistent",
+    "caught": true,
+    "finding_title": "One object is called note, card and block across the core screens"
+   },
+   {
+    "id": "promise-mismatch",
+    "caught": true,
+    "finding_title": "\"Saved \u2713\" confirms notes that never appear, breaking the \"remembers everything\" promise (plus Promise vs delivery table)"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "first-value-reached",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "login-wall",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "export-exists",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 6526,
+ "type": "result",
+ "duration_ms": 6555,
+ "uuid": "efdb2a2d-d4ed-4734-8c21-9498e541021b",
+ "ttft_stream_ms": 4593,
+ "time_to_request_ms": 263,
+ "first_content_frame_ms": 4593,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

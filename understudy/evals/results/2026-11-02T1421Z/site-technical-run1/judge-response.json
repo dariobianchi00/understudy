@@ -1,0 +1,144 @@
+{
+ "duration_api_ms": 13945,
+ "stop_reason": "tool_use",
+ "session_id": "6907a0a3-0dd8-4e8e-adf5-816377874417",
+ "total_cost_usd": 0.1210264,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 28874,
+  "cache_read_input_tokens": 13364,
+  "output_tokens": 419,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 28874,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 419,
+    "cache_read_input_tokens": 13364,
+    "cache_creation_input_tokens": 28874,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 28874
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 419,
+   "cacheReadInputTokens": 13364,
+   "cacheCreationInputTokens": 28874,
+   "webSearchRequests": 0,
+   "costUSD": 0.1210264,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 28874,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"hero-oversized\",\"caught\":true,\"finding_title\":\"Hero PNG ships 3000\u00d72000 at 3.9 MB for a 350\u00d7233 slot, driving a 5.8 s mobile LCP\"},{\"id\":\"mobile-lcp-poor\",\"caught\":true,\"finding_title\":\"Hero PNG ships 3000\u00d72000 at 3.9 MB for a 350\u00d7233 slot, driving a 5.8 s mobile LCP\"},{\"id\":\"render-blocking-css\",\"caught\":true,\"finding_title\":\"Third-party font stylesheet blocks first paint on the home page\"},{\"id\":\"console-error-on-load\",\"caught\":true,\"finding_title\":\"Home page throws a ReferenceError on load\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "hero-oversized",
+    "caught": true,
+    "finding_title": "Hero PNG ships 3000\u00d72000 at 3.9 MB for a 350\u00d7233 slot, driving a 5.8 s mobile LCP"
+   },
+   {
+    "id": "mobile-lcp-poor",
+    "caught": true,
+    "finding_title": "Hero PNG ships 3000\u00d72000 at 3.9 MB for a 350\u00d7233 slot, driving a 5.8 s mobile LCP"
+   },
+   {
+    "id": "render-blocking-css",
+    "caught": true,
+    "finding_title": "Third-party font stylesheet blocks first paint on the home page"
+   },
+   {
+    "id": "console-error-on-load",
+    "caught": true,
+    "finding_title": "Home page throws a ReferenceError on load"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 14145,
+ "type": "result",
+ "duration_ms": 14173,
+ "uuid": "d60baff3-cfde-4414-8506-f5f37e2e4145",
+ "ttft_stream_ms": 12210,
+ "time_to_request_ms": 228,
+ "first_content_frame_ms": 12210,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

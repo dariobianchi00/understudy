@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The answer says two captures: one A-visit that clarity, conversion and trust all score, and one Mode C crawl for seo. It gives the formula and does not propose one capture per lens.",
+  "cost": 0.1073747
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "**Two captures.**\n\n1. **Mode A-visit (persona visit).** One visit, because you have one persona. Clarity, conversion and trust all score this same visit. Each lens doesn't need its own capture.\n2. **Mode C (crawl).** One crawl for SEO. It runs with no persona and no session, so the number of personas doesn't change it.\n\nThe general rule is one visit per persona plus one crawl, which comes to 1 + 1 = 2 here. With a second persona it would be three: two visits and still one crawl.\n\nTwo notes:\n- The conversion lens needs a conversion goal in the target file. The interview normally collects that before anything runs.\n- The rule comes from the mode table in `commands/run.md:131-132`. While searching I also saw this exact question's eval grading criteria in the plugin's `evals/` folder. They agree with this answer, but I worked it out from the mode table.\n\nNothing has been started.",
+ "cost_usd": 0.2159
+}

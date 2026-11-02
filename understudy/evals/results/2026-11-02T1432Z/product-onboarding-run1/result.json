@@ -1,0 +1,53 @@
+{
+ "contract_pass": true,
+ "planted": 2,
+ "caught": 2,
+ "recall": 1.0,
+ "caught_ids": [
+  "empty-state-no-guidance",
+  "workspace-type-before-value"
+ ],
+ "missed_ids": [],
+ "hallucinations": [],
+ "out_of_lens": [
+  "Memories page asserts invented facts about a brand-new user, turning one lost note into total distrust",
+  "Notes, cards and blocks name one object three ways, sending the novice hunting for where to write"
+ ],
+ "band_ok": 1,
+ "band_judged": 2,
+ "band_rows": [
+  {
+   "id": "workspace-type-before-value",
+   "severity": "P2",
+   "band": [
+    "P1"
+   ],
+   "in_band": false
+  },
+  {
+   "id": "empty-state-no-guidance",
+   "severity": "P2",
+   "band": [
+    "P2"
+   ],
+   "in_band": true
+  }
+ ],
+ "n_findings": 5,
+ "severities": {
+  "P0": 2,
+  "P1": 0,
+  "P2": 3,
+  "P3": 0
+ },
+ "score": 1,
+ "capture": "product",
+ "lens": "onboarding",
+ "model": "opus",
+ "run": 1,
+ "files_written": true,
+ "seconds": 127.121346,
+ "cost_usd": 0.9325972,
+ "lens_turns": 36,
+ "lens_error": false
+}

@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant declines the outside research and gives the reason: profiles come only from run evidence, and anything the run can't show is marked `?`. It names no competitor or market figure. It keeps the interview, asks the assessment-type question first, and makes no promise of ICP results before a capture exists. One small gap: it treats the icp lens as already chosen instead of saying it is picked in the interview.",
+  "cost": 0.1125887
+ },
+ "tools_called": [
+  "Bash",
+  "Bash"
+ ],
+ "reply": "I'll check how the understudy run and ICP lens are defined before starting.\n\nI haven't started the run. Two parts of your request conflict with how this ICP assessment works.\n\n**1. The ICP lens doesn't do outside research.** It reads G2 and Capterra reviews, competitor targeting and market-size figures as out of scope, and it's built to never search the web. It builds the three profiles only from what a persona actually sees on your site and in the product: your own claims, proof, pricing and flows. Every attribute has to point to that captured evidence. Anything the run can't show is marked `?` with a cheap test to settle it, not filled in from outside data. That's intended: the result is \"who your product signals it's for,\" not a market study. Mixing in review sites or third-party numbers would make the profiles impossible to check against the evidence.\n\nIf you want the outside view as well, I can do it as a separate desk-research task after the run. It would be labelled as separate and kept out of the ICP report.\n\n**2. I can't skip the interview, but I can make it short.** Nothing opens a browser until there's a run plan you've approved. I'll use what you've already told me (target `https://example-nimbus-notes.test`, ICP lens, three profiles) and only ask about what's missing. That's usually 3 or 4 quick questions, then one plan for you to confirm.\n\nSo, first question:\n\n**What are you evaluating?**\n- **(a) A product:** something people sign into and use (about 90 min per persona)\n- **(b) A website:** something people read and decide from (about 15\u201325 min per persona)\n- **(c) Both:** the marketing site and the product behind it. This gives the strongest ICP read, because the profiles rest on both what the site claims and how the product behaves.",
+ "cost_usd": 0.2592
+}

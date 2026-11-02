@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [
+  "reply lacks /\\b(one|1)\\b[^\\n]{0,40}(traversal|capture)/"
+ ],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant answered one traversal and explained that all four lenses score the same Mode-A persona capture.",
+  "cost": 0.10567470000000001
+ },
+ "tools_called": [],
+ "reply": "**1.**\n\nAll four lenses (ux, bugs, onboarding, content) score the same kind of evidence: a Mode-A journey capture. A Mode-A traversal drives the product as one persona and writes screenshots, logs, a timeline and a debrief to disk. Since you have one persona and all four objectives need the same mode, a single traversal of the app produces the evidence they all need. The lenses then score it separately, and none of them opens the browser again.\n\nYou'd need more traversals if you added personas (one each), added objectives that use a different mode, or compared against competitors. The other modes are Mode B for technical, Mode C for seo/aeo, Mode A-visit for clarity/trust/conversion on a marketing site, and Mode D for compare.",
+ "cost_usd": 0.1819
+}

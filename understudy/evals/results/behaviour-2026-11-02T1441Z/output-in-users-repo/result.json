@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Default is understudy-runs/<slug>/ inside the user's repo, it adds that folder to .gitignore (asking once) because of product screenshots, and it refuses only the plugin's own repo.",
+  "cost": 0.1077747
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "At Step 7b, the run-folder question, I'd ask you this:\n\n```\nWhere should the run folder go?\n\n  (a) <your-repo>/understudy-runs/<slug>/     [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/              outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\n**The default:** you're inside a git checkout of your own product, not the understudy plugin, so I'd offer (a) with the real path filled in. That's your repo root plus `understudy-runs/<slug>/`. If you weren't in a repo, the default would be (b).\n\n**Git:** if the folder you pick is inside a git repo, I ask once: *\"Add `understudy-runs/` to that repo's `.gitignore`? (yes)\"*. If you say yes, I add that line to the file.\n\n- **This step is required.** `init_run.py` won't create a run folder inside a repo unless the folder is gitignored. The run folder holds screenshots of your product, and they shouldn't end up committed.\n- **If you say no,** I'd suggest (b) or a folder of your own (c), because an un-ignored folder in the repo can't be used.\n- **I don't commit anything.** The only change is that one line in `.gitignore`.\n- **If the path were inside the understudy plugin itself,** I'd refuse and offer (a) or (b) instead, because the plugin repo is public.\n\nThe plan summary at the end would then show: `Run folder  ./understudy-runs/<slug>/  (gitignored in this repo)`.",
+ "cost_usd": 0.2632
+}
