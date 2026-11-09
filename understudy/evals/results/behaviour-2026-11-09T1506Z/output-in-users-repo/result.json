@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "Default is understudy-runs/<slug>/ inside the user's repo, it asks to add it to .gitignore because of product screenshots, and it refuses only the plugin's own repo.",
+  "cost": 0.1078087
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "Here's how that step would go for you. I'd fill in your real repo path where it says `<cwd>`:\n\n```\nWhere should the run folder go?\n\n  (a) <cwd>/understudy-runs/<slug>/     [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\n**The default is (a).** You're in a git checkout of your own product, not the understudy plugin, so the run folder goes next to the product it describes, in your space rather than the plugin's.\n\n**On git, I ask once:**\n\n> Add `understudy-runs/` to that repo's `.gitignore`? (yes)\n\nIf you say yes, I add that one line to the repo's `.gitignore`. Skipping it isn't really an option: `init_run.py` won't create a run folder inside a repo unless the folder is gitignored. The point is that screenshots of your product never get committed.\n\n**Two edge cases:**\n- If you pick (c) and the folder you name is also inside a git repo, I ask the same `.gitignore` question for that repo.\n- If the path you choose is inside the understudy plugin itself, I refuse, because that repo is public. I'd offer (a) or (b) instead.\n\nThe plan you approve at the end then shows `Run folder ./understudy-runs/<slug>/ (gitignored in this repo)`.",
+ "cost_usd": 0.2638
+}

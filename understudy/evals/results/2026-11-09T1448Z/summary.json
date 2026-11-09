@@ -1,0 +1,427 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 3,
+  "caught": 3,
+  "recall": 1.0,
+  "caught_ids": [
+   "invalid-jsonld",
+   "no-llms-txt",
+   "no-organization-schema"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 3,
+  "band_judged": 3,
+  "band_rows": [
+   {
+    "id": "invalid-jsonld",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "no-organization-schema",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "no-llms-txt",
+    "severity": "P3",
+    "band": [
+     "P3"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 0,
+   "P1": 1,
+   "P2": 5,
+   "P3": 2
+  },
+  "score": 4,
+  "capture": "site",
+  "lens": "aeo",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 89.061676,
+  "cost_usd": 0.49369739999999995,
+  "lens_turns": 30,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 3,
+  "caught": 3,
+  "recall": 1.0,
+  "caught_ids": [
+   "dead-cta",
+   "jargon-fold",
+   "no-audience"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 3,
+  "band_judged": 3,
+  "band_rows": [
+   {
+    "id": "no-audience",
+    "severity": "P2",
+    "band": [
+     "P1",
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "jargon-fold",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "dead-cta",
+    "severity": "P2",
+    "band": [
+     "P1",
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 1,
+   "P1": 0,
+   "P2": 7,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "site",
+  "lens": "clarity",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 115.38578,
+  "cost_usd": 0.9261094,
+  "lens_turns": 26,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 4,
+  "recall": 0.8,
+  "caught_ids": [
+   "dead-cta",
+   "demo-form-burden",
+   "newsletter-louder",
+   "no-price"
+  ],
+  "missed_ids": [
+   "features-404"
+  ],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 2,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "no-price",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "demo-form-burden",
+    "severity": "P1",
+    "band": [
+     "P1",
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "newsletter-louder",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "dead-cta",
+    "severity": "P0",
+    "band": [
+     "P1",
+     "P2"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 5,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 2,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "site",
+  "lens": "conversion",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 90.448935,
+  "cost_usd": 0.749876,
+  "lens_turns": 29,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 7,
+  "caught": 7,
+  "recall": 1.0,
+  "caught_ids": [
+   "duplicate-titles",
+   "features-404",
+   "heading-structure",
+   "invalid-jsonld",
+   "pricing-no-meta-description",
+   "pricing-noindex",
+   "sitemap-404"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "Home page image has no alt text"
+  ],
+  "band_ok": 7,
+  "band_judged": 7,
+  "band_rows": [
+   {
+    "id": "pricing-noindex",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "sitemap-404",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "features-404",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "duplicate-titles",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "heading-structure",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "invalid-jsonld",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "pricing-no-meta-description",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 1,
+   "P1": 2,
+   "P2": 4,
+   "P3": 2
+  },
+  "score": 3,
+  "capture": "site",
+  "lens": "seo",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 57.454363,
+  "cost_usd": 0.35030189999999994,
+  "lens_turns": 23,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "console-error-on-load",
+   "hero-oversized",
+   "mobile-lcp-poor",
+   "render-blocking-css"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 4,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "hero-oversized",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "mobile-lcp-poor",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "render-blocking-css",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "console-error-on-load",
+    "severity": "P3",
+    "band": [
+     "P3"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 4,
+  "severities": {
+   "P0": 0,
+   "P1": 1,
+   "P2": 2,
+   "P3": 1
+  },
+  "score": 6,
+  "capture": "site",
+  "lens": "technical",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 59.730276,
+  "cost_usd": 0.34121540000000006,
+  "lens_turns": 15,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "cookie-banner-mismatch",
+   "no-price",
+   "privacy-vague",
+   "proof-anonymous"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 4,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "no-price",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "privacy-vague",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "proof-anonymous",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 1,
+   "P1": 3,
+   "P2": 4,
+   "P3": 1
+  },
+  "score": 3,
+  "capture": "site",
+  "lens": "trust",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 140.517515,
+  "cost_usd": 1.0267346,
+  "lens_turns": 39,
+  "lens_error": false
+ }
+]

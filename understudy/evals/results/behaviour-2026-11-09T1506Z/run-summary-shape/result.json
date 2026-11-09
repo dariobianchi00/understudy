@@ -1,0 +1,32 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "It wrote the summary and stopped, with no export offered and no questions asked. It didn't claim to have changed, re-scored or merged any finding. It explained leaving out the \"Raised by more than one check\" heading, which is acceptable.",
+  "cost": 0.10817070000000001
+ },
+ "tools_called": [
+  "Grep",
+  "Bash",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Read",
+  "Write"
+ ],
+ "reply": "Reading the end of \u00a73.6, then I'll write the summary.\n\nI've written the run summary to `2026-09-08-run-fixture01/exec-summary.md`, following \u00a73.6. I didn't run `check_report.py`, close the run or render anything.\n\n- **Top 5 has two rows, not five.** Only two findings are P1 and there are no P0s, and \u00a73.6 says not to pad the list with P2s. The two are \"landing fold never says what the product is\" (`0e2fadb02a78`) and \"'See it in action' goes nowhere\" (`e145f210ba5e`). A line under the table says the other six findings are in the full report.\n- **Some sections are left for the renderer.** Contents, Objectives (the run has one) and How each area scores are written as empty headings. I left out \"Raised by more than one check\" entirely, as \u00a73.6 says to when only one check ran.\n- **Quotes are word for word** from the two session logs and the evaluator's debrief, each with its source. Both visitors' positive reactions to the About page are included, and a line under the table says the speakers were made-up visitors, not customers.\n- **Limits states three things plainly:**\n  - **Planned but not scored:** the manifest lists five other checks, so the visitors' complaints about pricing, the demo form, the privacy policy and the testimonials aren't ranked in this summary.\n  - **Not live:** the visit recordings were hand-written test material (the manifest says `fixture-hand-authored`), not a live browser session.\n  - **Not seen:** the Features page returned a 404, the below-the-fold desktop screenshot was blank, and the phone visitor never opened Pricing.",
+ "cost_usd": 0.5459
+}

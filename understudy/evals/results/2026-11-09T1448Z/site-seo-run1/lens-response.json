@@ -1,0 +1,124 @@
+{
+ "duration_api_ms": 55961,
+ "stop_reason": "end_turn",
+ "session_id": "4cb58b1f-d316-454d-bcbe-8a34b02c8179",
+ "total_cost_usd": 0.22607349999999996,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 30839,
+  "cache_read_input_tokens": 227655,
+  "output_tokens": 7992,
+  "output_tokens_details": {
+   "thinking_tokens": 476
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30839,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 384,
+    "cache_read_input_tokens": 38443,
+    "cache_creation_input_tokens": 4721,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4721
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 16,
+   "outputTokens": 7992,
+   "cacheReadInputTokens": 227655,
+   "cacheCreationInputTokens": 30839,
+   "webSearchRequests": 0,
+   "costUSD": 0.22607349999999996,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 476,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 30839,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_015UqCfkAkLai5UNHFrJLiSa",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-seo-7iddqmz3/site/crawl; cat pages/*.json; head -c 1500 html/1-index.html; cat /home/runner/work/understudy/understudy/understudy/references/report-template.md | head -120"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01PqEbq4TQ9Na52fPTiGJbJA",
+   "tool_input": {
+    "command": "cd /tmp; S=/home/runner/work/understudy/understudy/understudy/scripts/finding_id.py\nf(){ python3 $S --lens seo --flow \"crawl:site\" --locator \"$1\" --title \"$2\"; }\nf \"crawl/pages/3-pricing.json#robots_meta\" \"Pricing page carries noindex and is hidden from search\"\nf \"crawl/pages/2-features.json#status\" \"Features page returns 404 while linked from all 5 pages\"\nf \"crawl/site.json#sitemap\" \"Declared sitemap returns 404\"\nf \"crawl/pages/1-index.json#structured_data\" \"Home page JSON-LD is invalid and unparseable\"\nf \"crawl/pages/4-about.json#title\" \"Two pages share the bare title \\\"Nimbus Notes\\\"\"\nf \"crawl/pages/3-pricing.json#meta_description\" \"3 of 4 live pages have no meta description\"\nf \"crawl/pages/5-privacy.json#h1\" \"Pricing has two h1s and privacy has none\"\nf \"crawl/pages/1-index.json#images_missing_alt\" \"Home page image has no alt text and no page sets a canonical\""
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01W2krVV7bmDAk3sWMscnJNa",
+   "tool_input": {
+    "command": "S=/home/runner/work/understudy/understudy/understudy/scripts/finding_id.py; for p in \"crawl/pages/3-pricing.json#robots_meta|Pricing page carries noindex and is hidden from search\" \"crawl/pages/2-features.json#status|Features page returns 404 while linked from all 5 pages\" \"crawl/site.json#sitemap|Declared sitemap returns 404\" \"crawl/pages/1-index.json#structured_data|Home page JSON-LD is invalid and unparseable\" \"crawl/pages/4-about.json#title|About and privacy pages share the bare title Nimbus Notes\" \"crawl/pages/3-pricing.json#meta_description|3 of 4 live pages have no meta description\" \"crawl/pages/5-privacy.json#h1|Pricing has two h1s and privacy has none\" \"crawl/pages/1-index.json#images_missing_alt|Home page image has no alt text\" \"crawl/pages/1-index.json#canonical|No crawled page declares a canonical\"; do python3 $S --lens seo --flow \"crawl:site\" --locator \"${p%%|*}\" --title \"${p#*|}\"; done"
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 23,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "The pricing page is marked noindex, and both the declared sitemap and the features page return 404, so search engines can't properly find or index this site. The gate check passed.\n\n**Findings by severity:** 1 P0, 2 P1, 4 P2, 2 P3 (9 total).\n\n- **P0:** pricing page has `noindex`.\n- **P1:** features page is a 404 linked from all 5 pages. The declared sitemap is a 404.\n- **P2:** invalid JSON-LD on the home page, duplicate bare titles on about and privacy, missing meta descriptions, and h1 problems on pricing and privacy.\n- **P3:** missing alt text on the home page image, and no canonicals on any page.\n\n**Score:** 3/10.\n\n**Dropped for want of evidence:** none. I also made no absence claims for `/app/login.html`, which robots.txt disallows.\n\nThe manifest still shows the run as open (phase `2a-capture`); `scripts/close_run.py` would close it.\n\nBoth files are in `/tmp/understudy-eval-site-seo-7iddqmz3/site/seo/`: `exec-summary.md` and `findings-final.md`.",
+ "ttft_ms": 2691,
+ "type": "result",
+ "duration_ms": 56676,
+ "uuid": "7435231a-a522-4dcb-91dd-6603d4635666",
+ "ttft_stream_ms": 2358,
+ "time_to_request_ms": 216,
+ "first_content_frame_ms": 2358,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

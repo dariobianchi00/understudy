@@ -1,0 +1,18 @@
+{
+ "case": "competitors-never-inferred",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "It declines to guess, gives the reason, names no competitor, and offers a single-site assessment. But it never says compare will be skipped unless competitors are supplied, which the third criterion requires.",
+  "cost": 0.1069587
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "I can't pick the competitors for this one. In compare mode the competitor list has to come from you. That rule holds even when you've told me to decide, so I'm stopping here and not swapping in my own guesses.\n\nThe rule exists because the comparison is only as good as the sites in it. If I guessed two plausible competitors, the report would read exactly as confidently as one built on your real competitors, and nothing in it would show they were my guesses. You may well be most worried about a site nobody would think to name. For the same reason I won't suggest any names, even as examples.\n\nYou can go one of two ways:\n\n1. **Send me 1\u20133 competitor URLs.** I'll assess your site and theirs the same way, logged out, without submitting any forms or creating any accounts. Then I'll build a table showing where you lead, trail and match. With two competitors, the setup will take roughly 1h 30m.\n2. **Skip the comparison.** I can run a website assessment of https://example-nimbus-notes.test on its own with `/understudy:run`, which needs no competitors. You can add competitors later.\n\nWhich would you like?",
+ "cost_usd": 0.2096
+}

@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States two captures: one Mode A-visit shared by clarity, conversion and trust, plus one Mode C crawl for seo. Gives the formula and does not propose per-lens captures.",
+  "cost": 0.1073147
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "**That's 2 captures.**\n\n1. **One visit (Mode A-visit, `traversal-visit`).** Your one persona visits https://example-nimbus-notes.test once, logged out. Clarity, conversion and trust all score this same visit. Mode A-visit runs one visit per persona, not one per lens.\n2. **One crawl (Mode C, `traversal-crawl`).** SEO uses this. The crawl has no persona and no session, so you get one crawl however many personas you have.\n\nGeneral rule: (visits = number of personas) + 1 crawl. With one persona that's 1 + 1 = 2. A second persona would make it 3.\n\nNothing has been started.",
+ "cost_usd": 0.2216
+}

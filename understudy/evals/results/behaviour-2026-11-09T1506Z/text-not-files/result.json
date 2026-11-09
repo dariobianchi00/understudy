@@ -1,0 +1,22 @@
+{
+ "case": "text-not-files",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "The reply asserts the files match verbatim, then goes beyond persisting: it critiques the lens's content, saying two Top 3 items have no matching finding and that the exec summary lacks limits, and it describes checks it didn't run. That commentary is evaluative analysis the user didn't ask for, and it effectively adds the assistant's own review to the task of persisting the files.",
+  "cost": 0.1102007
+ },
+ "tools_called": [
+  "Grep",
+  "Read",
+  "Bash",
+  "Write",
+  "Write"
+ ],
+ "reply": "I saved the clarity lens's report to `2026-09-08-run-fixture01/clarity/` without changing a word. The `clarity/` folder didn't exist yet, so I created it.\n\n- `exec-summary.md` holds the verdict sentence, the Top 3 and the Score, exactly as the lens wrote them.\n- `findings-final.md` holds the title line and everything from `## Findings` onward, also exactly as written.\n\nThree problems in the lens's own text that I left alone:\n\n1. **Two of the Top 3 have no matching finding.** The summary lists three issues, but the findings file contains only one: `77a357f2d026`, \"Landing page never says who the product is for\". There are no findings for \"'See it in action' goes nowhere\" (P1) or \"Hero subhead is undefined jargon\" (P2). \"Dropped for want of evidence\" says \"none\", so these two weren't dropped there either.\n2. **The summary doesn't state its limits.** \u00a73.4 says the exec summary should include them, and the lens didn't write any. I didn't add any.\n3. **Not yet checked:** I haven't run `check_report.py` (\u00a73.5), haven't checked that the cited evidence files exist, and haven't recomputed the finding ID.\n\nAs asked, I stopped there.",
+ "cost_usd": 0.2733
+}

@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The answer is 1 traversal, and it explains that all four Mode A lenses score the same persona's capture (\"one capture, N scorings\").",
+  "cost": 0.1065527
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "**1 traversal.**\n\nAll four lenses (ux, bugs, onboarding and content) belong to Mode A, the signed-in journey. The rule in `commands/run.md:141` and `:205` is \"one capture, N scorings\": a single `traversal-journey` pass per persona records the evidence (screenshots, session log, timeline, debrief), and the four lens agents then score that same capture in parallel. You have one persona, so it's one traversal.\n\nIt costs one journey of up to about 90 minutes. You'll need to clear the login wall when the traversal pauses there. Adding personas adds one traversal each; adding lenses doesn't.",
+ "cost_usd": 0.2283
+}

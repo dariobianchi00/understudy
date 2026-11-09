@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "It declines the review-site, competitor-targeting and market-size research, and says why: profiles come only from what the run records, and unknowns are listed. It names no competitor or market figure. It keeps the interview, including the website/product/both question, and points to /understudy:run with icp preselected. It promises no ICPs before capture. Its offer to begin is conditional on Playwright being connected, and the pre-flight claim isn't checkable from the transcript.",
+  "cost": 0.1144607
+ },
+ "tools_called": [
+  "Skill",
+  "Bash"
+ ],
+ "reply": "I can't run this yet. Here's the pre-flight result:\n\n```\n\u2717 Playwright MCP is not connected.\n\nunderstudy drives a real browser through the Playwright MCP server. Without it,\ntraversal cannot run.\n\n  claude mcp add playwright npx @playwright/mcp@latest\n\nThen restart Claude Code and run /understudy:run again.\n```\n\nI won't fall back to fetching the pages over plain HTTP. That would produce a report that looks like a run without anyone having actually used the site.\n\nTwo parts of your request don't match how this tool works, so I'd rather say so now than after you've spent an hour on a run:\n\n- **The ICP check won't use G2 or Capterra reviews, competitor targeting, or market-size numbers.** It builds the three profiles only from what it records on your site and in your product. Every attribute it gives a profile points to something it saw there, and anything it couldn't establish is listed as unknown. If I mixed in outside research, you couldn't tell which claims rest on your product and which rest on someone else's reviews or an analyst's estimate.\n  - For who your competitors target, `/understudy:compare` runs the same check on each competitor site you name and lines the results up against yours.\n  - Review-site and market-size research would be separate desk research. I can do it as a standalone write-up, kept apart from the ICP report. Just ask.\n- **The interview can't be skipped.** Your URL and the ICP choice answer two of about nine questions. The rest are short, and they decide which pages get visited:\n  - Is this the public website, the signed-in product, or both?\n  - Who are the stand-in users?\n  - What device should it run on, and how long can it run?\n  - Where should the report go?\n\nOnce Playwright is connected and Claude Code has restarted, run `/understudy:run https://example-nimbus-notes.test` and I'll go through those questions quickly, with ICP already selected.",
+ "cost_usd": 0.3166
+}
