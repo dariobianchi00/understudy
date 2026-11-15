@@ -137,6 +137,15 @@ def is_ours(lens_dir, roles):
     return roles.get(site) == "ours"
 
 
+def is_area(lens_dir):
+    """True for a lens that is an area of the main report — root-level lenses
+    and the compare diff lens. Per-site lenses under `compare/<site>/`, ours
+    included, feed the comparison only. `is_ours` says whose a lens is; this
+    says whether it scores. Conflating them averaged the comparison capture
+    of our own site into the overall (5.9 for 5.5, observed 2026-11-15)."""
+    return site_of(lens_dir) is None
+
+
 def self_test():
     import tempfile
     with tempfile.TemporaryDirectory() as t:

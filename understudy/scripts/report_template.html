@@ -8,7 +8,7 @@
 /* ------------------------------------------------------------------ base */
 :root{
   --accent:#1a56db;--ink:#16181d;--mut:#5d6470;--line:#e3e6ea;--bg:#f6f7f9;--card:#fff;
-  --p0:#b42318;--p1:#c4620a;--p2:#946200;--p3:#5d6470;--ok:#2f855a;
+  --p0:#7f1d1d;--p1:#dc2626;--p2:#d97706;--p3:#6b7280;--ok:#2f855a;
   --side:232px;--top:60px;--r:12px;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -32,8 +32,11 @@ blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--accent);col
 @media (max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
 .chip{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid transparent;line-height:1.5;vertical-align:middle}
-.sev-P0{background:#fde8e6;color:var(--p0);border-color:#f5c2bd}.sev-P1{background:#fff0e0;color:var(--p1);border-color:#f8d3a8}
-.sev-P2{background:#fff8dc;color:var(--p2);border-color:#f1e3a0}.sev-P3{background:#eef0f3;color:var(--p3);border-color:#dfe3e8}
+.sev-P0{background:var(--p0);color:#fff;border-color:var(--p0)}.sev-P1{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.sev-P2{background:#fef3c7;color:#92400e;border-color:#fcd34d}.sev-P3{background:#f3f4f6;color:#4b5563;border-color:#e5e7eb}
+.chip .code{font-weight:600;opacity:.7;margin-left:2px}
+.cat{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);border:1px solid color-mix(in srgb,var(--c) 30%,#fff)}
+.cat .sub{font-weight:500;opacity:.85}
 .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:#eef1f5;color:var(--mut);margin:0 4px 4px 0}
 .btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 12px;font-size:13.5px;font-weight:600;color:var(--ink)}
 .btn:hover{border-color:#c9ced6;background:#fafbfc;text-decoration:none}
@@ -60,6 +63,11 @@ blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--accent);col
 .side a.on{background:var(--accent);color:#fff}
 .side a .n{font-size:12px;color:var(--mut);font-weight:600}.side a.on .n{color:#fff;opacity:.85}
 .side .kicker{padding:14px 12px 4px}
+.side .grp{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:800;padding:16px 12px 4px}
+.side .grp:first-child{padding-top:4px}
+.side a.sub{padding:6px 12px 6px 22px;font-weight:500;font-size:13.5px}
+.side a.subsub{padding:4px 12px 4px 40px;font-weight:500;font-size:12.5px;color:var(--mut)}
+.side a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;flex:none}
 .side .lens{font-weight:500;font-size:13.5px}
 .side .bar{width:46px;height:5px;border-radius:3px;background:#e9ecf1;overflow:hidden;display:inline-block;margin-left:8px}
 .side .bar i{display:block;height:100%}
@@ -102,7 +110,25 @@ main{margin:var(--top) 0 0 var(--side);padding:26px 30px 80px;max-width:1280px}
 .filters input{border:1px solid var(--line);border-radius:9px;padding:6px 10px;font:inherit;min-width:220px}
 .filters .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
 .flist{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.frow{display:grid;grid-template-columns:56px 1fr auto;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer;align-items:center}
+.frow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer;align-items:center}
+.frow .lead{display:flex;flex-direction:column;gap:4px;align-items:flex-start;width:200px}
+.frow .fix{font-size:13px;color:var(--mut);margin-top:2px}.frow .fix b{color:var(--ink);font-weight:600}
+.frow .go{color:#b6bcc6;font-size:18px}
+@media (max-width:760px){.frow .fix{display:none}.frow .lead{min-width:0}}
+.catgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media (max-width:1100px){.catgrid{grid-template-columns:repeat(3,1fr)}}@media (max-width:640px){.catgrid{grid-template-columns:repeat(2,1fr)}}
+.ccard{background:#fff;border:1px solid var(--line);border-top:4px solid var(--c);border-radius:var(--r);padding:14px 12px;text-align:center;cursor:pointer}
+.ccard:hover{box-shadow:0 6px 18px rgba(20,30,60,.08)}
+.ccard svg{width:86px;height:86px;display:block;margin:0 auto 6px}
+.ccard .lab{font-weight:800;font-size:14px}.ccard .q{font-size:12px;color:var(--mut);margin-top:2px}
+.ccard .n{font-size:12px;color:var(--mut);margin-top:6px}
+.t5r{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:start;padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.t5r:last-child{border-bottom:0}.t5r:hover{background:#fafbfd}
+.t5r .num{font-size:24px;font-weight:800;color:#c9ced6;line-height:1}
+.t5r .ttl{font-weight:700;font-size:15.5px;margin:4px 0 2px}
+.t5r .eff{font-size:12px;color:var(--mut);white-space:nowrap}
+details.more summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:13.5px;margin:8px 0}
+.lim li{margin-bottom:8px}
 .frow:last-child{border-bottom:0}.frow:hover{background:#fafbfd}.frow.on{background:#eef3ff}
 .frow .t{font-weight:600}
 .frow .m{font-size:12.5px;color:var(--mut)}
@@ -157,7 +183,11 @@ main{margin:var(--top) 0 0 var(--side);padding:26px 30px 80px;max-width:1280px}
 /* ------------------------------------------------------------- present */
 .pres{position:fixed;inset:0;background:#fff;z-index:40;display:none;flex-direction:column}
 .pres.on{display:flex}
-.pres .slide{flex:1;padding:6vh 8vw;overflow:auto;display:flex;flex-direction:column;justify-content:center}
+.pres .slide{flex:1;padding:5vh 7vw;overflow:hidden;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.pres .slide .shot{max-height:58vh;aspect-ratio:auto;object-fit:contain}
+.pres .catgrid .ccard svg{width:min(15vh,130px);height:min(15vh,130px)}
+.pres .t5r{padding:1.4vh 4px}.pres .t5r .ttl{font-size:clamp(16px,1.8vw,24px)}
+.pres .overflow{outline:3px dashed var(--p1)}
 .pres .slide h1{font-size:clamp(30px,4.6vw,58px);letter-spacing:-.02em;margin:0 0 .3em}
 .pres .slide h2{font-size:clamp(22px,3vw,38px);margin:0 0 .5em}
 .pres .slide p,.pres .slide li{font-size:clamp(16px,1.6vw,22px)}
@@ -315,7 +345,13 @@ document.documentElement.style.setProperty('--accent', D.meta.accent || '#1a56db
 const src = rel => (IMG[rel] || {}).src || '';
 const img = (rel, cls='shot', ctx) => rel && src(rel)
   ? `<img class="${cls}" src="${src(rel)}" alt="" data-shot="${esc(rel)}" ${ctx?`data-ctx="${esc(ctx)}"`:''} loading="lazy">` : '';
-const sev = s => `<span class="chip sev-${s}">${esc(s)}</span>`;
+const SEVL = {P0:['🛑','Blocker'],P1:['🔴','High'],P2:['🟠','Medium'],P3:['⚪','Low']};
+const sev = s => SEVL[s] ? `<span class="chip sev-${s}">${SEVL[s][0]} ${SEVL[s][1]}<span class="code"> · ${s}</span></span>` : `<span class="chip">${esc(s)}</span>`;
+const CATS = D.categories || [];
+const CAT = Object.fromEntries(CATS.map(c=>[c.key,c]));
+const catChip = (key, sub='') => { const c=CAT[key]; return c ? `<span class="cat" style="--c:${c.colour}">${c.emoji} ${esc(c.label)}${sub?`<span class="sub"> › ${esc(sub)}</span>`:''}</span>` : (sub?`<span class="tag">${esc(sub)}</span>`:''); };
+const CATF = F.filter(f=>CAT[f.cat]);          // findings filed in one of the five categories
+const LINES = D.lines || {};
 const personaLabel = n => esc(n);
 const fmtSecs = s => s == null ? '—' : `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
 function ring(score, size=82, label='') {
@@ -355,104 +391,101 @@ $('#hsub').textContent = `${D.meta.kind} · ${D.meta.date}` + (D.meta.url ? ` ·
 if (D.meta.logo) { const l=$('#logo'); l.src=D.meta.logo; l.classList.remove('hide'); const link=document.createElement('link'); link.rel='icon'; link.href=D.meta.logo; document.head.appendChild(link); }
 $('#hoverall').innerHTML = D.overall != null ? `Overall <b style="color:${hue(D.overall)}">${D.overall}</b>/10` : '';
 
-const NAV = [
-  ['overview','Overview'], ['top5','Top 5'], ['findings','All findings', F.length],
-  ['personas','Personas', P.length], ...(D.compare ? [['compare','Competitive comparison']] : []), ...(D.icp ? [['icp','Ideal Customer Profiles']] : []),
-  ['quotes','In their own words', (D.quotes||[]).length], ['limits','Limits'],
-];
 function renderNav(){
-  const cur = location.hash.slice(1).split('/')[0] || 'overview';
-  const curLens = location.hash.startsWith('#lens/') ? decodeURIComponent(location.hash.slice(6)) : '';
-  $('#side').innerHTML = NAV.map(([k,l,n]) =>
-    `<a href="#${k}" class="${cur===k||(k==='personas'&&cur==='persona')?'on':''}">${l}${n!=null?`<span class="n">${n}</span>`:''}</a>`).join('')
-    + `<div class="kicker">Checks</div>` + LENS.map(l =>
-    `<a href="#${l.tally?'compare':'lens/'+encodeURIComponent(l.dir)}" class="lens ${curLens===l.dir||(l.tally&&cur==='compare')?'on':''}"><span>${esc(l.label)}</span>${l.tally?`<span class="n"><span style="color:var(--ok)">▲${l.tally.leads}</span> <span style="color:var(--p1)">▼${l.tally.trails}</span></span>`:`<span class="n">${l.score??'–'}<span class="bar"><i style="width:${(l.score||0)*10}%;background:${hue(l.score)}"></i></span></span>`}</a>`).join('');
+  const h = location.hash.slice(1) || 'overview';
+  const parts = h.split('/');
+  const cur = parts[0], arg = decodeURIComponent(parts.slice(1).join('/'));
+  const curCat = cur==='cat' ? arg : cur==='lens' ? (LENS.find(l=>l.dir===arg)||{}).cat : '';
+  const a = (href, label, on, cls='', n='') => `<a href="#${href}" class="${cls} ${on?'on':''}"><span>${label}</span>${n!==''?`<span class="n">${n}</span>`:''}</a>`;
+  const bar = s => `<span class="n">${s??'–'}<span class="bar"><i style="width:${(s||0)*10}%;background:${hue(s)}"></i></span></span>`;
+  let out = `<div class="grp">🏁 Overview</div>` + a('overview','Summary',cur==='overview','sub') + a('top5','Top 5 to fix',cur==='top5','sub');
+  out += `<div class="grp">🔎 Findings</div>` + a('findings','All issues',cur==='findings','sub',CATF.length);
+  for (const c of CATS){
+    out += `<a href="#cat/${c.key}" class="sub ${curCat===c.key&&cur==='cat'?'on':''}"><span>${c.emoji} ${esc(c.label)}</span>${bar(c.score)}</a>`;
+    if (curCat===c.key) out += c.checks.map(d=>{ const l=LENS.find(x=>x.dir===d); return l?a('lens/'+encodeURIComponent(d), esc(l.short), cur==='lens'&&arg===d,'subsub',l.count):''; }).join('');
+  }
+  out += `<div class="grp">👤 Customers</div>` + a('personas','Sessions',cur==='personas'||cur==='persona','sub',P.length)
+       + a('quotes','In their own words',cur==='quotes','sub') + (D.sections.buyer?a('buyer','What a buyer could find',cur==='buyer','sub'):'')
+       + (D.icp?a('icp',"Who it's for",cur==='icp','sub'):'');
+  if (D.compare) out += `<div class="grp">⚔️ Competitors</div>` + a('compare','Comparison',cur==='compare','sub');
+  out += `<div class="grp">📋 About this report</div>` + a('about','How it was produced',cur==='about','sub') + a('limits','Limits',cur==='limits','sub');
+  $('#side').innerHTML = out;
 }
 
 // ------------------------------------------------------------ views
+function catRing(c){ return `<div class="ccard" style="--c:${c.colour}" data-go="cat/${c.key}">${ring(c.score)}<div class="lab">${c.emoji} ${esc(c.label)}</div><div class="q">${esc(c.question)}</div><div class="n">${c.count} issue${c.count===1?'':'s'}${c.sev.P1||c.sev.P0?` · <b style="color:var(--p1)">${(c.sev.P0||0)+(c.sev.P1||0)} high</b>`:''}</div></div>`; }
+function t5rows(){
+  return (D.top5||[]).map(r=>{ const f=byId[r.id]||{}; return `<div class="t5r" data-fid="${esc(r.id)}"><div class="num">${r.n}</div><div><div>${sev(r.sev)} ${catChip(f.cat,f.check)}</div><div class="ttl">${esc(r.what)}</div>${f.shortFix?`<div class="small mut"><b style="color:var(--ink)">Fix:</b> ${esc(f.shortFix)}</div>`:''}</div><div class="eff">${esc(r.effort)}</div></div>`; }).join('');
+}
 function vOverview(){
   const caveat = D.meta.personaMode !== 'supplied'
-    ? `<p class="small mut" style="margin-top:10px">The users in this assessment were constructed, not researched. It shows what a capable first-time user can and cannot work out; it does not show what actual customers do.</p>` : '';
-  const counts = SEVS.map(s => `${sev(s)} ${D.counts[s]||0}`).join(' &nbsp; ');
+    ? `<p class="small mut" style="margin-top:10px">The users were constructed, not researched.</p>` : '';
+  const counts = SEVS.filter(s=>CATF.some(f=>f.sev===s)).map(s => `${sev(s)} ${CATF.filter(f=>f.sev===s).length}`).join(' &nbsp; ');
   return `
+  ${LINES.whatLine?`<p class="mut" style="margin:0 0 14px">${esc(LINES.whatLine)}</p>`:`<div class="mut" style="margin:0 0 14px">${D.sections.whatThisIs||''}</div>`}
   <div class="hero">
     <div class="card" style="flex:1;margin:0"><div class="kicker">The verdict</div><div class="verdict">${esc(D.verdict)}</div>${caveat}</div>
-    <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(D.overall,120)}<div class="lab">Overall</div><div class="n">mean of ${LENS.length} checks</div></div>
+    <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(D.overall,120)}<div class="lab">Overall</div><div class="n">mean of ${CATS.length} categories</div></div>
   </div>
-  <div class="card"><div class="kicker">How each area scores — click a check for its findings</div>
-    <div class="rings" style="margin:10px 0 0">${LENS.map(l=>lensRing(l)).join('')}</div>
-    <p class="small mut" style="margin:12px 0 0">${D.nFindings} findings — ${counts}${D.nProblems<D.nFindings?` · ${D.nProblems} distinct problems (the rest were raised by more than one check)`:''}</p>
-  </div>
+  <div class="card"><div class="kicker">Scorecard — click a category</div>
+    <div class="catgrid" style="margin-top:10px">${CATS.map(catRing).join('')}</div>
+    <p class="small mut" style="margin:12px 0 0">${CATF.length} issues — ${counts}</p></div>
   <div class="grid g2">
-    <div class="card"><div class="kicker">Fix these first</div>${(D.top5||[]).map(r=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)"><span style="font-weight:800;color:#c9ced6;width:18px">${r.n}</span>${sev(r.sev)}<span>${esc(r.what)}</span></div>`).join('')}<p style="margin:12px 0 0"><a href="#top5" class="btn sm">Open the Top 5 →</a></p></div>
-    <div class="card"><div class="kicker">What the site does well</div><ul style="padding-left:18px;margin:0">${(D.doesWell||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul></div>
+    <div class="card"><div class="kicker">Top 5 to fix</div>${(D.top5||[]).map(r=>`<div class="t5r" data-fid="${esc(r.id)}" style="grid-template-columns:24px 1fr"><div class="num" style="font-size:18px">${r.n}</div><div>${sev(r.sev)}<div style="font-weight:600;margin-top:4px">${esc(r.what)}</div></div></div>`).join('')}<p style="margin:12px 0 0"><a href="#top5" class="btn sm">Open the Top 5 →</a></p></div>
+    <div class="card"><div class="kicker">✅ What the site does well</div><ul style="padding-left:18px;margin:0">${(D.doesWell||[]).map(b=>`<li style="margin-bottom:6px">${esc(b)}</li>`).join('')}</ul>
+    ${D.compare?`<div class="kicker" style="margin-top:16px">⚔️ Against competitors</div><p style="margin:0">${esc(LINES.compareVerdict||D.compare.verdict)}</p><p style="margin:10px 0 0"><a href="#compare" class="btn sm">Open the comparison →</a></p>`:''}</div>
+  </div>`;
+}
+function vTop5(){
+  return `<h2>🏁 Top 5 to fix</h2><p class="mut">${esc(D.verdict)}</p><div class="card">${t5rows()}</div>
+  <p class="small mut">Click an issue for evidence and the full fix.</p>`;
+}
+
+// findings explorer
+const FLT = { sev:new Set(), cat:new Set(), lens:new Set(), q:'' };
+function passes(f){
+  if (FLT.sev.size && !FLT.sev.has(f.sev)) return false;
+  if (FLT.cat.size && !FLT.cat.has(f.cat)) return false;
+  if (FLT.lens.size && !FLT.lens.has(f.lens)) return false;
+  if (FLT.q){ const q=FLT.q.toLowerCase(); const hay=[f.short,f.title,f.sowhat,f.locator,f.id,...(f.observed||[]),f.fix].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
+  return true;
+}
+function frow(f){
+  return `<div class="frow ${location.hash.endsWith('/'+f.id)?'on':''}" data-fid="${f.id}"><div class="lead">${sev(f.sev)}${catChip(f.cat,f.check)}</div>
+    <div><div class="t">${esc(f.short||f.title)}</div>${f.shortFix?`<div class="fix"><b>Fix:</b> ${esc(f.shortFix)}</div>`:''}</div><div class="go">${status(f.id)!=='open'?`<span class="st st-${status(f.id)}">${status(f.id)}</span> `:''}▸</div></div>`;
+}
+function vFindings(scope){
+  // scope: undefined = all · {cat} · {lens}
+  const base = CATF.filter(f => !scope || (scope.cat && f.cat===scope.cat) || (scope.lens && f.lens===scope.lens));
+  const list = base.filter(passes).sort((a,b)=> a.sev.localeCompare(b.sev) || a.cat.localeCompare(b.cat));
+  const chip = (grp,val,label) => `<button class="f ${FLT[grp].has(val)?'on':''}" data-flt="${grp}" data-val="${esc(val)}">${label}</button>`;
+  return `${scope?'':'<h2>🔎 All issues</h2><p class="mut">'+esc((D.merge&&D.merge.note)||'Each issue appears once, under the check where its fix lives.')+'</p>'}
+  <div class="filters">
+    ${SEVS.filter(s=>base.some(f=>f.sev===s)).map(s=>chip('sev',s,`${SEVL[s][0]} ${SEVL[s][1]} ${base.filter(f=>f.sev===s).length}`)).join('')}
+    <span class="sep"></span>
+    ${scope?'':CATS.map(c=>chip('cat',c.key,`${c.emoji} ${esc(c.label)}`)).join('')+'<span class="sep"></span>'}
+    <input placeholder="Search…" id="fq" value="${esc(FLT.q)}">
+    <span class="small mut">${list.length} of ${base.length}</span>
   </div>
-  ${D.compare ? `<div class="card"><div class="kicker">Against comparable sites</div>
-    <div class="sites">${D.compare.sites.map(st=>`<div class="site ${st.ours?'ours':''}" data-go="compare">${slogo(st)}<div><div class="nm">${esc(st.name)}</div><div class="hs">${st.ours?'this site':esc(st.host)}</div></div></div>`).join('')}</div>
-    <div class="grid g2" style="align-items:start"><div>${D.sections.against||''}</div><div class="tally">${['leads','trails','level','not comparable'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${D.compare.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div></div>
-    <p style="margin:12px 0 0"><a href="#compare" class="btn sm">Open the comparison →</a></p></div>` : ''}
-  <div class="card"><div class="kicker">Who was simulated — click to replay the session</div>
-    <div class="grid g3" style="margin-top:8px">${P.map(pcard).join('')}</div></div>
-  ${D.clusters && D.clusters.length ? `<div class="card"><div class="kicker">Raised by more than one check</div><table><thead><tr><th>Sev</th><th>Problem</th><th>Raised by</th></tr></thead><tbody>${D.clusters.map(c=>`<tr><td>${sev(c.sev)}</td><td><a href="#findings/${esc(c.ids[0])}">${esc(c.title)}</a></td><td class="small mut">${c.raised.map(esc).join(' · ')}</td></tr>`).join('')}</tbody></table></div>`:''}
-  <div class="grid g2">
-    <div class="card"><div class="kicker">What this is</div>${D.sections.whatThisIs}</div>
-    <div class="card"><div class="kicker">How it was produced</div>${D.sections.howProduced}</div>
-  </div>
-  ${(D.extraSections||[]).length ? `<div class="kicker" style="margin-top:6px">More from the summary</div><div class="grid g2">${D.extraSections.map(x=>`<div class="card"><div class="kicker">${esc(x.title)}</div>${x.html}</div>`).join('')}</div>` : ''}`;
+  <div class="flist">${list.map(frow).join('') || '<div style="padding:20px" class="mut">Nothing matches these filters.</div>'}</div>`;
+}
+function vCat(key, lensDir){
+  const c = CAT[key]; if(!c) return '<p class="mut">No such category.</p>';
+  const ls = c.checks.map(d=>LENS.find(l=>l.dir===d)).filter(Boolean);
+  const l = lensDir ? LENS.find(x=>x.dir===lensDir) : null;
+  return `<div class="hero"><div class="card" style="flex:1;margin:0;border-top:4px solid ${c.colour}"><div class="kicker">${c.emoji} ${esc(c.label)}${l?` › ${esc(l.short)}`:''}</div><div class="verdict">${esc(c.question)}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${ls.map(x=>`<a class="btn sm ${l&&l.dir===x.dir?'primary':''}" href="#lens/${encodeURIComponent(x.dir)}">${esc(x.short)} · ${x.score??'–'}/10 · ${x.count}</a>`).join('')}${l?`<a class="btn sm" href="#cat/${key}">All ${esc(c.label)}</a>`:''}</div></div>
+    <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${ring(l?l.score:c.score,120)}<div class="lab">${l?esc(l.short):esc(c.label)}</div><div class="n">${l?esc(l.looksFor||''):`mean of ${ls.length} check${ls.length===1?'':'s'}`}</div></div></div>
+  ${vFindings(l?{lens:l.dir}:{cat:key})}`;
 }
 function pcard(p){
   const f = p.facts||{};
   const line = f.kind==='journey' ? (f.firstValue ? `Reached first value in ${fmtSecs(f.ttfv)}` : 'Did not reach first value')
     : f.kind==='visit' ? `Understood the site in ${f.comprehension??'?'}s · ${f.priceFound?'found a price':'no price found'}` : '';
   return `<div class="pcard" data-go="persona/${encodeURIComponent(p.name)}">${img(p.shots[0],'shot',p.dir)}<div><h3>${personaLabel(p.name)}</h3>
-    <div class="facts">${esc(f.device||'')}${f.kind?` · ${f.kind}`:''}${f.minutes?` · ${f.minutes} min`:''}<br>${esc(line)}${f.leftEarly?' · <b style="color:var(--p1)">left early</b>':''}<br>${p.findings.length} findings · ${p.shots.length} screens</div></div></div>`;
+    <div class="facts">${esc(f.device||'')}${f.kind?` · ${f.kind}`:''}${f.minutes?` · ${f.minutes} min`:''}<br>${esc(line)}${f.leftEarly?' · <b style="color:var(--p1)">left early</b>':''}</div></div></div>`;
 }
-function vTop5(){
-  const q = n => (D.quotes||[]).filter(x=>x.top5===n);
-  return `<h2>Top 5 — fix these first</h2><p class="verdict" style="font-size:17px;font-weight:600;margin-bottom:18px">${esc(D.verdict)}</p>
-  <div class="t5">${(D.top5||[]).map(r=>`<div class="row"><div class="num">${r.n}</div><div>${sev(r.sev)}</div><div class="what">${esc(r.what)}</div><div class="cost">${esc(r.cost)}</div><div class="eff">${esc(r.effort)}</div>
-   ${q(+r.n).map(x=>`<div class="q">${x.shots[0]?img(x.shots[0],'thumb',x.shots[0].split('/')[0]):''}<div><blockquote>“${esc(x.text)}”</blockquote><div class="small mut">${esc(x.who)} · ${esc(x.when)}</div></div></div>`).join('')}</div>`).join('')}</div>
-  <p class="small mut" style="margin-top:14px">Effort: copy = a wording change · design = a layout or flow change · server configuration = no UI change · build = new functionality.</p>`;
-}
-
-// findings explorer
-const FLT = { sev:new Set(), lens:new Set(), persona:new Set(), status:new Set(), q:'' };
-function passes(f){
-  if (FLT.sev.size && !FLT.sev.has(f.sev)) return false;
-  if (FLT.lens.size && !FLT.lens.has(f.lens)) return false;
-  if (FLT.persona.size && !f.personas.some(p=>FLT.persona.has(p))) return false;
-  if (FLT.status.size && !FLT.status.has(status(f.id))) return false;
-  if (FLT.q){ const q=FLT.q.toLowerCase(); const hay=[f.title,f.sowhat,f.locator,f.id,...(f.observed||[]),f.fix].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
-  return true;
-}
-function vFindings(fixedLens){
-  const list = F.filter(f => (!fixedLens || f.lens===fixedLens) && passes(f))
-    .sort((a,b)=> a.sev.localeCompare(b.sev) || a.lensLabel.localeCompare(b.lensLabel));
-  const chip = (grp,val,label,cls='') => `<button class="f ${cls} ${FLT[grp].has(val)?'on':''} ${val}" data-flt="${grp}" data-val="${esc(val)}">${label}</button>`;
-  const personas = [...new Set(F.flatMap(f=>f.personas))];
-  return `${fixedLens?'':'<h2>All findings</h2>'}
-  <div class="filters">
-    ${SEVS.map(s=>chip('sev',s,s+' '+F.filter(f=>f.sev===s&&(!fixedLens||f.lens===fixedLens)).length,'sevf')).join('')}
-    <span class="sep"></span>
-    ${fixedLens?'':LENS.map(l=>chip('lens',l.dir,esc(l.label))).join('')+'<span class="sep"></span>'}
-    ${personas.map(p=>chip('persona',p,esc(p))).join('')}
-    <span class="sep"></span>
-    ${STATUSES.map(s=>chip('status',s,s)).join('')}
-    <input placeholder="Search title, locator, id…" id="fq" value="${esc(FLT.q)}">
-    <span class="small mut">${list.length} of ${fixedLens?F.filter(f=>f.lens===fixedLens).length:F.length}</span>
-  </div>
-  <div class="flist">${list.map(f=>`<div class="frow ${location.hash.endsWith('/'+f.id)?'on':''}" data-fid="${f.id}"><div>${sev(f.sev)}</div>
-    <div><div class="t">${esc(f.title)}</div><div class="m">${esc(f.lensLabel)} · ${esc(f.locator||f.flow)}${f.personas.length?' · '+f.personas.map(esc).join(', '):''}${f.cluster!=null?' · also raised elsewhere':''}</div></div>
-    <div class="st st-${status(f.id)}">${status(f.id)}</div></div>`).join('') || '<div style="padding:20px" class="mut">Nothing matches these filters.</div>'}</div>`;
-}
-function vLens(dir){
-  const l = LENS.find(x=>x.dir===dir); if(!l) return '<p class="mut">No such check.</p>';
-  return `<div class="hero"><div class="card" style="flex:1;margin:0"><div class="kicker">${esc(l.label)} — ${esc(l.looksFor||'')}</div><div class="verdict">${esc(l.verdict)}</div><p class="small mut" style="margin:10px 0 0">${esc(l.why)}</p></div>
-  <div class="card ring big" style="margin:0;min-width:200px;cursor:default">${l.tally?tallyRing(l.tally,120):ring(l.score,120)}<div class="lab">${esc(l.label)}</div><div class="n">${SEVS.map(s=>`${s} ${l.sev[s]||0}`).join(' · ')}</div></div></div>
-  ${l.tally?`<p class="small" style="margin:-6px 0 14px"><a href="#compare">Open the site-by-site comparison →</a></p>`:''}
-  ${vFindings(dir)}`;
-}
-function vPersonas(){ return `<h2>Personas</h2><p class="mut">Each card is one recorded session. Open one to replay it line by line, see every screen, read the debrief.</p><div class="grid g2">${P.map(pcard).join('')}</div>`; }
+function vPersonas(){ return `<h2>👤 Sessions</h2><p class="mut">One card per recorded session. Open one to replay it.</p><div class="grid g2">${P.map(pcard).join('')}</div>`; }
 
 let replayTimer = null;
 function vPersona(name, tab='replay'){
@@ -481,7 +514,7 @@ function vPersona(name, tab='replay'){
   return `<p class="small"><a href="#personas">← All personas</a></p><h2>${personaLabel(p.name)}</h2><div>${facts.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>
     <div class="ptabs">${tabs.map(t=>`<button data-ptab="${t}" class="${t===tab?'on':''}">${t==='findings'?`findings (${p.findings.length})`:t==='screens'?`screens (${p.shots.length})`:t}</button>`).join('')}</div>${body}`;
 }
-function vIcp(){ return `<h2>Ideal Customer Profiles</h2><p class="mut">Who this product should be built and sold for, on the evidence of what it is. Three profiles, the trap to avoid, and every candidate considered. Derived from the recorded sessions only; the case against each profile is reasoning, not evidence.</p><div class="icp">${D.icp||'<p class="mut">The icp check did not run.</p>'}</div>`; }
+function vIcp(){ return `<h2>👤 Who it's for</h2><p class="mut">Three customer profiles, from the recorded sessions only.</p><div class="icp">${D.icp||'<p class="mut">The icp check did not run.</p>'}</div>`; }
 function matrixTable(rows, cls='matrix', filter=''){
   const C=D.compare, sites=C.sites.filter(s=>s.col!=null).sort((a,b)=>a.col-b.col);
   const cols=C.headers.slice(1,-1).map((h,i)=>{ const st=sites.find(s=>s.col===i); return {name: st?st.name:h, ours: !!(st&&st.ours)}; });
@@ -500,53 +533,60 @@ function vsCard(st){
 let MFILT='';
 function vCompare(){
   const C=D.compare; if(!C) return '<p class="mut">This run has no comparison.</p>';
-  const comp=C.sites.filter(s=>!s.ours), ours=C.sites.find(s=>s.ours);
-  const shared=C.sharedChecks||[];
-  const scoreby = shared.length ? `<table class="scoreby"><thead><tr><th>Check</th>${C.sites.map(s=>`<th class="${s.ours?'ours':''}">${esc(s.name)}</th>`).join('')}</tr></thead><tbody>
-    ${shared.map(k=>`<tr><td>${esc(C.checkLabels[k]||k)}</td>${C.sites.map(s=>{const v=(s.scores[k]||{}).score; return `<td class="sc ${s.ours?'ours':''}" style="color:${hue(v)}" title="${esc((s.scores[k]||{}).why||'')}">${v??'–'}</td>`;}).join('')}</tr>`).join('')}
-    <tr><td><b>Mean of these checks</b></td>${C.sites.map(s=>`<td class="sc ${s.ours?'ours':''}" style="color:${hue(s.mean)}">${s.mean??'–'}</td>`).join('')}</tr></tbody></table>
-    <p class="small mut" style="margin:8px 0 0">Each score is the one that site's own check wrote; the run's overall score counts ${esc(C.product)}'s checks only. Hover a number for the check's reason.</p>` : '';
-  return `<h2>How ${esc(C.product)} compares with ${comp.map(s=>esc(s.name)).join(' and ')}</h2>
-  ${C.note?`<p class="mut">${esc(C.note)}</p>`:''}
-  <div class="hero"><div class="card" style="flex:1;margin:0"><div class="kicker">The comparison verdict</div><div class="verdict">${esc(C.verdict)}</div></div>
-    <div class="card" style="margin:0;min-width:340px"><div class="kicker">Rows of the matrix where ${esc(C.product)}…</div><div class="tally">${['leads','trails','level','not comparable'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${C.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div></div></div>
-  <div class="card"><div class="kicker">The sites</div><div class="sites">${C.sites.map(st=>`<div class="site ${st.ours?'ours':''}">${slogo(st)}<div><div class="nm">${esc(st.name)}</div><div class="hs">${st.ours?'this site':esc(st.host)}</div></div>${st.mean!=null?`<div class="mean" style="color:${hue(st.mean)}">${st.mean}</div>`:''}</div>`).join('')}</div>${scoreby}</div>
+  const comp=C.sites.filter(s=>!s.ours);
+  const nc=(C.notCompared||[]).map(x=>`<p class="small mut" style="margin:8px 0 0">⚠️ ${esc(x.line)}</p>`).join('');
+  const cf = F.filter(f=>f.lens==='compare').sort((a,b)=>a.sev.localeCompare(b.sev));
+  return `<h2>⚔️ ${esc(C.product)} vs ${comp.map(s=>esc(s.name)).join(' and ')}</h2>
+  <div class="hero"><div class="card" style="flex:1;margin:0"><div class="kicker">The comparison verdict</div><div class="verdict">${esc(LINES.compareVerdict||C.verdict)}</div>${nc}</div>
+    <div class="card" style="margin:0;min-width:300px"><div class="kicker">Of ${C.rows.length} points, ${esc(C.product)}…</div><div class="tally" style="grid-template-columns:repeat(3,1fr)">${['leads','trails','level'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${C.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div></div></div>
+  <div class="card"><div class="kicker">Where ${esc(C.product)} trails</div>${C.rows.filter(r=>r.verdict==='trails').map(r=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${vd('trails')} <b>${esc(r.dim.replace(/^\d+\.\s*/,''))}</b></div>`).join('')}
+    <div class="kicker" style="margin-top:14px">Where it leads</div>${C.rows.filter(r=>r.verdict==='leads').map(r=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${vd('leads')} <b>${esc(r.dim.replace(/^\d+\.\s*/,''))}</b></div>`).join('')}</div>
+  ${D.sections.against?`<details class="more"><summary>Against comparable sites — from the run summary</summary><div class="card">${D.sections.against}</div></details>`:''}
+  <div class="card"><div class="kicker">Full matrix</div>
+    <div class="filters" style="margin:8px 0 10px">${['','leads','trails','level','not comparable'].filter(v=>!v||C.tally[v]).map(v=>`<button class="f ${MFILT===v?'on':''}" data-mf="${esc(v)}">${v||'all'} ${v?C.tally[v]||0:C.rows.length}</button>`).join('')}</div>
+    <div style="overflow:auto">${matrixTable(C.rows,'matrix',MFILT)}</div>${nc}</div>
   ${comp.map(vsCard).join('')}
-  <div class="card"><div class="kicker">Differences matrix — every row, with the check's own verdict</div>
-    <div class="filters" style="margin:8px 0 10px">${['','leads','trails','level','not comparable'].map(v=>`<button class="f ${MFILT===v?'on':''}" data-mf="${esc(v)}">${v||'all'} ${v?C.tally[v]||0:C.rows.length}</button>`).join('')}</div>
-    <div style="overflow:auto">${matrixTable(C.rows,'matrix',MFILT)}</div>
-    <p class="small mut" style="margin:10px 0 0">Verdict rule, the same on every row: <b>leads</b> = ahead of at least one competitor and behind neither · <b>trails</b> = behind at least one and ahead of neither · <b>level</b> = level with all, or ahead of one and behind another.</p></div>
-  <div class="grid g2">${(C.narrative||[]).map(n=>`<div class="card"><div class="kicker">${esc(n.title)}</div>${n.html}</div>`).join('')}</div>
-  <p><a href="#lens/compare" class="btn sm">Findings from this check →</a></p>`;
+  ${cf.length?`<div class="card"><div class="kicker">Comparison findings</div><div class="flist">${cf.map(f=>`<div class="frow" data-fid="${f.id}"><div class="lead">${sev(f.sev)}</div><div><div class="t">${esc(f.title)}</div></div><div class="go">▸</div></div>`).join('')}</div></div>`:''}
+  <p class="small mut">${esc(C.note||'')}</p>`;
 }
 function vQuotes(){
-  return `<h2>In their own words</h2><p class="mut">Verbatim lines from the session logs and debriefs. The speakers are constructed personas driven by the evaluation, not customers.</p>
+  return `<h2>👤 In their own words</h2><p class="mut">Verbatim lines from the sessions.</p>
   <div class="card"><table class="qt"><thead><tr><th>Who</th><th>When</th><th>What they said</th><th>Screen</th></tr></thead><tbody>${(D.quotes||[]).map(q=>`<tr><td class="who">${esc(q.who)}</td><td class="small mut nowrap">${esc(q.when)}</td><td class="q">“${esc(q.text)}”${q.top5?`<div class="small mut">→ Top 5, row ${q.top5}</div>`:''}</td><td>${q.shots.map(s=>img(s,'thumb',s.split('/')[0])).join('')}</td></tr>`).join('')}</tbody></table></div>`;
 }
-function vLimits(){ return `<h2>Limits of this assessment</h2><div class="card">${D.sections.limits||'<ul>'+(D.limits||[]).map(b=>`<li>${esc(b)}</li>`).join('')+'</ul>'}</div>
-  <div class="card"><div class="kicker">Provenance</div><p class="small">${esc(D.meta.provenance)} · scoring: ${esc(Object.entries(D.meta.scoringModels||{}).map(([k,v])=>`${k} ${v}`).join(', '))} · understudy v${esc(D.meta.version)}</p></div>`; }
+function headMore(b){ const m=String(b).match(/^(.*?[.!?])\s+(.*)$/); return m ? `<li><b>${esc(m[1])}</b> <details class="more" style="display:inline"><summary>more</summary><span class="small">${esc(m[2])}</span></details></li>` : `<li><b>${esc(b)}</b></li>`; }
+function vLimits(){ return `<h2>📋 Limits</h2><ul class="lim">${(D.limits||[]).map(headMore).join('')}</ul>
+  <div class="card"><div class="kicker">Provenance</div><p class="small">${esc(D.meta.provenance)} · understudy v${esc(D.meta.version)}</p></div>`; }
+function vAbout(){
+  const lf = D.checksLookFor || {};
+  return `<h2>📋 How it was produced</h2><p>${esc(LINES.howLine||'')}</p><p class="small mut">The overall score is the mean of the category scores; each category is the mean of its checks' scores.</p><details class="more"><summary>Full method</summary><div class="card">${D.sections.howProduced}</div></details>
+  <div class="card"><div class="kicker">What each check looked for</div><table><tbody>${CATS.map(c=>c.checks.map(d=>{const l=LENS.find(x=>x.dir===d)||{}; return `<tr><td class="nowrap">${catChip(c.key,l.short||d)}</td><td class="small">${esc(lf[(l.label||'').toLowerCase()]||l.looksFor||'')}</td></tr>`;}).join('')).join('')}</tbody></table></div>  ${(D.extraSections||[]).length ? `<div class="kicker" style="margin-top:6px">More from the summary</div><div class="grid g2">${D.extraSections.map(x=>`<div class="card"><div class="kicker">${esc(x.title)}</div>${x.html}</div>`).join('')}</div>` : ''}`;
+}
+function vBuyer(){ return `<h2>👤 What a buyer could find</h2><div class="card">${D.sections.buyer||''}</div>`; }
 
 // ------------------------------------------------------------ drawer
 function openFinding(id){
   const f = byId[id]; if(!f) return;
   const st = status(id), note = (triage[id]||{}).note || '';
-  const cluster = f.cluster!=null ? F.filter(x=>x.cluster===f.cluster && x.id!==id) : [];
   $('#drawerBody').innerHTML = `
-    <div class="meta">${sev(f.sev)}<span class="tag">${esc(f.lensLabel)}</span><span class="tag"><code>${esc(f.id)}</code></span>${f.personas.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>
-    <h2>${esc(f.title)}</h2>
-    ${f.sowhat?`<p><b>So what:</b> ${esc(f.sowhat)}</p>`:''}
-    ${f.locator?`<p class="small mut">Where: ${esc(f.locator)}${f.flow?` · flow ${esc(f.flow)}`:''}${f.tags?` · ${esc(f.tags)}`:''}</p>`:''}
-    ${f.observed.length?`<h4>Observed</h4><ul>${f.observed.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>`:''}
-    ${f.quotes.length?`<h4>The persona said</h4>${f.quotes.map(q=>`<blockquote>“${esc(q)}”</blockquote>`).join('')}`:''}
-    ${f.shots.length?`<h4>Evidence — click to enlarge</h4><div>${f.shots.map(s=>img(s,'thumb','f-'+f.id)).join('')}</div><p class="small mut">${esc(f.evidence)}</p>`:(f.evidence?`<h4>Evidence</h4><p class="small">${esc(f.evidence)}</p>`:'')}
-    ${f.repro.length?`<h4>Reproduce</h4><ol style="padding-left:18px;margin:0">${f.repro.map(r=>`<li>${esc(r)}</li>`).join('')}</ol>`:''}
-    ${f.fix?`<h4>Fix</h4><p>${esc(f.fix)}</p>`:''}
-    ${Object.keys(f.extra||{}).length?Object.entries(f.extra).map(([k,v])=>`<h4>${esc(k)}</h4><p class="small">${esc(v)}</p>`).join(''):''}
-    ${cluster.length?`<h4>Also raised by</h4><ul>${cluster.map(x=>`<li><a href="#findings/${x.id}">${esc(x.lensLabel)} ${sev(x.sev)} ${esc(x.title)}</a></li>`).join('')}</ul>`:''}
+    <div class="meta">${sev(f.sev)}${catChip(f.cat,f.check)}</div>
+    <h2>${esc(f.short||f.title)}</h2>
+    ${f.shortFix?`<p><b>Fix:</b> ${esc(f.shortFix)}</p>`:''}
+    ${f.shots.length?`<div>${f.shots.slice(0,3).map(s=>img(s,'thumb','f-'+f.id)).join('')}</div>`:''}
+    <details class="more"><summary>Details and evidence</summary>
+      <p class="small mut">${esc(f.title)} · <code>${esc(f.id)}</code></p>
+      ${f.sowhat?`<p><b>So what:</b> ${esc(f.sowhat)}</p>`:''}
+      ${f.locator?`<p class="small mut">Where: ${esc(f.locator)}</p>`:''}
+      ${f.observed.length?`<h4>Observed</h4><ul>${f.observed.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>`:''}
+      ${f.quotes.length?`<h4>The persona said</h4>${f.quotes.map(q=>`<blockquote>“${esc(q)}”</blockquote>`).join('')}`:''}
+      ${f.shots.length>3?`<h4>All screenshots</h4><div>${f.shots.map(s=>img(s,'thumb','f-'+f.id)).join('')}</div>`:''}
+      ${f.evidence?`<h4>Evidence</h4><p class="small">${esc(f.evidence)}</p>`:''}
+      ${f.repro.length?`<h4>Reproduce</h4><ol style="padding-left:18px;margin:0">${f.repro.map(r=>`<li>${esc(r)}</li>`).join('')}</ol>`:''}
+      ${f.fix&&f.fix!==f.shortFix?`<h4>Full fix</h4><p>${esc(f.fix)}</p>`:''}
+      ${(f.merged||[]).length?`<h4>Merged into this issue (${f.merged.length})</h4><ul>${f.merged.map(m=>`<li class="small">${esc(m.title)} <span class="mut">· ${esc(m.check)} ${esc(m.sev)} · <code>${esc(m.id)}</code></span></li>`).join('')}</ul>${f.sevFrom?`<p class="small mut">Severity ${esc(f.sev)} comes from ${esc(f.sevFrom)}.</p>`:''}`:''}
+    </details>
     <div class="triage"><h4 style="margin-top:0">Triage — saved in this browser</h4>
       <div class="opts">${STATUSES.map(s=>`<button class="btn sm ${st===s?'primary':''}" data-st="${s}">${s}</button>`).join('')}</div>
-      <textarea id="tnote" placeholder="Note — owner, ticket, decision…">${esc(note)}</textarea>
-      <p class="small mut" style="margin:6px 0 0">Use Triage ▾ in the header to export everything you marked.</p></div>`;
+      <textarea id="tnote" placeholder="Note — owner, ticket, decision…">${esc(note)}</textarea></div>`;
   $('#drawer').classList.add('on');
   $('#drawer').dataset.id = id;
   $('#drawerBody').querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{ triage[id]={...(triage[id]||{}),status:b.dataset.st}; saveTriage(); openFinding(id); render(); });
@@ -572,43 +612,29 @@ $('#lb').onclick=e=>{ if(e.target.id==='lb') $('#lb').classList.remove('on'); };
 // ------------------------------------------------------------ present mode
 let SL = [], si = 0;
 function buildSlides(){
-  const s = [];
-  s.push({t:'Cover', h:`${D.meta.logo?`<img class="cover-logo" src="${D.meta.logo}" alt="">`:''}<div class="kicker">${esc(D.meta.kind)}</div><h1>${esc(D.meta.product)}</h1><p class="mut" style="font-size:22px">${esc(D.meta.date)} · ${P.length} simulated ${P.length===1?'user':'users'} · ${LENS.length} checks · ${D.nFindings} findings</p>
-    ${D.meta.personaMode!=='supplied'?`<div class="caveat"><b>The users were constructed, not researched.</b> This shows what a capable first-time user can and cannot work out from the product; it does not show what actual customers do.</div>`:''}`});
-  s.push({t:'What this is', h:`<h2>What this is</h2>${D.sections.whatThisIs}<h2 style="margin-top:.8em">How it was produced</h2>${D.sections.howProduced}`});
-  s.push({t:'The verdict', h:`<div class="kicker">The verdict</div><p class="verdict">${esc(D.verdict)}</p>`});
-  s.push({t:'Scores', h:`<h2>How each area scores${D.overall!=null?` — overall <span class="score" style="color:${hue(D.overall)}">${D.overall}/10</span>`:''}</h2><div class="rings">${LENS.map(l=>lensRing(l,false)).join('')}</div>`});
-  if (D.compare){
-    const C=D.compare, comp=C.sites.filter(s=>!s.ours), shared=C.sharedChecks||[];
-    s.push({t:'Against comparable sites', h:`<h2>Against ${comp.map(s=>esc(s.name)).join(' and ')}</h2><p class="mut" style="font-size:18px">${esc(C.verdict)}</p>
-      <div class="sites">${C.sites.map(st=>`<div class="site ${st.ours?'ours':''}">${slogo(st)}<div><div class="nm" style="font-size:20px">${esc(st.name)}</div><div class="hs">${st.ours?'this site':esc(st.host)}</div></div>${st.mean!=null?`<div class="mean" style="color:${hue(st.mean)};font-size:28px">${st.mean}</div>`:''}</div>`).join('')}</div>
-      <div class="two" style="align-items:start"><div class="tally">${['leads','trails','level','not comparable'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${C.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div>
-      ${shared.length?`<table class="scoreby"><thead><tr><th>Check</th>${C.sites.map(s=>`<th class="${s.ours?'ours':''}">${esc(s.name)}</th>`).join('')}</tr></thead><tbody>${shared.map(k=>`<tr><td>${esc(C.checkLabels[k]||k)}</td>${C.sites.map(s=>{const v=(s.scores[k]||{}).score; return `<td class="sc ${s.ours?'ours':''}" style="color:${hue(v)}">${v??'–'}</td>`;}).join('')}</tr>`).join('')}</tbody></table>`:''}</div>`});
-    comp.forEach(st=>s.push({t:`vs ${st.name}`, h:`<div class="kicker">${esc(C.product)} against</div><div class="hd" style="display:flex;gap:16px;align-items:center;margin-bottom:14px">${slogo(st)}<h2 style="margin:0">${esc(st.name)}</h2></div>
-      <div class="vs" style="border:0;padding:0"><div class="cols"><div><div class="k up">Where ${esc(st.name)} does better</div><ul>${st.better.slice(0,7).map(x=>`<li><b>${esc(x.dim)}</b><span class="cl">${esc(x.theirs)}</span></li>`).join('')||'<li class="mut">Nowhere the check marked them ahead.</li>'}</ul></div>
-      <div><div class="k down">Where ${esc(st.name)} does worse</div><ul>${st.worse.slice(0,7).map(x=>`<li><b>${esc(x.dim)}</b><span class="cl">${esc(x.theirs)}</span></li>`).join('')||'<li class="mut">Nowhere the check marked them behind.</li>'}</ul></div></div></div>`}));
-    const lt=C.rows.filter(r=>r.verdict==='leads'||r.verdict==='trails');
-    s.push({t:'Differences matrix', h:`<h2>Where ${esc(C.product)} leads and trails</h2>${matrixTable(lt)}<p class="small mut">${C.rows.length-lt.length} rows that are level or not comparable are in the full report.</p>`});
-  }
+  const s = [], C = D.compare;
+  s.push({t:'What we tested', h:`${D.meta.logo?`<img class="cover-logo" src="${D.meta.logo}" alt="">`:''}<div class="kicker">${esc(D.meta.kind)} · ${esc(D.meta.date)}</div><h1>${esc(D.meta.product)}</h1>
+    <p style="font-size:clamp(18px,2vw,26px)">${esc(LINES.whatLine||'')}</p><p class="mut" style="font-size:clamp(15px,1.5vw,20px)">${esc(LINES.howLine||'')}</p>`});
+  s.push({t:'The verdict', h:`<div class="two"><div><div class="kicker">The verdict</div><p class="verdict">${esc(D.verdict)}</p></div><div class="ring big" style="border:0;cursor:default">${ring(D.overall,120)}<div class="lab">Overall /10</div></div></div>`});
+  s.push({t:'Scorecard', h:`<h2>Scorecard</h2><div class="catgrid">${CATS.map(c=>`<div class="ccard" style="--c:${c.colour};cursor:default">${ring(c.score)}<div class="lab">${c.emoji} ${esc(c.label)}</div><div class="q">${esc(c.question)}</div></div>`).join('')}</div>`});
+  s.push({t:'Top 5 to fix', h:`<h2>Top 5 to fix</h2>${(D.top5||[]).map(r=>`<div class="t5r" style="cursor:default;grid-template-columns:40px 1fr"><div class="num">${r.n}</div><div>${sev(r.sev)}<div class="ttl">${esc(r.what)}</div></div></div>`).join('')}`});
   (D.top5||[]).forEach(r=>{
-    const q=(D.quotes||[]).find(x=>x.top5===+r.n);
-    s.push({t:`Fix #${r.n}`, h:`<div class="kicker">Fix these first — ${r.n} of ${D.top5.length}</div><div class="two"><div>${sev(r.sev)}<h2 style="margin-top:.4em">${esc(r.what)}</h2><p><b>What it costs:</b> ${esc(r.cost)}</p><p class="mut">Effort: ${esc(r.effort)}</p>${q?`<blockquote>“${esc(q.text)}”<div class="small mut" style="font-weight:400">${esc(q.who)} · ${esc(q.when)}</div></blockquote>`:''}</div><div>${q&&q.shots[0]?img(q.shots[0],'shot'):''}</div></div>`});
+    const f=byId[r.id]||{}; const q=(D.quotes||[]).find(x=>x.top5===+r.n);
+    const shot=(q&&q.shots[0])||(f.shots||[])[0];
+    s.push({t:`Fix #${r.n}`, h:`<div class="kicker">Top 5 · ${r.n} of ${D.top5.length}</div><div class="two"><div><div>${sev(r.sev)} ${catChip(f.cat,f.check)}</div><h2 style="margin-top:.4em">${esc(r.what)}</h2><p><b>Fix:</b> ${esc(f.shortFix||'')}</p>${q&&q.text.split(' ').length<=25?`<blockquote>“${esc(q.text)}”</blockquote>`:''}</div><div>${shot?img(shot,'shot'):''}</div></div>`});
   });
-  P.forEach(p=>{
-    const f=p.facts||{}; const outcome = f.kind==='journey'?(f.firstValue?`Reached what they came for in ${fmtSecs(f.ttfv)}`:'Never reached what they came for'):f.verdict||'';
-    const quote = (D.quotes||[]).find(q=>q.who===p.name) || null;
-    const hero = (quote&&quote.shots[0]) || p.shots[Math.floor(p.shots.length/2)] || p.shots[0];
-    s.push({t:p.name, h:`<div class="kicker">Persona ${P.indexOf(p)+1} of ${P.length}</div><div class="two"><div><h2>${personaLabel(p.name)}</h2><div class="persona-facts">${[f.device,f.kind,f.minutes?`${f.minutes} min`:'',`${p.shots.length} screens`,`${p.findings.length} findings`].filter(Boolean).map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div><p><b>${esc(outcome)}</b>${f.leftEarly?' — and left early.':''}</p>${quote?`<blockquote>“${esc(quote.text)}”<div class="small mut" style="font-weight:400">${esc(quote.when)}</div></blockquote>`:''}${f.what?`<p class="mut">${esc(f.what)}</p>`:''}</div><div>${img(hero,'shot',p.dir)}</div></div>`});
-  });
-  if (D.icpProfiles && D.icpProfiles.length){
-    s.push({t:'Ideal Customer Profiles', h:`<h2>Ideal Customer Profiles — who this should be built and sold for</h2><div class="icp icp-cards">${D.icpProfiles.map(p=>`<div class="icp-card icp-${p.role.toLowerCase().replace(/ /g,'-')}"><div class="icp-head">${p.avatar||''}<div><div class="icp-role">${esc(p.role)} · fit ${esc(p.fit)} · propensity ${esc(p.propensity)}</div><h3 class="icp-title">${p.n}. ${esc(p.title)}</h3><div class="icp-meet">${esc(p.meet||p.name)}</div></div></div><p class="icp-who">${esc(p.who)}</p><p class="small"><b>Job:</b> ${esc(p.job)}</p></div>`).join('')}</div>${D.icpTrap&&D.icpTrap.title?`<div class="icp-trap"><h3>The trap — ${esc(D.icpTrap.title)}</h3><p>${esc((D.icpTrap.text.match(/^.*?[.!?](\s|$)/)||[D.icpTrap.text])[0])}</p></div>`:''}`});
-    D.icpProfiles.forEach(p=>s.push({t:p.title, h:`<div class="kicker">${esc(p.role)} · fit ${esc(p.fit)} · propensity ${esc(p.propensity)}</div><div class="two"><div><h2>${p.n}. ${esc(p.title)}</h2><p><b>${esc(p.meet||p.name)}</b></p><p>${esc(p.who)}</p><p><b>Job to be done:</b> ${esc(p.job)}</p><p><b>Trigger:</b> ${esc(p.trigger)}</p></div><div>${p.avatar?`<div class="icp-big">${p.avatar}</div>`:''}<h3 style="margin-top:${p.avatar?18:0}px">Why it wins</h3><ul>${p.wins.map(w=>`<li>${esc(w)}</li>`).join('')}</ul><h3>What it lacks</h3><ul>${(p.lacks.length?p.lacks:['nothing observed']).map(w=>`<li>${esc(w)}</li>`).join('')}</ul></div></div>`}));
+  const qs=(D.quotes||[]).filter(q=>q.text.split(' ').length<=14).slice(0,3);
+  if (qs.length) s.push({t:'In their own words', h:`<h2>In their own words</h2>${qs.map(q=>`<blockquote>“${esc(q.text)}”<div class="small mut" style="font-weight:400">${esc(q.who)}</div></blockquote>`).join('')}`});
+  if ((D.icpProfiles||[]).length) s.push({t:"Who it's for", h:`<h2>Who it's for</h2>${D.icpProfiles.slice(0,3).map(p=>`<div class="t5r" style="cursor:default;grid-template-columns:40px 1fr"><div class="num">${p.n}</div><div><span class="tag">${esc(p.role)}</span><div class="ttl">${esc(p.title)}</div></div></div>`).join('')}`});
+  if (C){
+    const tr=C.rows.filter(r=>r.verdict==='trails').slice(0,3);
+    s.push({t:'Against competitors', h:`<h2>Against ${C.sites.filter(x=>!x.ours).map(x=>esc(x.name)).join(' and ')}</h2><div class="two" style="align-items:start"><div class="tally" style="grid-template-columns:repeat(3,1fr)">${['leads','trails','level'].map(v=>`<div><b class="${VCLS(v)}" style="background:none">${C.tally[v]||0}</b><span>${v}</span></div>`).join('')}</div>
+      <div><div class="kicker">Trails most on</div><ul>${tr.map(r=>`<li>${esc(r.dim.replace(/^\d+\.\s*/,''))}</li>`).join('')}</ul></div></div>${(C.notCompared||[]).map(x=>`<p class="small mut">⚠️ ${esc(x.line)}</p>`).join('')}`});
   }
-  s.push({t:'What works', h:`<h2>What the site does well</h2><ul>${(D.doesWell||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`});
-  s.push({t:'Limits', h:`<h2>Limits of this assessment</h2><ul>${(D.limits||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul><p class="small mut">${esc(D.meta.provenance)} · understudy v${esc(D.meta.version)}</p>`});
-  return s;
+  s.push({t:'Limits', h:`<h2>Limits</h2><ul>${(LINES.limitsTop3||(D.limits||[]).slice(0,3)).map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`});
+  return s.slice(0,15);
 }
-function showSlide(){ const s=SL[si]; $('#slide').innerHTML=s.h; $('#presPos').textContent=`${si+1} / ${SL.length}`; $('#presTitle').textContent=s.t; $('#slide').scrollTop=0; }
+function showSlide(){ const s=SL[si]; $('#slide').innerHTML=s.h; requestAnimationFrame(()=>{ const el=$('#slide'); const over=el.scrollHeight>el.clientHeight+2; el.classList.toggle('overflow',over); if(over) console.warn('slide does not fit one screen:', s.t); }); $('#presPos').textContent=`${si+1} / ${SL.length}`; $('#presTitle').textContent=s.t; $('#slide').scrollTop=0; }
 function present(on){ if(on){ SL=buildSlides(); si=0; $('#pres').classList.add('on'); showSlide(); if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); } else { $('#pres').classList.remove('on'); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); } }
 $('#btnPresent').onclick=()=>present(true);
 $('#slide').onclick=e=>{ if(e.target.closest('[data-shot]')) return; const x=e.clientX/innerWidth; if(x<.25&&si>0){si--;showSlide();} else if(x>=.25&&si<SL.length-1){si++;showSlide();} };
@@ -640,7 +666,10 @@ function render(){
   switch(view){
     case 'top5': target='top5'; htmlOut=vTop5(); break;
     case 'findings': target='findings'; htmlOut=vFindings(); break;
-    case 'lens': target='lens'; htmlOut=vLens(arg); break;
+    case 'cat': target='lens'; htmlOut=vCat(arg); break;
+    case 'lens': { target='lens'; const l=LENS.find(x=>x.dir===arg); htmlOut=l&&l.dir==='compare'?vCompare():vCat(l?l.cat:'',arg); break; }
+    case 'buyer': target='quotes'; htmlOut=vBuyer(); break;
+    case 'about': target='limits'; htmlOut=vAbout(); break;
     case 'personas': target='personas'; htmlOut=vPersonas(); break;
     case 'persona': { target='persona'; const [name,tab]=arg.split('/'); htmlOut=vPersona(name,tab||'replay'); break; }
     case 'icp': target='icp'; htmlOut=vIcp(); break;
@@ -659,6 +688,7 @@ function render(){
 }
 function wire(el){
   el.querySelectorAll('[data-go]').forEach(x=>x.onclick=e=>{ if(e.target.closest('[data-shot]')) return; location.hash='#'+x.dataset.go; });
+  el.querySelectorAll('.t5r[data-fid]').forEach(x=>x.onclick=()=>openFinding(x.dataset.fid));
   el.querySelectorAll('.frow').forEach(x=>x.onclick=()=>{ const id=x.dataset.fid; const base=location.hash.split('/')[0]; if(base==='#findings'||base==='#'+'findings') history.replaceState(null,'','#findings/'+id); el.querySelectorAll('.frow').forEach(r=>r.classList.toggle('on',r===x)); openFinding(id); });
   el.querySelectorAll('[data-mf]').forEach(b=>b.onclick=()=>{ MFILT=b.dataset.mf; render(); });
   el.querySelectorAll('[data-flt]').forEach(b=>b.onclick=()=>{ const s=FLT[b.dataset.flt]; s.has(b.dataset.val)?s.delete(b.dataset.val):s.add(b.dataset.val); render(); });

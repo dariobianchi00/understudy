@@ -36,6 +36,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import render_report as rr  # noqa: E402
 import compare_view  # noqa: E402
+import run_layout  # noqa: E402
 
 TEMPLATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "report_template.html")
 
@@ -45,6 +46,86 @@ TEMPLATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "report_temp
 SHOT_MAX_W = 1280
 SHOT_JPEG_Q = 72
 EMBED_CAP = 60 * 1024 * 1024
+
+
+# The five categories a reader sees; the checks underneath stay as they are.
+# Emoji and colour are fixed and reused everywhere in the page. Colours avoid
+# red, amber and green, which belong to severity and to leads/trails.
+CATEGORIES = [
+    ("clarity", "🧭", "Clarity", "#4f46e5", "Do people get what it is?", ["clarity", "content"]),
+    ("conversion", "💰", "Conversion", "#0d9488", "Do people reach value and pay?", ["conversion", "onboarding", "ux"]),
+    ("trust", "🛡️", "Trust", "#c026d3", "Do people believe it?", ["trust"]),
+    ("technical", "🔧", "Technical", "#475569", "Does it work and load fast?", ["bugs", "technical"]),
+    ("discover", "🔍", "Discoverability", "#0284c7", "Can Google and AI assistants find it?", ["seo", "aeo"]),
+]
+CAT_OF = {d: c[0] for c in CATEGORIES for d in c[5]}
+CHECK_SHORT = {"clarity": "Clarity", "content": "Content", "conversion": "Conversion",
+               "onboarding": "Activation", "ux": "Usability", "trust": "Trust",
+               "bugs": "Defects", "technical": "Performance", "seo": "SEO", "aeo": "AEO",
+               "icp": "Customer profiles", "compare": "Comparison"}
+
+
+OVERLAY_VERSION = 1
+
+
+def load_overlay(run, findings):
+    """`<run>/report-overlay.json`, checked against the findings it names.
+
+    Returns (overlay, merge). `merge` holds only what is safe to apply:
+    groups whose ids all exist, are not the primary, and sit in one group
+    only, and Top 5 ids that are kept findings. Everything else is counted
+    in `ignored`, never raised — the gate is where a bad overlay fails.
+
+    No overlay, or one this renderer cannot read, falls back to the
+    corroboration clusters render_report already computed, so an issue
+    several checks raised still appears once — and `note` says on the page
+    that the merge step did not run.
+    """
+    known = {f["id"]: f for f in findings}
+    merge = {"groups": {}, "top5": [], "ignored": 0, "source": "overlay", "note": ""}
+    overlay = {}
+    path = os.path.join(run, "report-overlay.json")
+    if os.path.exists(path):
+        try:
+            overlay = json.loads(rr._read(path, errors="replace"))
+        except Exception:
+            overlay = {}
+        if not isinstance(overlay, dict) or overlay.get("version") != OVERLAY_VERSION:
+            overlay = {}
+    if not overlay:
+        merge["source"] = "clusters"
+        merge["note"] = ("These findings were not merged by the merge step; "
+                         "issues several checks raised are grouped automatically.")
+        by_cluster = {}
+        for f in findings:
+            if f.get("cluster") is not None:
+                by_cluster.setdefault(f["cluster"], []).append(f)
+        for members in by_cluster.values():
+            members.sort(key=lambda f: (f["sev"], rr.lens_rank(f["lens"])))
+            merge["groups"][members[0]["id"]] = [f["id"] for f in members[1:]]
+        return overlay, merge
+
+    seen = set()
+    for prim, ids in (overlay.get("groups") or {}).items():
+        if prim not in known or prim in seen:
+            merge["ignored"] += 1
+            continue
+        keep = []
+        for i in ids if isinstance(ids, list) else []:
+            if i in known and i != prim and i not in seen and i not in merge["groups"]:
+                keep.append(i)
+                seen.add(i)
+            else:
+                merge["ignored"] += 1
+        seen.add(prim)
+        merge["groups"][prim] = keep
+    absorbed = {i for ids in merge["groups"].values() for i in ids}
+    for t in overlay.get("top5") or []:
+        if isinstance(t, dict) and t.get("id") in known and t["id"] not in absorbed:
+            merge["top5"].append(t)
+        else:
+            merge["ignored"] += 1
+    return overlay, merge
 
 
 # ------------------------------------------------------------- images ----
@@ -349,7 +430,9 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
     """The interactive page as a string. `entries` is render_report's parsed
     list (summary first, lenses after, LENS_ORDER applied, clusters marked)."""
     summary = entries[0]
-    lenses = [e for e in entries[1:] if e.get("ours", True)]
+    # A competitor-comparison capture of our own site (compare/<site>/<lens>/)
+    # feeds the comparison section only — never the areas, cards or overall.
+    lenses = [e for e in entries[1:] if e.get("ours", True) and run_layout.is_area(e["dir"])]
 
     # ---- run-level sections, both as HTML and as structure -----------------
     secs = md_sections(summary["md"])
@@ -391,7 +474,10 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
              "what the product does well", "what works", "limits", "what this is",
              "how it was produced", "what each check looked for", "objectives",
              "against comparable sites", "contents", "how each area scores",
-             "raised by more than one check", "icp profiles", "ideal customer profiles")
+             "raised by more than one check", "icp profiles", "ideal customer profiles",
+             # cut in v0.8.0 (an issue appears once; severity reads on its
+             # face) — older run summaries still carry it
+             "how to read these findings")
     extra = []
     for k, st in sec_struct.items():
         if any(k.startswith(n) for n in known):
@@ -468,17 +554,67 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
             "count": len(fs),
             "sev": {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")},
         })
-    scored = [l["score"] for l in lens_payload if isinstance(l.get("score"), int)]
-    overall = round(sum(scored) / len(scored), 1) if scored else None
+    # ---- merge step: one issue, one finding ----------------------------------
+    # report-overlay.json is the merge step's output: groups of findings that
+    # describe the same issue (the primary is filed under the check where the
+    # fix lives), plus a short title and fix within the word limits. The
+    # originals stay readable in the expanded finding; nothing is dropped.
+    overlay, merge = load_overlay(run, findings)
+    by_id = {f["id"]: f for f in findings}
+    absorbed = set()
+    for prim, ids in merge["groups"].items():
+        p = by_id[prim]
+        p["merged"] = []
+        for i in ids:
+            m = by_id[i]
+            absorbed.add(i)
+            p["merged"].append({"id": m["id"], "check": m["lensLabel"], "sev": m["sev"],
+                                "title": m["title"], "observed": m["observed"][:3]})
+            if m["sev"] < p["sev"]:
+                # The group takes the highest severity; Details says whose it was.
+                p["sev"], p["sevFrom"] = m["sev"], m["lensLabel"]
+            p["shots"] += [s for s in m["shots"] if s not in p["shots"]]
+            p["quotes"] += [q for q in m["quotes"] if q not in p["quotes"]]
+            p["personas"] += [x for x in m["personas"] if x not in p["personas"]]
+    findings = [f for f in findings if f["id"] not in absorbed]
+    short = overlay.get("short") or {}
+    for f in findings:
+        s = short.get(f["id"]) or {}
+        f["short"] = s.get("title") or f["title"]
+        f["shortFix"] = s.get("fix") or f["fix"]
+        f["cat"] = CAT_OF.get(f["lens"], "competitors" if f["lens"] == "compare" else "customers")
+        f["check"] = CHECK_SHORT.get(f["lens"], f["lensLabel"])
+    for l in lens_payload:
+        fs = [f for f in findings if f["lens"] == l["dir"]]
+        l["count"] = len(fs)
+        l["sev"] = {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")}
+        l["cat"] = CAT_OF.get(l["dir"], "competitors" if l["dir"] == "compare" else "customers")
+        l["short"] = CHECK_SHORT.get(l["dir"], l["label"])
 
-    clusters = []
-    try:
-        for c in rr.corroboration_clusters(entries):
-            clusters.append({"sev": c["sev"], "title": c["rep"]["title"],
-                             "ids": [m["id"] for m in c["members"]],
-                             "raised": [f"{l} {s}" for l, s in c["raised"]]})
-    except Exception:
-        pass
+    # ---- five categories; the overall is their mean ----------------------------
+    categories = []
+    for key, emoji, label, colour, question, dirs in CATEGORIES:
+        ls = [l for l in lens_payload if l["dir"] in dirs]
+        if not ls:
+            continue
+        sc = [l["score"] for l in ls if isinstance(l.get("score"), int)]
+        fs = [f for f in findings if f["cat"] == key]
+        categories.append({"key": key, "emoji": emoji, "label": label, "colour": colour,
+                           "question": question, "checks": [l["dir"] for l in ls],
+                           "score": round(sum(sc) / len(sc), 1) if sc else None,
+                           "count": len(fs),
+                           "sev": {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")}})
+    scored = [c["score"] for c in categories if c["score"] is not None]
+    overall = round(sum(scored) / len(scored), 1) if scored else None
+    if overlay.get("verdict"):
+        verdict = overlay["verdict"]
+    if merge["top5"]:
+        by_id = {f["id"]: f for f in findings}
+        top5 = [{"n": str(k + 1), "id": t["id"], "sev": by_id[t["id"]]["sev"],
+                 "what": by_id[t["id"]]["short"], "effort": t.get("effort", ""), "cost": ""}
+                for k, t in enumerate(merge["top5"])]
+
+    clusters = []    # replaced by the merge step: an issue appears once
 
     # ---- comparison (Mode D) ------------------------------------------------
     cmp = compare_view.payload(run, meta)
@@ -571,11 +707,16 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
         "compare": cmp,
         "top5": top5,
         "quotes": quotes,
-        "doesWell": [strip_md(b) for b in (well_s or {}).get("bullets", [])],
+        "doesWell": overlay.get("doesWell") or [strip_md(b) for b in (well_s or {}).get("bullets", [])],
+        "lines": {k: overlay.get(k) for k in ("whatLine", "howLine", "compareVerdict", "limitsTop3")},
+        "checksLookFor": checks,
         "limits": [strip_md(b) for b in (limits_s or {}).get("bullets", [])],
         "lenses": lens_payload,
+        "categories": categories,
+        "scoring": "categories-v1",
         "findings": findings,
         "clusters": clusters,
+        "merge": {k: merge[k] for k in ("source", "note", "ignored")},
         "icp": icp_html,
         "icpProfiles": (icp_struct or {}).get("profiles", []),
         "icpTrap": (icp_struct or {}).get("trap", {}),

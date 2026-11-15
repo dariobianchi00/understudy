@@ -486,8 +486,9 @@ def score_table(entries, run):
         sc = e.get("score")
         # A competitor's lens is context, not a check on the client's site.
         # Observed 2026-09-11: ours 2/10 + competitor 10/10 rendered as an
-        # overall of 6.0 on the cover.
-        if not sc or not e.get("ours", True):
+        # overall of 6.0 on the cover. Nor is our own site's comparison
+        # capture: 5.9 for 5.5, observed 2026-11-15.
+        if not sc or not e.get("area", True):
             continue
         vals.append(sc["score"])
         hue = ("var(--p0)" if sc["score"] <= 3 else "var(--p1)" if sc["score"] <= 5
@@ -1254,7 +1255,10 @@ def main():
     roles = run_layout.site_roles(run, meta)
     for e in entries[1:]:
         e["ours"] = run_layout.is_ours(e["dir"], roles)
-    ours = [entries[0]] + [e for e in entries[1:] if e["ours"]]
+        e["area"] = run_layout.is_area(e["dir"])
+    # Areas score, tally and corroborate; a per-site lens of our own site is
+    # ours but not an area — it feeds the comparison only.
+    ours = [entries[0]] + [e for e in entries[1:] if e["ours"] and e["area"]]
 
     # ---- section numbers, fixed before anything is rendered ----------------
     # The exec summary owns sections 1..k (its H2s, in the order it wrote

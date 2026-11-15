@@ -427,7 +427,10 @@ class Interactive(unittest.TestCase):
                    "## Against comparable sites\n- **Lead · trail · level:** trails on 1.\n\n"
                    "## Limits of this assessment"))
             page, _ = self._html(run)
-            self.assertGreaterEqual(len(re.findall(r"Differences matrix|Against comparable", page)), 2)
+            # v0.8.0: the matrix card is "Full matrix"; the summary's own
+            # section is shown verbatim under it, so both must be in the page.
+            self.assertIn("Full matrix", page)
+            self.assertIn("${D.sections.against}", page)
             d = self._data(page)
             c = d["compare"]
             self.assertEqual(c["tally"], {"leads": 0, "trails": 1, "level": 0, "not comparable": 0})
@@ -465,12 +468,25 @@ class Interactive(unittest.TestCase):
             fx.run_summary(run)
             p = os.path.join(run, "exec-summary.md")
             _write(p, _read(p).replace("## Limits of this assessment",
-                   "## How to read these findings\n- Severity is by user impact.\n\n## Limits of this assessment"))
+                   "## A note from the operator\n- Severity is by user impact.\n\n## Limits of this assessment"))
             page, err = self._html(run, "all")
             d = self._data(page)
-            self.assertEqual([x["title"] for x in d["extraSections"]], ["How to read these findings"])
+            self.assertEqual([x["title"] for x in d["extraSections"]], ["A note from the operator"])
             self.assertIn("Severity is by user impact", d["extraSections"][0]["html"])
-            self.assertIn("How to read these findings", err)
+            self.assertIn("A note from the operator", err)
+
+    def test_cut_sections_stay_cut(self):
+        # v0.8.0: an older run summary still carries the two cut sections;
+        # neither reaches the page, not even under "More from the summary".
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.run_summary(run)
+            p = os.path.join(run, "exec-summary.md")
+            _write(p, _read(p).replace("## Limits of this assessment",
+                   "## How to read these findings\n- Severity is by user impact.\n\n## Limits of this assessment"))
+            page, err = self._html(run, "all")
+            self.assertEqual(self._data(page)["extraSections"], [])
+            self.assertNotIn("How to read these findings", err)
 
     def test_print_format_writes_the_document_layout_only(self):
         with tempfile.TemporaryDirectory() as t:
@@ -527,3 +543,149 @@ class IcpCards(unittest.TestCase):
         self.assertFalse(p["invented"])
         self.assertIn("Dana, 34", ip.cards_html(body))
         self.assertEqual(p["avatar"], "")                     # faces are opt-in
+
+
+class Categories(unittest.TestCase):
+    """v0.8.0: five categories over the checks, per-site comparison lenses
+    out of every area, one issue per finding via report-overlay.json."""
+
+    def _html(self, run):
+        return Interactive._html(self, run)
+
+    def _data(self, page):
+        return Interactive._data(self, page)
+
+    def _build(self, t, overlay=None, ours_site=False):
+        """clarity 4 + content 6 → Clarity 5.0 · ux 7 + onboarding 3 →
+        Conversion 5.0 · bugs 8 → Technical 8.0. Overall 6.0; the mean of
+        the five checks would be 5.6."""
+        run = fx.clean_run(t, with_lens=False)
+        fx.manifest(run, objectives=["clarity", "content", "ux", "onboarding", "bugs"])
+        fx.run_summary(run)
+        ev = "`persona-p/screenshots/01-landing.png` · `persona-p/screenshots/02-pricing.png`"
+        fx.lens(run, "clarity", [fx.finding("clarity", "The fold names no audience", evidence=ev,
+                                            fid="cla-1")], score=4)
+        fx.lens(run, "content", [fx.finding("content", "Headline does not say who the notes app is for",
+                                            sev="P2", evidence=ev, fid="con-1")], score=6)
+        fx.lens(run, "ux", [fx.finding("ux", "Settings toggle has no explanation", sev="P2",
+                                       flow="surfaces", locator="/settings", fid="ux-1", evidence="`persona-p/screenshots/03-settings.png`")], score=7)
+        fx.lens(run, "onboarding", [fx.finding("onboarding", "Signup asks for a card first",
+                                               flow="entry", locator="/signup", fid="onb-1", evidence="`persona-p/screenshots/04-signup.png`")], score=3)
+        fx.lens(run, "bugs", [fx.finding("bugs", "Pricing toggle throws a console error", sev="P0",
+                                         flow="surfaces", locator="/pricing", fid="bug-1", evidence="`persona-p/screenshots/05-pricing-error.png`")], score=8)
+        if ours_site:
+            fx.lens(run, "compare/ours-nimbus/clarity",
+                    [fx.finding("clarity", "Our fold, captured for the comparison", sev="P3")],
+                    score=10)
+            fx.lens(run, "compare", [fx.finding("compare", "Trails on price findable", sev="P1",
+                                                flow="compare:trust:price", locator="/pricing")],
+                    score=4, matrix="| Dimension | Ours | Verdict |\n|---|---|---|\n"
+                                    "| Price findable | ✗ absent | **trails** |\n")
+        if overlay is not None:
+            _write(os.path.join(run, "report-overlay.json"), __import__("json").dumps(overlay))
+        return run
+
+    def test_every_check_sits_in_exactly_one_category(self):
+        import interactive_report as ir
+        dirs = [d for c in ir.CATEGORIES for d in c[5]]
+        self.assertEqual(len(dirs), len(set(dirs)))
+        self.assertEqual(set(dirs), set(rr.LENS_ORDER) - {"icp", "compare"})
+        self.assertEqual(len(ir.CATEGORIES), 5)
+
+    def test_overall_is_the_mean_of_the_categories(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._data(self._html(self._build(t))[0])
+            self.assertEqual({c["key"]: c["score"] for c in d["categories"]},
+                             {"clarity": 5.0, "conversion": 5.0, "technical": 8.0})
+            self.assertEqual(d["overall"], 6.0)
+            self.assertEqual(d["scoring"], "categories-v1")
+
+    def test_our_own_comparison_capture_is_not_an_area(self):
+        # 2026-11-15: compare/<our-site>/<lens> counted as areas, 5.5 → 5.9.
+        with tempfile.TemporaryDirectory() as t:
+            run = self._build(t, ours_site=True)
+            d = self._data(self._html(run)[0])
+            self.assertFalse([l for l in d["lenses"] if l["dir"].startswith("compare/")])
+            self.assertEqual(d["overall"], 6.0)
+            # the print layout: the per-site 10/10 never reaches the cover
+            html = render(run, "summary")
+            self.assertEqual(re.search(r'scorebig[^>]*>([\d.]+)', html).group(1), "5.3")
+
+    def test_is_area(self):
+        import run_layout
+        self.assertTrue(run_layout.is_area("clarity"))
+        self.assertTrue(run_layout.is_area("compare"))
+        self.assertFalse(run_layout.is_area("compare/ours-nimbus/clarity"))
+        self.assertFalse(run_layout.is_area("compare/comp-stratus/clarity"))
+
+    def test_a_site_that_could_not_be_read_gets_no_column(self):
+        import json
+        with tempfile.TemporaryDirectory() as t:
+            run = build(t)
+            fx.persona(run, base=os.path.join(run, "compare", "comp-cirrus"))
+            fx.lens(run, "compare/comp-cirrus/clarity", [], score=None, score_line="")
+            fx.lens(run, "compare", [fx.finding("compare", "Trails on price findable", sev="P1",
+                                                flow="compare:trust:price", locator="/pricing")],
+                    score=4, matrix="| Dimension | Ours | Stratus | Cirrus | Verdict |\n|---|---|---|---|---|\n"
+                                    "| Price findable | ✗ absent | ✓ 3 tiers | — not read | **trails** |\n")
+            _write(os.path.join(run, "compare", "index.json"), json.dumps({"sites": [
+                {"slug": "comp-stratus", "name": "Stratus", "role": "competitor",
+                 "url": "https://example-stratus.test"},
+                {"slug": "comp-cirrus", "name": "Cirrus", "role": "competitor",
+                 "url": "https://example-cirrus.test", "comparable": False,
+                 "unreachable": [{"url": "/", "reason": "HTTP 403 bot challenge"}]}]}))
+            c = self._data(self._html(run)[0])["compare"]
+            self.assertNotIn("Cirrus", [s["name"] for s in c["sites"]])
+            self.assertNotIn("Cirrus", c["headers"])
+            self.assertTrue(all(len(r["cells"]) == len(c["headers"]) - 2 for r in c["rows"]))
+            self.assertEqual([x["line"] for x in c["notCompared"]],
+                             ["Cirrus blocked automated browsers, so it wasn't compared."])
+
+    def test_overlay_merges_shortens_and_picks_the_top5(self):
+        ov = {"version": 1, "verdict": "Visitors cannot tell who it is for.",
+              "groups": {"cla-1": ["con-1"]},
+              "short": {"cla-1": {"title": "Fold names no audience", "fix": "Name the audience."}},
+              "top5": [{"id": "bug-1", "effort": "Build"}, {"id": "cla-1", "effort": "Copy"}]}
+        with tempfile.TemporaryDirectory() as t:
+            d = self._data(self._html(self._build(t, overlay=ov))[0])
+            ids = [f["id"] for f in d["findings"]]
+            self.assertNotIn("con-1", ids)
+            prim = next(f for f in d["findings"] if f["id"] == "cla-1")
+            self.assertEqual([m["id"] for m in prim["merged"]], ["con-1"])
+            self.assertEqual((prim["short"], prim["shortFix"]), ("Fold names no audience", "Name the audience."))
+            self.assertEqual([r["id"] for r in d["top5"]], ["bug-1", "cla-1"])
+            self.assertEqual(d["verdict"], "Visitors cannot tell who it is for.")
+            self.assertEqual((d["merge"]["source"], d["merge"]["ignored"]), ("overlay", 0))
+
+    def test_merge_takes_the_highest_severity_and_says_whose(self):
+        ov = {"version": 1, "groups": {"con-1": ["cla-1"]}}
+        with tempfile.TemporaryDirectory() as t:
+            d = self._data(self._html(self._build(t, overlay=ov))[0])
+            prim = next(f for f in d["findings"] if f["id"] == "con-1")
+            self.assertEqual((prim["sev"], prim["sevFrom"]), ("P1", "Clarity"))
+
+    def test_without_an_overlay_clusters_still_merge_and_the_page_says_so(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._data(self._html(self._build(t))[0])
+            self.assertEqual(d["merge"]["source"], "clusters")
+            self.assertIn("not merged by the merge step", d["merge"]["note"])
+            ids = [f["id"] for f in d["findings"]]
+            self.assertEqual(len(ids), 4)          # five findings, one shared problem
+            self.assertEqual([f["short"] for f in d["findings"] if f["id"] == "ux-1"],
+                             ["Settings toggle has no explanation"])
+
+    def test_a_bad_overlay_is_counted_never_fatal(self):
+        ov = {"version": 1,
+              "groups": {"nope": ["cla-1"], "cla-1": ["con-1", "cla-1", "ghost"], "ux-1": ["con-1"]},
+              "top5": [{"id": "con-1"}, {"id": "ghost"}, {"id": "bug-1"}]}
+        with tempfile.TemporaryDirectory() as t:
+            d = self._data(self._html(self._build(t, overlay=ov))[0])
+            self.assertEqual(sorted(f["id"] for f in d["findings"]), ["bug-1", "cla-1", "onb-1", "ux-1"])
+            self.assertEqual([r["id"] for r in d["top5"]], ["bug-1"])
+            # nope · cla-1 self · ghost · con-1 twice · top5 con-1 (merged) · top5 ghost
+            self.assertEqual(d["merge"]["ignored"], 6)
+
+    def test_an_overlay_of_another_version_falls_back(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._data(self._html(self._build(t, overlay={"version": 2, "groups": {}}))[0])
+            self.assertEqual(d["merge"]["source"], "clusters")

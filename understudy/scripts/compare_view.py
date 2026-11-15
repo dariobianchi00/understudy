@@ -208,6 +208,34 @@ def payload(run, meta):
                          "host": _host(s["url"]), "ours": s["role"] == "ours",
                          "logo": logo, "col": i, "scores": _site_scores(run, s)})
 
+    # A site the capture could not read gets no column: an empty or "blocked"
+    # column takes a quarter of the matrix and says nothing. It is named once,
+    # in one line, under the matrix (Dario 2026-11-15, critical).
+    not_compared = []
+    try:
+        idx = json.loads(rr._read(os.path.join(run, "compare", "index.json"), errors="replace"))
+        unread = {s.get("slug"): s for s in idx.get("sites", []) if s.get("comparable") is False}
+    except Exception:
+        unread = {}
+    for s in [x for x in site_out if x["slug"] in unread and not x["ours"]]:
+        why = " ".join(u.get("reason", "") for u in unread[s["slug"]].get("unreachable", []))
+        blocked = re.search(r"\b403\b|bot|human|captcha", why, re.I)
+        not_compared.append({"name": s["name"], "line":
+            f"{s['name']} blocked automated browsers, so it wasn't compared." if blocked
+            else f"{s['name']} couldn't be read, so it wasn't compared."})
+        i = s["col"]
+        site_out.remove(s)
+        if i is None:
+            continue
+        del headers[1 + i]
+        for r in rows:
+            if i < len(r["cells"]):
+                del r["cells"][i]
+        for o in site_out:
+            if o["col"] is not None and o["col"] > i:
+                o["col"] -= 1
+        col_of = {k: (v - 1 if v is not None and v > i else v) for k, v in col_of.items() if k != s["slug"]}
+
     # Which checks ran on every site, so a mean is like for like.
     shared = None
     for s in site_out:
@@ -258,6 +286,7 @@ def payload(run, meta):
         "rows": rows,
         "tally": tally,
         "narrative": narrative,
+        "notCompared": not_compared,
     }
 
 
