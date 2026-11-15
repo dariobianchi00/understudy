@@ -220,6 +220,22 @@ def check_crawl(crawl_dir, r):
                "distinguish a skipped section from a missing one")
 
 
+def _check_setup_state(state, where, r):
+    """The browser reset's own counts (playwright-patterns.md). browser_close()
+    only closes the tab, so a persona could inherit the last one's cookies and
+    nothing on disk would say so — observed on a client run, 2026-09-28."""
+    if not isinstance(state, dict):
+        r.warn(f"{where}: no setup_state — nothing shows the browser started "
+               f"without the previous persona's cookies and storage")
+        return
+    left = {k: state.get(k) for k in ("cookies_after", "storage_origins_after")
+            if state.get(k)}
+    if left:
+        r.fail(0, f"{where}: setup_state shows the browser did not start clean "
+                  f"({', '.join(f'{k}={v}' for k, v in left.items())}) — this "
+                  f"capture saw a returning visitor, not a new one")
+
+
 def check_measure(measure_dir, r):
     """Mode B. A measurement whose viewport was not verified is not evidence —
     it looks authoritative and describes a page nobody saw."""
@@ -240,6 +256,7 @@ def check_measure(measure_dir, r):
             r.fail(0, f"measure/{f}: viewport_verified is not true — a "
                       f"device-specific measurement taken at the wrong viewport "
                       f"is worse than none, because it still looks authoritative")
+        _check_setup_state(d.get("setup_state"), f"measure/{f}", r)
         vp = d.get("viewport") or {}
         if vp.get("width"):
             viewports.add(vp["width"])
@@ -281,6 +298,13 @@ def check_compare_sites(run, sites, r):
         elif n_shots == 0:
             r.fail(0, f"{site}: no persona folder and no screenshots — nothing was captured")
         else:
+            sj = os.path.join(sdir, "site.json")
+            if os.path.exists(sj):
+                try:
+                    _check_setup_state(json.loads(_read(sj)).get("setup_state"),
+                                       f"{site}/site.json", r)
+                except (json.JSONDecodeError, AttributeError):
+                    r.fail(0, f"{site}: site.json is not a JSON object")
             r.note(f"{site}: mechanical capture, {n_shots} screenshot(s)")
     if not os.path.exists(os.path.join(run, "compare", "index.json")):
         r.fail(0, "compare/index.json missing — the sites, and what could not be "
@@ -321,7 +345,9 @@ def _check_persona(pdir, d, r):
     tl = os.path.join(pdir, "timeline.json")
     if os.path.exists(tl):
         try:
-            json.loads(_read(tl))
+            timeline = json.loads(_read(tl))
+            _check_setup_state(timeline.get("setup_state") if isinstance(timeline, dict)
+                               else None, d, r)
         except json.JSONDecodeError as e:
             r.fail(0, f"{d}: timeline.json is not valid JSON ({e})")
 

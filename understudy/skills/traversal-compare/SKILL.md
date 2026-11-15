@@ -73,7 +73,7 @@ Announce the plan and its cost before starting — **N sites means N captures**,
 
 Per site:
 
-1. `browser_close()` first. Fresh context, logged out, no shared state.
+1. Reset the browser first (`playwright-patterns.md`, *Fresh context per persona*) — `browser_close()` alone carries the previous site's cookies and dismissed popups into this one. Fresh context, logged out, no shared state. Its result goes into `site.json` as `setup_state`.
 2. Run the capture skill unchanged, writing into `compare/<site-slug>/`.
 3. Same persona, same device, same cap, same coverage depth. **Any asymmetry invalidates the comparison** — a competitor given five extra minutes will look better, and nothing in the output will reveal why.
 4. Record in `compare/<site-slug>/site.json`: the URL, which capture mode ran, when, and **whether anything was unreachable** (a wall, a region block, a robots disallow).

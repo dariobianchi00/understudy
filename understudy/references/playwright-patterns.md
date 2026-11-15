@@ -25,7 +25,7 @@
 | `browser_console_messages()` | Read console |
 | `browser_network_requests()` | Inspect network |
 | `browser_handle_dialog(action)` | Accept/dismiss native dialog |
-| `browser_close()` | Close browser between personas |
+| `browser_close()` | Close the tab. **Does not clear state** — see *Fresh context per persona* |
 
 ---
 
@@ -114,7 +114,65 @@ Capture both at every checkpoint and at any moment the persona is confused. A pe
 
 **Prefer text waits over time waits.** `browser_wait_for({text})` over `{time}`. Fixed waits hide flakiness — and flakiness the persona experienced as slowness is itself a finding.
 
-**Fresh context per persona.** `browser_close()` between personas. Running headed, launch the MCP server `--isolated` or with a per-persona `userDataDir` under `~/.understudy/profiles/<slug>/`.
+**Fresh context per persona — reset, then verify. `browser_close()` is not a reset.**
+
+In current versions `browser_close()` runs `page.close()`: the tab goes, the
+browser context stays. Observed 2026-11-10: a persistent cookie and a
+localStorage key set by one "persona" were both there on the next page after
+`browser_close()`, and the default profile already held 26 cookies from
+unrelated earlier sessions before the run had started. The cost is real: on one
+client run the third persona saw a returning-visitor homepage and a competitor
+whose popup had been dismissed by persona 1. Evidence from a dirty browser is
+about a visitor who does not exist.
+
+So, before **every** persona and every Mode D site (the first one too), run this
+through the run-code tool:
+
+```js
+async (page) => {
+  const ctx = page.context();
+  const before = await ctx.storageState();
+  const origins = new Set(before.origins.map(o => o.origin));
+  for (const c of before.cookies) origins.add('https://' + c.domain.replace(/^\./, ''));
+  let method = 'cdp';
+  try {                                   // Chromium: storage, IndexedDB, cache, service workers
+    const cdp = await ctx.newCDPSession(page);
+    for (const origin of origins)
+      await cdp.send('Storage.clearDataForOrigin', { origin, storageTypes: 'all' });
+    await cdp.send('Network.clearBrowserCache');
+    await cdp.detach();
+  } catch (e) {                           // other engines: localStorage only, origin by origin
+    method = 'per-origin';
+    for (const o of before.origins) {
+      await page.goto(o.origin).catch(() => {});
+      await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); }).catch(() => {});
+    }
+  }
+  await ctx.clearCookies();               // last — the per-origin visits above can set new ones
+  await ctx.clearPermissions();
+  await page.goto('about:blank');
+  const after = await ctx.storageState();
+  return { method, cookies_before: before.cookies.length,
+           storage_origins_before: before.origins.length,
+           cookies_after: after.cookies.length,
+           storage_origins_after: after.origins.length };
+}
+```
+
+Write what it returns, unedited, into `timeline.json` as `"setup_state"` (Mode D
+mechanical capture: `site.json`; Mode B: each measurement record).
+`check_capture.py` **fails** a capture whose `cookies_after` or
+`storage_origins_after` is not 0, and warns when `setup_state` is missing.
+The counts are the record, not the code: a reader of the run can see the browser
+started empty.
+
+**This clears the MCP browser profile, not the user's own browser.** Anything
+the profile held from earlier, unrelated use is gone after the first persona.
+To avoid touching it at all, launch the MCP server `--isolated` (state lives in
+memory and dies with the browser); the reset still runs, and returns zeros.
+
+**A product journey resets before the auth pause, never after.** The human
+authenticates into the clean context; clearing it afterwards logs them out.
 
 ---
 

@@ -37,7 +37,7 @@ Default: the entry URL. Add any page the target names, and — if a Mode C crawl
 
 **The discipline, in order. Skipping a step silently invalidates the number:**
 
-1. **Fresh browser context.** A warm cache measures your second visit, not a visitor's first.
+1. **Fresh browser context.** A warm cache measures your second visit, not a visitor's first. Run the reset from `playwright-patterns.md` (*Fresh context per persona*) before each page and viewport — it clears the HTTP cache too — and put its result in the record as `setup_state`.
 2. Set the viewport and **verify it** with `browser_evaluate`.
 3. Install the observers **before navigating** — LCP and layout-shift entries emitted before the observer exists are lost, and the number will be quietly wrong rather than obviously missing.
 4. Navigate.
@@ -65,6 +65,7 @@ Then read Tier 1, Tier 2 and Tier 3 per `technical-metrics.md`.
 {
   "url": "", "viewport": {"width": 0, "height": 0}, "viewport_verified": true,
   "measured_utc": "", "cache": "cold", "throttling": "none",
+  "setup_state": {"method": "cdp", "cookies_after": 0, "storage_origins_after": 0},
   "runs": 1,
   "tier1": {"lcp_ms": 0, "cls": 0, "tbt_ms": 0, "fcp_ms": 0, "ttfb_ms": 0},
   "tier2": {

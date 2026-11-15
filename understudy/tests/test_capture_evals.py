@@ -34,6 +34,7 @@ def good_run(t, persona="evaluator"):
                           "[01:30] Pricing. Screenshot 02-pricing.png.\n")
     fx.write(os.path.join(pdir, "timeline.json"), json.dumps(
         {"viewport": {"width": 1440, "height": 900, "verified": True},
+         "setup_state": fx.CLEAN_START,
          "shape_v1": {"time_to_comprehension_seconds": None},
          "shape_v3": {"forms_submitted": 0}, "left_early": False}))
     fx.write(os.path.join(pdir, "persona-debrief.md"),

@@ -62,6 +62,10 @@ def manifest(run, **over):
     return m
 
 
+CLEAN_START = {"method": "cdp", "cookies_before": 3, "storage_origins_before": 1,
+               "cookies_after": 0, "storage_origins_after": 0}
+
+
 def persona(run, name="p", base=None, log=None, shots=("01-landing.png",)):
     """A complete, clean persona capture."""
     pdir = os.path.join(base or run, f"persona-{name}")
@@ -76,7 +80,8 @@ def persona(run, name="p", base=None, log=None, shots=("01-landing.png",)):
           "[00:12] I can't tell what this is for. Is it for teams?\n"
           "[01:40] Looking for a price. Nothing in the nav.\n")
     write(os.path.join(pdir, "timeline.json"), json.dumps(
-        {"shape_v1": {"time_to_comprehension_seconds": None}}))
+        {"setup_state": CLEAN_START,
+         "shape_v1": {"time_to_comprehension_seconds": None}}))
     write(os.path.join(pdir, "persona-debrief.md"),
           "# Debrief\n\nQ1 — I think it's some kind of notes app, but I'm guessing.\n")
     write(os.path.join(pdir, "findings-raw.json"), json.dumps(

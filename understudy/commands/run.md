@@ -188,7 +188,7 @@ journey folders only, and `icp` reads both — say which in each dispatch.
 
 **Do not pass the scoring framework to the traversal.** Not the heuristics, not the severity rubric, not a previous run's findings. The traversal skill loads only what it needs, and the separation is checked mechanically afterwards.
 
-Between personas: `browser_close()`, fresh context.
+Before each persona, the first included: the browser reset in `playwright-patterns.md`, its result in `timeline.json` as `setup_state`. `browser_close()` alone does not clear cookies or storage.
 
 ### 3.3 — Verify the capture before claiming it worked
 

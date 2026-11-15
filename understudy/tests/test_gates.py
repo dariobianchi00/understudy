@@ -6,6 +6,7 @@ runs the real CLI, and asserts both the exit code AND which check number
 the failure was filed under. Failing for the wrong reason is a passing test
 in a suite that only looks at exit codes.
 """
+import json
 import os
 import re
 import subprocess
@@ -169,6 +170,48 @@ class Capture(unittest.TestCase):
             rc, checks, out = gate(CAPTURE, run)
             self.assertEqual(rc, 1)
             self.assertIn("no [MM:SS] timestamps", out)
+
+    def _timeline(self, run, **over):
+        p = os.path.join(run, "persona-p", "timeline.json")
+        tl = {"shape_v1": {}}
+        tl.update(over)
+        _write(p, json.dumps(tl))
+
+    def test_dirty_browser_start_fails(self):
+        """browser_close() only closes the tab; a reset that left cookies
+        behind means the persona was a returning visitor."""
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            self._timeline(run, setup_state=dict(fx.CLEAN_START, cookies_after=26))
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 1)
+            self.assertEqual(checks, {0}, out)
+            self.assertIn("did not start clean", out)
+            self.assertIn("cookies_after=26", out)
+
+    def test_leftover_storage_fails(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            self._timeline(run, setup_state=dict(fx.CLEAN_START, storage_origins_after=1))
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 1)
+            self.assertIn("storage_origins_after=1", out)
+
+    def test_missing_setup_state_warns_not_fails(self):
+        """Runs before 2026-11-10 never recorded it; they still pass, loudly."""
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            self._timeline(run)
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("no setup_state", out)
+
+    def test_clean_start_is_silent(self):
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            rc, checks, out = gate(CAPTURE, run)
+            self.assertEqual(rc, 0, out)
+            self.assertNotIn("setup_state", out)
 
     def test_mode_d_mechanical_capture_passes(self):
         """compare/<site>/ with screenshots + site.json and no persona prose is a

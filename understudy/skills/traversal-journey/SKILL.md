@@ -47,7 +47,7 @@ Write everything in **first person, present tense**: *"I can't tell what this bu
 → [<persona>] setup — <device profile>, viewport <W>×<H>
 ```
 
-Fresh browser context. Set the viewport per `playwright-patterns.md` — **and verify it.** An unverified viewport means a device-defined persona may be testing the wrong product, invisibly.
+Fresh browser context — run the reset from `playwright-patterns.md` (*Fresh context per persona*) **before** any auth wall, and write its result into `timeline.json` as `setup_state`. `browser_close()` alone leaves the previous persona's cookies behind. Set the viewport per `playwright-patterns.md` — **and verify it.** An unverified viewport means a device-defined persona may be testing the wrong product, invisibly.
 
 Create the run folder if the orchestrator hasn't:
 

@@ -48,7 +48,7 @@ This is the whole reason the skill exists. Hold it the entire session:
 → [<persona>] visit setup — <device profile>, viewport <W>×<H>, logged out
 ```
 
-Fresh context, **logged out**, prior state cleared. Set the viewport and **verify it**.
+Fresh context, **logged out**, prior state cleared — run the reset from `playwright-patterns.md` (*Fresh context per persona*) and write its result into `timeline.json` as `setup_state`. `browser_close()` alone leaves the previous persona's cookies behind. Set the viewport and **verify it**.
 
 Log the entry expectation **before navigating anywhere** (`visit-shapes.md`, Setup §4). Written afterwards it is contaminated by what was found, and the promise-match question becomes unanswerable.
 
