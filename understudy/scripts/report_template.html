@@ -410,7 +410,8 @@ function renderNav(){
   for (const c of CATS){
     out += `<a href="#cat/${c.key}" class="sub ${curCat===c.key&&cur==='cat'?'on':''}"><span>${c.emoji} ${esc(c.label)}</span>${bar(c.score)}</a>`;
     // check rows show their score like the category above them; mixing a count in the same column reads as one
-    if (curCat===c.key) out += c.checks.map(d=>{ const l=LENS.find(x=>x.dir===d); return l?`<a href="#lens/${encodeURIComponent(d)}" class="subsub ${cur==='lens'&&arg===d?'on':''}"><span>${esc(l.short)}</span>${bar(l.score)}</a>`:''; }).join('');
+    // a one-check category would only repeat itself underneath
+    if (curCat===c.key && c.checks.length>1) out += c.checks.map(d=>{ const l=LENS.find(x=>x.dir===d); return l?`<a href="#lens/${encodeURIComponent(d)}" class="subsub ${cur==='lens'&&arg===d?'on':''}"><span>${esc(l.short)}</span>${bar(l.score)}</a>`:''; }).join('');
   }
   out += `<div class="grp">👤 Customers</div>` + a('personas','Sessions',cur==='personas'||cur==='persona','sub',P.length)
        + a('quotes','In their own words',cur==='quotes','sub') + (D.sections.buyer?a('buyer','What a buyer could find',cur==='buyer','sub'):'')
