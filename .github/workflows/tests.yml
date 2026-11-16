@@ -25,5 +25,6 @@ jobs:
       - name: nothing real in the tree
         run: |
           # §7 — a stray capture artifact in the working tree is a leak.
-          # The one exception is the frozen capture of the FICTIONAL fixture site.
-          ! git ls-files | grep -vE '^understudy/evals/fixture-run/|^docs/og-image\.png$' | grep -E '\.(png|jpe?g|webm|zip|pdf)$|session\.log$|/runs/|/targets/'
+          # The exceptions: the frozen capture of the FICTIONAL fixture site, and the
+          # docs site's report tiles, rendered from that same fictional fixture.
+          ! git ls-files | grep -vE '^understudy/evals/fixture-run/|^docs/og-image\.png$|^docs/img/report-[a-z]+\.jpg$' | grep -E '\.(png|jpe?g|webm|zip|pdf)$|session\.log$|/runs/|/targets/'

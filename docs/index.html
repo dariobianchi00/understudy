@@ -44,6 +44,8 @@
          "acceptedAnswer": {"@type": "Answer", "text": "It sends a stand-in user with a goal through your live product in a real browser, records where they hesitate, get stuck or give up, and scores that one recording through as many lenses as you ask for — usability, bugs, onboarding, content, ideal customer profiles, clarity, conversion, trust, page speed, SEO and answer-engine readiness."}},
         {"@type": "Question", "name": "Does understudy store my credentials or product data?",
          "acceptedAnswer": {"@type": "Answer", "text": "No. It never handles a credential: at a login screen it stops and hands you the browser. Reports and screenshots stay in a folder you choose on your machine; understudy uploads nothing. What the Claude model reads to score the run goes through your own Claude account, as anything you paste into Claude does."}},
+        {"@type": "Question", "name": "What happens when several checks find the same problem?",
+         "acceptedAnswer": {"@type": "Answer", "text": "It becomes one issue. A merge step at the end of the run groups the findings that describe the same problem on the same screen, files the issue under the check where the fix lives, and lists every check that raised it. Nothing a check wrote is changed, and every merge is written down with its reason so you can check it."}},
         {"@type": "Question", "name": "How reproducible are the findings?",
          "acceptedAnswer": {"@type": "Answer", "text": "Scoring the same recording twice with the same reviewers reproduces about 30% of individual findings and 43% of the serious ones; the themes are stable. Treat any single finding as one careful reading and open its evidence before acting on it."}}
       ]
@@ -277,6 +279,7 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     <nav class="topnav">
       <a href="#lenses">lenses</a>
       <a href="#icp">who it's for</a>
+      <a href="#issues">one list</a>
       <a href="#report">the report</a>
       <a href="#trust">honesty</a>
       <a href="#install">install</a>
@@ -429,6 +432,35 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
   </div>
 </section>
 
+<section id="issues">
+  <div class="wrap">
+    <p class="kicker">eleven reviewers, one list</p>
+    <h2>The same problem, said once.</h2>
+    <p class="section-lede">The reviewers never read each other — that is what makes their agreement worth something. It also means one problem arrives three or four times, in three or four phrasings. So the run ends with a merge step: one pass over every finding that decides which describe the same thing, and files each under the check where the fix lives.</p>
+
+    <div class="rules">
+      <div class="rule-card">
+        <h3>Merged on what was seen, never on wording.</h3>
+        <p>Two findings become one issue only when they describe the same observed problem on the same page or screen. A problem and its consequence stay apart when they need different fixes, and when in doubt they stay apart — a wrong merge hides a problem, a missed one only repeats it. Every merge and every near-miss is written down with a reason, for you to disagree with.</p>
+      </div>
+      <div class="rule-card">
+        <h3>Grouped, never rewritten.</h3>
+        <p>No reviewer's finding or score is touched. Each issue keeps every original under it, names every check that raised it, and takes the highest severity among them, never an average. A gate refuses a merge that drops or doubles a finding. Tried three times on the same 85 findings, it landed on 49, 51 and 49 issues.</p>
+      </div>
+    </div>
+
+    <div class="group"><h3>Five areas</h3><span>each the mean of its checks · the overall is the mean of the areas</span></div>
+    <div class="grid">
+      <div class="card"><span class="num">clarity · content</span><h3>Clarity</h3><p>Do people get what it is?</p></div>
+      <div class="card"><span class="num">conversion · ux · onboarding</span><h3>Conversion</h3><p>Do people reach value and pay?</p></div>
+      <div class="card"><span class="num">trust</span><h3>Trust</h3><p>Do people believe it?</p></div>
+      <div class="card"><span class="num">technical · bugs</span><h3>Technical</h3><p>Does it work and load fast?</p></div>
+      <div class="card"><span class="num">seo · aeo</span><h3>Discoverability</h3><p>Can Google and AI assistants find it?</p></div>
+    </div>
+    <p class="note">Who it's for and how you compare sit beside the areas, not in them — one tells you who to sell to, the other where you stand, and neither is a quality score.</p>
+  </div>
+</section>
+
 <section id="report">
   <div class="wrap">
     <p class="kicker">what you get</p>
@@ -447,11 +479,12 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
     </div>
 
     <div class="shots">
-      <figure><a href="img/report-overview.jpg"><img src="img/report-overview.jpg" alt="Overview of the interactive report: the verdict, an overall score ring and one ring per check" loading="lazy" width="1200" height="750"></a><figcaption>overview — the verdict, a score per check</figcaption></figure>
+      <figure><a href="img/report-overview.jpg"><img src="img/report-overview.jpg" alt="Overview of the interactive report: the verdict, an overall score ring and one ring per area" loading="lazy" width="1200" height="750"></a><figcaption>overview — the verdict, a score per area</figcaption></figure>
+      <figure><a href="img/report-issues.jpg"><img src="img/report-issues.jpg" alt="An area of the interactive report: its issues, each once, with the checks that raised it, and the Export menu open" loading="lazy" width="1200" height="750"></a><figcaption>an area — each issue once, with its fix; the Export menu open</figcaption></figure>
       <figure><a href="img/report-compare.jpg"><img src="img/report-compare.jpg" alt="Competitive comparison: three sites with logos, a lead/trail/level tally and scores side by side" loading="lazy" width="1200" height="750"></a><figcaption>competitive comparison — tally, scores side by side</figcaption></figure>
       <figure><a href="img/report-replay.jpg"><img src="img/report-replay.jpg" alt="Session replay: the persona's log line by line beside the screen that was showing" loading="lazy" width="1200" height="750"></a><figcaption>session replay — the log, with the screen showing</figcaption></figure>
       <figure><a href="img/report-icp.jpg"><img src="img/report-icp.jpg" alt="An ideal customer profile card with fit and propensity bars and the case against it" loading="lazy" width="1200" height="750"></a><figcaption>ideal customer profiles — cards with the case against</figcaption></figure>
-      <figure><a href="img/report-cover.jpg"><img src="img/report-cover.jpg" alt="The PDF cover: product, overall score, scope, buyers, checks and finding counts" loading="lazy" width="1200" height="750"></a><figcaption>the PDF — cover, with the caveat on the front</figcaption></figure>
+      <figure><a href="img/report-cover.jpg"><img src="img/report-cover.jpg" alt="The PDF cover: product, overall score, scope, buyers, checks, issue and finding counts" loading="lazy" width="1200" height="750"></a><figcaption>the PDF — cover, with the caveat on the front</figcaption></figure>
       <figure class="plain"><p>Every screen is a render of a <strong>fictional</strong> product — the test fixture that ships with the tool — greyed so nothing reads as a real client. Click one for full size.</p></figure>
     </div>
 
@@ -539,6 +572,10 @@ footer p{color:var(--muted);font-size:.88rem;font-family:var(--mono)}
       <div class="rule-card">
         <h3>Does it work in Claude Cowork?</h3>
         <p>Yes. In Cowork go to Customize → Plugins → Yours, press + to add the GitHub repo as a marketplace, and install understudy there; a terminal install does not carry over. Cowork also needs the Playwright browser plugin or a local Playwright MCP entry in Claude Desktop's config.</p>
+      </div>
+      <div class="rule-card">
+        <h3>What happens when several checks find the same problem?</h3>
+        <p>It becomes one issue. A merge step at the end of the run groups the findings that describe the same problem on the same screen, files the issue under the check where the fix lives, and lists every check that raised it. Nothing a check wrote is changed, and every merge is written down with its reason so you can check it.</p>
       </div>
       <div class="rule-card">
         <h3>How reproducible are the findings?</h3>

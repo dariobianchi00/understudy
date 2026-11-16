@@ -50,7 +50,7 @@ It does the same for websites: a visitor with a question lands, orients, evaluat
 - [The lenses](#the-lenses) · [Adding one](#adding-a-lens)
 - [Coverage depth](#coverage-depth--how-much-gets-opened)
 - [Watching it run](#watching-it-run)
-- [What a run produces](#what-a-run-produces)
+- [What a run produces](#what-a-run-produces) · [From findings to issues](#from-findings-to-issues)
 - [Models — you choose, at both levels](#models--you-choose-at-both-levels)
 - [Personas — read before trusting a report](#personas--read-this-before-trusting-a-report)
 - [Credentials and data](#this-tool-never-stores-your-credentials-or-your-product-data)
@@ -203,6 +203,7 @@ Personas      3, INFERRED (generic)        ← flagged in the report
 
 Captures      3 × Mode-A traversal  (90 min cap each)
 Scoring       4 lenses over the same evidence, in parallel
+Merge         1 pass: same problem, several checks → one issue
 
 Models        traversal   <session model>  (session-set; I can't change it)
               scoring     balanced
@@ -216,7 +217,7 @@ Estimated     ~4.5h traversal + ~1h scoring
 Go?
 ```
 
-Note **Captures vs Scoring**: three traversals, four lenses. Adding `content` doesn't add a traversal.
+Note **Captures vs Scoring**: three traversals, four lenses. Adding `content` doesn't add a traversal. The **merge** pass reads every lens's findings once at the end and decides which describe the same problem — see [From findings to issues](#from-findings-to-issues).
 
 **Time is quoted before you commit, not after** — three personas at 90 minutes is most of a working day, and that should never be a surprise at hour four.
 
@@ -375,6 +376,8 @@ The lens agents also show under the prompt in Claude Code itself, named for what
 ├── manifest.json              what ran, on which models, with which personas
 ├── status.json                the phase the run is in — what the live view reads
 ├── exec-summary.md            what it is, how it was produced, the Top 5, the personas' own words
+├── report-overlay.json        the merge step: which findings are one issue, short titles, the Top 5
+├── report-merge-notes.md      every merge and near-miss, with the reason — where a person checks it
 ├── report-full.md             every lens report in one file, the canonical export
 ├── report-summary.pdf         the printed deliverable (and .html — the interactive one)
 ├── site-logo.png              the site's icon, fetched once for the cover
@@ -419,6 +422,27 @@ Findings carry **stable IDs** — `hash(lens + flow + locator + title)`, normali
 
 ---
 
+## From findings to issues
+
+Eleven checks that never read each other will describe the same problem several times — a plan that fails at its last step is a usability finding, an activation finding and a content finding, each in its own words. That agreement is the strongest signal the method produces, and it is also how one report came to show a single problem eight times. So the run ends with a **merge step**:
+
+- **One agent reads every check's findings once** and groups those that describe the *same observed problem on the same surface*. Shared wording is not enough; a problem and its consequence stay apart when they need different fixes; when unsure, it keeps them apart — a wrong merge hides a problem, a missed one only repeats it.
+- **Each group is filed under the check where the fix lives** — copy under Clarity or Content, a failed request under Defects, a slow page under Performance — and takes the highest severity among its members, never an average.
+- **It writes, it does not rewrite.** `report-overlay.json` holds the groups, a short title and fix per issue (≤13 and ≤22 words), the Top 5 and the run's verdict. No lens file or score changes; every original stays readable under its issue. `report-merge-notes.md` lists each merge and each near-miss with a reason, because a merge is a judgement and that is where you check it.
+- **The gate checks the bookkeeping** (check 9): every finding placed exactly once, no invented ids, a short entry for every issue, nothing below P1 in the Top 5, every word limit held.
+
+Then the checks roll up into **five areas**, each the mean of its checks, and the overall is the mean of the areas:
+
+| Area | Asks | Checks |
+|---|---|---|
+| **Clarity** | Do people get what it is? | clarity · content |
+| **Conversion** | Do people reach value and pay? | conversion · ux · onboarding |
+| **Trust** | Do people believe it? | trust |
+| **Technical** | Does it work and load fast? | technical · bugs |
+| **Discoverability** | Can Google and AI assistants find it? | seo · aeo |
+
+Ideal Customer Profiles and the competitive comparison sit beside the areas, not in them: one says who to sell to, the other where you stand, and neither is a quality score. Both deliverables — the PDF and the interactive HTML — are built from the same model, so they agree on every count, merge and score.
+
 ## Models — you choose, at both levels
 
 An evaluation is a real spend, so understudy asks rather than assumes. Two models run, and understudy controls exactly one.
@@ -430,8 +454,8 @@ An evaluation is a real spend, so understudy asks rather than assumes. Two model
 | Shape | Allocation | When |
 |---|---|---|
 | **thorough** | opus everywhere | Best judgement throughout, highest cost |
-| **balanced** *(default)* | opus → `ux` `content` `onboarding` `clarity` `conversion` `trust` `icp` `compare`<br>sonnet → `bugs` `seo` `aeo` `technical` | Opus where judgement is load-bearing |
-| **cheap** | sonnet everywhere | Fastest; expect weaker `ux` and `content` |
+| **balanced** *(default)* | opus → `ux` `content` `onboarding` `clarity` `conversion` `trust` `icp` `compare` `merge`<br>sonnet → `bugs` `seo` `aeo` `technical` | Opus where judgement is load-bearing |
+| **cheap** | sonnet everywhere | Fastest; expect weaker `ux`, `content` and merges |
 
 Per-lens overrides accepted. The split exists because `ux` and `content` ask a model to judge whether something is *good* — where a weaker model produces findings that are plausible and wrong, and **a wrong P0 costs more than a missed P2**. `bugs`, `seo` and `aeo` check observable facts against a rubric; the framework carries those.
 
