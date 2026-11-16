@@ -21,4 +21,4 @@ Its published reproducibility floor: scoring identical evidence twice reproduces
 
 ## Reports
 
-Two deliverables from one run: a PDF (cover with score, scope, caveat; Top 5; quotes; every lens with evidence) and a self-contained interactive HTML (dashboard, findings explorer, session replay, ICP cards, competitive comparison with logos and side-by-side scores, Present mode, triage). Screenshots of both, rendered from a fictional fixture product, are on the landing page.
+Two deliverables from one run, drawn from one model so they agree: a PDF (cover with score, scope, caveat; Top 5; quotes; five areas, each issue once with the checks that raised it; every lens with evidence in the full export) and a self-contained interactive HTML (dashboard, issues explorer, session replay, ICP cards, competitive comparison with logos and side-by-side scores, Present mode, triage, an Export menu with a fix list for a coding agent). A merge step groups the findings several checks raised into one issue each; it never edits a check's findings or scores. Screenshots of both, rendered from a fictional fixture product, are on the landing page.
