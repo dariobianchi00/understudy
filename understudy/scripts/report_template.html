@@ -9,7 +9,7 @@
 :root{
   --accent:#1a56db;--ink:#16181d;--mut:#5d6470;--line:#e3e6ea;--bg:#f6f7f9;--card:#fff;
   --p0:#7f1d1d;--p1:#dc2626;--p2:#d97706;--p3:#6b7280;--ok:#2f855a;
-  --side:232px;--top:60px;--r:12px;
+  --side:252px;--top:60px;--r:12px;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
@@ -61,7 +61,8 @@ blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--accent);col
 .side a{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;color:var(--ink);font-weight:600;font-size:14px}
 .side a:hover{background:#f2f4f8;text-decoration:none}
 .side a.on{background:var(--accent);color:#fff}
-.side a .n{font-size:12px;color:var(--mut);font-weight:600}.side a.on .n{color:#fff;opacity:.85}
+.side a .n{font-size:12px;color:var(--mut);font-weight:600;flex:none;white-space:nowrap;font-variant-numeric:tabular-nums}.side a.on .n{color:#fff;opacity:.85}
+.side a>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .side .kicker{padding:14px 12px 4px}
 .side .grp{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:800;padding:16px 12px 4px}
 .side .grp:first-child{padding-top:4px}
@@ -69,6 +70,7 @@ blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--accent);col
 .side a.subsub{padding:4px 12px 4px 40px;font-weight:500;font-size:12.5px;color:var(--mut)}
 .side a .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;flex:none}
 .side .lens{font-weight:500;font-size:13.5px}
+.side .sc{display:inline-block;min-width:22px;text-align:right}
 .side .bar{width:46px;height:5px;border-radius:3px;background:#e9ecf1;overflow:hidden;display:inline-block;margin-left:8px}
 .side .bar i{display:block;height:100%}
 .side a.on .bar{background:rgba(255,255,255,.3)}
@@ -262,12 +264,19 @@ table.matrix tr.hide{display:none}
 .menu.on .dd{display:block}
 .menu .dd button,.menu .dd label{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:7px;font-size:13.5px;font-weight:600;cursor:pointer}
 .menu .dd button:hover,.menu .dd label:hover{background:#f2f4f8}
-.menu .dd .mut{padding:6px 10px 2px;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.menu .dd{min-width:300px}
+.menu .dd .ext{font-size:11.5px;font-weight:600;color:var(--mut);margin-left:4px}
+.menu .dd .hint{display:block;font-size:12px;font-weight:400;color:var(--mut);margin-top:2px}
+.menu .dd .foot{border-top:1px solid var(--line);margin-top:6px;padding:8px 10px 4px;font-size:12px;color:var(--mut)}
+.menu .dd .foot button,.menu .dd .foot label{display:inline;width:auto;padding:0;font-size:12px;font-weight:600;color:var(--accent);background:none}
+.menu .dd .foot button:hover,.menu .dd .foot label:hover{background:none;text-decoration:underline}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 
 /* ------------------------------------------------------------- print */
-@media print{.top,.side,.drawer,.lb,.pres,.filters{display:none!important}main{margin:0;padding:0}.view{display:block!important;break-before:page}}
+/* Views are filled only when opened, so print builds its own document in #v-print (beforeprint). */
+#v-print{display:none}
+@media print{.top,.side,.drawer,.lb,.pres,.filters,.frow .go,#v-print .btn:not(.sm){display:none!important}main{margin:0;padding:0}.view{display:none!important}#v-print{display:block!important}#v-print .psec{break-before:page}#v-print .frow{break-inside:avoid}#v-print .frow .fix{display:block!important}#v-print [data-go].btn,#v-print a.btn[href="#top5"]{display:none!important}html,body,main{background:#fff!important}}
 </style>
 </head>
 <body>
@@ -278,18 +287,15 @@ table.matrix tr.hide{display:none}
   <div class="overall" id="hoverall"></div>
   <button class="btn primary" id="btnPresent">▶ Present</button>
   <div class="menu" id="triageMenu">
-    <button class="btn" id="btnTriage">Triage ▾</button>
+    <button class="btn" id="btnTriage">Export ▾</button>
     <div class="dd">
-      <div class="mut">Export</div>
-      <button data-x="json">JSON (re-importable)</button>
-      <button data-x="csv">CSV for a tracker</button>
-      <button data-x="md">Markdown summary</button>
-      <div class="mut">Import</div>
-      <label>Load a triage JSON… <input type="file" id="triageFile" accept="application/json" class="hide"></label>
-      <button data-x="clear">Clear all triage on this device</button>
+      <button data-x="md"><b>Report</b> <span class="ext">.md</span><span class="hint">The summary and every issue, readable</span></button>
+      <button data-x="pdf"><b>Report</b> <span class="ext">.pdf</span><span class="hint">Opens print — choose “Save as PDF”</span></button>
+      <button data-x="csv"><b>Tracker</b> <span class="ext">.csv</span><span class="hint">One row per issue, with your triage — for Sheets, Jira, Linear</span></button>
+      <button data-x="agent"><b>Fix list for a coding agent</b> <span class="ext">.md</span><span class="hint">Issues marked accepted (or all not rejected), with steps — for Claude Code or similar</span></button>
+      <div class="foot">Triage marks: <button data-x="json">save</button> · <label>load<input type="file" id="triageFile" accept="application/json" class="hide"></label> · <button data-x="clear">clear</button></div>
     </div>
   </div>
-  <button class="btn" id="btnPrint" title="Print or save as PDF">Print</button>
 </header>
 
 <nav class="side" id="side"></nav>
@@ -305,6 +311,7 @@ table.matrix tr.hide{display:none}
   <section class="view" id="v-compare"></section>
   <section class="view" id="v-quotes"></section>
   <section class="view" id="v-limits"></section>
+  <section class="view" id="v-print"></section>
 </main>
 
 <aside class="drawer" id="drawer"><button class="btn sm close" id="drawerClose">✕</button><div id="drawerBody"></div></aside>
@@ -397,12 +404,13 @@ function renderNav(){
   const cur = parts[0], arg = decodeURIComponent(parts.slice(1).join('/'));
   const curCat = cur==='cat' ? arg : cur==='lens' ? (LENS.find(l=>l.dir===arg)||{}).cat : '';
   const a = (href, label, on, cls='', n='') => `<a href="#${href}" class="${cls} ${on?'on':''}"><span>${label}</span>${n!==''?`<span class="n">${n}</span>`:''}</a>`;
-  const bar = s => `<span class="n">${s??'–'}<span class="bar"><i style="width:${(s||0)*10}%;background:${hue(s)}"></i></span></span>`;
+  const bar = s => `<span class="n"><span class="sc">${s??'–'}</span><span class="bar"><i style="width:${(s||0)*10}%;background:${hue(s)}"></i></span></span>`;
   let out = `<div class="grp">🏁 Overview</div>` + a('overview','Summary',cur==='overview','sub') + a('top5','Top 5 to fix',cur==='top5','sub');
   out += `<div class="grp">🔎 Findings</div>` + a('findings','All issues',cur==='findings','sub',CATF.length);
   for (const c of CATS){
     out += `<a href="#cat/${c.key}" class="sub ${curCat===c.key&&cur==='cat'?'on':''}"><span>${c.emoji} ${esc(c.label)}</span>${bar(c.score)}</a>`;
-    if (curCat===c.key) out += c.checks.map(d=>{ const l=LENS.find(x=>x.dir===d); return l?a('lens/'+encodeURIComponent(d), esc(l.short), cur==='lens'&&arg===d,'subsub',l.count):''; }).join('');
+    // check rows show their score like the category above them; mixing a count in the same column reads as one
+    if (curCat===c.key) out += c.checks.map(d=>{ const l=LENS.find(x=>x.dir===d); return l?`<a href="#lens/${encodeURIComponent(d)}" class="subsub ${cur==='lens'&&arg===d?'on':''}"><span>${esc(l.short)}</span>${bar(l.score)}</a>`:''; }).join('');
   }
   out += `<div class="grp">👤 Customers</div>` + a('personas','Sessions',cur==='personas'||cur==='persona','sub',P.length)
        + a('quotes','In their own words',cur==='quotes','sub') + (D.sections.buyer?a('buyer','What a buyer could find',cur==='buyer','sub'):'')
@@ -640,20 +648,106 @@ $('#btnPresent').onclick=()=>present(true);
 $('#slide').onclick=e=>{ if(e.target.closest('[data-shot]')) return; const x=e.clientX/innerWidth; if(x<.25&&si>0){si--;showSlide();} else if(x>=.25&&si<SL.length-1){si++;showSlide();} };
 
 // ------------------------------------------------------------ triage export
+// Every export reads the payload as rendered: nothing here scores, ranks or rewrites a finding.
+const SEV_ORDER = {P0:0,P1:1,P2:2,P3:3};
+const T5 = Object.fromEntries((D.top5||[]).map((r,i)=>[r.id,i]));
+const bySev = (a,b) => (SEV_ORDER[a.sev]??9)-(SEV_ORDER[b.sev]??9) || (T5[a.id]??99)-(T5[b.id]??99);
+const catName = f => CAT[f.cat] ? CAT[f.cat].label : "Who it's for";
+const pageUrl = f => /^\//.test(f.locator||'') && D.meta.url ? D.meta.url.replace(/\/$/,'')+f.locator : (f.locator||'');
+const noteOf = id => (triage[id]||{}).note || '';
+const mdList = xs => xs.map(x=>`- ${x}`).join('\n');
+
+function reportMd(){
+  const L = [`# ${D.meta.product} — ${D.meta.kind} — ${D.meta.date}`, ''];
+  if (D.overall!=null) L.push(`**Overall ${D.overall}/10** · ${F.length} issues`, '');
+  if (D.verdict) L.push(`> ${D.verdict}`, '');
+  if ((D.top5||[]).length){ L.push('## Top 5 to fix',''); D.top5.forEach(r=>L.push(`${r.n}. **${r.sev}** ${r.what}${r.effort?` — _${r.effort}_`:''}`)); L.push(''); }
+  if ((D.doesWell||[]).length) L.push('## What works', '', mdList(D.doesWell), '');
+  L.push('## Scores', '', '| Area | Score | Issues |', '|---|---|---|');
+  CATS.forEach(c=>L.push(`| ${c.label} | ${c.score??'–'}/10 | ${c.count} |`)); L.push('');
+  for (const c of [...CATS, {key:null,label:"Who it's for"}]){
+    const fs = F.filter(f=>c.key ? f.cat===c.key : !CAT[f.cat]).sort(bySev);
+    if (!fs.length) continue;
+    L.push(`## ${c.label}`, '');
+    for (const f of fs){
+      L.push(`### ${f.sev} — ${f.short||f.title}`, '', `${f.lensLabel} · \`${f.id}\`${status(f.id)!=='open'?` · triage: **${status(f.id)}**`:''}`, '');
+      if (f.sowhat) L.push(`**Why it matters:** ${f.sowhat}`, '');
+      if (f.observed.length) L.push('**Observed:**', mdList(f.observed), '');
+      if (f.fix) L.push(`**Fix:** ${f.fix}`, '');
+      if ((f.merged||[]).length) L.push(`**Also raised as:**`, mdList(f.merged.map(m=>`${m.check} ${m.sev} — ${m.title}`)), '');
+      if (noteOf(f.id)) L.push(`**Note:** ${noteOf(f.id)}`, '');
+    }
+  }
+  if ((D.limits||[]).length) L.push('## Limits', '', mdList(D.limits), '');
+  return L.join('\n');
+}
+
+// The brief for a coding agent: what it needs to act without the run folder open.
+// Issues accepted in triage; if none are, every issue not rejected or already fixed.
+function agentMd(){
+  const acc = F.filter(f=>status(f.id)==='accepted');
+  const pick = (acc.length ? acc : F.filter(f=>!['rejected','fixed'].includes(status(f.id)))).sort(bySev);
+  const L = [`# Fix list — ${D.meta.product}`, '',
+    `Source: understudy ${D.meta.kind.toLowerCase()} of ${D.meta.url||D.meta.product}, ${D.meta.date}. ${pick.length} issue${pick.length===1?'':'s'}, most severe first.`,
+    acc.length ? 'Selection: issues accepted in triage.' : 'Selection: every issue not rejected or marked fixed (none were accepted in triage).', '',
+    '## How to work this list', '',
+    '- Each issue was observed on the live product by a simulated user. Quotes and numbers are from the recording; do not treat them as requirements to copy.',
+    '- Severity: P0 blocks the job · P1 they get through but would not become a customer · P2 friction · P3 polish.',
+    '- For each issue: find where it lives in the code, reproduce it from the steps, make the fix, then check the "Done when" line.',
+    '- Screenshots are named, not embedded. They live in the understudy run folder; ask for one if the text is not enough.',
+    '- If a fix is a product or copy decision rather than code, say so instead of guessing.', ''];
+  pick.forEach((f,i)=>{
+    L.push(`## ${i+1}. ${f.sev} — ${f.short||f.title}`, '',
+      `- **Id:** \`${f.id}\` · **Area:** ${catName(f)} · **Raised by:** ${[f.lensLabel, ...(f.merged||[]).map(m=>m.check)].join(', ')}`);
+    if (pageUrl(f)) L.push(`- **Where:** ${pageUrl(f)}`);
+    const who = f.personas.filter(p=>p && p!=='n/a');
+    if (who.length) L.push(`- **Seen by:** ${who.join(', ')}`);
+    L.push('');
+    if (f.sowhat) L.push(`**Why it matters:** ${f.sowhat}`, '');
+    const seen = [...f.observed, ...(f.merged||[]).flatMap(m=>m.observed||[])];
+    if (seen.length) L.push('**What happens:**', mdList([...new Set(seen)]), '');
+    if (f.repro.length) L.push('**Steps to reproduce:**', f.repro.map((r,k)=>`${k+1}. ${r}`).join('\n'), '');
+    if (f.evidence) L.push(`**Evidence:** ${f.evidence}`, '');
+    if (f.shots.length) L.push(`**Screenshots:** ${f.shots.map(s=>'`'+s+'`').join(', ')}`, '');
+    L.push(`**Fix:** ${f.fix||f.shortFix||'not stated by the check — decide from the evidence'}`, '',
+      `**Done when:** following the same path, what "What happens" describes no longer occurs${f.fix?', and the change matches the fix above':''}.`, '');
+    if (noteOf(f.id)) L.push(`**Reviewer note:** ${noteOf(f.id)}`, '');
+  });
+  return L.join('\n');
+}
+
 function exportTriage(kind){
-  const rows = F.map(f=>({id:f.id, severity:f.sev, check:f.lensLabel, title:f.title, personas:f.personas.join('; '), locator:f.locator, status:status(f.id), note:(triage[f.id]||{}).note||''}));
-  const marked = rows.filter(r=>r.status!=='open'||r.note);
-  let text, name, type='text/plain';
+  if (kind==='pdf'){ $('#triageMenu').classList.remove('on'); setTimeout(()=>window.print(), 50); return; }
+  let text, name, type='text/markdown';
   if (kind==='json'){ text=JSON.stringify({run:D.meta.runId, product:D.meta.product, exported:new Date().toISOString(), triage}, null, 2); name='triage.json'; type='application/json'; }
-  else if (kind==='csv'){ const q=v=>`"${String(v??'').replace(/"/g,'""')}"`; text=[Object.keys(rows[0]).join(',')].concat(rows.map(r=>Object.values(r).map(q).join(','))).join('\n'); name='findings-triage.csv'; type='text/csv'; }
-  else { text=`# ${D.meta.product} — triage — ${new Date().toISOString().slice(0,10)}\n\n`+STATUSES.filter(s=>s!=='open').map(s=>{const rs=marked.filter(r=>r.status===s); return rs.length?`## ${s} (${rs.length})\n\n`+rs.map(r=>`- **${r.severity}** ${r.title} — ${r.check} · \`${r.id}\`${r.note?`\n  - ${r.note}`:''}`).join('\n')+'\n\n':'';}).join('')+`## open (${rows.filter(r=>r.status==='open').length})\n`; name='triage.md'; type='text/markdown'; }
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=`${(D.meta.product||'run').toLowerCase().replace(/[^a-z0-9]+/g,'-')}-${name}`; a.click(); toast(`Exported ${name}`);
+  else if (kind==='csv'){
+    const rows = [...F].sort(bySev).map(f=>({id:f.id, severity:f.sev, area:catName(f), check:f.lensLabel, title:f.short||f.title, why_it_matters:f.sowhat||'', fix:f.shortFix||f.fix||'', where:pageUrl(f), raised_by:[f.lensLabel, ...(f.merged||[]).map(m=>m.check)].join('; '), personas:f.personas.join('; '), status:status(f.id), note:noteOf(f.id)}));
+    const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+    text=[Object.keys(rows[0]).join(',')].concat(rows.map(r=>Object.values(r).map(q).join(','))).join('\n'); name='tracker.csv'; type='text/csv';
+  }
+  else if (kind==='agent'){ text=agentMd(); name='fix-list-for-agent.md'; }
+  else { text=reportMd(); name='report.md'; }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=`${(D.meta.product||'run').toLowerCase().replace(/[^a-z0-9]+/g,'-')}-${name}`; a.click(); toast(`Saved ${name}`);
 }
 $('#btnTriage').onclick=e=>{ e.stopPropagation(); $('#triageMenu').classList.toggle('on'); };
 document.addEventListener('click',()=>$('#triageMenu').classList.remove('on'));
 $('#triageMenu .dd').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const k=b.dataset.x; if(k==='clear'){ if(confirm('Clear every status and note saved for this report on this device?')){ triage={}; saveTriage(); render(); toast('Triage cleared'); } } else exportTriage(k); };
 $('#triageFile').onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ try{ const j=JSON.parse(t); const t2=j.triage||j; Object.assign(triage,t2); saveTriage(); render(); toast(`Imported ${Object.keys(t2).length} entries`);}catch(err){ toast('Not a triage file'); } }); e.target.value=''; };
-$('#btnPrint').onclick=()=>window.print();
+// ------------------------------------------------------------ print
+// One document from the views: overview, each category with its issues, who it's for, quotes, limits.
+// Filters are cleared for the print so a filtered screen never prints a partial list.
+let FLT_SAVED = null;
+window.addEventListener('beforeprint', ()=>{
+  FLT_SAVED = {sev:new Set(FLT.sev), cat:new Set(FLT.cat), lens:new Set(FLT.lens), q:FLT.q};
+  FLT.sev.clear(); FLT.cat.clear(); FLT.lens.clear(); FLT.q='';
+  const parts = [vOverview(), ...CATS.map(c=>vCat(c.key)), D.icp?vIcp():'', (D.quotes||[]).length?vQuotes():'', vLimits()].filter(Boolean);
+  $('#v-print').innerHTML = parts.map((h,i)=>`<div class="${i?'psec':''}">${h}</div>`).join('');
+  $('#v-print').querySelectorAll('details').forEach(d=>d.open=true);
+});
+window.addEventListener('afterprint', ()=>{
+  $('#v-print').innerHTML = '';
+  if (FLT_SAVED) Object.assign(FLT, FLT_SAVED);
+});
 
 // ------------------------------------------------------------ router
 function render(){

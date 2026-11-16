@@ -488,6 +488,19 @@ class Interactive(unittest.TestCase):
             self.assertEqual(self._data(page)["extraSections"], [])
             self.assertNotIn("How to read these findings", err)
 
+    def test_export_menu_offers_the_four_outputs_and_a_print_document(self):
+        # One Export menu replaced Triage + Print. Views fill only when opened,
+        # so printing builds its own document; without it the PDF was blank pages.
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.run_summary(run)
+            page, _ = self._html(run, "all")
+            for kind in ("md", "pdf", "csv", "agent", "json", "clear"):
+                self.assertIn(f'data-x="{kind}"', page)
+            self.assertNotIn('id="btnPrint"', page)
+            self.assertIn('id="v-print"', page)
+            self.assertIn("beforeprint", page)
+
     def test_print_format_writes_the_document_layout_only(self):
         with tempfile.TemporaryDirectory() as t:
             run = fx.clean_run(t)
