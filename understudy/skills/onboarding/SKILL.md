@@ -267,7 +267,7 @@ Scoring models — three shapes:
                   Best judgement everywhere. Highest cost.
 
   (b) balanced    opus  → ux, content, onboarding, clarity, conversion,
-      ← default            trust, icp, compare
+      ← default            trust, icp, compare, merge
                   sonnet → bugs, seo, aeo, technical
                   Opus where judgement is load-bearing; sonnet where the
                   framework does the work and the task is closer to
@@ -279,6 +279,12 @@ Scoring models — three shapes:
 
   Or override per lens. Which?
 ```
+
+**`merge` is the merge step** (v0.8.0): one agent, after the lenses, that groups
+the findings several checks raised into one issue each and writes the short
+titles and the Top 5. It is judgement — whether two findings are the same
+problem — so it is opus under *thorough* and *balanced*, sonnet under *cheap*.
+Write it into the target as `models.scoring.merge` like any lens.
 
 **Why balanced splits where it does:** `ux` and `content` ask a model to judge whether something is *good*, and a weaker model produces findings that are plausible and wrong — the most expensive failure mode, because a wrong P0 costs more than a missed P2. `bugs`, `seo` and `aeo` check observable facts against a rubric: was there a console error, is there a canonical tag, is there valid schema.org. The framework carries those.
 
@@ -441,7 +447,7 @@ Scoring       3 lenses over the visit evidence, in parallel
               1 lens  over the crawl evidence
 
 Models        traversal   <session model>   (session-set; I can't change it)
-              scoring     balanced — opus: clarity, conversion, trust
+              scoring     balanced — opus: clarity, conversion, trust, merge
                                      sonnet: seo
 
 Excluded      <verbatim list, or "nothing">

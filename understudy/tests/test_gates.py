@@ -503,3 +503,96 @@ class Report(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Merge(unittest.TestCase):
+    """Gate check 9: report-overlay.json, the merge step's output (v0.8.0)."""
+
+    def setUp(self):
+        self.cla = fx.finding_id("clarity", "V1", "/", "The fold names no audience")
+        self.con = fx.finding_id("content", "V1", "/", "Headline names no audience")
+        self.ux = fx.finding_id("ux", "V2", "/settings", "Settings toggle is unexplained")
+
+    def build(self, t, overlay=None, **change):
+        run = fx.clean_run(t, with_lens=False)
+        fx.lens(run, "clarity", [fx.finding("clarity", "The fold names no audience")])
+        fx.lens(run, "content", [fx.finding("content", "Headline names no audience", sev="P2")])
+        fx.lens(run, "ux", [fx.finding("ux", "Settings toggle is unexplained", sev="P2",
+                                       flow="V2", locator="/settings")])
+        ov = {"version": 1, "verdict": "Visitors cannot tell who it is for.",
+              "groups": {self.cla: [self.con]},
+              "short": {self.cla: {"title": "Fold names no audience", "fix": "Name the audience under the headline."},
+                        self.ux: {"title": "Settings toggle unexplained", "fix": "Add one line saying what it does."}},
+              "top5": [{"id": self.cla, "effort": "Copy"}]}
+        ov.update(change)
+        if overlay is not False:
+            _write(os.path.join(run, "report-overlay.json"), json.dumps(overlay or ov))
+        return run, ov
+
+    def test_a_sound_overlay_passes_and_prints_the_count(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, _ = self.build(t)
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("merge: 3 → 2 issues (1 groups)", out)
+
+    def test_no_overlay_is_a_note_not_a_failure(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, _ = self.build(t, overlay=False)
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("merge step did not run", out)
+
+    def test_an_id_placed_twice_fails(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, ov = self.build(t)
+            ov["groups"][self.ux] = [self.con]
+            run, _ = self.build(t, overlay=ov)
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual((rc, checks), (1, {9}), out)
+            self.assertIn("twice", out)
+
+    def test_an_unknown_id_fails(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, _ = self.build(t, groups={"000000000000": [self.con]})
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual((rc, checks), (1, {9}), out)
+
+    def test_a_kept_issue_without_a_short_entry_fails(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, ov = self.build(t)
+            del ov["short"][self.ux]
+            run, _ = self.build(t, overlay=ov)
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual((rc, checks), (1, {9}), out)
+
+    def test_a_short_title_over_the_limit_fails(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, ov = self.build(t)
+            ov["short"][self.ux]["title"] = " ".join(["word"] * 14)
+            run, _ = self.build(t, overlay=ov)
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual((rc, checks), (1, {9}), out)
+
+    def test_the_top5_is_never_padded_with_a_p2(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, _ = self.build(t, top5=[{"id": self.cla}, {"id": self.ux}])
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual((rc, checks), (1, {9}), out)
+            self.assertIn("never padded", out)
+
+    def test_a_merged_id_cannot_be_in_the_top5(self):
+        with tempfile.TemporaryDirectory() as t:
+            run, _ = self.build(t, top5=[{"id": self.con}])
+            rc, checks, out = gate(REPORT, run)
+            self.assertEqual((rc, checks), (1, {9}), out)
+
+
+class Words(unittest.TestCase):
+    def test_the_one_word_rule(self):
+        sys.path.insert(0, fx.SCRIPTS)
+        import words
+        self.assertEqual(words.count("P1 — the fold · names no audience →"), 5)
+        self.assertEqual(words.count("Mobile LCP is 4.4 s"), 5)
+        self.assertEqual(words.count("🔴 P0 Pricing breaks"), 2)
+        self.assertEqual(words.count(""), 0)

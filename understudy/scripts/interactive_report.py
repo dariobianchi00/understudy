@@ -101,7 +101,10 @@ def load_overlay(run, findings):
             if f.get("cluster") is not None:
                 by_cluster.setdefault(f["cluster"], []).append(f)
         for members in by_cluster.values():
-            members.sort(key=lambda f: (f["sev"], rr.lens_rank(f["lens"])))
+            # A group led by an icp finding is filed under no category and
+            # drops out of every scorecard, so a category check leads when one
+            # is in the group; the group still takes the highest severity.
+            members.sort(key=lambda f: (f["lens"] not in CAT_OF, f["sev"], rr.lens_rank(f["lens"])))
             merge["groups"][members[0]["id"]] = [f["id"] for f in members[1:]]
         return overlay, merge
 
@@ -426,6 +429,106 @@ def persona_facts(p, manifest_p):
 
 
 # --------------------------------------------------------------- build ----
+def issue_model(run, lenses, images, used, checks=None):
+    """Lenses, issues, categories and the overall — the one model both
+    renderers draw from (v0.8.0), so the PDF and the HTML cannot disagree on
+    a count, a merge or a score. `lenses` are render_report entries that are
+    areas of the report (run_layout.is_area). Returns (lens_payload, issues,
+    overlay, merge, categories, overall); `issues` are the kept findings, each
+    carrying its merged originals."""
+    checks = checks or {}
+    # ---- lenses and findings -------------------------------------------------
+    lens_payload, findings = [], []
+    for e in lenses:
+        sc = e.get("score") or {}
+        fs = findings_for(e, images, used)
+        by_id = {f["id"]: f for f in e["find"]}
+        for f in fs:
+            f["cluster"] = by_id.get(f["id"], {}).get("cluster")
+        findings += fs
+        # the lens's own verdict = first paragraph of its exec summary
+        verdict_l = ""
+        try:
+            verdict_l = rr.first_verdict(rr._read(os.path.join(run, e["dir"], "exec-summary.md"), errors="replace")) \
+                if hasattr(rr, "first_verdict") else ""
+        except Exception:
+            pass
+        if not verdict_l:
+            try:
+                md = rr._read(os.path.join(run, e["dir"], "exec-summary.md"), errors="replace")
+                body = re.sub(r"^#\s+.*\n", "", md, count=1).strip()
+                verdict_l = body.split("\n\n")[0].strip()
+            except Exception:
+                verdict_l = ""
+        why = sc.get("why", "")
+        if not sc:
+            # A lens that declined to score says why under `## Score`; the
+            # compare lens always does (a position is not a quality score).
+            why = compare_view.no_score_reason(run, e["dir"])
+        lens_payload.append({
+            "dir": e["dir"], "label": e["lens"],
+            "score": sc.get("score"), "why": rr.sentence(why),
+            "noScore": bool(why) and not sc,
+            "verdict": strip_md(verdict_l),
+            "looksFor": checks.get(e["lens"].lower(), ""),
+            "count": len(fs),
+            "sev": {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")},
+        })
+    # ---- merge step: one issue, one finding ----------------------------------
+    # report-overlay.json is the merge step's output: groups of findings that
+    # describe the same issue (the primary is filed under the check where the
+    # fix lives), plus a short title and fix within the word limits. The
+    # originals stay readable in the expanded finding; nothing is dropped.
+    overlay, merge = load_overlay(run, findings)
+    by_id = {f["id"]: f for f in findings}
+    absorbed = set()
+    for prim, ids in merge["groups"].items():
+        p = by_id[prim]
+        p["merged"] = []
+        for i in ids:
+            m = by_id[i]
+            absorbed.add(i)
+            p["merged"].append({"id": m["id"], "check": m["lensLabel"], "sev": m["sev"],
+                                "title": m["title"], "observed": m["observed"][:3]})
+            if m["sev"] < p["sev"]:
+                # The group takes the highest severity; Details says whose it was.
+                p["sev"], p["sevFrom"] = m["sev"], m["lensLabel"]
+            p["shots"] += [s for s in m["shots"] if s not in p["shots"]]
+            p["quotes"] += [q for q in m["quotes"] if q not in p["quotes"]]
+            p["personas"] += [x for x in m["personas"] if x not in p["personas"]]
+    findings = [f for f in findings if f["id"] not in absorbed]
+    short = overlay.get("short") or {}
+    for f in findings:
+        s = short.get(f["id"]) or {}
+        f["short"] = s.get("title") or f["title"]
+        f["shortFix"] = s.get("fix") or f["fix"]
+        f["cat"] = CAT_OF.get(f["lens"], "competitors" if f["lens"] == "compare" else "customers")
+        f["check"] = CHECK_SHORT.get(f["lens"], f["lensLabel"])
+    for l in lens_payload:
+        fs = [f for f in findings if f["lens"] == l["dir"]]
+        l["count"] = len(fs)
+        l["sev"] = {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")}
+        l["cat"] = CAT_OF.get(l["dir"], "competitors" if l["dir"] == "compare" else "customers")
+        l["short"] = CHECK_SHORT.get(l["dir"], l["label"])
+
+    # ---- five categories; the overall is their mean ----------------------------
+    categories = []
+    for key, emoji, label, colour, question, dirs in CATEGORIES:
+        ls = [l for l in lens_payload if l["dir"] in dirs]
+        if not ls:
+            continue
+        sc = [l["score"] for l in ls if isinstance(l.get("score"), int)]
+        fs = [f for f in findings if f["cat"] == key]
+        categories.append({"key": key, "emoji": emoji, "label": label, "colour": colour,
+                           "question": question, "checks": [l["dir"] for l in ls],
+                           "score": round(sum(sc) / len(sc), 1) if sc else None,
+                           "count": len(fs),
+                           "sev": {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")}})
+    scored = [c["score"] for c in categories if c["score"] is not None]
+    overall = round(sum(scored) / len(scored), 1) if scored else None
+    return lens_payload, findings, overlay, merge, categories, overall
+
+
 def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
     """The interactive page as a string. `entries` is render_report's parsed
     list (summary first, lenses after, LENS_ORDER applied, clusters marked)."""
@@ -517,95 +620,8 @@ def build(run, meta, entries, images, used, a_scope, logo_uri, provenance):
         if len(r) >= 2:
             checks[strip_md(r[0]).lower()] = strip_md(r[1])
 
-    # ---- lenses and findings -------------------------------------------------
-    lens_payload, findings = [], []
-    for e in lenses:
-        sc = e.get("score") or {}
-        fs = findings_for(e, images, used)
-        by_id = {f["id"]: f for f in e["find"]}
-        for f in fs:
-            f["cluster"] = by_id.get(f["id"], {}).get("cluster")
-        findings += fs
-        # the lens's own verdict = first paragraph of its exec summary
-        verdict_l = ""
-        try:
-            verdict_l = rr.first_verdict(rr._read(os.path.join(run, e["dir"], "exec-summary.md"), errors="replace")) \
-                if hasattr(rr, "first_verdict") else ""
-        except Exception:
-            pass
-        if not verdict_l:
-            try:
-                md = rr._read(os.path.join(run, e["dir"], "exec-summary.md"), errors="replace")
-                body = re.sub(r"^#\s+.*\n", "", md, count=1).strip()
-                verdict_l = body.split("\n\n")[0].strip()
-            except Exception:
-                verdict_l = ""
-        why = sc.get("why", "")
-        if not sc:
-            # A lens that declined to score says why under `## Score`; the
-            # compare lens always does (a position is not a quality score).
-            why = compare_view.no_score_reason(run, e["dir"])
-        lens_payload.append({
-            "dir": e["dir"], "label": e["lens"],
-            "score": sc.get("score"), "why": rr.sentence(why),
-            "noScore": bool(why) and not sc,
-            "verdict": strip_md(verdict_l),
-            "looksFor": checks.get(e["lens"].lower(), ""),
-            "count": len(fs),
-            "sev": {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")},
-        })
-    # ---- merge step: one issue, one finding ----------------------------------
-    # report-overlay.json is the merge step's output: groups of findings that
-    # describe the same issue (the primary is filed under the check where the
-    # fix lives), plus a short title and fix within the word limits. The
-    # originals stay readable in the expanded finding; nothing is dropped.
-    overlay, merge = load_overlay(run, findings)
-    by_id = {f["id"]: f for f in findings}
-    absorbed = set()
-    for prim, ids in merge["groups"].items():
-        p = by_id[prim]
-        p["merged"] = []
-        for i in ids:
-            m = by_id[i]
-            absorbed.add(i)
-            p["merged"].append({"id": m["id"], "check": m["lensLabel"], "sev": m["sev"],
-                                "title": m["title"], "observed": m["observed"][:3]})
-            if m["sev"] < p["sev"]:
-                # The group takes the highest severity; Details says whose it was.
-                p["sev"], p["sevFrom"] = m["sev"], m["lensLabel"]
-            p["shots"] += [s for s in m["shots"] if s not in p["shots"]]
-            p["quotes"] += [q for q in m["quotes"] if q not in p["quotes"]]
-            p["personas"] += [x for x in m["personas"] if x not in p["personas"]]
-    findings = [f for f in findings if f["id"] not in absorbed]
-    short = overlay.get("short") or {}
-    for f in findings:
-        s = short.get(f["id"]) or {}
-        f["short"] = s.get("title") or f["title"]
-        f["shortFix"] = s.get("fix") or f["fix"]
-        f["cat"] = CAT_OF.get(f["lens"], "competitors" if f["lens"] == "compare" else "customers")
-        f["check"] = CHECK_SHORT.get(f["lens"], f["lensLabel"])
-    for l in lens_payload:
-        fs = [f for f in findings if f["lens"] == l["dir"]]
-        l["count"] = len(fs)
-        l["sev"] = {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")}
-        l["cat"] = CAT_OF.get(l["dir"], "competitors" if l["dir"] == "compare" else "customers")
-        l["short"] = CHECK_SHORT.get(l["dir"], l["label"])
-
-    # ---- five categories; the overall is their mean ----------------------------
-    categories = []
-    for key, emoji, label, colour, question, dirs in CATEGORIES:
-        ls = [l for l in lens_payload if l["dir"] in dirs]
-        if not ls:
-            continue
-        sc = [l["score"] for l in ls if isinstance(l.get("score"), int)]
-        fs = [f for f in findings if f["cat"] == key]
-        categories.append({"key": key, "emoji": emoji, "label": label, "colour": colour,
-                           "question": question, "checks": [l["dir"] for l in ls],
-                           "score": round(sum(sc) / len(sc), 1) if sc else None,
-                           "count": len(fs),
-                           "sev": {s: sum(1 for f in fs if f["sev"] == s) for s in ("P0", "P1", "P2", "P3")}})
-    scored = [c["score"] for c in categories if c["score"] is not None]
-    overall = round(sum(scored) / len(scored), 1) if scored else None
+    lens_payload, findings, overlay, merge, categories, overall = issue_model(
+        run, lenses, images, used, checks)
     if overlay.get("verdict"):
         verdict = overlay["verdict"]
     if merge["top5"]:

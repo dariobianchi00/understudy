@@ -19,6 +19,13 @@ Enforces the four gate conditions scoring is responsible for (CLAUDE.md §10):
   Check 7 — a lens's self-assigned score is not contradicted by its own
             severities. The lens that read the evidence picks the 0-10; this
             refuses the combinations that cannot both be true.
+  Check 9 — the merge step's report-overlay.json, when there is one,
+            accounts for every finding once: each id exists, appears in one
+            place only, the Top 5 holds kept P0/P1 issues, every kept issue
+            has a short title and fix, and the word limits hold (words.py).
+            The universe is the root lenses (compare's diff lens excluded).
+            A run with no overlay is not failed: the renderer falls back to
+            grouping on its own and says so on the page.
 
 Checks 2 and 5 belong to capture — see check_capture.py.
 
@@ -36,6 +43,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from finding_id import finding_id, FINDING_HEADING  # noqa: E402
 import run_layout  # noqa: E402
+import words  # noqa: E402
 
 
 def _read(*a, **k):
@@ -398,6 +406,119 @@ def check_findings(path, r, lens, run):
            f"{sum(1 for f in findings if f['fields'].get('severity', '').upper().startswith('P0'))} P0")
 
 
+OVERLAY_VERSION = 1
+# Hard maximums, in words.py words. A short title or fix is what the exec
+# reader sees in place of the lens's own; past these it stops being short.
+LIMITS = {"title": 13, "fix": 22, "verdict": 22, "doesWell": 12, "limitsTop3": 8}
+SEV_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+
+
+def merge_universe(run):
+    """{id: severity} for every finding the merge step must account for: the
+    root lenses — the five categories and icp. The compare diff lens and the
+    per-site lenses under compare/<site>/ are the comparison, not issues."""
+    out = {}
+    for lens in run_layout.lens_dirs(run):
+        if "/" in lens or lens == "compare":
+            continue
+        p = os.path.join(run, lens, "findings-final.md")
+        for f in parse_findings(_read(p, errors="replace")):
+            m = SEVERITY.search("\n".join(f["raw"]))
+            out[f["id"]] = m.group(1).upper() if m else "P3"
+    return out
+
+
+def check_overlay(run, r):
+    """Check 9. Returns the summary line, or None when there is no overlay."""
+    path = os.path.join(run, "report-overlay.json")
+    if not os.path.exists(path):
+        r.note("no report-overlay.json — the merge step did not run; the "
+               "report will group findings automatically and say so")
+        return None
+    try:
+        ov = json.loads(_read(path, errors="replace"))
+    except Exception as e:
+        r.fail(9, f"report-overlay.json is not valid JSON: {e}")
+        return None
+    if not isinstance(ov, dict) or ov.get("version") != OVERLAY_VERSION:
+        r.fail(9, f"report-overlay.json: version must be {OVERLAY_VERSION}")
+        return None
+
+    known = merge_universe(run)
+    groups = ov.get("groups") or {}
+    if not isinstance(groups, dict):
+        r.fail(9, "report-overlay.json: groups must be an object {primary: [merged ids]}")
+        groups = {}
+    placed = {}
+    for prim, ids in groups.items():
+        for i, role in [(prim, "primary")] + [(x, f"merged into {prim}") for x in (ids if isinstance(ids, list) else [])]:
+            if i not in known:
+                r.fail(9, f"overlay names {i} ({role}), which no lens reported")
+            elif i in placed:
+                r.fail(9, f"overlay places {i} twice: {placed[i]} and {role}")
+            else:
+                placed[i] = role
+    merged = {i for i, role in placed.items() if role != "primary"}
+    kept = [i for i in known if i not in merged]
+    group_sev = {i: known[i] for i in kept}
+    for prim, ids in groups.items():
+        if prim in group_sev:
+            for x in ids if isinstance(ids, list) else []:
+                if x in known and SEV_RANK[known[x]] < SEV_RANK[group_sev[prim]]:
+                    group_sev[prim] = known[x]
+
+    short = ov.get("short") or {}
+    for i in kept:
+        s = short.get(i)
+        if not isinstance(s, dict) or not s.get("title") or not s.get("fix"):
+            r.fail(9, f"overlay has no short title and fix for kept issue {i}")
+            continue
+        for k in ("title", "fix"):
+            n = words.count(s[k])
+            if n > LIMITS[k]:
+                r.fail(9, f"short {k} for {i} is {n} words, limit {LIMITS[k]}: {s[k][:70]}")
+    for i in short:
+        if i in merged:
+            r.fail(9, f"overlay has a short entry for {i}, which is merged — only kept issues get one")
+
+    top = ov.get("top5") or []
+    ids = [t.get("id") if isinstance(t, dict) else t for t in top]
+    if len(top) > 5:
+        r.fail(9, f"top5 has {len(top)} entries, at most 5")
+    for i in ids:
+        if i not in group_sev:
+            r.fail(9, f"top5 names {i}, which is not a kept issue")
+        elif group_sev[i] not in ("P0", "P1"):
+            r.fail(9, f"top5 names {i} at {group_sev[i]}: the Top 5 is never padded with P2/P3")
+    ranks = [SEV_RANK[group_sev[i]] for i in ids if i in group_sev]
+    if ranks != sorted(ranks):
+        r.fail(9, "top5 is not ordered P0 first, then P1")
+    missing = [i for i, s in group_sev.items() if s in ("P0", "P1") and i not in ids]
+    if missing and len(ids) < 5:
+        r.fail(9, f"top5 has {len(ids)} entries but leaves out kept P0/P1 issue(s): {', '.join(missing)}")
+
+    v = ov.get("verdict", "")
+    if words.count(v) > LIMITS["verdict"]:
+        r.fail(9, f"verdict is {words.count(v)} words, limit {LIMITS['verdict']}")
+    for k in ("whatLine", "howLine"):
+        if "\n" in (ov.get(k) or ""):
+            r.fail(9, f"{k} must be one line")
+    dw = ov.get("doesWell") or []
+    if dw and not 3 <= len(dw) <= 5:
+        r.fail(9, f"doesWell has {len(dw)} items, 3-5")
+    for x in dw:
+        if words.count(x) > LIMITS["doesWell"]:
+            r.fail(9, f"doesWell item is {words.count(x)} words, limit {LIMITS['doesWell']}: {x[:60]}")
+    lt = ov.get("limitsTop3") or []
+    if lt and len(lt) != 3:
+        r.fail(9, f"limitsTop3 has {len(lt)} items, 3")
+    for x in lt:
+        if words.count(x) > LIMITS["limitsTop3"]:
+            r.fail(9, f"limitsTop3 item is {words.count(x)} words, limit {LIMITS['limitsTop3']}: {x[:60]}")
+
+    return f"merge: {len(known)} → {len(kept)} issues ({sum(1 for p in groups if p in known)} groups)"
+
+
 def _artifact_exists(run, lens, path):
     """A citation is relative to the run root — or, as the contract's own
     example `session.log:NN` shows, to the persona folder it came from. Try
@@ -454,6 +575,9 @@ def main():
         check_score(os.path.join(d, "exec-summary.md"),
                     os.path.join(d, "findings-final.md"), r, lens)
     check_quotes(run, r)
+    merge_line = None if a.lens else check_overlay(run, r)
+    if merge_line:
+        r.note(merge_line)
 
     # A note, never a failure: the run is sound, its record of itself is not.
     # Warning here is what stops the close step being forgotten — the gate is
@@ -478,7 +602,8 @@ def main():
                   4: "stable finding IDs (gate check 4)",
                   6: "report leads with a verdict (gate check 6)",
                   7: "score consistent with severities (gate check 7)",
-                  8: "every dispatched lens landed (--expect-lenses)"}
+                  8: "every dispatched lens landed (--expect-lenses)",
+                  9: "merge overlay accounts for every finding once (gate check 9)"}
         by = {}
         for c, m in r.failures:
             by.setdefault(c, []).append(m)

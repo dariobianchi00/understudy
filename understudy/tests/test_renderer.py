@@ -63,12 +63,19 @@ def render(run, scope):
 
 class Order(unittest.TestCase):
     def test_sections_follow_lens_order_not_disk_order(self):
+        # v0.8.0: the summary lists issues by category, in the fixed category
+        # order; the full export keeps every lens section, in LENS_ORDER.
         with tempfile.TemporaryDirectory() as t:
-            html = render(build(t), "summary")
-            labels = ["Clarity", "Competitive comparison", "Performance and delivery", "Usability"]
-            pos = [html.find(f"</span> {l} — ") for l in labels]
+            run = build(t)
+            html = render(run, "summary")
+            pos = [html.find(f"</span> {l} — ") for l in ("Clarity", "Conversion", "Technical")]
             self.assertTrue(all(p > 0 for p in pos), pos)
-            self.assertEqual(pos, sorted(pos), "sections are not in LENS_ORDER")
+            self.assertEqual(pos, sorted(pos), "categories are not in their fixed order")
+            full = render(run, "all")
+            labels = ["clarity", "compare", "technical", "ux"]
+            pos = [full.find(f"— {l} — Run") for l in labels]
+            self.assertTrue(all(p > 0 for p in pos), pos)
+            self.assertEqual(pos, sorted(pos), "lens sections are not in LENS_ORDER")
 
     def test_lens_order_constant_matches_spec(self):
         self.assertEqual(rr.LENS_ORDER, ["clarity", "conversion", "trust", "icp", "compare", "seo",
@@ -81,8 +88,8 @@ class Index(unittest.TestCase):
             html = render(build(t), "summary")
             idx = re.search(r'<ul class="idxlist">(.*?)</ul>', html, re.S).group(1)
             items = re.findall(r"<li>", idx)
-            # 8 summary H2s + 4 client lenses + competitor lens + matrix
-            self.assertEqual(len(items), 8 + 4 + 1 + 1, idx)
+            # 7 summary H2s + 3 categories (clarity, conversion, technical) + matrix
+            self.assertEqual(len(items), 7 + 3 + 1, idx)
             self.assertIn("Site-by-site comparison", idx)
 
 
@@ -91,20 +98,26 @@ class Scores(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             html = render(build(t), "summary")
             overall = re.search(r'scorebig[^>]*>([\d.]+)', html).group(1)
-            # ux 7, technical 5, clarity 4, compare 4 → 5.0; competitor 10 excluded
-            self.assertEqual(overall, "5.0")
-            self.assertIn("Mean of the 4 checks", html)
+            # categories: Clarity 4 · Conversion (ux) 7 · Technical 5 → 5.3, as the
+            # HTML. The compare diff lens is the comparison, not a category, and
+            # the competitor's 10 never counts.
+            self.assertEqual(overall, "5.3")
+            self.assertIn("Mean of the 3 categories", html)
 
     def test_competitor_section_is_labelled_context(self):
         with tempfile.TemporaryDirectory() as t:
-            html = render(build(t), "summary")
+            html = render(build(t), "all")
             self.assertIn("Competitor site — shown for comparison only", html)
 
     def test_cover_tally_excludes_competitor(self):
         with tempfile.TemporaryDirectory() as t:
             html = render(build(t), "summary")
             cover = html[:html.find("</section>")]
-            self.assertIn("4 — 3 P1 · 1 P2", cover)   # not "5 — … 1 P3"
+            # 4 client findings, not 5 with the competitor's P3; the fixture's
+            # findings share one screenshot pair, so they group into one issue
+            self.assertIn("4 — one issue can be raised by several checks", cover)
+            issues_row = re.search(r"<dt>Issues</dt><dd>([^<]*)</dd>", cover).group(1)
+            self.assertNotIn("low", issues_row)      # the competitor's P3 is not an issue
 
 
 ICP_PROFILES = (
@@ -161,8 +174,9 @@ class Content(unittest.TestCase):
             self.assertIn("The trap", html)
             self.assertIn("Candidates considered", html)
             self.assertIn("gives_up_when", html)
-            # no P0/P1 gap, yet the section is present and says so
-            self.assertIn("No P0/P1 gaps were observed", html)
+            # the fixture's icp gaps share evidence with category findings, so
+            # they are filed where the fix lives and the section says so
+            self.assertIn("filed under the area where its fix lives", html)
             # order: Clarity before Ideal Customer Profiles
             self.assertLess(html.find("</span> Clarity"), html.find("</span> Ideal Customer Profiles"))
 
@@ -184,7 +198,7 @@ class Content(unittest.TestCase):
     def test_fix_column_is_rendered(self):
         with tempfile.TemporaryDirectory() as t:
             html = render(build(t), "summary")
-            self.assertIn("Recommended fix", html)
+            self.assertIn("<th>Fix</th>", html)
             self.assertIn("Say who it is for in the headline", html)
 
     def test_summary_scope_embeds_a_screenshot(self):
@@ -321,13 +335,13 @@ class Units(unittest.TestCase):
                        evidence=ev)], score=4)
         out = render(run, "summary")
         text = re.sub(r"<[^>]+>", " ", out)
-        # The problem appears in the corroboration table only, not again per lens.
+        # One issue, under the category where its fix lives, naming both checks;
+        # the merged original is not listed a second time.
         self.assertEqual(out.count("Companion invents a false personal business"), 1)
         self.assertEqual(out.count("Companion asserts a gym business"), 0)
-        self.assertIn("Raised by Clarity (P0) · Usability (P1)", text)
+        self.assertIn("Raised by Clarity, Usability", text)
         self.assertIn("The fold names no audience.", text)      # Observed bullets survive
-        self.assertIn("Distinct problems", text)
-        self.assertNotIn("Settings toggle has no explanation", out)  # P2 singleton → full export
+        self.assertIn("Issues", text)
 
     def test_extract_findings_reads_the_whole_block(self):
         md = fx.finding("ux", "Long repro", sev="P2", extra="- **Repro:**\n" +
@@ -474,6 +488,20 @@ class Interactive(unittest.TestCase):
             self.assertEqual([x["title"] for x in d["extraSections"]], ["A note from the operator"])
             self.assertIn("Severity is by user impact", d["extraSections"][0]["html"])
             self.assertIn("A note from the operator", err)
+
+    def test_cut_sections_never_reach_the_pdf(self):
+        # An older summary still declares both; the print path drops them, so
+        # "Raised by more than one check" cannot print as an empty section.
+        with tempfile.TemporaryDirectory() as t:
+            run = fx.clean_run(t)
+            fx.run_summary(run)
+            p = os.path.join(run, "exec-summary.md")
+            _write(p, _read(p).replace("## Limits of this assessment",
+                   "## How to read these findings\n- P0 blocks.\n\n"
+                   "## Raised by more than one check\n\n## Limits of this assessment"))
+            html = render(run, "summary")
+            self.assertNotIn("Raised by more than one check", html)
+            self.assertNotIn("How to read these findings", html)
 
     def test_cut_sections_stay_cut(self):
         # v0.8.0: an older run summary still carries the two cut sections;
@@ -622,7 +650,7 @@ class Categories(unittest.TestCase):
             self.assertEqual(d["overall"], 6.0)
             # the print layout: the per-site 10/10 never reaches the cover
             html = render(run, "summary")
-            self.assertEqual(re.search(r'scorebig[^>]*>([\d.]+)', html).group(1), "5.3")
+            self.assertEqual(re.search(r'scorebig[^>]*>([\d.]+)', html).group(1), "6.0")  # = the HTML
 
     def test_is_area(self):
         import run_layout
@@ -686,6 +714,21 @@ class Categories(unittest.TestCase):
             self.assertEqual(len(ids), 4)          # five findings, one shared problem
             self.assertEqual([f["short"] for f in d["findings"] if f["id"] == "ux-1"],
                              ["Settings toggle has no explanation"])
+
+    def test_without_an_overlay_a_category_check_leads_the_group(self):
+        # 2026-11-16: a cluster led by its icp member was filed under no
+        # category, and the issue dropped out of every scorecard.
+        with tempfile.TemporaryDirectory() as t:
+            run = self._build(t)
+            ev = "`persona-p/screenshots/01-landing.png` · `persona-p/screenshots/02-pricing.png`"
+            fx.lens(run, "icp", [fx.finding("icp", "The fold names no audience for the notes app",
+                                            sev="P0", evidence=ev, fid="icp-1")], score=5)
+            d = self._data(self._html(run)[0])
+            ids = [f["id"] for f in d["findings"]]
+            self.assertNotIn("icp-1", ids)
+            prim = next(f for f in d["findings"] if "icp-1" in [m["id"] for m in f.get("merged", [])])
+            self.assertIn(prim["cat"], {c["key"] for c in d["categories"]})
+            self.assertEqual((prim["sev"], prim["sevFrom"]), ("P0", "Ideal Customer Profiles"))
 
     def test_a_bad_overlay_is_counted_never_fatal(self):
         ov = {"version": 1,

@@ -231,6 +231,17 @@ def _scalar(v):
     return v
 
 
+def merge_model(models):
+    """The scoring map with the merge step's model filled in (v0.8.0). A
+    target written before the merge step existed names no model for it; the
+    shape decides — sonnet under *cheap*, opus otherwise — and the manifest
+    records the name, so it is a model somebody chose, not a silent default."""
+    scoring = dict(models.get("scoring") or {})
+    if scoring and "merge" not in scoring:
+        scoring["merge"] = "sonnet" if models.get("scoring_shape") == "cheap" else "opus"
+    return scoring
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--target", required=True)
@@ -295,7 +306,7 @@ def main():
         "models": {
             "traversal": args.traversal_model,
             "traversal_settable_by_understudy": False,
-            "scoring": models.get("scoring") or {},
+            "scoring": merge_model(models),
             "scoring_shape": models.get("scoring_shape"),
         },
 

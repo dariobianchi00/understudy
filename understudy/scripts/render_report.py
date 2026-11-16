@@ -262,16 +262,23 @@ def cover(meta, title, subtitle, n_find, counts, overall=None, provenance="",
     website = meta.get("assessment_type") == "website"
     row("Scope", meta.get("base_url"))
     people = meta.get("personas") or []
-    row("Simulated buyers" if website else "Simulated users",
-        ", ".join(p.get("name", "") for p in people))
+    # A *both* run records a persona's visit and journey as two entries
+    # (`novice`, `novice-journey`); they are one simulated person.
+    names = []
+    for p in people:
+        n = re.sub(r"-journey$", "", p.get("name", ""))
+        if n and n not in names:
+            names.append(n)
+    row("Simulated buyers" if website else "Simulated users", ", ".join(names))
     row("Devices", ", ".join(sorted({p.get("device", "") for p in people if p.get("device")})))
     row("Checks applied", ", ".join(lens_label(o) for o in meta.get("objectives") or []))
     if n_find:
-        sev = " · ".join(f"{counts[k]} {k}" for k in ("P0", "P1", "P2", "P3") if counts[k])
-        row("Findings", f"{n_find} — {sev}")
+        # `counts` are the issues' severities: one per problem, after merging.
+        sev = " · ".join(f"{counts[k]} {SEV_LABEL[k].lower()}" for k in ("P0", "P1", "P2", "P3") if counts[k])
+        row("Issues", f"{n_problems or n_find} — {sev}")
         if n_problems and n_problems < n_find:
-            row("Distinct problems", f"{n_problems} — the rest are the same problem "
-                                     f"seen by more than one check")
+            row("Findings", f"{n_find} — one issue can be raised by several checks; "
+                            f"each issue appears once")
     row("Conversion goal", meta.get("conversion_goal"))
     # "logged out" is only known to be true for a website assessment (§3). A
     # product run signs in, and claiming otherwise on the cover is a factual
@@ -354,8 +361,11 @@ LENS_LABELS = {
     "compare": "Competitive comparison",
 }
 SEV_WEIGHT = {"P0": 1000, "P1": 100, "P2": 10, "P3": 1}
-SEV_EMOJI = {"P0": "\U0001F534", "P1": "\U0001F7E0",
-             "P2": "\U0001F7E1", "P3": "\u26AA"}
+# The same chip the interactive report shows (v0.8.0): a reader who has both
+# the PDF and the HTML must not meet two colour codes for one severity.
+SEV_EMOJI = {"P0": "\U0001F6D1", "P1": "\U0001F534",
+             "P2": "\U0001F7E0", "P3": "\u26AA"}
+SEV_LABEL = {"P0": "Blocker", "P1": "High", "P2": "Medium", "P3": "Low"}
 
 # ⚑ Reading order is FIXED, not computed. It was severity-weighted for a day;
 # a reader who cannot predict where a section lives has to consult the index
@@ -376,7 +386,7 @@ def lens_rank(name):
 def sev_cell(sev):
     """Severity as it appears in every table: emoji, bold, coloured."""
     return (f'<span class="sevchip s{sev.lower()}">{SEV_EMOJI.get(sev, "")} '
-            f'<strong>{sev}</strong></span>')
+            f'<strong>{SEV_LABEL.get(sev, "")}</strong> <span class="mut">{sev}</span></span>')
 
 
 def lens_label(name):
@@ -508,6 +518,45 @@ def score_table(entries, run):
             '</table>', overall)
 
 
+def fmt_score(v):
+    """6.0 → "6", 6.5 → "6.5" — the interactive report's format."""
+    return "–" if v is None else (f"{v:g}" if isinstance(v, (int, float)) else str(v))
+
+
+def category_table(cats, lens_pl, overall):
+    """How each area scores, by category (v0.8.0): each category is the mean
+    of its checks, the overall the mean of the categories — computed in
+    interactive_report.issue_model, the same numbers the HTML shows."""
+    if not cats:
+        return ""
+
+    def bar(v):
+        hue = ("var(--p0)" if v <= 3 else "var(--p1)" if v <= 5
+               else "var(--p2)" if v <= 7 else "#2f855a")
+        return f'<span class="bar"><i style="width:{v * 10}%;background:{hue}"></i></span>'
+
+    by = {l["dir"]: l for l in lens_pl}
+    rows = []
+    for c in cats:
+        sc = c["score"]
+        rows.append(f'<tr class="cat"><td><strong>{html.escape(c["label"])}</strong>'
+                    f'<div class="mut">{html.escape(c["question"])}</div></td>'
+                    f'<td>{"–" if sc is None else f"{fmt_score(sc)}/10{bar(sc)}"}</td>'
+                    f'<td>{c["count"]} issue{"s" if c["count"] != 1 else ""}</td></tr>')
+        for d in c["checks"]:
+            l = by.get(d)
+            if not l or l.get("score") is None:
+                continue
+            rows.append(f'<tr class="chk"><td>{html.escape(LENS_LABELS.get(d, l["label"]))}</td>'
+                        f'<td>{l["score"]}/10</td><td>{html.escape(sentence(l.get("why", "")))}</td></tr>')
+    if overall is not None:
+        rows.append(f'<tr class="overall"><td>Overall</td><td>{fmt_score(overall)}/10</td>'
+                    f'<td>Mean of the {sum(1 for c in cats if c["score"] is not None)} '
+                    f'categories above; each is the mean of its checks.</td></tr>')
+    return ('<table class="scores"><thead><tr><th>Area</th><th>Score</th>'
+            f'<th>Why</th></tr></thead><tbody>{"".join(rows)}</tbody></table>')
+
+
 def _norm_head(t):
     return re.sub(r"[^a-z0-9 ]", "", re.sub(r"<[^>]+>", "", t).lower()).strip()
 
@@ -547,7 +596,7 @@ def fill_section(html_str, exec_secs, names, payload):
     return html_str
 
 
-def build_index(exec_secs, entries, scope, matrix_no=None):
+def build_index(exec_secs, entries, scope, matrix_no=None, cat_secs=()):
     """The document's index: every top-level section, numbered and linked.
 
     Rendered as real anchors, which Chromium turns into PDF GoTo annotations —
@@ -558,7 +607,13 @@ def build_index(exec_secs, entries, scope, matrix_no=None):
     for no, anchor_id, text in exec_secs:
         items.append(f'<li><span class="secno">{no}.</span> '
                      f'<a href="#{anchor_id}">{html.escape(re.sub(r"<[^>]+>", "", text))}</a></li>')
+    for no, anchor_id, text, n in cat_secs:
+        items.append(f'<li><span class="secno">{no}.</span> '
+                     f'<a href="#{anchor_id}">{html.escape(text)}</a>'
+                     f' <span class="mut">— {n} issue{"s" if n != 1 else ""}</span></li>')
     for e in entries[1:]:
+        if scope == "summary" and not e.get("shown"):
+            continue
         label = e["lens"] if (scope == "summary" and e["find"]) else e["label"]
         count = (f' <span class="mut">— {len(e["find"])} findings</span>'
                  if e["find"] else "")
@@ -985,7 +1040,7 @@ columns:2;column-gap:26px}
 /* findings index */
 h2.idx{margin-top:30px}
 table.fidx{font-size:13.5px;table-layout:fixed}
-table.fidx td:first-child,table.fidx th:first-child{width:58px;
+table.fidx td:first-child,table.fidx th:first-child{width:96px;
 text-align:center;overflow-wrap:normal}
 table.fidx td:first-child{font-weight:700}
 table.fidx th:nth-child(2),table.fidx td:nth-child(2){width:33%}
@@ -1260,18 +1315,51 @@ def main():
     # ours but not an area — it feeds the comparison only.
     ours = [entries[0]] + [e for e in entries[1:] if e["ours"] and e["area"]]
 
+    # ---- one model with the interactive report (v0.8.0) --------------------
+    # Merges, categories, short texts and the overall come from the function
+    # the HTML is built from, so the two deliverables cannot disagree on a
+    # count, a merge or a score. Images are registered only when shown.
+    # The clusters are the fallback grouping when the merge step did not run;
+    # computing them marks each finding's `cluster`, which issue_model reads.
+    corroborate(ours)
+    corroboration_clusters(ours)
+    import interactive_report as ir
+    lens_pl, issues, _overlay, merge, cats, cat_overall = ir.issue_model(
+        run, ours[1:], images, {})
+    t5 = {t["id"]: k for k, t in enumerate(merge.get("top5") or [])}
+    issues.sort(key=lambda f: (f["sev"], t5.get(f["id"], 99), lens_rank(f["lens"])))
+
     # ---- section numbers, fixed before anything is rendered ----------------
     # The exec summary owns sections 1..k (its H2s, in the order it wrote
     # them); each lens takes the next number. Computing this up front means a
     # finding can print "6.4" without the renderer having to look ahead.
+    # Two sections v0.8.0 cut — an issue appears once with every check named,
+    # and severity reads on its face. Older run summaries still carry them;
+    # left in, "Raised by more than one check" prints as an empty section.
+    entries[0]["md"] = re.sub(
+        r"^##\s+(How to read these findings|Raised by more than one check)\s*\n.*?(?=^##\s|\Z)",
+        "", entries[0]["md"], flags=re.M | re.S | re.I)
     exec_h2 = [h for h in re.findall(r"^##\s+(.*)", entries[0]["md"], re.M)]
     exec_secs = [(i + 1, slug(h, entries[0]["prefix"]), h)
                  for i, h in enumerate(exec_h2)]
     base = len(exec_h2)
-    for i, e in enumerate(entries[1:], 1):
-        e["secno"] = base + i
+    # Categories follow the summary, each listing its issues once; then the
+    # lens sections — all of them in the full export, only the icp profiles in
+    # the summary, where every issue is already in its category.
+    cat_secs = [(base + i, f"cat-{c['key']}", c["label"], c["count"])
+                for i, c in enumerate(cats, 1)]
+    base += len(cat_secs)
+    has_icp_html = a.scope in ("summary", "all", "icp")
+    k = 0
+    for e in entries[1:]:
+        e["shown"] = a.scope != "summary" or (
+            e["dir"].rpartition("/")[2] == "icp" and has_icp_html)
+        if e["shown"]:
+            k += 1
+            e["secno"] = base + k
+    last_no = base + k            # the matrix, when there is one, comes after
 
-    scores_html, overall = score_table(entries, run)
+    scores_html, overall = category_table(cats, lens_pl, cat_overall), cat_overall
 
     # The site-by-site matrix closes the document: it is reference material a
     # reader consults after the findings, not a thing they read on the way in.
@@ -1279,7 +1367,7 @@ def main():
     # because a section the summary declares lands among sections 1..k and this
     # one has to come last.
     matrix_html = comparison_section(run, meta, images, used)
-    matrix_no = base + len(entries) if matrix_html else None
+    matrix_no = last_no + 1 if matrix_html else None
 
     # The icp lens's profiles sit where its section sits (LENS_ORDER), as the
     # body of that section — lifted from the lens file, never re-authored.
@@ -1301,12 +1389,15 @@ def main():
                             flags=re.M | re.S)
         objectives_html = render_markdown(obj_md, images, used, "obj-")
 
-    shared = corroborate(ours)
-    clusters = corroboration_clusters(ours)
     all_find = [f for e in ours[1:] for f in e["find"]]
-    counts = {k: sum(1 for f in all_find if f["sev"] == k) for k in ("P0", "P1", "P2", "P3")}
-    # Distinct problems: one per cluster, plus every finding no other lens raised.
-    n_problems = len(clusters) + sum(1 for f in all_find if f.get("cluster") is None)
+    # The cover counts issues — one per problem, after merging — and names the
+    # finding count beside it, as the interactive report does.
+    # Issues in the five categories, as the interactive report's "All issues";
+    # icp gaps sit with the profiles and comparison rows with the comparison.
+    cat_keys = {c["key"] for c in cats}
+    cat_issues = [f for f in issues if f["cat"] in cat_keys]
+    counts = {k: sum(1 for f in cat_issues if f["sev"] == k) for k in ("P0", "P1", "P2", "P3")}
+    n_problems = len(cat_issues)
 
     def also_note(f):
         if not f.get("also"):
@@ -1366,18 +1457,67 @@ def main():
                 break
         return f'<div class="ev">{"".join(figs)}</div>' if figs else ""
 
-    # "Raised by more than one check" — one row per PROBLEM, never per finding.
-    # The 2026-09-14 export listed the same fabrication three times in this
-    # table, once in each lens's wording, and the section meant to collapse
-    # repetition became the place a reader met it most. The highest-severity
-    # member speaks for the cluster; every lens's own severity is shown beside
-    # its name, because severities are never averaged (§11.5).
+    # "Raised by more than one check" is gone (v0.8.0): an issue several
+    # checks raised appears once, in its category, with every check named.
     corr_html = ""
-    if clusters:
-        reps = [c["rep"] for c in clusters]
-        raised = {c["rep"]["id"]: c["raised"] for c in clusters}
-        corr_html = (fidx_table(reps, detail=(a.scope == "summary"), raised=raised)
-                     + (evidence_block(reps, cap=None) if a.scope == "summary" else ""))
+
+    def raised_by(f):
+        names = []
+        for x in [f["lensLabel"]] + [m["check"] for m in f.get("merged", [])]:
+            if x not in names:
+                names.append(x)
+        if len(names) < 2:
+            return ""
+        sev_from = (f' · severity {f["sev"]} from {html.escape(f["sevFrom"])}'
+                    if f.get("sevFrom") else "")
+        return f'<span class="also">Raised by {html.escape(", ".join(names))}{sev_from}</span>'
+
+    def issue_table(iss, no):
+        rows = []
+        for i, f in enumerate(iss, 1):
+            obs = ""
+            if f["sev"] in ("P0", "P1") and f.get("observed"):
+                obs = '<ul class="obs">' + "".join(
+                    f"<li>{html.escape(o)}</li>" for o in f["observed"][:3]) + "</ul>"
+            fix = f.get("shortFix") or f.get("fix") or ""
+            rows.append(
+                f'<tr class="r{f["sev"].lower()}"><td>{sev_cell(f["sev"])}</td>'
+                f'<td><span class="secno">{no}.{i}</span> {html.escape(f.get("short") or f["title"])}'
+                f'{raised_by(f)}{obs}</td>'
+                f'<td>{html.escape(f.get("sowhat", ""))}</td>'
+                f'<td>{html.escape(fix) if fix else "<span class=mut>—</span>"}</td></tr>')
+        return ('<table class="fidx"><thead><tr><th>Severity</th><th>Issue</th>'
+                '<th>What it costs</th><th>Fix</th></tr></thead>'
+                f'<tbody>{"".join(rows)}</tbody></table>')
+
+    def issue_shots(iss):
+        figs = []
+        for f in iss:
+            if f["sev"] not in ("P0", "P1") or not f.get("shots"):
+                continue
+            cls = image_class(f["shots"][0], images, used)
+            if cls:
+                figs.append(f'<figure><span class="shot {cls}"></span><figcaption>'
+                            f'{sev_cell(f["sev"])} {html.escape(f.get("short") or f["title"])}'
+                            f'</figcaption></figure>')
+        return f'<div class="ev">{"".join(figs)}</div>' if figs else ""
+
+    cat_html = []
+    merge_note = (f'<p class="mut">{html.escape(merge["note"])}</p>'
+                  if merge.get("source") == "clusters" else "")
+    for (no, anchor_id, label, n), c in zip(cat_secs, cats):
+        iss = [f for f in issues if f["cat"] == c["key"]]
+        checks = " · ".join(f'{LENS_LABELS.get(l["dir"], l["label"])} {l["score"]}/10'
+                            for l in lens_pl if l["dir"] in c["checks"] and l.get("score") is not None)
+        cat_html.append(
+            f'<section class="doc" id="{anchor_id}"><h2><span class="secno">{no}.</span> '
+            f'{html.escape(label)} — {fmt_score(c["score"])}/10 · '
+            f'{n} issue{"s" if n != 1 else ""}</h2>'
+            f'<p class="mut">{html.escape(c["question"])} {html.escape(checks)}</p>'
+            + (merge_note if no == cat_secs[0][0] else "")
+            + (issue_table(iss, no) + issue_shots(iss) if iss else
+               '<p class="mut">No issues filed under this area.</p>')
+            + '</section>')
 
     body = []
     for n, e in enumerate(entries):
@@ -1389,18 +1529,20 @@ def main():
         # "Raised by more than one check"; P2/P3 singletons in the full export.
         # Printing every lens's whole table here is how a 3-lens run put 45
         # rows for 25 problems in front of a client (2026-09-14).
+        if a.scope == "summary" and n > 0 and not e.get("shown"):
+            e["sub"] = []
+            continue
         if a.scope == "summary" and n > 0:
             # The icp lens's deliverable is its profiles, not its findings:
             # a summary that dropped it for having no P0/P1 gap would lose the
             # one section the client asked the run for. Its section is the
             # lifted profiles, then any P0/P1 gaps in the usual table.
             if e["dir"].rpartition("/")[2] == "icp" and icp_html:
-                shown = [f for f in e["find"] if f.get("cluster") is None and f["sev"] in ("P0", "P1")]
-                table = (fidx_table(shown, numbered=e["secno"], detail=True)
-                         + evidence_block(shown, cap=None)) if shown else ""
-                gaps = (f'<h3>Gaps the run observed</h3>{table}' if table else
-                        '<p class="mut">No P0/P1 gaps were observed for these profiles; '
-                        'lesser ones are in the complete export.</p>')
+                # Its kept issues — the gaps no category check also raised.
+                own = [f for f in issues if f["cat"] == "customers"]
+                gaps = (f'<h3>Gaps the run observed</h3>{issue_table(own, e["secno"])}' if own else
+                        '<p class="mut">Every gap the run observed for these profiles is filed '
+                        'under the area where its fix lives.</p>')
                 body.append(
                     f'<section class="doc icp-section" id="{e["anchor"]}">'
                     f'<h2 id="{slug(e["lens"], prefix)}">'
@@ -1447,7 +1589,7 @@ def main():
             # Two sections the summary declares and the renderer fills, so the
             # index and the scores cannot drift from what actually ran.
             rendered = fill_section(rendered, exec_secs, ("contents", "index"),
-                                    build_index(exec_secs, entries, a.scope, matrix_no))
+                                    build_index(exec_secs, entries, a.scope, matrix_no, cat_secs))
             if scores_html:
                 rendered = fill_section(rendered, exec_secs,
                                         ("how each area scores", "scores",
@@ -1469,7 +1611,12 @@ def main():
             marker = '<h3 id="' + e["find"][0]["anchor"] + '"'
             rendered = rendered.replace(marker, index + marker, 1)
 
+        if n > 0 and not e.get("ours", True):
+            rendered = ('<p class="mut">Competitor site — shown for comparison only. '
+                        'Not counted in the client\'s score, tally or issues.</p>' + rendered)
         body.append(f'<section class="doc" id="{e["anchor"]}">{rendered}</section>')
+
+    body[1:1] = cat_html
 
     if matrix_html:
         body.append(
@@ -1490,7 +1637,7 @@ def main():
     front = []
     if len(docs) > 1 and not has_section(exec_secs, ("contents", "index")):
         front.append('<nav class="toc"><h2 id="contents">Contents</h2>'
-                     + build_index(exec_secs, entries, a.scope, matrix_no) + "</nav>")
+                     + build_index(exec_secs, entries, a.scope, matrix_no, cat_secs) + "</nav>")
     if scores_html and not has_section(exec_secs, ("how each area scores", "scores",
                                                    "how the site scores", "how it scores")):
         front.append('<section class="doc"><h2 id="scores">How each area scores</h2>'

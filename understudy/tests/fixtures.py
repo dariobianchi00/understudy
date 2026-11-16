@@ -137,7 +137,6 @@ def run_summary(run, product=PRODUCT):
           "## What each check looked for\n| Check | Question it answers |\n|---|---|\n"
           "| **Clarity** | Can a visitor say what this is? |\n\n"
           "## How each area scores\n\n"
-          "## Raised by more than one check\n\n"
           "## Limits of this assessment\n- Personas were constructed, not researched.\n")
 
 

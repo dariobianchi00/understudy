@@ -289,6 +289,43 @@ count:
 If that list is shorter than the lenses you dispatched in 3.4, the gate is
 green on incomplete work. Go back and persist the missing ones.
 
+### 3.5a — Merge: one issue per problem
+
+The lenses never read each other, so one problem is often reported by three or
+four of them in their own words. The **merge step** reads every lens's findings
+once, after the gate has passed, and writes `<run_folder>/report-overlay.json`:
+which findings are the same problem on the same surface, the check where the fix
+lives, a short title and fix for each issue, the Top 5 and the run's one-line
+verdict. Both renderers read it. **It never edits a lens file and never changes
+a score** — the originals stay readable under each issue.
+
+Dispatch `report-merge` once, with the model from `manifest.json` →
+`models.scoring.merge` (opus unless the user chose otherwise), described for the
+watcher as `report-merge · <N> findings · <model>`:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/mark.py <run_folder> --lens merge:<model>
+```
+
+Then check that both files landed — `report-overlay.json` and
+`report-merge-notes.md`. If the agent returned them as text, persist them
+verbatim (the rules in 3.4 apply). Re-run the gate:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/check_report.py <run_folder>
+```
+
+Gate check 9 now applies: every finding placed once, ids that exist, a short
+entry for every kept issue, the Top 5 holding only kept P0/P1 issues, every word
+limit held. It prints the count — `merge: 85 → 51 issues (20 groups)`. **If check
+9 fails, re-dispatch the merge step with the gate's output; never hand-edit the
+overlay to pass.**
+
+**Say the count and the groups to the user in the hand-over**, and point at
+`report-merge-notes.md`: a merge is a judgement, and the notes are where a person
+checks it. If a skipped or failed merge leaves no overlay, the run is still
+valid — the report groups findings automatically and says so on its face.
+
 ### 3.6 — Write the run-level exec summary
 
 **Always written, every run, whatever was asked for.** It sits above the lens reports at `<run_folder>/exec-summary.md`.
@@ -346,17 +383,20 @@ the question the user actually asked. Omit the heading when there were none.>
 
 ## Top 5 — fix these first
 
-<ONE sentence: the strongest honest reading of the whole run. This is the
-verdict; it lives here, introducing the list, not at the top of the document.>
+<ONE sentence: the overlay's `verdict`, verbatim. It lives here, introducing
+the list, not at the top of the document.>
 
 | # | Severity | What is happening | What it costs | Effort |
 |---|---|---|---|---|
 | 1 | P0 | <what a reader can see on the page> | <the cost, in the buyer's terms> | <Copy change / Server configuration / Design change / Build> |
 
-<Exactly five rows, highest severity first, drawn from every check. If the run
-produced fewer than five P0s — usually — fill from P1, and let the Severity
-column say so. Never pad with P2 or P3 to reach five: four serious findings and
-a filler reads worse than four.>
+<One row per entry in the overlay's `top5`, in its order — at most five, P0
+then P1, never padded with P2 or P3. "What is happening" is the overlay's short
+title for that issue; the Effort column is its `effort`; the Severity is the
+issue's (the highest among the findings merged into it). Say which checks raised
+it when more than one did. The overlay is the only source of the Top 5, so the
+summary and both renderers cannot disagree about it. With no overlay, choose the
+rows yourself by the same rule.>
 
 <One line under the table grouping the effort: which are copy, which are
 configuration, which need building.>
@@ -415,23 +455,6 @@ Include only the checks that ran. This table's order IS the document's order.>
 <LEAVE EMPTY. render_report.py fills this from each lens's own `Score:` line
 and computes the overall. Never write the numbers by hand.>
 
-## How to read these findings
-
-| Severity | Meaning |
-|---|---|
-| 🔴 **P0** | Blocks the job, or breaks trust badly enough that people leave |
-| 🟠 **P1** | They get through, but would not become a customer |
-| 🟡 **P2** | Noticeable friction; erodes value over time |
-| ⚪ **P3** | Polish. Worth fixing, changes nothing on its own |
-
-<Then one line on what corroboration across checks means, and one on where the
-full evidence lives.>
-
-## Raised by more than one check
-
-<LEAVE EMPTY. render_report.py fills this with the findings two or more checks
-named independently. Omit the heading entirely if only one check ran.>
-
 ## Limits of this assessment
 
 - <Persona mode, coverage depth, surfaces never opened, devices not tested,
@@ -456,14 +479,18 @@ named independently. Omit the heading entirely if only one check ran.>
 - **No severity tally of your own.** The cover already carries the finding
   count and the P0/P1/P2/P3 split. A second copy in the body is how the two
   come to disagree.
+- **No "How to read these findings" and no "Raised by more than one check"**
+  (v0.8.0). The renderers explain severity where it is shown, and the merge step
+  replaced the corroboration table: an issue several checks raised appears once,
+  with every check that raised it named beside it.
 - **No invented or improved quotation.** "In their own words" carries the
   persona's exact text with a source. A quote the log does not contain, or a
   quote made more quotable, is fabricated evidence in the one section a
   reader will repeat out loud.
 
-Four headings are written empty and filled by the renderer — **Contents**,
-**Objectives** (when the run had any), **How each area scores**, and **Raised by
-more than one check**. Write the heading, write nothing under it. Each is built from what actually ran, so none
+Three headings are written empty and filled by the renderer — **Contents**,
+**Objectives** (when the run had any) and **How each area scores**. Write the
+heading, write nothing under it. Each is built from what actually ran, so none
 of them can contradict the document it sits in.
 
 A fourth, **Site-by-site comparison**, is appended by the renderer as the final
@@ -540,28 +567,15 @@ to someone who was sent a PDF — say "in the full report".
 
 `severity-rubric.md` is shared and lens-agnostic: P0–P3 are defined by user impact, not by lens, and every lens loads it. **So you may rank findings from different lenses against each other.** Note in the limits that scoring models differed if they did — the manifest records which.
 
-**Do not rewrite, merge or re-score a lens's finding.** Quote its title, cite its ID, link to its report.
+**Do not rewrite, merge or re-score a lens's finding** — grouping is the merge step's, in the overlay, never in a lens file. Quote its title, cite its ID, link to its report.
 
 #### ⚑ Cross-lens corroboration — the one thing only this layer can see
 
-Lens reports deliberately do not dedupe against each other (`report-template.md`): each stands alone. So the same problem legitimately appears in several. **At the run level, say so:**
+Lens reports deliberately do not dedupe against each other (`report-template.md`): each stands alone, so the same problem legitimately appears in several. **Three independent lenses reaching the same finding is the strongest signal this architecture can produce** — they never read each other, so agreement is corroboration, not an echo.
 
-> **[P0] Memories asserts facts that are not the user's** — flagged independently by `ux`, `bugs` and `onboarding`
+Since v0.8.0 the merge step (3.5a) records it: one issue, filed under the check where the fix lives, with every check that raised it listed beside it. In the summary, say so on the Top 5 row — *raised independently by Usability, Activation and Content* — and count checks, never average severities: the issue carries the highest, and the renderers name whose it was.
 
-**Three independent lenses reaching the same finding is the strongest signal this architecture can produce** — the lenses never read each other, so agreement is real corroboration rather than an echo. Reported as three separate findings it reads as padding; reported as a corroboration count it reads as confidence.
-
-Rules: a corroborated finding takes **one** slot in the top 3, not three. Count lenses, never average severities — cite the highest and say which lens assigned it.
-
-**`render_report.py` also computes this mechanically** and prints a "Raised by
-more than one check" table above the lens sections, plus an *Also raised by*
-note on each affected row. That is a floor, not a substitute: it pairs findings
-on a shared verbatim quotation or a similar title at the same locator, so it
-catches the obvious agreements and misses ones phrased differently. **Your
-top-3 corroboration counts are the authoritative ones** — write them from
-reading the lens reports, not from the generated table.
-
-It never merges, re-scores or drops anything (§11.8) — a false pair costs a
-misleading note, not a lost finding.
+**Do not write a corroboration table.** The overlay is the record; a hand-written second one is how the two come to disagree. With no overlay, `render_report.py` and `interactive_report.py` fall back to computed clusters and say on the page that the merge step did not run.
 
 ### 3.7 — Close the manifest
 

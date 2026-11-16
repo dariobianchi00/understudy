@@ -82,6 +82,15 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/check_report.py <run_folder>
 
 Gate checks 1, 3, 4, 6 and 7. **Do not present a report that fails.** Fix the lens output and re-run the check.
 
+### 4a. Re-run the merge step
+
+A re-scored lens has new findings, so the old `report-overlay.json` no longer
+accounts for them — gate check 9 will say which ids it is missing. Run the merge
+step exactly as `/understudy:run` §3.5a describes (`report-merge`, model from
+`models.scoring.merge`), over every lens now in the run, then re-run the gate.
+Never patch the old overlay by hand: a merge is a judgement over all the
+findings at once, and a hand-added id is one nobody checked against the others.
+
 ### 5. Aggregate
 
 Write a run-level `exec-summary.md` at the run root — **rewriting the existing one**, since it now covers a lens it did not before.
@@ -92,11 +101,11 @@ easily lost. In particular:
 
 - Open with **What this is** — a description of the thing assessed — then **How it was
   produced**. No verdict sentence at the top; the verdict opens the Top 5.
-- **Top 5**, always five, ranked by severity across every check, filled from P1 when the
-  run carries fewer than five P0s.
-- Write **Contents**, **Objectives** (when the run had any), **How each area scores** and
-  **Raised by more than one check** as empty headings. `render_report.py` fills them
-  from what actually ran.
+- **Top 5** from the overlay's `top5`, in its order, with its short titles — at most
+  five, P0 then P1, never padded with P2 or P3.
+- Write **Contents**, **Objectives** (when the run had any) and **How each area scores**
+  as empty headings. `render_report.py` fills them from what actually ran. No "How to
+  read these findings" and no "Raised by more than one check" (v0.8.0).
 - Sections in `LENS_ORDER` and named in Title Case — never by folder name.
 - No section numbers by hand, no severity tally of your own, no "Recommended first action".
 
