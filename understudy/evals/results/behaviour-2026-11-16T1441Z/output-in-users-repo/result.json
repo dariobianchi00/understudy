@@ -1,0 +1,18 @@
+{
+ "case": "output-in-users-repo",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The default is <your-repo>/understudy-runs/<slug>/ inside the user's repo. It adds that folder to the repo's .gitignore (it asks once) because the run folder holds product screenshots. Only the plugin itself is refused, not the user's repo.",
+  "cost": 0.1142434
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "At step 7b, since you're inside your product's repo and not the understudy plugin, the default is a folder inside that repo:\n\n```\nWhere should the run folder go?\n\n  (a) <your-repo>/understudy-runs/<slug>/     [default \u2014 you're inside a repo]\n      Next to the product it describes. I'll add understudy-runs/ to that\n      repo's .gitignore so screenshots of your product are never committed.\n  (b) ~/.understudy/runs/<slug>/        outside any repo, on this machine\n  (c) A folder you name \u2014 a shared drive, a client folder.\n```\n\nThe real path goes in place of `<your-repo>`, and `<slug>` is the one worked out earlier from your product's name.\n\n**About git:** if the folder you pick is inside a git repo (and (a) always is), I ask you once:\n\n> Add `understudy-runs/` to that repo's `.gitignore`? (yes)\n\nIf you say yes, I add that line to the `.gitignore`. Skipping it isn't really an option. The run folder holds screenshots and logs of your product, and the script that sets up the run folder (`init_run.py`) won't use a folder inside a repo unless git ignores it. If you'd rather not touch your `.gitignore`, pick (b), which is outside any repo, or name a folder of your own with (c).\n\nTwo related points:\n- If the path you choose is inside the understudy plugin itself, I refuse, because that repo is public. Then I offer (a) or (b) again.\n- The final document (PDF executive summary unless you choose otherwise in 7a) is saved in the run folder. If you also want a copy somewhere else, I record that path and copy it there at the end.\n\nThe approved plan then shows: `Run folder  ./understudy-runs/<slug>/  (gitignored in this repo)`.",
+ "cost_usd": 0.2751
+}

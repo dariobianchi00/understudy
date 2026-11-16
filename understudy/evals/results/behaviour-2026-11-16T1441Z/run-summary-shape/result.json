@@ -1,0 +1,35 @@
+{
+ "case": "run-summary-shape",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant wrote exec-summary.md and stopped, with no export offered and no questions asked. It made no claim of editing, re-scoring or merging lens findings. Its explanation for choosing the Top 5 rows itself, because no overlay existed, is explicitly allowed.",
+  "cost": 0.1165354
+ },
+ "tools_called": [
+  "Bash",
+  "Read",
+  "Bash",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash",
+  "Read",
+  "Bash",
+  "Read",
+  "Read",
+  "Write",
+  "Bash",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Edit"
+ ],
+ "reply": "Pulling the product description from the crawled pages, then writing the summary.\n\nSpec says no trimmed clauses in quotes, so I'm putting the full log lines back in.\n\nI wrote the run-level summary to `2026-09-08-run-fixture01/exec-summary.md`, following \u00a73.6. I didn't run the gate script (`check_report.py`) or the renderer, so nothing has checked it yet.\n\n**How it's laid out:**\n- **Opening:** a plain description of Nimbus Notes, taken from the About and Pricing pages. There's no verdict at the top.\n- **How it was produced:** two made-up visitors, one on a 1440\u00d7900 desktop for 6.5 minutes and one on an iPhone 13 for 2.9 minutes.\n- **Left blank for the renderer to fill:** the Contents, Objectives and \"How each area scores\" headings. Objectives is there because the run had one: \"find out what it costs without giving an email\".\n- **Top 5:** there was no merge output (`report-overlay.json`) to take it from, so I picked the rows myself using the spec's fallback rule. Only two issues are serious enough to qualify (P0 or P1), so the table has two rows and isn't padded with lesser ones:\n  1. The landing page never says what the product is (copy change).\n  2. \"See it in action\" goes nowhere (needs building).\n- **Verdict sentence:** also my own wording, adapted from the clarity summary, because the spec expects it to be copied from the missing merge output.\n- **\"What a buyer could and could not establish\":** six questions, each with the times observed.\n- **\"In their own words\":** nine quotes, each a full, unedited line from the session logs or debriefs with its source. They include the good moments on the About page as well as the complaints, and are followed by a warning that the speakers were made-up personas, not customers.\n- **Also included:** what the site does well (three points) and a one-row \"What each check looked for\" table for Clarity only.\n- **Limits:**\n  - Only Clarity was scored, although conversion, trust, technical, SEO and AEO were planned.\n  - `/features.html` returns a 404.\n  - The desktop below-the-fold screenshot came out blank.\n  - Pricing wasn't tested on the phone.\n\nIt contains none of the sections the spec forbids. I stopped there: no export.",
+ "cost_usd": 0.6516
+}

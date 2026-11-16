@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-product",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "The assistant answered 1 traversal and explained that all four Mode A lenses score the same single persona's saved evidence.",
+  "cost": 0.11224540000000001
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "**1.**\n\nAll four objectives (ux, bugs, onboarding, content) are Mode A lenses. Mode A runs one journey per persona (`commands/run.md:131`), and the lenses don't drive the browser themselves. Each one reads the evidence that single traversal saves: screenshots, session log, timeline, debrief and raw observations. One persona and one mode means one traversal, scored four ways.\n\nThe count would only go up if you added another persona (one more traversal each) or picked an objective from a different mode. For example, clarity would add a visit, technical a measurement, and seo a crawl.",
+ "cost_usd": 0.2104
+}

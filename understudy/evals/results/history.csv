@@ -134,3 +134,13 @@ date,capture,lens,model,run,contract_pass,recall,caught,planted,hallucinations,o
 2026-11-09T1458Z,product,content,opus,1,1,1.0,4,4,0,0,3,4,6,2,1.1033,136.5,results/2026-11-09T1458Z
 2026-11-09T1458Z,product,onboarding,opus,1,1,1.0,2,2,0,0,1,2,8,1,1.0008,135.4,results/2026-11-09T1458Z
 2026-11-09T1458Z,product,ux,opus,1,1,1.0,5,5,0,0,3,5,8,2,0.9218,107.3,results/2026-11-09T1458Z
+2026-11-16T1423Z,site,aeo,sonnet,1,1,1.0,3,3,0,0,3,3,6,4,0.5201,69.5,results/2026-11-16T1423Z
+2026-11-16T1423Z,site,clarity,opus,1,1,1.0,3,3,0,0,3,3,9,3,0.9828,123.3,results/2026-11-16T1423Z
+2026-11-16T1423Z,site,conversion,opus,1,1,0.8,4,5,0,0,4,4,5,1,0.8533,111.0,results/2026-11-16T1423Z
+2026-11-16T1423Z,site,seo,sonnet,1,1,1.0,7,7,0,0,7,7,9,4,0.3458,47.1,results/2026-11-16T1423Z
+2026-11-16T1423Z,site,technical,sonnet,1,1,1.0,4,4,0,0,4,4,5,6,0.3459,48.4,results/2026-11-16T1423Z
+2026-11-16T1423Z,site,trust,opus,1,1,1.0,4,4,0,1,3,4,8,3,1.0784,138.2,results/2026-11-16T1423Z
+2026-11-16T1433Z,product,bugs,sonnet,1,1,0.75,3,4,0,0,2,3,4,2,0.4186,69.4,results/2026-11-16T1433Z
+2026-11-16T1433Z,product,content,opus,1,1,1.0,4,4,0,1,2,4,9,2,1.1582,154.3,results/2026-11-16T1433Z
+2026-11-16T1433Z,product,onboarding,opus,1,1,1.0,2,2,0,2,1,2,6,1,0.9761,124.6,results/2026-11-16T1433Z
+2026-11-16T1433Z,product,ux,opus,1,1,1.0,5,5,0,0,3,5,8,1,1.0939,136.6,results/2026-11-16T1433Z

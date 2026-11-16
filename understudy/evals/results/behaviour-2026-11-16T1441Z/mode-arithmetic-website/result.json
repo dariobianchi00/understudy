@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States two captures: one Mode A-visit persona visit scored by clarity, conversion and trust, plus one Mode C crawl for seo, with the formula, and does not propose one capture per lens.",
+  "cost": 0.1123494
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "It's **two captures**:\n\n1. **One persona visit (Mode A\u2011visit).** Clarity, conversion and trust all score the same visit, so they don't each need their own. One persona means one visit.\n2. **One crawl (Mode C).** SEO scores a crawl of the site's markup, and a crawl doesn't use a persona.\n\nThe rule is one visit per persona plus one crawl. With one persona, that's 1 + 1 = 2. The interview's estimate is about 15\u201325 minutes per persona, plus the crawl.\n\nNothing has been started.",
+ "cost_usd": 0.2248
+}
