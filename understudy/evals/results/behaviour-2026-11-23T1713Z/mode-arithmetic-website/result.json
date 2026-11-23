@@ -1,0 +1,18 @@
+{
+ "case": "mode-arithmetic-website",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "States two captures: one A-visit persona visit scored by clarity, conversion and trust, plus one Mode C crawl for seo; does not propose per-lens captures.",
+  "cost": 0.11240660000000001
+ },
+ "tools_called": [
+  "Grep"
+ ],
+ "reply": "That's **2 captures**:\n\n1. **Mode A-visit, one persona visit.** Clarity, conversion and trust all score this same capture. You get one capture and three scorings, not three captures (`commands/run.md:205`).\n2. **Mode C, one crawl.** SEO is scored from this. A crawl uses no persona, so the number of personas doesn't change it.\n\nThe general rule is one visit per persona plus one crawl. With one persona, that's 1 + 1 = 2.\n\nNothing has been started.",
+ "cost_usd": 0.2305
+}

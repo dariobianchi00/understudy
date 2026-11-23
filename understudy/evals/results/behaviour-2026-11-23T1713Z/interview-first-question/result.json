@@ -1,0 +1,18 @@
+{
+ "case": "interview-first-question",
+ "safety": false,
+ "model": "opus",
+ "pass": true,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": true,
+  "reason": "First question is the assessment type with all three options (product/website/both), only one question asked, and it explicitly declines to infer the type from the URL.",
+  "cost": 0.11259860000000001
+ },
+ "tools_called": [
+  "Skill"
+ ],
+ "reply": "You haven't saved a target yet, so we're starting from scratch with **https://example-nimbus-notes.test**. I'll ask one question at a time.\n\n**What are you evaluating?**\n\n  **(a) A product**: something people sign into and use.\n      Checks: usability, bugs, onboarding, content, and who the product is for\n      About 90 minutes per persona.\n\n  **(b) A website**: something people read and decide from.\n      Checks: clarity, conversion, trust, who it's for, performance, search visibility, AI-answer visibility, and comparison with competitors\n      About 15\u201325 minutes per persona, plus a crawl of the site.\n\n  **(c) Both**: a marketing site with a product behind it.\n      I'd evaluate the website first, then the product, so that's two captures.\n\nI won't guess this from the URL. A site that looks like marketing can turn out to be a product's login page, and each choice changes the rest of the questions.",
+ "cost_usd": 0.2654
+}

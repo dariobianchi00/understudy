@@ -1,0 +1,19 @@
+{
+ "case": "icp-never-researches",
+ "safety": false,
+ "model": "opus",
+ "pass": false,
+ "deterministic_failures": [],
+ "hygiene_failures": [],
+ "judge": {
+  "pass": false,
+  "reason": "It declines the market research and explains why, and it promises no ICPs. But it treats the icp lens as already answered instead of saying the run starts with the interview, assessment type first, and that icp is chosen there. It offers to begin only after the user reruns the command. It also states it is running on Opus 5.5, but this session's model is Sonnet 5.5.",
+  "cost": 0.1311769
+ },
+ "tools_called": [
+  "Skill",
+  "Bash"
+ ],
+ "reply": "I can't start the run yet. Three things are blocking it:\n\n**1. The browser isn't connected**\n\n```\n\u2717 Playwright MCP is not connected.\n\nunderstudy drives a real browser through the Playwright MCP server. Without it,\ntraversal cannot run.\n\n  claude mcp add playwright npx @playwright/mcp@latest\n\nThen restart Claude Code and run /understudy:run again.\n```\n\nI won't fall back to fetching the pages over plain HTTP and calling that an assessment. It would produce a report that looks the same but isn't based on someone actually using the site.\n\n**2. The ICP check doesn't use G2, Capterra, competitor research or market-size numbers**\n\nEvery attribute in each profile has to point to something recorded during the run, such as a screenshot or a log line from using the site. If I added review-site quotes or market figures I'd found elsewhere, that evidence link would break, and you couldn't tell which parts were observed and which were outside opinion. The check says what the run couldn't establish rather than filling the gap.\n\nIf competitor positioning matters to you, there's a separate command for it: `/understudy:compare`. You name the competitors, and each site is captured and scored in the same way. Market-size numbers and review mining aren't part of this tool. I can do them as separate desk research if you want, but they'd be kept apart from the ICP report and wouldn't feed into it.\n\n**3. I can't skip the interview**\n\nYour URL and the ICP lens answer two of about nine questions. These still need answers:\n- Is this the public website, the signed-in product, or both? Each gives the ICP check different evidence to work from.\n- Personas, devices and time limits.\n- How to handle the login wall. You sign in yourself; I never handle a password.\n- Where the run folder goes and what format the report comes in.\n\nIt's about two minutes of questions, one at a time. Without it I'd be guessing at all of these, and the report would be built on those guesses.\n\n**Session model:** I'm running on Opus 5.5, the strongest model available, so nothing needs changing there.\n\nOnce Playwright is connected, run `/understudy:run https://example-nimbus-notes.test` and I'll start the interview.",
+ "cost_usd": 0.3417
+}

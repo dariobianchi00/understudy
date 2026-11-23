@@ -1,0 +1,159 @@
+{
+ "duration_api_ms": 2711,
+ "stop_reason": "tool_use",
+ "session_id": "00ed771d-306c-455f-a3b4-fe4b5a8a91ac",
+ "total_cost_usd": 0.1298203,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 30853,
+  "cache_read_input_tokens": 13943,
+  "output_tokens": 501,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30853,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 501,
+    "cache_read_input_tokens": 13943,
+    "cache_creation_input_tokens": 30853,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 30853
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 501,
+   "cacheReadInputTokens": 13943,
+   "cacheCreationInputTokens": 30853,
+   "webSearchRequests": 0,
+   "costUSD": 0.1298203,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 30853,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"pricing-noindex\",\"caught\":true,\"finding_title\":\"Pricing page is noindex, so search engines are told to drop it\"},{\"id\":\"sitemap-404\",\"caught\":true,\"finding_title\":\"Declared sitemap returns 404 and sits on a different host than the site\"},{\"id\":\"features-404\",\"caught\":true,\"finding_title\":\"Features page 404s but is linked from the nav of all 5 crawled pages\"},{\"id\":\"duplicate-titles\",\"caught\":true,\"finding_title\":\"About and privacy pages share the generic title Nimbus Notes\"},{\"id\":\"heading-structure\",\"caught\":true,\"finding_title\":\"Pricing has two h1 elements and privacy has none\"},{\"id\":\"invalid-jsonld\",\"caught\":true,\"finding_title\":\"Home page JSON-LD is invalid and unparseable\"},{\"id\":\"pricing-no-meta-description\",\"caught\":true,\"finding_title\":\"Pricing and privacy pages have no meta description\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "pricing-noindex",
+    "caught": true,
+    "finding_title": "Pricing page is noindex, so search engines are told to drop it"
+   },
+   {
+    "id": "sitemap-404",
+    "caught": true,
+    "finding_title": "Declared sitemap returns 404 and sits on a different host than the site"
+   },
+   {
+    "id": "features-404",
+    "caught": true,
+    "finding_title": "Features page 404s but is linked from the nav of all 5 crawled pages"
+   },
+   {
+    "id": "duplicate-titles",
+    "caught": true,
+    "finding_title": "About and privacy pages share the generic title Nimbus Notes"
+   },
+   {
+    "id": "heading-structure",
+    "caught": true,
+    "finding_title": "Pricing has two h1 elements and privacy has none"
+   },
+   {
+    "id": "invalid-jsonld",
+    "caught": true,
+    "finding_title": "Home page JSON-LD is invalid and unparseable"
+   },
+   {
+    "id": "pricing-no-meta-description",
+    "caught": true,
+    "finding_title": "Pricing and privacy pages have no meta description"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 2925,
+ "type": "result",
+ "duration_ms": 2948,
+ "uuid": "4f0c4516-1d31-4ebc-87c7-852a040d29dc",
+ "ttft_stream_ms": 796,
+ "time_to_request_ms": 238,
+ "first_content_frame_ms": 796,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

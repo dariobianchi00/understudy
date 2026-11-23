@@ -1,0 +1,139 @@
+{
+ "duration_api_ms": 2016,
+ "stop_reason": "tool_use",
+ "session_id": "64542f09-4a4e-4b90-b775-8995618e75df",
+ "total_cost_usd": 0.13666430000000002,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 32944,
+  "cache_read_input_tokens": 13943,
+  "output_tokens": 349,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 32944,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 349,
+    "cache_read_input_tokens": 13943,
+    "cache_creation_input_tokens": 32944,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 32944
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 349,
+   "cacheReadInputTokens": 13943,
+   "cacheCreationInputTokens": 32944,
+   "webSearchRequests": 0,
+   "costUSD": 0.13666430000000002,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 32944,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-audience\",\"caught\":true,\"finding_title\":\"Landing page never says who it is for \u2014 evaluator cannot tell if it fits his team\"},{\"id\":\"jargon-fold\",\"caught\":true,\"finding_title\":\"Subheadline jargon \\\"bi-directional sync graph\\\" and \\\"zero-knowledge vault\\\" goes undefined\"},{\"id\":\"dead-cta\",\"caught\":true,\"finding_title\":\"Only next step \\\"See it in action\\\" is outweighed by the newsletter box and does nothing\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-audience",
+    "caught": true,
+    "finding_title": "Landing page never says who it is for \u2014 evaluator cannot tell if it fits his team"
+   },
+   {
+    "id": "jargon-fold",
+    "caught": true,
+    "finding_title": "Subheadline jargon \"bi-directional sync graph\" and \"zero-knowledge vault\" goes undefined"
+   },
+   {
+    "id": "dead-cta",
+    "caught": true,
+    "finding_title": "Only next step \"See it in action\" is outweighed by the newsletter box and does nothing"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 2204,
+ "type": "result",
+ "duration_ms": 2229,
+ "uuid": "c64982b4-ded0-4901-b6d3-af7323b73572",
+ "ttft_stream_ms": 715,
+ "time_to_request_ms": 213,
+ "first_content_frame_ms": 715,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

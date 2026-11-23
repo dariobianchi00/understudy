@@ -1,0 +1,144 @@
+{
+ "duration_api_ms": 2255,
+ "stop_reason": "tool_use",
+ "session_id": "2eeae88a-32f8-4e60-b08b-77dc2c0bb3c8",
+ "total_cost_usd": 0.1363143,
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 32724,
+  "cache_read_input_tokens": 13943,
+  "output_tokens": 402,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 32724,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 402,
+    "cache_read_input_tokens": 13943,
+    "cache_creation_input_tokens": 32724,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 32724
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 2,
+   "outputTokens": 402,
+   "cacheReadInputTokens": 13943,
+   "cacheCreationInputTokens": 32724,
+   "webSearchRequests": 0,
+   "costUSD": 0.1363143,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 0,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 32724,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 2,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "{\"caught\":[{\"id\":\"no-price\",\"caught\":true,\"finding_title\":\"No plan shows a price, so the evaluator gave up on cost and would not trust them with money\"},{\"id\":\"cookie-banner-mismatch\",\"caught\":true,\"finding_title\":\"Cookie bar claims no tracking while a third-party analytics tracker sends a user ID on page load\"},{\"id\":\"privacy-vague\",\"caught\":true,\"finding_title\":\"Privacy page names no partners and contradicts the cookie bar \u2014 the sceptic left over it\"},{\"id\":\"proof-anonymous\",\"caught\":true,\"finding_title\":\"All three testimonials are anonymous, so the only proof on the home page was disbelieved\"}],\"clean_reported\":[{\"id\":\"about-provenance\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"faq-extractable\",\"reported\":false,\"finding_title\":\"\"},{\"id\":\"https-hsts\",\"reported\":false,\"finding_title\":\"\"}],\"out_of_lens\":[]}",
+ "structured_output": {
+  "caught": [
+   {
+    "id": "no-price",
+    "caught": true,
+    "finding_title": "No plan shows a price, so the evaluator gave up on cost and would not trust them with money"
+   },
+   {
+    "id": "cookie-banner-mismatch",
+    "caught": true,
+    "finding_title": "Cookie bar claims no tracking while a third-party analytics tracker sends a user ID on page load"
+   },
+   {
+    "id": "privacy-vague",
+    "caught": true,
+    "finding_title": "Privacy page names no partners and contradicts the cookie bar \u2014 the sceptic left over it"
+   },
+   {
+    "id": "proof-anonymous",
+    "caught": true,
+    "finding_title": "All three testimonials are anonymous, so the only proof on the home page was disbelieved"
+   }
+  ],
+  "clean_reported": [
+   {
+    "id": "about-provenance",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "faq-extractable",
+    "reported": false,
+    "finding_title": ""
+   },
+   {
+    "id": "https-hsts",
+    "reported": false,
+    "finding_title": ""
+   }
+  ],
+  "out_of_lens": []
+ },
+ "ttft_ms": 2450,
+ "type": "result",
+ "duration_ms": 2475,
+ "uuid": "c2ff914e-3caa-43ee-8624-0979a8ef693e",
+ "ttft_stream_ms": 744,
+ "time_to_request_ms": 220,
+ "first_content_frame_ms": 745,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}

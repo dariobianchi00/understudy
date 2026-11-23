@@ -1,0 +1,263 @@
+[
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 3,
+  "recall": 0.75,
+  "caught_ids": [
+   "api-500-notes",
+   "console-error-dashboard",
+   "lying-toast"
+  ],
+  "missed_ids": [
+   "search-always-empty"
+  ],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 1,
+  "band_judged": 3,
+  "band_rows": [
+   {
+    "id": "lying-toast",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "api-500-notes",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "console-error-dashboard",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   }
+  ],
+  "n_findings": 4,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 1,
+   "P3": 0
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "bugs",
+  "model": "sonnet",
+  "run": 1,
+  "files_written": true,
+  "seconds": 51.899504,
+  "cost_usd": 0.3602145,
+  "lens_turns": 24,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 4,
+  "caught": 4,
+  "recall": 1.0,
+  "caught_ids": [
+   "memories-invented",
+   "naming-inconsistent",
+   "promise-mismatch",
+   "webhook-toggle-unexplained"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "\"Saved \u2713\" confirms a note that never appears in \"Your cards\" or search"
+  ],
+  "band_ok": 3,
+  "band_judged": 4,
+  "band_rows": [
+   {
+    "id": "memories-invented",
+    "severity": "P0",
+    "band": [
+     "P0"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "naming-inconsistent",
+    "severity": "P2",
+    "band": [
+     "P3"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "promise-mismatch",
+    "severity": "P1",
+    "band": [
+     "P1"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 9,
+  "severities": {
+   "P0": 2,
+   "P1": 2,
+   "P2": 4,
+   "P3": 1
+  },
+  "score": 2,
+  "capture": "product",
+  "lens": "content",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 127.72486,
+  "cost_usd": 1.0104544999999998,
+  "lens_turns": 35,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 2,
+  "caught": 2,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [
+   "Memories page shows invented facts about the user, which made the novice distrust the Saved confirmation",
+   "Memories page shows invented facts about the user, which the power user dismissed as demo content"
+  ],
+  "band_ok": 1,
+  "band_judged": 2,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P2",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 5,
+  "severities": {
+   "P0": 1,
+   "P1": 1,
+   "P2": 3,
+   "P3": 0
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "onboarding",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 109.764648,
+  "cost_usd": 0.9766693,
+  "lens_turns": 36,
+  "lens_error": false
+ },
+ {
+  "contract_pass": true,
+  "planted": 5,
+  "caught": 5,
+  "recall": 1.0,
+  "caught_ids": [
+   "empty-state-no-guidance",
+   "memories-invented",
+   "search-always-empty",
+   "webhook-toggle-unexplained",
+   "workspace-type-before-value"
+  ],
+  "missed_ids": [],
+  "hallucinations": [],
+  "out_of_lens": [],
+  "band_ok": 2,
+  "band_judged": 5,
+  "band_rows": [
+   {
+    "id": "workspace-type-before-value",
+    "severity": "P2",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "memories-invented",
+    "severity": "P1",
+    "band": [
+     "P0"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "empty-state-no-guidance",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   },
+   {
+    "id": "search-always-empty",
+    "severity": "P0",
+    "band": [
+     "P1"
+    ],
+    "in_band": false
+   },
+   {
+    "id": "webhook-toggle-unexplained",
+    "severity": "P2",
+    "band": [
+     "P2"
+    ],
+    "in_band": true
+   }
+  ],
+  "n_findings": 8,
+  "severities": {
+   "P0": 2,
+   "P1": 1,
+   "P2": 5,
+   "P3": 0
+  },
+  "score": 1,
+  "capture": "product",
+  "lens": "ux",
+  "model": "opus",
+  "run": 1,
+  "files_written": true,
+  "seconds": 129.059157,
+  "cost_usd": 1.0982638999999998,
+  "lens_turns": 42,
+  "lens_error": false
+ }
+]

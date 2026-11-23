@@ -1,0 +1,131 @@
+{
+ "duration_api_ms": 46460,
+ "stop_reason": "end_turn",
+ "session_id": "00be3ff8-6264-4e1f-9b73-17dab9fe8ec0",
+ "total_cost_usd": 0.2196899,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 30795,
+  "cache_read_input_tokens": 239339,
+  "output_tokens": 7254,
+  "output_tokens_details": {
+   "thinking_tokens": 718
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30795,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 274,
+    "cache_read_input_tokens": 39100,
+    "cache_creation_input_tokens": 4480,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 4480
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-sonnet-5-5": {
+   "inputTokens": 18,
+   "outputTokens": 7254,
+   "cacheReadInputTokens": 239339,
+   "cacheCreationInputTokens": 30795,
+   "webSearchRequests": 0,
+   "costUSD": 0.2196899,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 718,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 30795,
+   "canonicalModel": "claude-sonnet-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_0134mKMsosfLHJby7TqGmWSe",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-seo-2nfpkya_/site; cat manifest.json; cat crawl/index.json; cat crawl/site.json; ls crawl/pages crawl/html; R=/home/runner/work/understudy/understudy/understudy/references; cat $R/lens-output-contract.md"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01EJ162qo2tKqHwKZq8RDeAg",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-seo-2nfpkya_/site; cat manifest.json crawl/index.json crawl/site.json; ls crawl/pages crawl/html; cat /home/runner/work/understudy/understudy/understudy/references/lens-output-contract.md"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01STku7dQ8PeU3bEGpu6L1H3",
+   "tool_input": {
+    "command": "cd /tmp/understudy-eval-site-seo-2nfpkya_/site/crawl; for f in pages/*.json; do echo \"== $f\"; cat $f; done; for f in html/*; do echo \"== $f\"; cat $f; done"
+   }
+  },
+  {
+   "tool_name": "Bash",
+   "tool_use_id": "toolu_01KJQpKG54rH5fR5XYehrPKv",
+   "tool_input": {
+    "command": "cd /tmp; S=/home/runner/work/understudy/understudy/understudy/scripts/finding_id.py\nid(){ python3 $S --lens seo --flow \"crawl:site\" --locator \"$1\" --title \"$2\"; }\nid \"/pricing.html\" \"Pricing page is noindex, so search engines are told to drop it\"\nid \"/sitemap.xml\" \"Declared sitemap returns 404 and sits on a different host than the site\"\nid \"/features.html\" \"Features page 404s but is linked from the nav of all 5 crawled pages\"\nid \"/\" \"Home page JSON-LD is invalid and unparseable\"\nid \"/about.html\" \"Two pages share the generic title \\\"Nimbus Notes\\\" (about, privacy)\"\nid \"/pricing.html\" \"Pricing and privacy pages have no meta description\"\nid \"/pricing.html\" \"Pricing has two h1 elements and privacy has none\"\nid \"/\" \"No page declares a canonical URL\""
+   }
+  }
+ ],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 20,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "The pricing page is marked noindex, the sitemap 404s, and the nav links a 404 features page, so a crawler can reach little of the commercially important content.\n\n- **Counts:** 8 findings: 1 P0, 2 P1, 4 P2, 1 P3. Score is 4/10.\n- **Gate:** `check_report.py` passed. Its only note was that the manifest is still open, which is for the orchestrator to close.\n- **Dropped for want of evidence:**\n  - The home-page \"image missing alt\" count: the markup shows `alt=\"\"`, so it is a decorative image, not a missing alt.\n  - The client-rendering concern: all content is in the raw HTML.\n- **Not crawled:** `/app/login.html` is disallowed by robots.txt, and two assets are off-domain. I made no absence claims about them.",
+ "ttft_ms": 1316,
+ "type": "result",
+ "duration_ms": 47270,
+ "uuid": "9d048f4a-def6-4268-8b25-bc91ff570d18",
+ "ttft_stream_ms": 682,
+ "time_to_request_ms": 229,
+ "first_content_frame_ms": 682,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "stderr": ""
+}
